@@ -160,6 +160,39 @@ export default function EstimatePageDesktop() {
       });
     }
     setMarkers(newMarkers);
+    
+    // Tracer la route dès que les 2 points sont sélectionnés
+    if (depart && arrivee) {
+      const fetchRoute = async () => {
+        try {
+          const { getDirections } = await import('../services/mapboxService');
+          const result = await getDirections([
+            depart.coordinates,
+            arrivee.coordinates,
+          ], {
+            profile: 'mapbox/driving-traffic',
+            steps: true,
+          });
+          
+          if (result?.routes?.[0]) {
+            const route = result.routes[0];
+            setRoute({
+              coordinates: route.geometry.coordinates,
+              color: '#f3cd08',
+              distance: route.distance,
+              duration: route.duration,
+            });
+            console.log('✅ Route tracée:', route.distance, 'm,', Math.round(route.duration / 60), 'min');
+          }
+        } catch (error) {
+          console.error('❌ Erreur tracé route:', error);
+        }
+      };
+      
+      fetchRoute();
+    } else {
+      setRoute(null);
+    }
   }, [depart, arrivee]);
 
   const handleDepartSelect = (location) => {
@@ -277,7 +310,7 @@ export default function EstimatePageDesktop() {
             <>
               {/* Titre */}
               <h2 className="text-3xl font-black text-gray-700 mb-8">
-                Planifier un trajet
+                Estimer un trajet
               </h2>
 
               {/* Inputs */}
@@ -292,16 +325,15 @@ export default function EstimatePageDesktop() {
                   <div className="flex-1 space-y-4">
                     <SearchBar
                       placeholder="Départ"
+                      onSelect={handleDepartSelect}
+                      showCurrentLocation={true}
                       value={depart?.label || ''}
-                      onLocationSelect={handleDepartSelect}
-                      icon={<Navigation className="w-5 h-5" />}
                     />
                     
                     <SearchBar
                       placeholder="Arrivée"
+                      onSelect={handleArriveeSelect}
                       value={arrivee?.label || ''}
-                      onLocationSelect={handleArriveeSelect}
-                      icon={<MapPin className="w-5 h-5" />}
                     />
                   </div>
                 </div>

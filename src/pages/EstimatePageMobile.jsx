@@ -132,11 +132,43 @@ export default function EstimatePageMobile() {
     
     setMarkers(newMarkers);
     
+    // Calculer et tracer la route dès que les 2 points sont sélectionnés
     if (departPlace && arriveePlace) {
       const centerLng = (departPlace.longitude + arriveePlace.longitude) / 2;
       const centerLat = (departPlace.latitude + arriveePlace.latitude) / 2;
       setMapCenter([centerLng, centerLat]);
       setMapZoom(13);
+      
+      // Tracer la route avec Mapbox Directions API
+      const fetchRoute = async () => {
+        try {
+          const { getDirections } = await import('../services/mapboxService');
+          const result = await getDirections([
+            [departPlace.longitude, departPlace.latitude],
+            [arriveePlace.longitude, arriveePlace.latitude],
+          ], {
+            profile: 'mapbox/driving-traffic',
+            steps: true,
+          });
+          
+          if (result?.routes?.[0]) {
+            const route = result.routes[0];
+            setRouteData({
+              coordinates: route.geometry.coordinates,
+              color: '#f3cd08',
+              distance: route.distance,
+              duration: route.duration,
+            });
+            console.log('✅ Route tracée:', route.distance, 'm,', Math.round(route.duration / 60), 'min');
+          }
+        } catch (error) {
+          console.error('❌ Erreur tracé route:', error);
+        }
+      };
+      
+      fetchRoute();
+    } else {
+      setRouteData(null);
     }
   }, [departPlace, arriveePlace]);
 
@@ -217,18 +249,18 @@ export default function EstimatePageMobile() {
       <Drawer.Root shouldScaleBackground={false}>
         <Drawer.Trigger asChild>
           <button className="absolute bottom-8 left-1/2 -translate-x-1/2 px-6 py-3 bg-[#f3cd08] text-gray-700 rounded-full font-bold shadow-2xl z-10">
-            Planifier un trajet
+            Estimer un trajet
           </button>
         </Drawer.Trigger>
 
         <Drawer.Portal>
           <Drawer.Overlay className="fixed inset-0 bg-black/40 z-40" />
-          <Drawer.Content className="bg-white flex flex-col rounded-t-3xl h-[85vh] fixed bottom-0 left-0 right-0 z-50">
+          <Drawer.Content className="bg-white flex flex-col rounded-t-3xl h-auto max-h-[80vh] fixed bottom-0 left-0 right-0 z-50">
             <div className="p-4 bg-white rounded-t-3xl flex-shrink-0">
               <div className="mx-auto w-12 h-1.5 flex-shrink-0 rounded-full bg-gray-300 mb-8" />
               <div className="max-w-md mx-auto">
                 <Drawer.Title className="font-black text-2xl mb-6 text-gray-800">
-                  Planifier un trajet
+                  Estimer un trajet
                 </Drawer.Title>
                 <Drawer.Description className="sr-only">
                   Formulaire pour estimer le prix d'un trajet en taxi
@@ -254,11 +286,13 @@ export default function EstimatePageMobile() {
                             placeholder="Départ"
                             onSelect={handleDepartSelect}
                             showCurrentLocation={true}
+                            value={departPlace?.label || ''}
                           />
                           
                           <SearchBar
                             placeholder="Arrivée"
                             onSelect={handleArriveeSelect}
+                            value={arriveePlace?.label || ''}
                           />
                         </div>
                       </div>

@@ -14,8 +14,10 @@
 import { useEffect, useRef, useState } from 'react';
 import mapboxgl from 'mapbox-gl';
 import 'mapbox-gl/dist/mapbox-gl.css';
-import { MapPin, Navigation, Layers, ZoomIn, ZoomOut, Maximize2 } from 'lucide-react';
+import { MapPin, Navigation, Layers, ZoomIn, ZoomOut, Maximize2, Clock, Route as RouteIcon } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
+import LottieAnimation from './LottieAnimation';
+import yellowTaxiAnimation from '../assets/lotties/yellow taxi.json';
 
 // Configuration Mapbox
 const MAPBOX_TOKEN = import.meta.env.VITE_MAPBOX_TOKEN;
@@ -61,6 +63,7 @@ export default function MapView({
   const map = useRef(null);
   const markersRef = useRef([]);
   const routeLayerId = useRef('route-layer');
+  const userMarkerRef = useRef(null);
   const [mapLoaded, setMapLoaded] = useState(false);
   const [currentStyle, setCurrentStyle] = useState(style);
   const [userLocation, setUserLocation] = useState(null);
@@ -234,6 +237,8 @@ export default function MapView({
 
     // Ajouter nouvel itinéraire
     try {
+      console.log('🛣️ Route reçue:', route);
+      
       const routeGeoJSON = {
         type: 'Feature',
         properties: {},
@@ -242,6 +247,13 @@ export default function MapView({
           coordinates: route.coordinates || route.geometry?.coordinates || [],
         },
       };
+
+      console.log('📍 Coordonnées itinéraire:', routeGeoJSON.geometry.coordinates.length, 'points');
+
+      if (routeGeoJSON.geometry.coordinates.length === 0) {
+        console.error('❌ Aucune coordonnée dans l\'itinéraire!');
+        return;
+      }
 
       // Source
       map.current.addSource(sourceId, {
@@ -265,7 +277,19 @@ export default function MapView({
         },
       });
 
-      // Ligne principale
+      // Ligne principale - Utiliser congestion si disponible
+      const lineColor = route.congestion 
+        ? [
+            'match',
+            ['get', 'congestion'],
+            'low', ROUTE_COLORS.congestion.low,
+            'moderate', ROUTE_COLORS.congestion.moderate,
+            'heavy', ROUTE_COLORS.congestion.heavy,
+            'severe', ROUTE_COLORS.congestion.severe,
+            route.color || ROUTE_COLORS.primary
+          ]
+        : route.color || ROUTE_COLORS.primary;
+
       map.current.addLayer({
         id: layerId,
         type: 'line',
@@ -275,8 +299,8 @@ export default function MapView({
           'line-cap': 'round',
         },
         paint: {
-          'line-color': route.color || ROUTE_COLORS.primary,
-          'line-width': 5,
+          'line-color': lineColor,
+          'line-width': 6,
           'line-opacity': 1,
         },
       });
@@ -382,6 +406,29 @@ export default function MapView({
         setUserLocation([longitude, latitude]);
         
         if (map.current) {
+          // Supprimer ancien marker utilisateur
+          if (userMarkerRef.current) {
+            userMarkerRef.current.remove();
+          }
+
+          // Créer marker utilisateur avec cercle pulsant
+          const el = document.createElement('div');
+          el.className = 'user-location-marker';
+          el.innerHTML = `
+            <div class="relative w-10 h-10 flex items-center justify-center">
+              <div class="absolute inset-0 bg-[#3B82F6] rounded-full opacity-30 animate-ping"></div>
+              <div class="relative w-5 h-5 bg-[#3B82F6] border-4 border-white rounded-full shadow-lg"></div>
+            </div>
+          `;
+
+          userMarkerRef.current = new mapboxgl.Marker({ 
+            element: el,
+            anchor: 'center'
+          })
+            .setLngLat([longitude, latitude])
+            .addTo(map.current);
+
+          // Zoom sur position
           map.current.flyTo({
             center: [longitude, latitude],
             zoom: 15,
@@ -401,7 +448,7 @@ export default function MapView({
       },
       {
         enableHighAccuracy: true,
-        timeout: 5000,
+        timeout: 10000,
         maximumAge: 0,
       }
     );
@@ -529,30 +576,27 @@ export default function MapView({
         </motion.button>
       )}
 
-      {/* Badge de chargement */}
+      {/* Badge de chargement - Lottie discret */}
       <AnimatePresence>
         {!mapLoaded && (
           <motion.div
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
-            className="absolute inset-0 flex items-center justify-center bg-gray-900/20 backdrop-blur-sm z-20 rounded-2xl"
+            className="absolute bottom-20 right-6 z-20"
           >
-            <div className="bg-white px-6 py-4 rounded-2xl shadow-2xl flex items-center gap-3">
-              <motion.div
-                animate={{ rotate: 360 }}
-                transition={{ duration: 1, repeat: Infinity, ease: 'linear' }}
-              >
-                <MapPin className="w-6 h-6 text-blue-600" />
-              </motion.div>
-              <span className="font-semibold text-gray-900">Chargement de la carte...</span>
+            <div className="w-24 h-24 bg-transparent">
+              <LottieAnimation 
+                animationData={yellowTaxiAnimation}
+                loop={true}
+              />
             </div>
           </motion.div>
         )}
       </AnimatePresence>
 
       {/* Style personnalisé pour popup */}
-      <style jsx>{`
+      <style>{`
         .custom-popup .mapboxgl-popup-content {
           padding: 0;
           border-radius: 0.75rem;

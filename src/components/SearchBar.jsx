@@ -11,7 +11,7 @@
 import { useState, useEffect, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Search, MapPin, Loader2, Navigation, MapPinned } from 'lucide-react';
-import { searchSuggestions } from '../services/mapboxService';
+import { searchPlaces } from '../services/nominatimService';
 import { getCurrentPositionWithAddress } from '../services/geolocationService';
 
 export default function SearchBar({
@@ -20,6 +20,7 @@ export default function SearchBar({
   initialValue = '',
   showCurrentLocation = false,
   label = null,
+  value = null, // Ajout prop value pour mode controlé
 }) {
   const [query, setQuery] = useState(initialValue);
   const [suggestions, setSuggestions] = useState([]);
@@ -31,6 +32,13 @@ export default function SearchBar({
   
   const debounceTimer = useRef(null);
   const wrapperRef = useRef(null);
+
+  // Synchroniser query avec value externe (mode controlé)
+  useEffect(() => {
+    if (value !== null && value !== query) {
+      setQuery(value);
+    }
+  }, [value]);
 
   useEffect(() => {
     if (query.length < 2) {
@@ -45,13 +53,16 @@ export default function SearchBar({
     setIsLoading(true);
     debounceTimer.current = setTimeout(async () => {
       try {
-        const results = await searchSuggestions(query, { 
-          limit: 5,
-          proximity: [11.5021, 3.8480],
+        // Utiliser Nominatim au lieu de Mapbox
+        const results = await searchPlaces(query, { 
+          limit: 10,
+          bounded: true, // Limiter à Yaoundé
+          viewbox: '11.4,3.78,11.6,3.95',
         });
         setSuggestions(results);
-        setIsOpen(true);
+        setIsOpen(results.length > 0);
       } catch (error) {
+        console.warn('Erreur recherche:', error);
         setSuggestions([]);
       } finally {
         setIsLoading(false);
@@ -80,6 +91,8 @@ export default function SearchBar({
     setQuery(suggestion.name);
     setIsOpen(false);
     setIsFocused(false);
+    setIsLoading(false); // Arrêter loading immédiatement
+    setSuggestions([]); // Vider suggestions
     
     // Format uniforme: coordinates + longitude/latitude séparés
     const coords = suggestion.coordinates || [suggestion.longitude, suggestion.latitude];
