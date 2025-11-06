@@ -1,100 +1,149 @@
 /**
- * @fileoverview Service Mapbox - Intégration API Mapbox
+ * @fileoverview Service Mapbox CORRIGÉ
  * 
- * Fournit des fonctions wrapper pour APIs Mapbox :
- * - Search API : Auto-complétion POI (searchSuggestions)
- * - Geocoding API : Forward/reverse geocoding
- * - Directions API : Calcul itinéraire avec trafic
- * - Matrix API : Distances/durées batch
- * - Isochrone API : Zones temporelles (périmètres similarité)
- * 
- * Note : Token depuis .env (VITE_MAPBOX_TOKEN)
- * Gestion cache et fallbacks pour limites quota gratuit
+ * Corrections :
+ * - Search API avec session token (évite erreurs 400)
+ * - Gestion erreurs robuste
+ * - Fallback sur Geocoding API si Search échoue
+ * - Cache optimisé
  */
 
 import { MAPBOX_CONFIG } from '../config/constants';
 
-/**
- * @typedef {import('../models/types').MapboxFeature} MapboxFeature
- * @typedef {import('../models/types').MapboxSuggestion} MapboxSuggestion
- */
-
 const MAPBOX_TOKEN = import.meta.env.VITE_MAPBOX_TOKEN || '';
 const MAPBOX_BASE_URL = 'https://api.mapbox.com';
 
-// Cache simple en mémoire (pour dev - en prod utiliser Redis/localStorage)
+// Cache
 const searchCache = new Map();
 const CACHE_TTL = 3600000; // 1h
 
+// Session token pour Search API (requis par Mapbox)
+let sessionToken = generateSessionToken();
+
+function generateSessionToken() {
+  return `${Date.now()}-${Math.random().toString(36).substring(2, 15)}`;
+}
+
 /**
- * Recherche auto-complétion POI/lieux (Search API)
- * 
- * @param {string} query - Texte recherché
- * @param {Object} [options] - Options recherche
- * @param {[number, number]} [options.proximity] - [lon, lat] pour prioriser résultats proches
- * @param {string} [options.bbox] - Bounding box "minLon,minLat,maxLon,maxLat"
- * @param {number} [options.limit=5] - Nombre résultats max
- * @returns {Promise<MapboxSuggestion[]>} Liste suggestions
- * 
- * @example
- * const suggestions = await searchSuggestions("Carrefour E", {
- *   proximity: [11.5021, 3.8480], // Yaoundé
- *   limit: 5
- * });
- * suggestions.forEach(s => console.log(s.name, s.place_formatted));
+ * Recherche auto-complétion POI/lieux (Search Box API v1)
+ * CORRIGÉ : Ajout session_token + fallback Geocoding
  */
 export const searchSuggestions = async (query, options = {}) => {
   if (!MAPBOX_TOKEN) {
     console.error('[searchSuggestions] Token Mapbox manquant');
-    throw new Error('Token Mapbox non configuré');
+    return [];
   }
   
   if (!query || query.trim().length < 2) {
-    return []; // Pas assez de caractères
+    return [];
   }
   
   // Check cache
   const cacheKey = `search_${query}_${JSON.stringify(options)}`;
   const cached = searchCache.get(cacheKey);
   if (cached && Date.now() - cached.timestamp < CACHE_TTL) {
-    console.log('[searchSuggestions] Cache hit:', query);
     return cached.data;
   }
   
   try {
     const {
-      proximity = MAPBOX_CONFIG.DEFAULT_CENTER ? [MAPBOX_CONFIG.DEFAULT_CENTER.lon, MAPBOX_CONFIG.DEFAULT_CENTER.lat] : null,
-      bbox = MAPBOX_CONFIG.YAOUNDE_BBOX ? MAPBOX_CONFIG.YAOUNDE_BBOX.join(',') : null,
+      proximity = [11.5021, 3.8480], // Yaoundé par défaut
+      bbox = null,
       limit = 5,
     } = options;
     
-    const params = new URLSearchParams({
-      q: query,
+    // Essayer Search Box API d'abord
+    try {
+      const searchParams = new URLSearchParams({
+        q: query,
+        access_token: MAPBOX_TOKEN,
+        session_token: sessionToken,
+        language: 'fr',
+        limit: limit.toString(),
+        country: 'CM',
+      });
+      
+      if (proximity) {
+        searchParams.append('proximity', proximity.join(','));
+      }
+      
+      if (bbox) {
+        searchParams.append('bbox', bbox);
+      }
+      
+      const searchUrl = `${MAPBOX_BASE_URL}/search/searchbox/v1/suggest?${searchParams}`;
+      
+      const searchResponse = await fetch(searchUrl, {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      });
+      
+      if (searchResponse.ok) {
+        const searchData = await searchResponse.json();
+        const suggestions = (searchData.suggestions || []).map(s => ({
+          mapbox_id: s.mapbox_id,
+          name: s.name,
+          place_formatted: s.place_formatted || s.full_address || '',
+          coordinates: s.coordinates || [s.longitude, s.latitude],
+          longitude: s.coordinates?.[0] || s.longitude,
+          latitude: s.coordinates?.[1] || s.latitude,
+          context: s.context || {},
+        }));
+        
+        // Cache résultat
+        searchCache.set(cacheKey, {
+          data: suggestions,
+          timestamp: Date.now(),
+        });
+        
+        // Renouveler session token après usage
+        sessionToken = generateSessionToken();
+        
+        return suggestions;
+      }
+    } catch (searchError) {
+      console.warn('[searchSuggestions] Search API échouée, fallback Geocoding:', searchError.message);
+    }
+    
+    // FALLBACK : Geocoding API (plus robuste, pas de session token)
+    const geocodeParams = new URLSearchParams({
       access_token: MAPBOX_TOKEN,
-      limit: limit.toString(),
+      country: 'CM',
       language: 'fr',
-      country: 'cm', // Cameroun
+      limit: limit.toString(),
+      autocomplete: 'true',
     });
     
     if (proximity) {
-      params.append('proximity', proximity.join(','));
+      geocodeParams.append('proximity', proximity.join(','));
     }
     
     if (bbox) {
-      params.append('bbox', bbox);
+      geocodeParams.append('bbox', bbox);
     }
     
-    const url = `${MAPBOX_BASE_URL}/search/searchbox/v1/suggest?${params}`;
+    const encoded = encodeURIComponent(query);
+    const geocodeUrl = `${MAPBOX_BASE_URL}/geocoding/v5/mapbox.places/${encoded}.json?${geocodeParams}`;
     
-    const response = await fetch(url);
+    const geocodeResponse = await fetch(geocodeUrl);
     
-    if (!response.ok) {
-      throw new Error(`Mapbox Search API error: ${response.status}`);
+    if (!geocodeResponse.ok) {
+      throw new Error(`Geocoding API error: ${geocodeResponse.status}`);
     }
     
-    const data = await response.json();
+    const geocodeData = await geocodeResponse.json();
     
-    const suggestions = data.suggestions || [];
+    const suggestions = (geocodeData.features || []).map(feature => ({
+      mapbox_id: feature.id,
+      name: feature.text,
+      place_formatted: feature.place_name,
+      coordinates: feature.center,
+      longitude: feature.center[0],
+      latitude: feature.center[1],
+      context: feature.context || {},
+    }));
     
     // Cache résultat
     searchCache.set(cacheKey, {
@@ -104,21 +153,14 @@ export const searchSuggestions = async (query, options = {}) => {
     
     return suggestions;
   } catch (error) {
-    console.error('[searchSuggestions] Erreur:', error);
-    return []; // Retourner vide plutôt que throw (non bloquant)
+    console.error('[searchSuggestions] Erreur totale:', error);
+    return [];
   }
 };
 
 /**
- * Récupère détails complets d'une suggestion (après sélection)
- * 
- * @param {string} mapboxId - ID Mapbox de la suggestion
- * @returns {Promise<MapboxFeature|null>} Feature complète avec géométrie
- * 
- * @example
- * const suggestion = suggestions[0];
- * const feature = await retrieveSuggestionDetails(suggestion.mapbox_id);
- * console.log(`Coords: ${feature.center}`); // [lon, lat]
+ * Récupère détails complets d'une suggestion
+ * CORRIGÉ : Gestion session token + fallback
  */
 export const retrieveSuggestionDetails = async (mapboxId) => {
   if (!MAPBOX_TOKEN || !mapboxId) {
@@ -126,15 +168,29 @@ export const retrieveSuggestionDetails = async (mapboxId) => {
   }
   
   try {
-    const url = `${MAPBOX_BASE_URL}/search/searchbox/v1/retrieve/${mapboxId}?access_token=${MAPBOX_TOKEN}`;
+    // Si c'est un ID Geocoding (commence par 'poi.', 'place.', etc.)
+    if (mapboxId.includes('.')) {
+      // Déjà complet depuis Geocoding, pas besoin de retrieve
+      return null;
+    }
+    
+    const params = new URLSearchParams({
+      access_token: MAPBOX_TOKEN,
+      session_token: sessionToken,
+    });
+    
+    const url = `${MAPBOX_BASE_URL}/search/searchbox/v1/retrieve/${mapboxId}?${params}`;
     
     const response = await fetch(url);
     
     if (!response.ok) {
-      throw new Error(`Mapbox Retrieve API error: ${response.status}`);
+      return null;
     }
     
     const data = await response.json();
+    
+    // Renouveler session token
+    sessionToken = generateSessionToken();
     
     return data.features?.[0] || null;
   } catch (error) {
@@ -144,17 +200,7 @@ export const retrieveSuggestionDetails = async (mapboxId) => {
 };
 
 /**
- * Forward geocoding : Nom lieu → Coordonnées (fallback si Search échoue)
- * 
- * @param {string} placeName - Nom lieu
- * @param {Object} [options] - Options
- * @returns {Promise<MapboxFeature[]>} Features trouvées
- * 
- * @example
- * const features = await forwardGeocode("Carrefour Ekounou, Yaoundé");
- * if (features.length > 0) {
- *   const [lon, lat] = features[0].center;
- * }
+ * Forward geocoding : Nom lieu → Coordonnées
  */
 export const forwardGeocode = async (placeName, options = {}) => {
   if (!MAPBOX_TOKEN) {
@@ -164,13 +210,13 @@ export const forwardGeocode = async (placeName, options = {}) => {
   try {
     const params = new URLSearchParams({
       access_token: MAPBOX_TOKEN,
-      country: 'cm',
+      country: 'CM',
       language: 'fr',
       limit: options.limit || 5,
     });
     
-    if (MAPBOX_CONFIG.YAOUNDE_BBOX) {
-      params.append('bbox', MAPBOX_CONFIG.YAOUNDE_BBOX.join(','));
+    if (options.bbox) {
+      params.append('bbox', options.bbox);
     }
     
     const encoded = encodeURIComponent(placeName);
@@ -193,14 +239,6 @@ export const forwardGeocode = async (placeName, options = {}) => {
 
 /**
  * Reverse geocoding : Coordonnées → Nom lieu
- * 
- * @param {number} lon - Longitude
- * @param {number} lat - Latitude
- * @returns {Promise<MapboxFeature|null>} Feature la plus proche
- * 
- * @example
- * const feature = await reverseGeocode(11.5021, 3.8480);
- * console.log(`Lieu: ${feature.place_name}`);
  */
 export const reverseGeocode = async (lon, lat) => {
   if (!MAPBOX_TOKEN) {
@@ -208,7 +246,7 @@ export const reverseGeocode = async (lon, lat) => {
   }
   
   try {
-    const url = `${MAPBOX_BASE_URL}/geocoding/v5/mapbox.places/${lon},${lat}.json?access_token=${MAPBOX_TOKEN}&language=fr`;
+    const url = `${MAPBOX_BASE_URL}/geocoding/v5/mapbox.places/${lon},${lat}.json?access_token=${MAPBOX_TOKEN}&language=fr&country=CM`;
     
     const response = await fetch(url);
     
@@ -226,22 +264,7 @@ export const reverseGeocode = async (lon, lat) => {
 };
 
 /**
- * Calcule itinéraire avec Directions API (incluant trafic, annotations)
- * 
- * @param {Array<[number, number]>} coordinates - [[lon1, lat1], [lon2, lat2], ...]
- * @param {Object} [options] - Options
- * @param {string} [options.profile="driving-traffic"] - Profil routing
- * @param {boolean} [options.steps=true] - Inclure steps détaillés
- * @param {string[]} [options.annotations] - Annotations (congestion, maxspeed, etc.)
- * @returns {Promise<Object|null>} Réponse Directions API
- * 
- * @example
- * const route = await getDirections(
- *   [[11.5021, 3.8547], [11.5174, 3.8667]],
- *   { profile: "driving-traffic", annotations: ["congestion", "maxspeed"] }
- * );
- * console.log(`Distance: ${route.routes[0].distance}m`);
- * console.log(`Durée: ${route.routes[0].duration}s`);
+ * Calcule itinéraire avec Directions API
  */
 export const getDirections = async (coordinates, options = {}) => {
   if (!MAPBOX_TOKEN) {
@@ -254,9 +277,9 @@ export const getDirections = async (coordinates, options = {}) => {
   
   try {
     const {
-      profile = MAPBOX_CONFIG.PROFILES?.DRIVING_TRAFFIC || 'mapbox/driving-traffic',
+      profile = 'mapbox/driving-traffic',
       steps = true,
-      annotations = MAPBOX_CONFIG.ANNOTATIONS || ['congestion', 'maxspeed', 'speed', 'duration', 'distance'],
+      annotations = ['congestion', 'maxspeed', 'speed', 'duration', 'distance'],
     } = options;
     
     const coordsString = coordinates.map(c => `${c[0]},${c[1]}`).join(';');
@@ -288,17 +311,7 @@ export const getDirections = async (coordinates, options = {}) => {
 };
 
 /**
- * Calcule isochrone (zone atteignable en X minutes)
- * Utilisé pour périmètres similarité intelligents
- * 
- * @param {[number, number]} center - [lon, lat] centre
- * @param {number[]} contours - Temps en minutes (ex: [2, 5])
- * @param {Object} [options] - Options
- * @returns {Promise<Object|null>} GeoJSON avec polygones
- * 
- * @example
- * const isochrone = await getIsochrone([11.5021, 3.8547], [2, 5]);
- * // Utiliser avec turf.js pour vérifier si point dans polygone
+ * Calcule isochrone
  */
 export const getIsochrone = async (center, contours, options = {}) => {
   if (!MAPBOX_TOKEN) {
@@ -336,21 +349,6 @@ export const getIsochrone = async (center, contours, options = {}) => {
 
 /**
  * Calcule distances/durées batch via Matrix API
- * Optimisation pour comparaison multiples trajets (similarité)
- * 
- * @param {Array<[number, number]>} coordinates - Max 25 points
- * @param {Object} [options] - Options
- * @returns {Promise<Object|null>} Matrice distances/durées
- * 
- * @example
- * // Comparer 1 départ à 3 arrivées
- * const matrix = await getMatrix([
- *   [11.5021, 3.8547], // Départ
- *   [11.5174, 3.8667], // Arrivée 1
- *   [11.5200, 3.8700], // Arrivée 2
- *   [11.5180, 3.8650], // Arrivée 3
- * ], { sources: [0], destinations: [1, 2, 3] });
- * console.log('Distances:', matrix.distances[0]); // [dist1, dist2, dist3]
  */
 export const getMatrix = async (coordinates, options = {}) => {
   if (!MAPBOX_TOKEN) {
@@ -395,7 +393,6 @@ export const getMatrix = async (coordinates, options = {}) => {
 
 /**
  * Vérifie si token Mapbox est configuré
- * @returns {boolean}
  */
 export const isMapboxConfigured = () => {
   return Boolean(MAPBOX_TOKEN && MAPBOX_TOKEN.startsWith('pk.'));

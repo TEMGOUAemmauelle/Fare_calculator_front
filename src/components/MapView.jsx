@@ -70,6 +70,16 @@ export default function MapView({
   useEffect(() => {
     if (map.current) return; // Déjà initialisée
 
+    // Debug: vérifier taille du conteneur
+    if (mapContainer.current) {
+      const rect = mapContainer.current.getBoundingClientRect();
+      console.log('📐 Container size:', { width: rect.width, height: rect.height });
+      
+      if (rect.height === 0) {
+        console.error('❌ Container height is 0! Map will be blank.');
+      }
+    }
+
     map.current = new mapboxgl.Map({
       container: mapContainer.current,
       style: MAP_STYLES[currentStyle] || MAP_STYLES.streets,
@@ -82,7 +92,11 @@ export default function MapView({
     // Événements carte
     map.current.on('load', () => {
       setMapLoaded(true);
-      console.log('✅ Carte Mapbox chargée');
+      // Force resize pour éviter render issues
+      setTimeout(() => {
+        map.current?.resize();
+        console.log('✅ Carte Mapbox chargée + resized');
+      }, 100);
     });
 
     // Click sur la carte
@@ -121,6 +135,18 @@ export default function MapView({
     // Ajouter nouveaux markers
     markers.forEach((markerData, index) => {
       const { coordinates, type, label, color } = markerData;
+      
+      // Valider coordonnées
+      if (!coordinates || !Array.isArray(coordinates) || coordinates.length !== 2) {
+        console.warn('Marker ignoré - coordonnées invalides:', markerData);
+        return;
+      }
+      
+      const [lng, lat] = coordinates;
+      if (isNaN(lng) || isNaN(lat)) {
+        console.warn('Marker ignoré - NaN:', { lng, lat, markerData });
+        return;
+      }
 
       // Créer élément DOM personnalisé
       const el = document.createElement('div');
@@ -367,7 +393,10 @@ export default function MapView({
         console.log('✅ Position utilisateur:', { longitude, latitude });
       },
       (error) => {
-        console.error('❌ Erreur géolocalisation:', error);
+        // Erreur silencieuse si permission refusée
+        if (error.code !== 1) { // Pas PERMISSION_DENIED
+          console.warn('⚠️ Géolocalisation:', error.message);
+        }
         setIsTracking(false);
       },
       {
@@ -403,9 +432,13 @@ export default function MapView({
   };
 
   return (
-    <div className={`relative ${className}`} style={{ height }}>
+    <div className={`relative ${className}`} style={{ height, minHeight: height }}>
       {/* Container carte */}
-      <div ref={mapContainer} className="absolute inset-0 rounded-2xl overflow-hidden shadow-xl" />
+      <div 
+        ref={mapContainer} 
+        className="absolute inset-0 overflow-hidden"
+        style={{ minHeight: '400px' }}
+      />
 
       {/* Contrôles flottants */}
       {showControls && (
@@ -480,7 +513,7 @@ export default function MapView({
           whileTap={{ scale: 0.95 }}
           onClick={handleGeolocate}
           disabled={isTracking}
-          className="absolute bottom-4 right-4 p-4 bg-blue-600 hover:bg-blue-700 disabled:bg-blue-400 text-white rounded-full shadow-2xl z-10 transition-colors"
+          className="absolute bottom-30 right-4 p-4 bg-yellow-400 hover:bg-blue-700 disabled:bg-blue-400 text-white rounded-full shadow-2xl z-10 transition-colors"
           title="Ma position"
         >
           {isTracking ? (

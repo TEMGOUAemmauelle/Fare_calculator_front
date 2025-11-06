@@ -58,11 +58,14 @@ export const getCurrentPosition = (options = {}) => {
     
     navigator.geolocation.getCurrentPosition(
       (position) => {
-        console.log('[getCurrentPosition] Succès:', position);
+        // Log silencieux
         resolve(position);
       },
       (error) => {
-        console.error('[getCurrentPosition] Erreur:', error);
+        // Log uniquement si pas permission denied
+        if (error.code !== 1) {
+          console.warn('[getCurrentPosition] Erreur:', error.message);
+        }
         
         // Formater erreur avec message utilisateur
         const formattedError = formatGeolocationError(error);

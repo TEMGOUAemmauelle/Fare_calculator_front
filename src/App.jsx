@@ -1,33 +1,64 @@
-import { useState } from 'react'
-import taxiLogo from './assets/images/taxi-logo.png'
-import './App.css'
+/**
+ * @fileoverview App - Application principale avec routing
+ * 
+ * Configuration complète avec :
+ * - React Router DOM
+ * - Toaster pour notifications
+ * - Structure responsive
+ * - Gestion erreurs globale
+ */
+
+import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
+import { Toaster } from 'react-hot-toast';
+
+// Pages
+import HomePage from './pages/HomePage';
+import EstimatePage from './pages/EstimatePageRouter';
+import AddTrajetPage from './pages/AddTrajetPage';
+import './App.css';
 
 function App() {
-  const [count, setCount] = useState(0)
-
   return (
-    <>
-      <div className='bg-black'>
-        <a href="https://vite.dev" target="_blank" rel="noreferrer">
-        </a>
-        <a href="https://react.dev" target="_blank" rel="noreferrer">
-          <img src={taxiLogo} className="logo react" alt="Taxi logo" />
-        </a>
-      </div>
-      <h1>Vite + React hah</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.jsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
-    </>
-  )
+    <BrowserRouter>
+      {/* Toaster pour notifications globales */}
+      <Toaster
+        position="top-center"
+        toastOptions={{
+          duration: 3000,
+          style: {
+            background: '#fff',
+            color: '#1f2937',
+            fontWeight: '600',
+            borderRadius: '1rem',
+            padding: '1rem 1.5rem',
+            boxShadow: '0 10px 25px rgba(0, 0, 0, 0.1)',
+          },
+          success: {
+            iconTheme: {
+              primary: '#10b981',
+              secondary: '#fff',
+            },
+          },
+          error: {
+            iconTheme: {
+              primary: '#ef4444',
+              secondary: '#fff',
+            },
+          },
+        }}
+      />
+
+      {/* Routes */}
+      <Routes>
+        <Route path="/" element={<HomePage />} />
+        <Route path="/estimate" element={<EstimatePage />} />
+        <Route path="/add-trajet" element={<AddTrajetPage />} />
+        
+        {/* Redirect unknown routes to home */}
+        <Route path="*" element={<Navigate to="/" replace />} />
+      </Routes>
+    </BrowserRouter>
+  );
 }
 
-export default App
+export default App;

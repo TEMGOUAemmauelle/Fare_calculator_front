@@ -1,6 +1,31 @@
 # Fare Calculator - Frontend PWA
 
-Application web progressive (PWA) pour l'estimation des prix de taxi au Cameroun, avec focus initial sur Yaoundé.
+# 🚕 Fare Calculator Frontend
+
+Application web PWA moderne pour l'estimation de prix de taxi au Cameroun (focus Yaoundé).
+
+## ✨ Fonctionnalités
+
+- 🗺️ **Carte interactive** Mapbox avec itinéraires animés
+- 📍 **Système POI** avec suggestions intelligentes
+- 💰 **Estimation prix** avec 3 méthodes (exact, similaire, inconnu)
+- 🌤️ **Ajustements météo** et tranches horaires
+- 📱 **Bottom sheet** draggable mobile-first
+- 💾 **Historique anonyme** dans localStorage
+- 🎨 **Design moderne** avec Framer Motion
+- 🌓 **Mode sombre** (à venir)
+- 📴 **Fonctionnement offline** PWA
+
+## 🛠️ Technologies
+
+- **React 19** + **Vite 7** - Framework moderne ultra-rapide
+- **Tailwind CSS 4** - Styling utility-first
+- **Mapbox GL JS** - Cartes interactives
+- **Framer Motion** - Animations fluides
+- **Lucide React** - Icônes professionnelles
+- **React Router DOM** - Navigation
+- **Axios** - API calls
+- **Lottie React** - Animations JSON
 
 ## 📋 Vue d'ensemble
 

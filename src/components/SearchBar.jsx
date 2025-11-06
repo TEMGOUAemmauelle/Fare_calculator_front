@@ -1,17 +1,18 @@
 /**
- * @fileoverview Composant SearchBar - Auto-complétion POI via Mapbox
+ * @fileoverview SearchBar CORRIGÉ
  * 
- * Barre de recherche avec suggestions en temps réel pour sélectionner
- * des points d'intérêt (POI) comme "Carrefour Ekounou", "Polytechnique Yaoundé".
- * Design moderne avec animations fluides et icônes professionnelles.
+ * Corrections :
+ * - Suppression emojis UI
+ * - Fix erreurs API Mapbox 400
+ * - Focus ring jaune
+ * - Gestion erreurs silencieuse
  */
 
 import { useState, useEffect, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Search, MapPin, Loader2, Navigation, MapPinned } from 'lucide-react';
-import { searchSuggestions, retrieveSuggestionDetails } from '../services/mapboxService';
+import { searchSuggestions } from '../services/mapboxService';
 import { getCurrentPositionWithAddress } from '../services/geolocationService';
-import { UI_CONFIG } from '../config/constants';
 
 export default function SearchBar({
   onSelect,
@@ -30,9 +31,7 @@ export default function SearchBar({
   
   const debounceTimer = useRef(null);
   const wrapperRef = useRef(null);
-  const inputRef = useRef(null);
 
-  // Debounce recherche
   useEffect(() => {
     if (query.length < 2) {
       setSuggestions([]);
@@ -46,16 +45,18 @@ export default function SearchBar({
     setIsLoading(true);
     debounceTimer.current = setTimeout(async () => {
       try {
-        const results = await searchSuggestions(query, { limit: 5 });
+        const results = await searchSuggestions(query, { 
+          limit: 5,
+          proximity: [11.5021, 3.8480],
+        });
         setSuggestions(results);
         setIsOpen(true);
       } catch (error) {
-        console.error('Erreur recherche:', error);
         setSuggestions([]);
       } finally {
         setIsLoading(false);
       }
-    }, UI_CONFIG.SEARCH_DEBOUNCE);
+    }, 300);
 
     return () => {
       if (debounceTimer.current) {
@@ -64,7 +65,6 @@ export default function SearchBar({
     };
   }, [query]);
 
-  // Fermer dropdown si clic extérieur
   useEffect(() => {
     const handleClickOutside = (event) => {
       if (wrapperRef.current && !wrapperRef.current.contains(event.target)) {
@@ -81,18 +81,17 @@ export default function SearchBar({
     setIsOpen(false);
     setIsFocused(false);
     
-    // Récupérer détails complets
-    const details = await retrieveSuggestionDetails(suggestion.mapbox_id);
+    // Format uniforme: coordinates + longitude/latitude séparés
+    const coords = suggestion.coordinates || [suggestion.longitude, suggestion.latitude];
     
-    if (details) {
-      onSelect({
-        label: suggestion.name,
-        coords: details.center, // [lon, lat]
-        address: suggestion.place_formatted,
-        quartier: suggestion.context?.neighborhood?.name || suggestion.context?.locality?.name,
-        ville: suggestion.context?.place?.name || 'Yaoundé',
-      });
-    }
+    onSelect({
+      label: suggestion.name,
+      coordinates: coords,
+      longitude: coords[0],
+      latitude: coords[1],
+      address: suggestion.place_formatted,
+      place_name: suggestion.place_formatted,
+    });
   };
 
   const handleCurrentLocation = async () => {
@@ -100,17 +99,19 @@ export default function SearchBar({
     try {
       const point = await getCurrentPositionWithAddress();
       setQuery(point.label || 'Ma position');
+      
+      const coords = [point.coords_longitude, point.coords_latitude];
+      
       onSelect({
         label: point.label || 'Ma position',
-        coords: [point.coords_longitude, point.coords_latitude],
+        coordinates: coords,
+        longitude: coords[0],
+        latitude: coords[1],
         address: `${point.quartier || ''} ${point.ville || ''}`.trim(),
-        quartier: point.quartier,
-        ville: point.ville,
       });
       setIsOpen(false);
     } catch (error) {
-      console.error('Erreur géolocalisation:', error);
-      alert(error.userMessage || 'Impossible d\'obtenir votre position');
+      // Silencieux
     } finally {
       setLoadingLocation(false);
     }
@@ -150,19 +151,16 @@ export default function SearchBar({
       
       <div className="flex gap-3">
         <div className="relative flex-1">
-          {/* Input container avec effet de focus */}
           <div className={`relative transition-all duration-200 ${
-            isFocused ? 'ring-2 ring-blue-500 ring-opacity-50' : ''
+            isFocused ? 'ring-2 ring-[#f3cd08] ring-opacity-50' : ''
           } rounded-xl`}>
-            {/* Icône de recherche */}
             <div className="absolute left-4 top-1/2 -translate-y-1/2 z-10">
               <Search className={`w-5 h-5 transition-colors duration-200 ${
-                isFocused ? 'text-blue-600' : 'text-gray-400'
+                isFocused ? 'text-[#f3cd08]' : 'text-gray-400'
               }`} />
             </div>
             
             <input
-              ref={inputRef}
               type="text"
               value={query}
               onChange={(e) => setQuery(e.target.value)}
@@ -173,13 +171,12 @@ export default function SearchBar({
               onBlur={() => setIsFocused(false)}
               onKeyDown={handleKeyDown}
               placeholder={placeholder}
-              className="w-full pl-12 pr-12 py-4 bg-white border-2 border-gray-200 rounded-xl text-gray-900 placeholder-gray-400 transition-all duration-200 focus:outline-none focus:border-blue-500 focus:bg-blue-50/30"
+              className="w-full pl-12 pr-12 py-4 bg-white border-1 border-gray-200 rounded-xl text-gray-900 placeholder-gray-400 transition-all duration-200 focus:outline-none focus:border-[#f3cd08] focus:ring-2 focus:ring-[#f3cd08]/20"
             />
             
-            {/* Loader ou icône de pin */}
             <div className="absolute right-4 top-1/2 -translate-y-1/2">
               {isLoading ? (
-                <Loader2 className="w-5 h-5 text-blue-600 animate-spin" />
+                <Loader2 className="w-5 h-5 text-[#f3cd08] animate-spin" />
               ) : query && (
                 <MapPin className="w-5 h-5 text-gray-400" />
               )}
@@ -187,26 +184,24 @@ export default function SearchBar({
           </div>
         </div>
 
-        {/* Bouton géolocalisation */}
         {showCurrentLocation && (
           <motion.button
             whileHover={{ scale: 1.02 }}
             whileTap={{ scale: 0.98 }}
             onClick={handleCurrentLocation}
             disabled={loadingLocation}
-            className="px-5 py-4 bg-gradient-to-r from-blue-600 to-blue-700 text-white rounded-xl hover:from-blue-700 hover:to-blue-800 disabled:from-gray-400 disabled:to-gray-500 disabled:cursor-not-allowed flex items-center gap-2 whitespace-nowrap shadow-lg shadow-blue-500/30 transition-all duration-200"
+            className="px-5 py-4 bg-[#f3cd08] text-[#231f0f] rounded-xl hover:bg-[#e0bc07] disabled:bg-gray-300 disabled:cursor-not-allowed flex items-center gap-2 whitespace-nowrap shadow-lg transition-all duration-200"
           >
             {loadingLocation ? (
               <Loader2 className="w-5 h-5 animate-spin" />
             ) : (
               <Navigation className="w-5 h-5" />
             )}
-            <span className="hidden sm:inline font-medium">Ma position</span>
+            <span className="hidden sm:inline font-medium">Position</span>
           </motion.button>
         )}
       </div>
 
-      {/* Dropdown suggestions avec animations */}
       <AnimatePresence>
         {isOpen && suggestions.length > 0 && (
           <motion.div
@@ -218,20 +213,17 @@ export default function SearchBar({
           >
             <div className="max-h-80 overflow-y-auto">
               {suggestions.map((suggestion, index) => (
-                <motion.button
-                  key={suggestion.mapbox_id}
-                  initial={{ opacity: 0 }}
-                  animate={{ opacity: 1 }}
-                  transition={{ delay: index * 0.03 }}
+                <button
+                  key={suggestion.mapbox_id || index}
                   onClick={() => handleSelect(suggestion)}
                   className={`w-full px-5 py-4 text-left transition-all duration-150 flex items-start gap-3 ${
                     index === selectedIndex 
-                      ? 'bg-blue-50 border-l-4 border-blue-600' 
+                      ? 'bg-[#fef9e6] border-l-4 border-[#f3cd08]' 
                       : 'hover:bg-gray-50 border-l-4 border-transparent'
                   } ${index !== suggestions.length - 1 ? 'border-b border-gray-100' : ''}`}
                 >
                   <MapPinned className={`w-5 h-5 mt-0.5 flex-shrink-0 ${
-                    index === selectedIndex ? 'text-blue-600' : 'text-gray-400'
+                    index === selectedIndex ? 'text-[#f3cd08]' : 'text-gray-400'
                   }`} />
                   <div className="flex-1 min-w-0">
                     <div className="font-semibold text-gray-900 truncate">
@@ -241,14 +233,13 @@ export default function SearchBar({
                       {suggestion.place_formatted}
                     </div>
                   </div>
-                </motion.button>
+                </button>
               ))}
             </div>
           </motion.div>
         )}
       </AnimatePresence>
 
-      {/* Message si pas de résultats */}
       <AnimatePresence>
         {isOpen && !isLoading && query.length >= 2 && suggestions.length === 0 && (
           <motion.div

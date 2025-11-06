@@ -8,6 +8,7 @@
  * - Actions configurables
  */
 
+import React, { useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { X } from 'lucide-react';
 import LottieAnimation from './LottieAnimation';
@@ -28,7 +29,7 @@ export default function ConfirmationModal({
   autoCloseDelay = 3000,
 }) {
   // Auto-fermeture optionnelle
-  React.useEffect(() => {
+  useEffect(() => {
     if (isOpen && autoClose) {
       const timer = setTimeout(() => {
         handleClose();

@@ -1,7 +1,65 @@
-/* stylelint-disable at-rule-no-unknown */
-/* @tailwind base;
-@tailwind components;
-@tailwind utilities; */
-
 @import "tailwindcss";
 
+/* Reset global - À appliquer APRÈS Tailwind */
+html, body {
+  width: 100%;
+  min-height: 100vh;
+  overflow-x: hidden;
+  margin: 0;
+  padding: 0;
+}
+
+input:focus {
+  outline: none !important;
+}
+input {
+  outline: none !important;
+ 
+}
+
+
+
+#root {
+  width: 100%;
+  min-height: 100vh;
+  margin: 0;
+  padding: 0;
+}
+
+/* Smooth scrolling */
+html {
+  scroll-behavior: smooth;
+}
+
+/* Vaul Drawer styles */
+[vaul-drawer] {
+  touch-action: none;
+  will-change: transform;
+}
+
+[vaul-drawer][vaul-drawer-visible='true'] {
+  transition: transform 0.5s cubic-bezier(0.32, 0.72, 0, 1);
+}
+
+.vaul-overlay {
+  background: rgba(0, 0, 0, 0.3);
+  backdrop-filter: blur(4px);
+}
+
+
+@layer base {
+  
+  /* Scrollbar custom (optionnel) */
+  ::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+  }
+  
+  ::-webkit-scrollbar-track {
+    @apply bg-gray-100;
+  }
+  
+  ::-webkit-scrollbar-thumb {
+    @apply bg-gray-300 rounded-full hover:bg-[#f3cd08];
+  }
+}
