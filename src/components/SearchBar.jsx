@@ -11,6 +11,7 @@
 import { useState, useEffect, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Search, MapPin, Loader2, Navigation, MapPinned } from 'lucide-react';
+import toast from 'react-hot-toast';
 import { searchPlaces } from '../services/nominatimService';
 import { getCurrentPositionWithAddress } from '../services/geolocationService';
 
@@ -109,22 +110,86 @@ export default function SearchBar({
 
   const handleCurrentLocation = async () => {
     setLoadingLocation(true);
+    setIsLoading(false);
+    setSuggestions([]);
+    
+    // Afficher toast pendant la recherche
+    const loadingToast = toast.loading('Détection de votre position...', {
+      duration: 3000,
+    });
+    
     try {
       const point = await getCurrentPositionWithAddress();
-      setQuery(point.label || 'Ma position');
+      console.log('📍 Position obtenue:', point);
+      
+      // Dismiss loading toast
+      toast.dismiss(loadingToast);
+      
+      const locationLabel = point.label || 'Ma position';
+      setQuery(locationLabel);
       
       const coords = [point.coords_longitude, point.coords_latitude];
       
       onSelect({
-        label: point.label || 'Ma position',
+        label: locationLabel,
         coordinates: coords,
         longitude: coords[0],
         latitude: coords[1],
         address: `${point.quartier || ''} ${point.ville || ''}`.trim(),
       });
       setIsOpen(false);
+      setIsFocused(false);
+      
+      toast.success(`📍 ${locationLabel}`, {
+        duration: 3000,
+      });
     } catch (error) {
-      // Silencieux
+      console.error('❌ Erreur position complète:', {
+        error,
+        code: error.code,
+        message: error.message,
+        userMessage: error.userMessage
+      });
+      
+      // Dismiss loading toast
+      toast.dismiss(loadingToast);
+      setQuery('');
+      
+      // Afficher message spécifique selon le CODE d'erreur (pas le message)
+      if (error.code === 1) {
+        // Permission réellement refusée
+        toast.error(
+          'Autorisation refusée. Cliquez sur l\'icône de cadenas 🔒 dans la barre d\'adresse, puis autorisez la géolocalisation.',
+          {
+            duration: 7000,
+            icon: '🔒',
+          }
+        );
+      } else if (error.code === 2) {
+        // Position indisponible (pas de GPS, pas de réseau)
+        toast.error(
+          'Position indisponible. Vérifiez votre connexion internet.',
+          {
+            duration: 5000,
+            icon: '📡',
+          }
+        );
+      } else if (error.code === 3) {
+        // Timeout
+        toast.error(
+          'Délai dépassé. Réessayez.',
+          {
+            duration: 4000,
+            icon: '⏱️',
+          }
+        );
+      } else {
+        // Erreur inconnue
+        toast.error(`Erreur de localisation`, {
+          duration: 4000,
+          icon: '📍',
+        });
+      }
     } finally {
       setLoadingLocation(false);
     }

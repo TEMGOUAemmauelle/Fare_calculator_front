@@ -277,18 +277,28 @@ export default function MapView({
         },
       });
 
-      // Ligne principale - Utiliser congestion si disponible
-      const lineColor = route.congestion 
-        ? [
-            'match',
-            ['get', 'congestion'],
-            'low', ROUTE_COLORS.congestion.low,
-            'moderate', ROUTE_COLORS.congestion.moderate,
-            'heavy', ROUTE_COLORS.congestion.heavy,
-            'severe', ROUTE_COLORS.congestion.severe,
-            route.color || ROUTE_COLORS.primary
-          ]
-        : route.color || ROUTE_COLORS.primary;
+      // Ligne principale - Couleur selon congestion
+      let lineColor = ROUTE_COLORS.primary; // Bleu par défaut
+      
+      if (route.congestion_level) {
+        // Adapter couleur au niveau dominant
+        switch (route.congestion_level) {
+          case 'low':
+            lineColor = ROUTE_COLORS.congestion.low; // Vert
+            break;
+          case 'moderate':
+            lineColor = ROUTE_COLORS.primary; // Bleu
+            break;
+          case 'heavy':
+            lineColor = ROUTE_COLORS.congestion.moderate; // Orange
+            break;
+          case 'severe':
+            lineColor = ROUTE_COLORS.congestion.heavy; // Rouge
+            break;
+        }
+      } else if (route.color) {
+        lineColor = route.color;
+      }
 
       map.current.addLayer({
         id: layerId,
@@ -517,6 +527,29 @@ export default function MapView({
             <ZoomOut className="w-5 h-5 text-gray-700" />
           </motion.button>
 
+          {/* Bouton géolocalisation - Jaune */}
+          {showGeolocate && (
+            <motion.button
+              whileHover={{ scale: 1.05 }}
+              whileTap={{ scale: 0.95 }}
+              onClick={handleGeolocate}
+              disabled={isTracking}
+              className="p-3 bg-gradient-to-r from-yellow-400 to-yellow-500 hover:from-yellow-500 hover:to-yellow-600 disabled:from-gray-300 disabled:to-gray-400 rounded-xl shadow-lg border border-yellow-300 transition-colors"
+              title="Ma position"
+            >
+              {isTracking ? (
+                <motion.div
+                  animate={{ rotate: 360 }}
+                  transition={{ duration: 1, repeat: Infinity, ease: 'linear' }}
+                >
+                  <Navigation className="w-5 h-5 text-[#231f0f]" />
+                </motion.div>
+              ) : (
+                <Navigation className="w-5 h-5 text-[#231f0f]" />
+              )}
+            </motion.button>
+          )}
+
           {/* Fit bounds */}
           {markers.length > 1 && (
             <motion.button
@@ -550,48 +583,84 @@ export default function MapView({
         </motion.div>
       )}
 
-      {/* Bouton géolocalisation */}
-      {showGeolocate && (
-        <motion.button
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.5 }}
-          whileHover={{ scale: 1.05 }}
-          whileTap={{ scale: 0.95 }}
-          onClick={handleGeolocate}
-          disabled={isTracking}
-          className="absolute bottom-30 right-4 p-4 bg-yellow-400 hover:bg-blue-700 disabled:bg-blue-400 text-white rounded-full shadow-2xl z-10 transition-colors"
-          title="Ma position"
-        >
-          {isTracking ? (
-            <motion.div
-              animate={{ rotate: 360 }}
-              transition={{ duration: 1, repeat: Infinity, ease: 'linear' }}
-            >
-              <Navigation className="w-6 h-6" />
-            </motion.div>
-          ) : (
-            <Navigation className="w-6 h-6" />
-          )}
-        </motion.button>
-      )}
-
-      {/* Badge de chargement - Lottie discret */}
+      {/* Badge de chargement - Lottie grand au centre */}
       <AnimatePresence>
         {!mapLoaded && (
           <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            className="absolute bottom-20 right-6 z-20"
+            initial={{ opacity: 0, scale: 0.8 }}
+            animate={{ opacity: 1, scale: 1 }}
+            exit={{ opacity: 0, scale: 0.8 }}
+            className="absolute inset-0 flex items-center justify-center bg-white/80 backdrop-blur-sm z-20"
           >
-            <div className="w-24 h-24 bg-transparent">
-              <LottieAnimation 
-                animationData={yellowTaxiAnimation}
-                loop={true}
-              />
+            <div className="text-center">
+              <div className="w-48 h-48 mx-auto mb-4">
+                <LottieAnimation 
+                  animationData={yellowTaxiAnimation}
+                  loop={true}
+                />
+              </div>
+              <p className="text-[#231f0f] text-lg font-semibold">Chargement de la carte...</p>
             </div>
           </motion.div>
+        )}
+      </AnimatePresence>
+
+      {/* Boîte info trajet (distance/temps/congestion) */}
+      <AnimatePresence>
+        {route && route.distance && (
+          <motion.div
+            initial={{ opacity: 0, y: -20 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -20 }}
+            className="absolute top-24 left-4 bg-white rounded-2xl shadow-2xl p-4 z-20 min-w-[170px]"
+          >
+          <div className="space-y-3">
+            {/* Distance */}
+            <div className="flex items-center gap-3">
+              <div className="p-2 bg-blue-100 rounded-lg">
+                <RouteIcon className="w-5 h-5 text-blue-600" />
+              </div>
+              <div>
+                <div className="text-xs font-semibold text-gray-500 uppercase">Distance</div>
+                <div className="text-lg font-black text-gray-900">
+                  {(route.distance / 1000).toFixed(1)} km
+                </div>
+              </div>
+            </div>
+
+            {/* Durée */}
+            <div className="flex items-center gap-3">
+              <div className="p-2 bg-purple-100 rounded-lg">
+                <Clock className="w-5 h-5 text-purple-600" />
+              </div>
+              <div>
+                <div className="text-xs font-semibold text-gray-500 uppercase">Durée</div>
+                <div className="text-lg font-black text-gray-900">
+                  {Math.ceil(route.duration / 60)} min
+                </div>
+              </div>
+            </div>
+
+            {/* Congestion si disponible */}
+            {route.congestion_level && (
+              <div className="pt-2 border-t border-gray-100">
+                <div className="flex items-center justify-between">
+                  <span className="text-xs font-semibold text-gray-500 uppercase">Trafic</span>
+                  <span className={`text-xs font-bold px-2 py-1 rounded-full ${
+                    route.congestion_level === 'low' ? 'bg-green-100 text-green-700' :
+                    route.congestion_level === 'moderate' ? 'bg-yellow-100 text-yellow-700' :
+                    route.congestion_level === 'heavy' ? 'bg-orange-100 text-orange-700' :
+                    'bg-red-100 text-red-700'
+                  }`}>
+                    {route.congestion_level === 'low' ? 'Fluide' :
+                     route.congestion_level === 'moderate' ? 'Modéré' :
+                     route.congestion_level === 'heavy' ? 'Dense' : 'Saturé'}
+                  </span>
+                </div>
+              </div>
+            )}
+          </div>
+        </motion.div>
         )}
       </AnimatePresence>
 

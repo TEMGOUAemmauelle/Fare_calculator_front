@@ -22,9 +22,9 @@ import { MESSAGES, NOMINATIM_CONFIG } from '../config/constants';
  * Options par défaut géolocalisation
  */
 const DEFAULT_OPTIONS = {
-  enableHighAccuracy: true,  // Précision maximale (GPS si disponible)
-  timeout: 10000,            // Timeout 10s
-  maximumAge: 60000,         // Cache 1 min
+  enableHighAccuracy: false, // Désactiver haute précision pour éviter timeout
+  timeout: 15000,            // Timeout 15s
+  maximumAge: 0,             // Pas de cache pour forcer nouvelle position
 };
 
 /**
@@ -55,17 +55,25 @@ export const getCurrentPosition = (options = {}) => {
     }
     
     const opts = { ...DEFAULT_OPTIONS, ...options };
+    console.log('🌍 Demande de géolocalisation avec options:', opts);
     
     navigator.geolocation.getCurrentPosition(
       (position) => {
-        // Log silencieux
+        console.log('✅ Position obtenue:', {
+          lat: position.coords.latitude,
+          lng: position.coords.longitude,
+          accuracy: position.coords.accuracy
+        });
         resolve(position);
       },
       (error) => {
-        // Log uniquement si pas permission denied
-        if (error.code !== 1) {
-          console.warn('[getCurrentPosition] Erreur:', error.message);
-        }
+        console.error('❌ Erreur géolocalisation:', {
+          code: error.code,
+          message: error.message,
+          type: error.code === 1 ? 'PERMISSION_DENIED' :
+                error.code === 2 ? 'POSITION_UNAVAILABLE' :
+                error.code === 3 ? 'TIMEOUT' : 'UNKNOWN'
+        });
         
         // Formater erreur avec message utilisateur
         const formattedError = formatGeolocationError(error);
@@ -277,6 +285,12 @@ export const getCurrentPositionWithAddress = async () => {
  * @returns {Error} Erreur enrichie
  */
 const formatGeolocationError = (error) => {
+  console.log('🔍 Erreur géolocalisation détails:', {
+    code: error.code,
+    message: error.message,
+    PERMISSION_DENIED: error.PERMISSION_DENIED
+  });
+  
   const formattedError = new Error(error.message);
   formattedError.code = error.code;
   

@@ -1,30 +1,34 @@
 /**
- * @fileoverview AddTrajetPage - Page ajout trajet réel
+ * @fileoverview AddTrajetPage - Page ajout trajet réel avec CARTE
  * 
  * Formulaire pour contribuer avec :
+ * - Carte Mapbox en plein écran
+ * - Bottom sheet avec formulaire par-dessus
  * - Auto-enrichissement (géoloc, météo, heure)
- * - FormInput réutilisables
  * - Validation complète
  * - Modal de confirmation avec Lottie
- * - Responsive mobile/desktop
+ * - Switch élégant pour navigation
  */
 
 import { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { useNavigate, useLocation } from 'react-router-dom';
+import { Drawer } from 'vaul';
 import { 
-  ArrowLeft, 
   MapPin, 
   DollarSign,
   Sun,
   CloudRain,
   Loader2,
+  Calculator,
+  PlusCircle,
 } from 'lucide-react';
 import toast from 'react-hot-toast';
 
 // Components
 import FormInput from '../components/FormInput';
 import SearchBar from '../components/SearchBar';
+import MapView from '../components/MapView';
 import ErrorMessage from '../components/ErrorMessage';
 import { TrajetAddedModal } from '../components/ConfirmationModal';
 
@@ -53,6 +57,12 @@ export default function AddTrajetPage() {
   const [error, setError] = useState(null);
   const [showSuccessModal, setShowSuccessModal] = useState(false);
   const [validationErrors, setValidationErrors] = useState({});
+  
+  // États carte
+  const [mapCenter, setMapCenter] = useState([11.5021, 3.8480]); // Yaoundé
+  const [mapZoom, setMapZoom] = useState(12);
+  const [markers, setMarkers] = useState([]);
+  const [routeData, setRouteData] = useState(null);
 
   // Pré-remplir depuis estimation précédente
   useEffect(() => {
@@ -66,6 +76,67 @@ export default function AddTrajetPage() {
       }));
     }
   }, [location.state]);
+  
+  // Mettre à jour la carte quand les points changent
+  useEffect(() => {
+    const newMarkers = [];
+    
+    if (formData.depart_coords) {
+      newMarkers.push({
+        coordinates: formData.depart_coords,
+        type: 'depart',
+        color: '#3B82F6',
+        label: formData.depart_point || 'Départ',
+      });
+    }
+    
+    if (formData.arrivee_coords) {
+      newMarkers.push({
+        coordinates: formData.arrivee_coords,
+        type: 'arrivee',
+        color: '#EF4444',
+        label: formData.arrivee_point || 'Arrivée',
+      });
+    }
+    
+    setMarkers(newMarkers);
+    
+    // Tracer route si les 2 points existent
+    if (formData.depart_coords && formData.arrivee_coords) {
+      const centerLng = (formData.depart_coords[0] + formData.arrivee_coords[0]) / 2;
+      const centerLat = (formData.depart_coords[1] + formData.arrivee_coords[1]) / 2;
+      setMapCenter([centerLng, centerLat]);
+      setMapZoom(13);
+      
+      const fetchRoute = async () => {
+        try {
+          const { getDirections } = await import('../services/mapboxService');
+          const result = await getDirections([
+            formData.depart_coords,
+            formData.arrivee_coords,
+          ], {
+            profile: 'mapbox/driving-traffic',
+            steps: true,
+          });
+          
+          if (result?.routes?.[0]) {
+            const route = result.routes[0];
+            setRouteData({
+              coordinates: route.geometry.coordinates,
+              distance: route.distance,
+              duration: route.duration,
+            });
+          }
+        } catch (error) {
+          console.error('❌ Erreur tracé route:', error);
+        }
+      };
+      
+      fetchRoute();
+    } else {
+      setRouteData(null);
+    }
+  }, [formData.depart_coords, formData.arrivee_coords, formData.depart_point, formData.arrivee_point]);
 
   const handleInputChange = (field, value) => {
     setFormData(prev => ({ ...prev, [field]: value }));
@@ -80,18 +151,20 @@ export default function AddTrajetPage() {
   };
 
   const handleDepartSelect = (location) => {
+    console.log('🗺️ Départ sélectionné:', location);
     setFormData(prev => ({
       ...prev,
-      depart_point: location.place_name || location.label,
-      depart_coords: location.coordinates || [location.longitude, location.latitude],
+      depart_point: location.label || location.place_name || '',
+      depart_coords: location.coords || [location.longitude, location.latitude],
     }));
   };
 
   const handleArriveeSelect = (location) => {
+    console.log('🗺️ Arrivée sélectionnée:', location);
     setFormData(prev => ({
       ...prev,
-      arrivee_point: location.place_name || location.label,
-      arrivee_coords: location.coordinates || [location.longitude, location.latitude],
+      arrivee_point: location.label || location.place_name || '',
+      arrivee_coords: location.coords || [location.longitude, location.latitude],
     }));
   };
 
@@ -170,74 +243,113 @@ export default function AddTrajetPage() {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-gray-50 to-white">
-      {/* Header - Responsive */}
-      <div className="sticky top-0 z-10 bg-white border-b border-gray-200 shadow-sm">
-        <div className="max-w-4xl mx-auto px-4 py-4 flex items-center gap-4">
-          <motion.button
-            whileHover={{ scale: 1.05 }}
-            whileTap={{ scale: 0.95 }}
-            onClick={() => navigate(-1)}
-            className="p-2 hover:bg-gray-100 rounded-xl transition-colors"
-          >
-            <ArrowLeft className="w-6 h-6 text-gray-700" />
-          </motion.button>
-          
-          <div className="flex-1">
-            <h1 className="text-xl md:text-2xl font-black text-gray-900">
-              Ajouter un trajet
-            </h1>
-            <p className="text-sm text-gray-600 mt-1">
-              Aidez la communauté en partageant vos données
-            </p>
-          </div>
-        </div>
+    <div className="relative w-full h-screen overflow-hidden bg-[#f8f8f5]">
+      {/* Carte plein écran */}
+      <div className="absolute inset-0">
+        <MapView
+          center={mapCenter}
+          zoom={mapZoom}
+          markers={markers}
+          route={routeData}
+          showControls={true}
+          showGeolocate={true}
+          className="w-full h-full"
+        />
       </div>
 
-      {/* Formulaire - Container responsive */}
-      <div className="max-w-4xl mx-auto px-4 py-8">
-        <motion.form
-          initial={{ opacity: 0, y: 20 }}
+      {/* Switch élégant en haut au centre */}
+      <div className="absolute top-6 left-1/2 -translate-x-1/2 z-20">
+        <motion.div
+          initial={{ opacity: 0, y: -20 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.5 }}
-          onSubmit={handleSubmit}
-          className="bg-white rounded-3xl shadow-xl p-6 md:p-8 space-y-6"
+          className="bg-white/95 backdrop-blur-sm rounded-full p-1 shadow-2xl border border-gray-200"
         >
+          <div className="flex gap-1">
+            <button
+              onClick={() => navigate('/estimate')}
+              className="px-6 py-3 bg-transparent hover:bg-gray-100 text-gray-700 rounded-full font-bold text-sm flex items-center gap-2 transition-all"
+            >
+              <Calculator className="w-4 h-4" strokeWidth={2.5} />
+              <span>Estimer</span>
+            </button>
+            
+            <button
+              onClick={() => navigate('/add-trajet')}
+              className="px-6 py-3 bg-gradient-to-r from-yellow-400 to-yellow-500 text-[#231f0f] rounded-full font-bold text-sm flex items-center gap-2 shadow-lg"
+            >
+              <PlusCircle className="w-4 h-4" strokeWidth={3} />
+              <span>Ajouter</span>
+            </button>
+          </div>
+        </motion.div>
+      </div>
+
+      {/* Bottom Sheet avec Formulaire */}
+      <Drawer.Root shouldScaleBackground={false} modal={true}>
+        <Drawer.Trigger asChild>
+          <button 
+            className="absolute bottom-8 left-1/2 -translate-x-1/2 px-6 py-3 bg-[#f3cd08] text-gray-700 rounded-full font-bold shadow-2xl z-10"
+            aria-label="Ajouter un trajet"
+          >
+            Ajouter un trajet effectué
+          </button>
+        </Drawer.Trigger>
+
+        <Drawer.Portal>
+          <Drawer.Overlay className="fixed inset-0 bg-black/40 z-40" />
+          <Drawer.Content 
+            className="bg-white flex flex-col rounded-t-3xl h-auto max-h-[85vh] fixed bottom-0 left-0 right-0 z-50"
+            aria-describedby="drawer-description-add"
+          >
+            <div className="p-4 bg-white rounded-t-3xl flex-shrink-0">
+              <div className="mx-auto w-12 h-1.5 flex-shrink-0 rounded-full bg-gray-300 mb-8" />
+              <div className="max-w-md mx-auto">
+                <Drawer.Title className="font-black text-2xl mb-2 text-gray-700">
+                  Ajouter un trajet
+                </Drawer.Title>
+                <p id="drawer-description-add" className="text-sm text-gray-600">
+                  Aidez la communauté en partageant vos données
+                </p>
+              </div>
+            </div>
+
+            <div className="p-4 bg-white overflow-y-auto flex-1">
+              <div className="max-w-md mx-auto">
+                <form onSubmit={handleSubmit} className="space-y-5">
           {/* Section Itinéraire */}
-          <div className="space-y-4">
-            <h2 className="text-lg font-bold text-gray-900 flex items-center gap-2">
-              <MapPin className="w-5 h-5 text-blue-600" />
+          <div className="space-y-3">
+            <h2 className="text-base font-bold text-gray-900 flex items-center gap-2">
+              <MapPin className="w-4 h-4 text-blue-600" />
               Itinéraire
             </h2>
 
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div className="space-y-3">
               <div>
-                <label className="block text-sm font-semibold text-gray-900 mb-2">
-                  Point de départ <span className="text-red-500">*</span>
+                <label className="block text-sm font-semibold text-gray-900 mb-1">
+                  Départ <span className="text-red-500">*</span>
                 </label>
                 <SearchBar
                   placeholder="Saisir le lieu de départ"
                   value={formData.depart_point}
-                  onLocationSelect={handleDepartSelect}
-                  icon={<MapPin className="w-5 h-5" />}
+                  onSelect={handleDepartSelect}
+                  showCurrentLocation={true}
                 />
                 {validationErrors.depart_point && (
-                  <p className="mt-2 text-sm text-red-600">{validationErrors.depart_point}</p>
+                  <p className="mt-1 text-xs text-red-600">{validationErrors.depart_point}</p>
                 )}
               </div>
 
               <div>
-                <label className="block text-sm font-semibold text-gray-900 mb-2">
-                  Point d'arrivée <span className="text-red-500">*</span>
+                <label className="block text-sm font-semibold text-gray-900 mb-1">
+                  Arrivée <span className="text-red-500">*</span>
                 </label>
                 <SearchBar
                   placeholder="Saisir le lieu d'arrivée"
                   value={formData.arrivee_point}
-                  onLocationSelect={handleArriveeSelect}
-                  icon={<MapPin className="w-5 h-5" />}
+                  onSelect={handleArriveeSelect}
                 />
                 {validationErrors.arrivee_point && (
-                  <p className="mt-2 text-sm text-red-600">{validationErrors.arrivee_point}</p>
+                  <p className="mt-1 text-xs text-red-600">{validationErrors.arrivee_point}</p>
                 )}
               </div>
             </div>
@@ -245,18 +357,18 @@ export default function AddTrajetPage() {
 
           {/* Section Prix */}
           <div>
-            <h2 className="text-lg font-bold text-gray-900 flex items-center gap-2 mb-4">
-              <DollarSign className="w-5 h-5 text-green-600" />
+            <h2 className="text-base font-bold text-gray-900 flex items-center gap-2 mb-2">
+              <DollarSign className="w-4 h-4 text-green-600" />
               Prix payé
             </h2>
 
             <FormInput
-              label="Montant en FCFA"
+              label=""
               name="prix_paye"
               type="number"
               value={formData.prix_paye}
               onChange={(e) => handleInputChange('prix_paye', e.target.value)}
-              placeholder="Ex: 1500"
+              placeholder="Montant en FCFA (ex: 1500)"
               min={0}
               step={50}
               required
@@ -267,30 +379,30 @@ export default function AddTrajetPage() {
           </div>
 
           {/* Section Conditions */}
-          <div className="space-y-4">
-            <h2 className="text-lg font-bold text-gray-900">
+          <div className="space-y-3">
+            <h2 className="text-base font-bold text-gray-900">
               Conditions du trajet
             </h2>
 
             {/* Météo */}
             <div>
-              <label className="block text-sm font-semibold text-gray-900 mb-3">
+              <label className="block text-sm font-semibold text-gray-900 mb-2">
                 Météo
               </label>
-              <div className="grid grid-cols-2 gap-3">
+              <div className="grid grid-cols-2 gap-2">
                 <motion.button
                   type="button"
                   whileHover={{ scale: 1.02 }}
                   whileTap={{ scale: 0.98 }}
                   onClick={() => handleInputChange('meteo', 0)}
-                  className={`flex items-center justify-center gap-3 p-4 rounded-2xl border-2 transition-all ${
+                  className={`flex items-center justify-center gap-2 p-3 rounded-xl border-2 transition-all ${
                     formData.meteo === 0
                       ? 'border-yellow-500 bg-yellow-50 shadow-lg shadow-yellow-500/20'
                       : 'border-gray-200 bg-white hover:border-gray-300'
                   }`}
                 >
-                  <Sun className={`w-6 h-6 ${formData.meteo === 0 ? 'text-yellow-600' : 'text-gray-400'}`} />
-                  <span className={`font-bold ${formData.meteo === 0 ? 'text-yellow-900' : 'text-gray-600'}`}>
+                  <Sun className={`w-5 h-5 ${formData.meteo === 0 ? 'text-yellow-600' : 'text-gray-400'}`} />
+                  <span className={`font-bold text-sm ${formData.meteo === 0 ? 'text-yellow-900' : 'text-gray-600'}`}>
                     Ensoleillé
                   </span>
                 </motion.button>
@@ -300,14 +412,14 @@ export default function AddTrajetPage() {
                   whileHover={{ scale: 1.02 }}
                   whileTap={{ scale: 0.98 }}
                   onClick={() => handleInputChange('meteo', 2)}
-                  className={`flex items-center justify-center gap-3 p-4 rounded-2xl border-2 transition-all ${
+                  className={`flex items-center justify-center gap-2 p-3 rounded-xl border-2 transition-all ${
                     formData.meteo === 2
                       ? 'border-blue-500 bg-blue-50 shadow-lg shadow-blue-500/20'
                       : 'border-gray-200 bg-white hover:border-gray-300'
                   }`}
                 >
-                  <CloudRain className={`w-6 h-6 ${formData.meteo === 2 ? 'text-blue-600' : 'text-gray-400'}`} />
-                  <span className={`font-bold ${formData.meteo === 2 ? 'text-blue-900' : 'text-gray-600'}`}>
+                  <CloudRain className={`w-5 h-5 ${formData.meteo === 2 ? 'text-blue-600' : 'text-gray-400'}`} />
+                  <span className={`font-bold text-sm ${formData.meteo === 2 ? 'text-blue-900' : 'text-gray-600'}`}>
                     Pluvieux
                   </span>
                 </motion.button>
@@ -316,10 +428,10 @@ export default function AddTrajetPage() {
 
             {/* Tranche horaire */}
             <div>
-              <label className="block text-sm font-semibold text-gray-900 mb-3">
+              <label className="block text-sm font-semibold text-gray-900 mb-2">
                 Tranche horaire
               </label>
-              <div className="grid grid-cols-2 md:grid-cols-4 gap-2 p-1 bg-gray-100 rounded-2xl">
+              <div className="grid grid-cols-4 gap-1 p-1 bg-gray-100 rounded-xl">
                 {Object.entries(HEURE_TRANCHES).map(([key, { label }]) => (
                   <motion.button
                     key={key}
@@ -327,7 +439,7 @@ export default function AddTrajetPage() {
                     whileHover={{ scale: 1.02 }}
                     whileTap={{ scale: 0.98 }}
                     onClick={() => handleInputChange('heure_tranche', key)}
-                    className={`py-3 rounded-xl font-bold text-sm transition-all ${
+                    className={`py-2 px-1 rounded-lg font-bold text-xs transition-all ${
                       formData.heure_tranche === key
                         ? 'bg-white text-gray-900 shadow-md'
                         : 'text-gray-600 hover:text-gray-900'
@@ -357,11 +469,11 @@ export default function AddTrajetPage() {
             whileHover={{ scale: 1.02 }}
             whileTap={{ scale: 0.98 }}
             disabled={isLoading}
-            className="w-full py-4 bg-gradient-to-r from-green-500 to-emerald-600 hover:from-green-600 hover:to-emerald-700 disabled:from-gray-300 disabled:to-gray-400 text-white font-black text-lg rounded-2xl shadow-lg shadow-green-500/30 disabled:cursor-not-allowed transition-all flex items-center justify-center gap-3"
+            className="w-full py-3 bg-gradient-to-r from-yellow-400 to-yellow-500 hover:from-yellow-500 hover:to-yellow-600 disabled:from-gray-300 disabled:to-gray-400 text-[#231f0f] disabled:text-gray-500 font-black text-base rounded-xl shadow-lg shadow-yellow-500/30 disabled:cursor-not-allowed transition-all flex items-center justify-center gap-2"
           >
             {isLoading ? (
               <>
-                <Loader2 className="w-6 h-6 animate-spin" />
+                <Loader2 className="w-5 h-5 animate-spin" />
                 Envoi en cours...
               </>
             ) : (
@@ -372,11 +484,15 @@ export default function AddTrajetPage() {
           </motion.button>
 
           {/* Note */}
-          <p className="text-center text-sm text-gray-500">
+          <p className="text-center text-xs text-gray-500">
             Vos données sont anonymes et aident à améliorer les estimations pour tous.
           </p>
-        </motion.form>
-      </div>
+                </form>
+              </div>
+            </div>
+          </Drawer.Content>
+        </Drawer.Portal>
+      </Drawer.Root>
 
       {/* Modal de confirmation */}
       <TrajetAddedModal

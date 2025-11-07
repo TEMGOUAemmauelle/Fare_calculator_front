@@ -20,6 +20,15 @@ const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || 'http://localhost:8000
 const API_KEY = import.meta.env.VITE_API_KEY || '';
 const API_TIMEOUT = parseInt(import.meta.env.VITE_API_TIMEOUT || '30000', 10);
 
+// Log configuration au chargement (dev only)
+if (import.meta.env.DEV) {
+  console.log('🔧 [API Config] Initialisation:', {
+    baseURL: API_BASE_URL,
+    apiKey: API_KEY ? `${API_KEY.substring(0, 8)}...${API_KEY.substring(API_KEY.length - 4)}` : '❌ MANQUANT',
+    timeout: API_TIMEOUT,
+  });
+}
+
 /**
  * Instance Axios configurée pour le backend
  */
@@ -28,6 +37,8 @@ export const apiClient = axios.create({
   timeout: API_TIMEOUT,
   headers: {
     'Content-Type': 'application/json',
+    // Ajouter l'Authorization dès la création si disponible
+    ...(API_KEY && { 'Authorization': `ApiKey ${API_KEY}` }),
   },
 });
 
@@ -36,23 +47,23 @@ export const apiClient = axios.create({
 // ===========================================
 apiClient.interceptors.request.use(
   (config) => {
-    // Ajouter clé API si disponible (sauf pour endpoint public /health)
+    // Forcer l'ajout du header Authorization pour chaque requête (même OPTIONS)
     if (API_KEY && !config.url?.includes('/health')) {
       config.headers['Authorization'] = `ApiKey ${API_KEY}`;
     }
     
     // Log en développement
     if (import.meta.env.DEV) {
-      console.log(`[API Request] ${config.method?.toUpperCase()} ${config.url}`, {
-        params: config.params,
-        data: config.data,
+      console.log(`🔵 [API Request] ${config.method?.toUpperCase()} ${config.url}`, {
+        Authorization: config.headers['Authorization'] ? `✅ ${config.headers['Authorization'].substring(0, 20)}...` : '❌ MANQUANT',
+        ContentType: config.headers['Content-Type'],
       });
     }
     
     return config;
   },
   (error) => {
-    console.error('[API Request Error]', error);
+    console.error('🔴 [API Request Error]', error);
     return Promise.reject(error);
   }
 );
@@ -64,7 +75,10 @@ apiClient.interceptors.response.use(
   (response) => {
     // Log succès en dev
     if (import.meta.env.DEV) {
-      console.log(`[API Response] ${response.config.method?.toUpperCase()} ${response.config.url}`, response.data);
+      console.log(`✅ [API Response] ${response.config.method?.toUpperCase()} ${response.config.url}`, {
+        status: response.status,
+        data: response.data,
+      });
     }
     return response;
   },
@@ -73,11 +87,13 @@ apiClient.interceptors.response.use(
     const status = error.response?.status;
     const data = error.response?.data;
     const url = error.config?.url;
+    const method = error.config?.method?.toUpperCase();
     
-    console.error(`[API Error] ${status} ${url}`, {
+    console.error(`🔴 [API Error] ${method} ${url} - ${status}`, {
       status,
       data,
       message: error.message,
+      headers: error.config?.headers,
     });
     
     // Gestion par type d'erreur
@@ -86,7 +102,8 @@ apiClient.interceptors.response.use(
       error.userMessage = 'Impossible de contacter le serveur. Vérifiez votre connexion Internet.';
     } else if (status === 401) {
       // Erreur authentification
-      error.userMessage = 'Clé API invalide ou manquante. Contactez l\'administrateur.';
+      console.error('🔴 [AUTH ERROR] Header envoyé:', error.config?.headers?.Authorization);
+      error.userMessage = 'Authentification échouée. Vérifiez la configuration de la clé API.';
     } else if (status === 400) {
       // Erreur validation
       const validationErrors = [];

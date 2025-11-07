@@ -23,6 +23,8 @@ import {
   Sunrise,
   Sunset,
   Moon,
+  Calculator,
+  PlusCircle,
 } from 'lucide-react';
 import toast from 'react-hot-toast';
 
@@ -176,13 +178,25 @@ export default function EstimatePageDesktop() {
           
           if (result?.routes?.[0]) {
             const route = result.routes[0];
+            
+            // Extraire niveau de congestion moyen
+            const congestionLevels = route.legs?.[0]?.annotation?.congestion || [];
+            const congestionCounts = { low: 0, moderate: 0, heavy: 0, severe: 0 };
+            congestionLevels.forEach(level => {
+              if (congestionCounts.hasOwnProperty(level)) congestionCounts[level]++;
+            });
+            const dominantCongestion = Object.keys(congestionCounts).reduce((a, b) => 
+              congestionCounts[a] > congestionCounts[b] ? a : b
+            );
+            
             setRoute({
               coordinates: route.geometry.coordinates,
-              color: '#f3cd08',
               distance: route.distance,
               duration: route.duration,
+              congestion: congestionLevels.length > 0,
+              congestion_level: congestionLevels.length > 0 ? dominantCongestion : null,
             });
-            console.log('✅ Route tracée:', route.distance, 'm,', Math.round(route.duration / 60), 'min');
+            console.log('✅ Route tracée:', route.distance, 'm,', Math.round(route.duration / 60), 'min', '- Trafic:', dominantCongestion || 'N/A');
           }
         } catch (error) {
           console.error('❌ Erreur tracé route:', error);
@@ -280,8 +294,16 @@ export default function EstimatePageDesktop() {
 
       toast.success('Estimation calculée');
     } catch (err) {
-      setError(err.response?.data?.detail || 'Impossible de calculer l\'estimation');
-      toast.error('Erreur lors du calcul');
+      console.error('❌ Erreur estimation:', err);
+      
+      // Message spécifique pour erreur 401
+      if (err.response?.status === 401) {
+        setError('Erreur d\'authentification avec le serveur. Vérifiez la configuration backend (CORS).');
+        toast.error('Erreur d\'authentification serveur');
+      } else {
+        setError(err.response?.data?.detail || err.userMessage || 'Impossible de calculer l\'estimation');
+        toast.error('Erreur lors du calcul');
+      }
     } finally {
       setIsLoading(false);
     }
@@ -301,6 +323,33 @@ export default function EstimatePageDesktop() {
           className="absolute inset-0"
           height="100vh"
         />
+        
+        {/* Switch élégant en haut au centre */}
+        <div className="absolute top-6 left-1/2 -translate-x-1/2 z-20">
+          <motion.div
+            initial={{ opacity: 0, y: -20 }}
+            animate={{ opacity: 1, y: 0 }}
+            className="bg-white/95 backdrop-blur-sm rounded-full p-1 shadow-2xl border border-gray-200"
+          >
+            <div className="flex gap-1">
+              <button
+                onClick={() => navigate('/estimate')}
+                className="px-6 py-3 bg-gradient-to-r from-yellow-400 to-yellow-500 text-[#231f0f] rounded-full font-bold text-sm flex items-center gap-2 shadow-lg"
+              >
+                <Calculator className="w-4 h-4" strokeWidth={3} />
+                <span>Estimer</span>
+              </button>
+              
+              <button
+                onClick={() => navigate('/add-trajet')}
+                className="px-6 py-3 bg-transparent hover:bg-gray-100 text-gray-700 rounded-full font-bold text-sm flex items-center gap-2 transition-all"
+              >
+                <PlusCircle className="w-4 h-4" strokeWidth={2.5} />
+                <span>Ajouter</span>
+              </button>
+            </div>
+          </motion.div>
+        </div>
       </div>
 
       {/* Sidebar - Droite */}
@@ -308,10 +357,15 @@ export default function EstimatePageDesktop() {
         <div className="p-6">
           {!showResults ? (
             <>
-              {/* Titre */}
-              <h2 className="text-3xl font-black text-gray-700 mb-8">
-                Estimer un trajet
-              </h2>
+              {/* Header */}
+              <div className="mb-8">
+                <h2 className="text-3xl font-black text-gray-700">
+                  Estimer un trajet
+                </h2>
+                <p className="text-sm text-gray-600 mt-2">
+                  Calculez le prix estimé de votre course
+                </p>
+              </div>
 
               {/* Inputs */}
               <div className="flex flex-col gap-4 mb-6">

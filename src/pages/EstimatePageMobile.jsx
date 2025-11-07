@@ -18,6 +18,8 @@ import {
   Sun,
   CloudRain,
   TrendingUp,
+  Calculator,
+  PlusCircle,
 } from 'lucide-react';
 import toast from 'react-hot-toast';
 
@@ -153,13 +155,25 @@ export default function EstimatePageMobile() {
           
           if (result?.routes?.[0]) {
             const route = result.routes[0];
+            
+            // Extraire niveau de congestion moyen
+            const congestionLevels = route.legs?.[0]?.annotation?.congestion || [];
+            const congestionCounts = { low: 0, moderate: 0, heavy: 0, severe: 0 };
+            congestionLevels.forEach(level => {
+              if (congestionCounts.hasOwnProperty(level)) congestionCounts[level]++;
+            });
+            const dominantCongestion = Object.keys(congestionCounts).reduce((a, b) => 
+              congestionCounts[a] > congestionCounts[b] ? a : b
+            );
+            
             setRouteData({
               coordinates: route.geometry.coordinates,
-              color: '#f3cd08',
               distance: route.distance,
               duration: route.duration,
+              congestion: congestionLevels.length > 0,
+              congestion_level: congestionLevels.length > 0 ? dominantCongestion : null,
             });
-            console.log('✅ Route tracée:', route.distance, 'm,', Math.round(route.duration / 60), 'min');
+            console.log('✅ Route tracée:', route.distance, 'm,', Math.round(route.duration / 60), 'min', '- Trafic:', dominantCongestion || 'N/A');
           }
         } catch (error) {
           console.error('❌ Erreur tracé route:', error);
@@ -223,8 +237,16 @@ export default function EstimatePageMobile() {
 
       toast.success('Estimation calculée');
     } catch (err) {
-      setError(err.response?.data?.detail || 'Impossible de calculer');
-      toast.error('Erreur lors du calcul');
+      console.error('❌ Erreur estimation:', err);
+      
+      // Message spécifique pour erreur 401
+      if (err.response?.status === 401) {
+        setError('Erreur d\'authentification avec le serveur. Vérifiez la configuration backend (CORS).');
+        toast.error('Erreur d\'authentification serveur');
+      } else {
+        setError(err.response?.data?.detail || err.userMessage || 'Impossible de calculer');
+        toast.error('Erreur lors du calcul');
+      }
     } finally {
       setIsLoading(false);
     }
@@ -245,26 +267,59 @@ export default function EstimatePageMobile() {
         />
       </div>
 
+      {/* Switch élégant en haut au centre */}
+      <div className="absolute top-6 left-1/2 -translate-x-1/2 z-20">
+        <motion.div
+          initial={{ opacity: 0, y: -20 }}
+          animate={{ opacity: 1, y: 0 }}
+          className="bg-white/95 backdrop-blur-sm rounded-full p-1 shadow-2xl border border-gray-200"
+        >
+          <div className="flex gap-1">
+            <button
+              onClick={() => navigate('/estimate')}
+              className="px-6 py-3 bg-gradient-to-r from-yellow-400 to-yellow-500 text-[#231f0f] rounded-full font-bold text-sm flex items-center gap-2 shadow-lg"
+            >
+              <Calculator className="w-4 h-4" strokeWidth={3} />
+              <span>Estimer</span>
+            </button>
+            
+            <button
+              onClick={() => navigate('/add-trajet')}
+              className="px-6 py-3 bg-transparent hover:bg-gray-100 text-gray-700 rounded-full font-bold text-sm flex items-center gap-2 transition-all"
+            >
+              <PlusCircle className="w-4 h-4" strokeWidth={2.5} />
+              <span>Ajouter</span>
+            </button>
+          </div>
+        </motion.div>
+      </div>
+
       {/* Bottom Sheet CORRIGÉ */}
-      <Drawer.Root shouldScaleBackground={false}>
+      <Drawer.Root shouldScaleBackground={false} modal={true}>
         <Drawer.Trigger asChild>
-          <button className="absolute bottom-8 left-1/2 -translate-x-1/2 px-6 py-3 bg-[#f3cd08] text-gray-700 rounded-full font-bold shadow-2xl z-10">
+          <button 
+            className="absolute bottom-8 left-1/2 -translate-x-1/2 px-6 py-3 bg-[#f3cd08] text-gray-700 rounded-full font-bold shadow-2xl z-10"
+            aria-label="Estimer un trajet"
+          >
             Estimer un trajet
           </button>
         </Drawer.Trigger>
 
         <Drawer.Portal>
           <Drawer.Overlay className="fixed inset-0 bg-black/40 z-40" />
-          <Drawer.Content className="bg-white flex flex-col rounded-t-3xl h-auto max-h-[80vh] fixed bottom-0 left-0 right-0 z-50">
+          <Drawer.Content 
+            className="bg-white flex flex-col rounded-t-3xl h-auto max-h-[80vh] fixed bottom-0 left-0 right-0 z-50"
+            aria-describedby="drawer-description"
+          >
             <div className="p-4 bg-white rounded-t-3xl flex-shrink-0">
               <div className="mx-auto w-12 h-1.5 flex-shrink-0 rounded-full bg-gray-300 mb-8" />
               <div className="max-w-md mx-auto">
-                <Drawer.Title className="font-black text-2xl mb-6 text-gray-800">
+                <Drawer.Title className="font-black text-2xl mb-6 text-gray-700">
                   Estimer un trajet
                 </Drawer.Title>
-                <Drawer.Description className="sr-only">
+                <p id="drawer-description" className="sr-only">
                   Formulaire pour estimer le prix d'un trajet en taxi
-                </Drawer.Description>
+                </p>
               </div>
             </div>
 

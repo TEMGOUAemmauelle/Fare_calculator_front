@@ -31,10 +31,10 @@ export const METEO_OPTIONS = Object.entries(METEO_CODES).map(([code, data]) => (
 // TRANCHES HORAIRES - Mappings API → labels/icônes
 // ===========================================
 export const HEURE_TRANCHES = {
-  matin: { label: 'Matin (6h-12h)', emoji: '🌅', color: 'text-orange-500', bg: 'bg-orange-50' },
-  'apres-midi': { label: 'Après-midi (12h-18h)', emoji: '☀️', color: 'text-yellow-600', bg: 'bg-yellow-50' },
-  soir: { label: 'Soir (18h-22h)', emoji: '🌆', color: 'text-indigo-500', bg: 'bg-indigo-50' },
-  nuit: { label: 'Nuit (22h-6h)', emoji: '🌙', color: 'text-blue-700', bg: 'bg-blue-100' },
+  matin: { label: '6h-12h', emoji: '🌅', color: 'text-orange-500', bg: 'bg-orange-50' },
+  'apres-midi': { label: '12h-18h', emoji: '☀️', color: 'text-yellow-600', bg: 'bg-yellow-50' },
+  soir: { label: '18h-22h', emoji: '🌆', color: 'text-indigo-500', bg: 'bg-indigo-50' },
+  nuit: { label: '22h-6h', emoji: '🌙', color: 'text-blue-700', bg: 'bg-blue-100' },
 };
 
 export const HEURE_OPTIONS = Object.entries(HEURE_TRANCHES).map(([key, data]) => ({

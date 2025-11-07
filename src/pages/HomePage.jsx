@@ -149,14 +149,14 @@ export default function HomePage() {
           Votre trajet, votre tarif, en toute simplicité.
         </motion.p>
 
-        {/* CTA Button */}
+        {/* CTA Buttons */}
         <motion.div
           initial={{ opacity: 0, y: 30 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.7, duration: 0.6 }}
-          className="w-full max-w-sm md:max-w-md"
+          className="w-full max-w-sm md:max-w-md space-y-4"
         >
-          {/* Glow effect button */}
+          {/* Primary Button - Estimer */}
           <div className="relative">
             <motion.div
               animate={{
@@ -177,9 +177,19 @@ export default function HomePage() {
               onClick={handleStart}
               className="relative w-full py-4 md:py-4 bg-[#f3cd08] hover:bg-[#e0bc07] text-[#231f0f] font-black text-xl md:text-2xl rounded-full shadow-2xl transition-all"
             >
-              Commencer
+              Estimer un trajet
             </motion.button>
           </div>
+
+          {/* Secondary Button - Ajouter trajet */}
+          <motion.button
+            whileHover={{ scale: 1.02 }}
+            whileTap={{ scale: 0.98 }}
+            onClick={() => navigate('/add-trajet')}
+            className="w-full py-4 md:py-4 bg-white hover:bg-gray-50 text-[#231f0f] font-bold text-lg md:text-xl rounded-full shadow-lg border-2 border-gray-200 hover:border-[#f3cd08] transition-all"
+          >
+            Ajouter un trajet effectué
+          </motion.button>
         </motion.div>
 
         {/* Info badges - Desktop uniquement */}
