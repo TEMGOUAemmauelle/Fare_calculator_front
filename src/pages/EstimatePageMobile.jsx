@@ -68,7 +68,6 @@ export default function EstimatePageMobile() {
   const [markers, setMarkers] = useState([]);
   const [routeData, setRouteData] = useState(null);
   const drawerFirstFocusRef = useRef(null);
-  const [drawerMounted, setDrawerMounted] = useState(false);
 
   useEffect(() => {
     let mounted = true;
@@ -102,14 +101,8 @@ export default function EstimatePageMobile() {
     };
   }, []);
 
-  // Monter le Drawer après le premier rendu pour éviter un flash
-  // (certains navigateurs peuvent déclencher un rendu du portail
-  // pendant la transition de route). Le Drawer sera monté juste
-  // après le premier paint du composant.
-  useEffect(() => {
-    const t = setTimeout(() => setDrawerMounted(true), 20);
-    return () => clearTimeout(t);
-  }, []);
+  // NOTE: removed delayed mounting for Drawer to avoid timing issues
+  // and layout jumps. Drawer is mounted immediately (like AddTrajetPage).
 
   const setCurrentTimeSlot = () => {
     const hour = new Date().getHours();
@@ -360,11 +353,10 @@ export default function EstimatePageMobile() {
       </div>
 
       {/* Bottom Sheet CORRIGÉ */}
-      {drawerMounted && (
-        <Drawer.Root
-          shouldScaleBackground={false}
-          modal={true}
-          onOpenChange={(open) => {
+      <Drawer.Root
+        shouldScaleBackground={false}
+        modal={true}
+        onOpenChange={(open) => {
           // Quand le drawer s'ouvre, focuser un élément interne pour éviter
           // que le trigger conserve le focus et déclenche l'avertissement
           // aria-hidden (élément caché avec focus). On utilise un petit
@@ -386,7 +378,7 @@ export default function EstimatePageMobile() {
         >
         <Drawer.Trigger asChild>
           <button 
-            className="absolute bottom-8 left-1/2 -translate-x-1/2 px-6 py-3 bg-[#f3cd08] text-gray-700 rounded-full font-bold shadow-2xl z-10"
+            className="fixed bottom-8 left-1/2 -translate-x-1/2 px-6 py-3 bg-[#f3cd08] text-gray-700 rounded-full font-bold shadow-2xl z-20"
             aria-label="Estimer un trajet"
           >
             Estimer un trajet
@@ -395,23 +387,10 @@ export default function EstimatePageMobile() {
 
         <Drawer.Portal>
           <Drawer.Overlay className="fixed inset-0 bg-black/40 z-40" />
-          <Drawer.Content
-            className="bg-white flex flex-col rounded-t-3xl h-auto max-h-[80vh] fixed bottom-0 left-0 right-0 z-50 relative"
+          <Drawer.Content 
+            className="bg-white flex flex-col rounded-t-3xl h-auto max-h-[85vh] fixed bottom-0 left-0 right-0 z-50"
             aria-describedby="drawer-description"
           >
-            {/* Overlay de chargement placé au niveau du Drawer pour couvrir
-                l'intégralité du bottom-sheet et éviter un flash du contenu
-                lorsque l'on clique sur Estimer. */}
-            {isLoading && (
-              <div className="absolute inset-0 z-70 flex items-center justify-center bg-white/90">
-                <div className="flex flex-col items-center gap-3">
-                  <div className="w-28 h-28">
-                    <LottieAnimation animationData={carDrivingAnimation} loop={true} autoplay={true} />
-                  </div>
-                  <span className="font-bold text-lg text-[#231f0f]">Calcul en cours…</span>
-                </div>
-              </div>
-            )}
             <div className="p-4 bg-white rounded-t-3xl flex-shrink-0">
               <div className="mx-auto w-12 h-1.5 flex-shrink-0 rounded-full bg-gray-300 mb-8" />
               <div className="max-w-md mx-auto">
@@ -574,8 +553,7 @@ export default function EstimatePageMobile() {
             </div>
           </Drawer.Content>
         </Drawer.Portal>
-        </Drawer.Root>
-      )}
+      </Drawer.Root>
     </div>
   );
 }
