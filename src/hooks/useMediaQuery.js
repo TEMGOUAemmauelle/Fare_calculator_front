@@ -5,7 +5,21 @@
 import { useState, useEffect } from 'react';
 
 export function useMediaQuery(query) {
-  const [matches, setMatches] = useState(false);
+  // Initialiser synchronously à la valeur actuelle si window.matchMedia existe.
+  // Cela évite un rendu initial incorrect (flash) où la variante desktop
+  // est affichée avant que l'effet n'ait mis à jour la valeur.
+  const getInitial = () => {
+    try {
+      if (typeof window !== 'undefined' && typeof window.matchMedia === 'function') {
+        return window.matchMedia(query).matches;
+      }
+    } catch (e) {
+      // noop - retourner false par défaut
+    }
+    return false;
+  };
+
+  const [matches, setMatches] = useState(getInitial);
 
   useEffect(() => {
     const media = window.matchMedia(query);

@@ -396,9 +396,22 @@ export default function EstimatePageMobile() {
         <Drawer.Portal>
           <Drawer.Overlay className="fixed inset-0 bg-black/40 z-40" />
           <Drawer.Content
-            className="bg-white flex flex-col rounded-t-3xl h-auto max-h-[80vh] fixed bottom-0 left-0 right-0 z-50"
+            className="bg-white flex flex-col rounded-t-3xl h-auto max-h-[80vh] fixed bottom-0 left-0 right-0 z-50 relative"
             aria-describedby="drawer-description"
           >
+            {/* Overlay de chargement placé au niveau du Drawer pour couvrir
+                l'intégralité du bottom-sheet et éviter un flash du contenu
+                lorsque l'on clique sur Estimer. */}
+            {isLoading && (
+              <div className="absolute inset-0 z-70 flex items-center justify-center bg-white/90">
+                <div className="flex flex-col items-center gap-3">
+                  <div className="w-28 h-28">
+                    <LottieAnimation animationData={carDrivingAnimation} loop={true} autoplay={true} />
+                  </div>
+                  <span className="font-bold text-lg text-[#231f0f]">Calcul en cours…</span>
+                </div>
+              </div>
+            )}
             <div className="p-4 bg-white rounded-t-3xl flex-shrink-0">
               <div className="mx-auto w-12 h-1.5 flex-shrink-0 rounded-full bg-gray-300 mb-8" />
               <div className="max-w-md mx-auto">
@@ -413,19 +426,7 @@ export default function EstimatePageMobile() {
               </div>
             </div>
 
-            <div className="p-4 bg-white overflow-y-auto flex-1 relative">
-              {/* Overlay de chargement pour éviter le clignotement du formulaire
-                  lorsque l'utilisateur lance une estimation. */}
-                {isLoading && (
-                <div className="absolute inset-0 z-60 flex items-center justify-center bg-white/80">
-                  <div className="flex flex-col items-center gap-3">
-                    <div className="w-24 h-24">
-                      <LottieAnimation animationData={carDrivingAnimation} loop={true} autoplay={true} />
-                    </div>
-                    <span className="font-bold text-lg text-[#231f0f]">Calcul en cours…</span>
-                  </div>
-                </div>
-              )}
+            <div className="p-4 bg-white overflow-y-auto flex-1">
               <div className="max-w-md mx-auto">
                 {!prediction ? (
                   <>

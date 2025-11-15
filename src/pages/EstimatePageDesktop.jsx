@@ -120,6 +120,8 @@ export default function EstimatePageDesktop() {
     };
   }, []);
 
+
+
   const loadLocalData = () => {
     const recent = getRecentSearches(5);
     setRecentSearches(recent);
