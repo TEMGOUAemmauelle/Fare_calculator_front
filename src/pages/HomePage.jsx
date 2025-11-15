@@ -56,42 +56,8 @@ export default function HomePage() {
       <div className="relative z-10 flex flex-col items-center justify-center min-h-screen px-6 py-12 md:px-12">
         
         {/* Logo + Animation Lottie */}
-        <motion.div
-          initial={{ opacity: 0, scale: 0.5 }}
-          animate={{ opacity: 1, scale: 1 }}
-          transition={{ 
-            duration: 0.8, 
-            type: 'spring', 
-            damping: 15 
-          }}
-          className="mb-0 md:mb-0"
-        >
-          {/* Container Lottie avec glow effect */}
-          <div className="relative">
-            {/* Glow background */}
-            <motion.div
-              animate={{
-                scale: [1, 1.1, 1],
-                opacity: [0.3, 0.5, 0.3],
-              }}
-              transition={{
-                duration: 3,
-                repeat: Infinity,
-                ease: 'easeInOut',
-              }}
-              className="absolute -inset-8 bg-yellow-400/20 rounded-full blur-2xl"
-            />
-            
-            {/* Lottie animation */}
-            <div className="relative w-30 h-30 md:w-64 md:h-44 lg:w-80 lg:h-60">
-              <LottieAnimation
-                animationData={carAnimation}
-                loop={true}
-                autoplay={true}
-              />
-            </div>
-          </div>
-        </motion.div>
+        
+        
 {/* Logo + Animation Lottie */}
         <motion.div
           initial={{ opacity: 0, scale: 0.5 }}
@@ -182,14 +148,14 @@ export default function HomePage() {
           </div>
 
           {/* Secondary Button - Ajouter trajet */}
-          <motion.button
+          {/* <motion.button
             whileHover={{ scale: 1.02 }}
             whileTap={{ scale: 0.98 }}
             onClick={() => navigate('/add-trajet')}
             className="w-full py-4 md:py-4 bg-white hover:bg-gray-50 text-[#231f0f] font-bold text-lg md:text-xl rounded-full shadow-lg border-2 border-gray-200 hover:border-[#f3cd08] transition-all"
           >
             Ajouter un trajet effectué
-          </motion.button>
+          </motion.button> */}
         </motion.div>
 
         {/* Info badges - Desktop uniquement */}

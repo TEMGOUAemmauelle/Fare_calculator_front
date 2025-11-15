@@ -12,17 +12,62 @@ export default defineConfig({
     }),
     VitePWA({
       registerType: 'autoUpdate',
+      injectRegister: 'auto',
+      workbox: {
+        globPatterns: ['**/*.{js,css,html,ico,png,svg,json,woff2}'],
+        runtimeCaching: [
+          {
+            urlPattern: /^https:\/\/api\.mapbox\.com\/.*/i,
+            handler: 'NetworkFirst',
+            options: {
+              cacheName: 'mapbox-cache',
+              expiration: {
+                maxEntries: 50,
+                maxAgeSeconds: 60 * 60 * 24, // 24 heures
+              },
+              cacheableResponse: {
+                statuses: [0, 200],
+              },
+            },
+          },
+          {
+            urlPattern: /^https:\/\/nominatim\.openstreetmap\.org\/.*/i,
+            handler: 'NetworkFirst',
+            options: {
+              cacheName: 'nominatim-cache',
+              expiration: {
+                maxEntries: 30,
+                maxAgeSeconds: 60 * 60 * 24 * 7, // 7 jours
+              },
+            },
+          },
+          {
+            urlPattern: /\/api\/.*/i,
+            handler: 'NetworkFirst',
+            options: {
+              cacheName: 'api-cache',
+              expiration: {
+                maxEntries: 100,
+                maxAgeSeconds: 60 * 60, // 1 heure
+              },
+              networkTimeoutSeconds: 10,
+            },
+          },
+        ],
+      },
       manifest: {
-        name: 'Calculateur de tarif',
+        name: 'Fare Calculator - Taxi Cameroun',
         short_name: 'FareCalc',
-        description: "Calculateur de tarif",
-        theme_color: '#111827',
-        background_color: '#ffffff',
+        description: "Estimation de prix de taxi au Cameroun avec données de trafic en temps réel",
+        theme_color: '#f3cd08',
+        background_color: '#f8f8f5',
         display: 'standalone',
         start_url: '/',
-        lang: 'fr',
+        scope: '/',
+        lang: 'fr-CM',
+        orientation: 'portrait-primary',
+        categories: ['travel', 'navigation', 'utilities'],
         icons: [
-          // PNG icons (wide compatibility)
           {
             src: '/taxi-logo.png',
             sizes: '192x192',
@@ -35,12 +80,27 @@ export default defineConfig({
             type: 'image/png',
             purpose: 'maskable'
           },
-          // SVG as fallback / scalable icon
           {
             src: '/pwa-icon.svg',
             sizes: 'any',
             type: 'image/svg+xml',
             purpose: 'any'
+          }
+        ],
+        shortcuts: [
+          {
+            name: 'Estimer un trajet',
+            short_name: 'Estimer',
+            description: 'Calculer le prix d\'un trajet',
+            url: '/estimate',
+            icons: [{ src: '/pwa-icon.svg', sizes: '192x192' }]
+          },
+          {
+            name: 'Ajouter un trajet',
+            short_name: 'Ajouter',
+            description: 'Contribuer avec un nouveau trajet',
+            url: '/add-trajet',
+            icons: [{ src: '/pwa-icon.svg', sizes: '192x192' }]
           }
         ]
       }

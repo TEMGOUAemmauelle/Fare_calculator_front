@@ -117,14 +117,41 @@ export default function AddTrajetPage() {
           ], {
             profile: 'mapbox/driving-traffic',
             steps: true,
+            annotations: ['congestion'],
           });
           
           if (result?.routes?.[0]) {
             const route = result.routes[0];
+            
+            // Créer segments de congestion
+            const congestionLevels = route.legs?.[0]?.annotation?.congestion || [];
+            const coordinates = route.geometry.coordinates;
+            const congestionSegments = [];
+            
+            if (congestionLevels.length > 0 && coordinates.length > 1) {
+              congestionLevels.forEach((level, index) => {
+                if (index < coordinates.length - 1) {
+                  congestionSegments.push({
+                    congestion: level,
+                    coordinates: [coordinates[index], coordinates[index + 1]],
+                  });
+                }
+              });
+            } else if (coordinates.length > 1) {
+              // Pas de données de congestion → créer des segments "unknown" (jaune)
+              for (let i = 0; i < coordinates.length - 1; i++) {
+                congestionSegments.push({
+                  congestion: 'unknown',
+                  coordinates: [coordinates[i], coordinates[i + 1]],
+                });
+              }
+            }
+            
             setRouteData({
               coordinates: route.geometry.coordinates,
               distance: route.distance,
               duration: route.duration,
+              congestion_segments: congestionSegments.length > 0 ? congestionSegments : null,
             });
           }
         } catch (error) {

@@ -15,6 +15,10 @@ import { Toaster } from 'react-hot-toast';
 import HomePage from './pages/HomePage';
 import EstimatePage from './pages/EstimatePageRouter';
 import AddTrajetPage from './pages/AddTrajetPage';
+
+// Components
+import PWAInstallPrompt from './components/PWAInstallPrompt';
+
 import './App.css';
 
 function App() {
@@ -57,6 +61,9 @@ function App() {
         {/* Redirect unknown routes to home */}
         <Route path="*" element={<Navigate to="/" replace />} />
       </Routes>
+
+      {/* PWA Install Prompt */}
+      <PWAInstallPrompt />
     </BrowserRouter>
   );
 }

@@ -179,24 +179,68 @@ export default function EstimatePageDesktop() {
           if (result?.routes?.[0]) {
             const route = result.routes[0];
             
-            // Extraire niveau de congestion moyen
+            // Créer segments de congestion
             const congestionLevels = route.legs?.[0]?.annotation?.congestion || [];
-            const congestionCounts = { low: 0, moderate: 0, heavy: 0, severe: 0 };
+            const coordinates = route.geometry.coordinates;
+            
+            console.log('🚦 Données congestion:', congestionLevels.length, 'segments pour', coordinates.length, 'points');
+            
+            const congestionSegments = [];
+            if (congestionLevels.length > 0 && coordinates.length > 1) {
+              congestionLevels.forEach((level, index) => {
+                if (index < coordinates.length - 1) {
+                  congestionSegments.push({
+                    congestion: level,
+                    coordinates: [coordinates[index], coordinates[index + 1]],
+                  });
+                }
+              });
+              
+              console.log('✅ Segments créés:', congestionSegments.length);
+              console.log('📊 Répartition:', {
+                low: congestionSegments.filter(s => s.congestion === 'low').length,
+                moderate: congestionSegments.filter(s => s.congestion === 'moderate').length,
+                heavy: congestionSegments.filter(s => s.congestion === 'heavy').length,
+                severe: congestionSegments.filter(s => s.congestion === 'severe').length,
+              });
+            } else if (coordinates.length > 1) {
+              // Pas de données de congestion → créer des segments "unknown" (jaune)
+              console.log('⚠️ Pas de données de trafic - Création segments "unknown"');
+              for (let i = 0; i < coordinates.length - 1; i++) {
+                congestionSegments.push({
+                  congestion: 'unknown',
+                  coordinates: [coordinates[i], coordinates[i + 1]],
+                });
+              }
+              console.log('✅ Segments unknown créés:', congestionSegments.length);
+            }
+            
+            // Calculer niveau dominant pour l'info box
+            const congestionCounts = { low: 0, moderate: 0, heavy: 0, severe: 0, unknown: 0 };
             congestionLevels.forEach(level => {
-              if (congestionCounts.hasOwnProperty(level)) congestionCounts[level]++;
+              if (congestionCounts.hasOwnProperty(level)) {
+                congestionCounts[level]++;
+              } else {
+                congestionCounts.unknown++;
+              }
             });
-            const dominantCongestion = Object.keys(congestionCounts).reduce((a, b) => 
-              congestionCounts[a] > congestionCounts[b] ? a : b
-            );
+            
+            const dominantCongestion = congestionLevels.length > 0
+              ? Object.keys(congestionCounts).reduce((a, b) => 
+                  congestionCounts[a] > congestionCounts[b] ? a : b
+                )
+              : 'unknown';
             
             setRoute({
               coordinates: route.geometry.coordinates,
               distance: route.distance,
               duration: route.duration,
               congestion: congestionLevels.length > 0,
-              congestion_level: congestionLevels.length > 0 ? dominantCongestion : null,
+              congestion_level: dominantCongestion,
+              congestion_segments: congestionSegments.length > 0 ? congestionSegments : null,
             });
-            console.log('✅ Route tracée:', route.distance, 'm,', Math.round(route.duration / 60), 'min', '- Trafic:', dominantCongestion || 'N/A');
+            
+            console.log('✅ Route tracée:', route.distance, 'm,', Math.round(route.duration / 60), 'min', '- Trafic dominant:', dominantCongestion);
           }
         } catch (error) {
           console.error('❌ Erreur tracé route:', error);

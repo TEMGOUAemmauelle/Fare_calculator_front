@@ -1,12 +1,16 @@
 {
-  "name": "Fare Calculator",
+  "name": "Fare Calculator - Taxi Cameroun",
   "short_name": "FareCalc",
-  "description": "Estimation de prix de taxi au Cameroun",
+  "description": "Estimation de prix de taxi au Cameroun avec données de trafic en temps réel",
   "start_url": "/",
+  "scope": "/",
   "display": "standalone",
-  "background_color": "#ffffff",
+  "background_color": "#f8f8f5",
   "theme_color": "#f3cd08",
   "orientation": "portrait-primary",
+  "categories": ["travel", "navigation", "utilities"],
+  "lang": "fr-CM",
+  "dir": "ltr",
   "icons": [
     {
       "src": "/pwa-icon.svg",
@@ -19,6 +23,43 @@
       "sizes": "192x192",
       "type": "image/png",
       "purpose": "any maskable"
+    },
+    {
+      "src": "/taxi-logo.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
     }
-  ]
+  ],
+  "screenshots": [
+    {
+      "src": "/screenshot-mobile.png",
+      "sizes": "540x720",
+      "type": "image/png",
+      "form_factor": "narrow"
+    },
+    {
+      "src": "/screenshot-desktop.png",
+      "sizes": "1280x720",
+      "type": "image/png",
+      "form_factor": "wide"
+    }
+  ],
+  "shortcuts": [
+    {
+      "name": "Estimer un trajet",
+      "short_name": "Estimer",
+      "description": "Calculer le prix d'un trajet",
+      "url": "/estimate",
+      "icons": [{ "src": "/pwa-icon.svg", "sizes": "192x192" }]
+    },
+    {
+      "name": "Ajouter un trajet",
+      "short_name": "Ajouter",
+      "description": "Contribuer avec un nouveau trajet",
+      "url": "/add-trajet",
+      "icons": [{ "src": "/pwa-icon.svg", "sizes": "192x192" }]
+    }
+  ],
+  "prefer_related_applications": false
 }

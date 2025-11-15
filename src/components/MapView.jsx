@@ -36,6 +36,7 @@ const MAP_STYLES = {
 const ROUTE_COLORS = {
   primary: '#3B82F6', // Blue
   alternative: '#8B5CF6', // Purple
+  unknown: '#f3cd08', // Yellow (thème principal - quand pas de données trafic)
   congestion: {
     low: '#10B981', // Green
     moderate: '#F59E0B', // Amber
@@ -239,18 +240,51 @@ export default function MapView({
     try {
       console.log('🛣️ Route reçue:', route);
       
-      const routeGeoJSON = {
-        type: 'Feature',
-        properties: {},
-        geometry: {
-          type: 'LineString',
-          coordinates: route.coordinates || route.geometry?.coordinates || [],
-        },
-      };
+      // Si on a des données de congestion par segment, créer une LineString avec propriétés
+      let routeGeoJSON;
+      
+      if (route.congestion_segments && route.congestion_segments.length > 0) {
+        // Mode segmenté : créer une FeatureCollection avec un segment par niveau de congestion
+        console.log('🚦 Congestion par segments:', route.congestion_segments.length, 'segments');
+        
+        // Log des premiers segments pour debug
+        console.log('🔍 Premier segment:', route.congestion_segments[0]);
+        
+        routeGeoJSON = {
+          type: 'FeatureCollection',
+          features: route.congestion_segments.map((segment, index) => ({
+            type: 'Feature',
+            properties: {
+              congestion: segment.congestion || 'unknown',
+            },
+            geometry: {
+              type: 'LineString',
+              coordinates: segment.coordinates,
+            },
+          })),
+        };
+        
+        console.log('📦 GeoJSON créé:', routeGeoJSON.features.length, 'features');
+        console.log('🔍 Première feature:', JSON.stringify(routeGeoJSON.features[0]));
+      } else {
+        // Mode simple : une seule ligne
+        console.log('📍 Mode simple (pas de segments)');
+        routeGeoJSON = {
+          type: 'Feature',
+          properties: {
+            congestion: route.congestion_level || 'unknown',
+          },
+          geometry: {
+            type: 'LineString',
+            coordinates: route.coordinates || route.geometry?.coordinates || [],
+          },
+        };
+      }
 
-      console.log('📍 Coordonnées itinéraire:', routeGeoJSON.geometry.coordinates.length, 'points');
+      const coordinates = route.coordinates || route.geometry?.coordinates || [];
+      console.log('📍 Coordonnées itinéraire:', coordinates.length, 'points');
 
-      if (routeGeoJSON.geometry.coordinates.length === 0) {
+      if (coordinates.length === 0) {
         console.error('❌ Aucune coordonnée dans l\'itinéraire!');
         return;
       }
@@ -261,7 +295,7 @@ export default function MapView({
         data: routeGeoJSON,
       });
 
-      // Outline (bordure)
+      // Outline (bordure blanche)
       map.current.addLayer({
         id: `${layerId}-outline`,
         type: 'line',
@@ -277,29 +311,7 @@ export default function MapView({
         },
       });
 
-      // Ligne principale - Couleur selon congestion
-      let lineColor = ROUTE_COLORS.primary; // Bleu par défaut
-      
-      if (route.congestion_level) {
-        // Adapter couleur au niveau dominant
-        switch (route.congestion_level) {
-          case 'low':
-            lineColor = ROUTE_COLORS.congestion.low; // Vert
-            break;
-          case 'moderate':
-            lineColor = ROUTE_COLORS.primary; // Bleu
-            break;
-          case 'heavy':
-            lineColor = ROUTE_COLORS.congestion.moderate; // Orange
-            break;
-          case 'severe':
-            lineColor = ROUTE_COLORS.congestion.heavy; // Rouge
-            break;
-        }
-      } else if (route.color) {
-        lineColor = route.color;
-      }
-
+      // Ligne principale - Couleur par data-driven styling (congestion)
       map.current.addLayer({
         id: layerId,
         type: 'line',
@@ -309,11 +321,22 @@ export default function MapView({
           'line-cap': 'round',
         },
         paint: {
-          'line-color': lineColor,
+          'line-color': [
+            'match',
+            ['get', 'congestion'],
+            'low', ROUTE_COLORS.congestion.low,        // Vert (fluide)
+            'moderate', ROUTE_COLORS.primary,           // Bleu (modéré)
+            'heavy', ROUTE_COLORS.congestion.moderate,  // Orange (dense)
+            'severe', ROUTE_COLORS.congestion.heavy,    // Rouge (saturé)
+            'unknown', ROUTE_COLORS.unknown,            // Jaune (pas de données)
+            ROUTE_COLORS.unknown // Défaut: jaune (si données manquantes)
+          ],
           'line-width': 6,
           'line-opacity': 1,
         },
       });
+      
+      console.log('✅ Couches ajoutées:', `${layerId}-outline`, '+', layerId);
 
       // Animation de tracé (effet drawing)
       let dashArraySequence = [
@@ -345,11 +368,11 @@ export default function MapView({
       animateDashArray();
 
       // Ajuster vue sur l'itinéraire
-      const coordinates = routeGeoJSON.geometry.coordinates;
-      if (coordinates.length > 0) {
-        const bounds = coordinates.reduce((bounds, coord) => {
+      const routeCoords = route.coordinates || route.geometry?.coordinates || [];
+      if (routeCoords.length > 0) {
+        const bounds = routeCoords.reduce((bounds, coord) => {
           return bounds.extend(coord);
-        }, new mapboxgl.LngLatBounds(coordinates[0], coordinates[0]));
+        }, new mapboxgl.LngLatBounds(routeCoords[0], routeCoords[0]));
 
         map.current.fitBounds(bounds, {
           padding: 80,
@@ -503,7 +526,7 @@ export default function MapView({
           initial={{ opacity: 0, x: 20 }}
           animate={{ opacity: 1, x: 0 }}
           transition={{ delay: 0.3 }}
-          className="absolute top-4 right-4 flex flex-col gap-2 z-10"
+          className="absolute top-25 right-4 flex flex-col gap-2 z-10"
         >
           {/* Zoom In */}
           <motion.button
