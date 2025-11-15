@@ -9,7 +9,10 @@
  */
 
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
-import { Toaster } from 'react-hot-toast';
+import { Toaster, toast } from 'react-hot-toast';
+import geolocationService from './services/geolocationService';
+import { MESSAGES } from './config/constants';
+import { useEffect } from 'react';
 
 // Pages
 import HomePage from './pages/HomePage';
@@ -22,6 +25,27 @@ import PWAInstallPrompt from './components/PWAInstallPrompt';
 import './App.css';
 
 function App() {
+  useEffect(() => {
+    // Demander la permission de géolocalisation dès l'accès à l'interface sur mobile/desktop
+    const askPermissionOnLoad = async () => {
+      if (!('geolocation' in navigator)) return;
+      try {
+        const status = await geolocationService.checkGeolocationPermission();
+        console.log('[App] Statut permission géoloc:', status);
+        if (status === 'prompt') {
+          // Inviter poliment l'utilisateur mais ne pas forcer le prompt automatique
+          toast('Autorisez la géolocalisation pour une meilleure expérience (tapez sur l\'icône de localisation ou sur le bouton ma position).', { icon: '📍', duration: 6000 });
+        } else if (status === 'denied') {
+          // Permission bloquée : expliquer comment réactiver
+          toast.error('Géolocalisation bloquée. Ouvrez les paramètres du site (icône cadenas) et autorisez la localisation.', { duration: 8000 });
+        }
+      } catch (e) {
+        console.warn('[App] Vérification permission géoloc échouée:', e);
+      }
+    };
+
+    askPermissionOnLoad();
+  }, []);
   return (
     <BrowserRouter>
       {/* Toaster pour notifications globales */}

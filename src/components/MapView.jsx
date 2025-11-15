@@ -18,6 +18,8 @@ import { MapPin, Navigation, Layers, ZoomIn, ZoomOut, Maximize2, Clock, Route as
 import { motion, AnimatePresence } from 'framer-motion';
 import LottieAnimation from './LottieAnimation';
 import yellowTaxiAnimation from '../assets/lotties/yellow taxi.json';
+import geolocationService from '../services/geolocationService';
+import { toast } from 'react-hot-toast';
 
 // Configuration Mapbox
 const MAPBOX_TOKEN = import.meta.env.VITE_MAPBOX_TOKEN;
@@ -36,7 +38,8 @@ const MAP_STYLES = {
 const ROUTE_COLORS = {
   primary: '#3B82F6', // Blue
   alternative: '#8B5CF6', // Purple
-  unknown: '#f3cd08', // Yellow (thème principal - quand pas de données trafic)
+  // unknown traffic will be shown with the primary blue for readability
+  unknown: '#3B82F6', // Blue (use primary when traffic data unavailable)
   congestion: {
     low: '#10B981', // Green
     moderate: '#F59E0B', // Amber
@@ -295,7 +298,7 @@ export default function MapView({
         data: routeGeoJSON,
       });
 
-      // Outline (bordure blanche)
+      // Outline (subtle dark border to increase contrast)
       map.current.addLayer({
         id: `${layerId}-outline`,
         type: 'line',
@@ -305,9 +308,10 @@ export default function MapView({
           'line-cap': 'round',
         },
         paint: {
-          'line-color': '#ffffff',
+          // use a low-opacity dark outline so colored line remains visible on light backgrounds
+          'line-color': 'rgba(17,24,39,0.12)',
           'line-width': 8,
-          'line-opacity': 0.8,
+          'line-opacity': 1,
         },
       });
 
@@ -426,65 +430,74 @@ export default function MapView({
   }, [isochrones, mapLoaded]);
 
   // Géolocalisation
-  const handleGeolocate = () => {
+  const handleGeolocate = async () => {
     if (!navigator.geolocation) {
-      console.error('❌ Géolocalisation non supportée');
+      toast.error('Géolocalisation non supportée par votre appareil');
       return;
     }
 
     setIsTracking(true);
-    navigator.geolocation.getCurrentPosition(
-      (position) => {
-        const { longitude, latitude } = position.coords;
-        setUserLocation([longitude, latitude]);
-        
-        if (map.current) {
-          // Supprimer ancien marker utilisateur
-          if (userMarkerRef.current) {
-            userMarkerRef.current.remove();
-          }
+    try {
+      // Vérifier le statut de permission avant de déclencher la requête
+      const status = await geolocationService.checkGeolocationPermission();
+      console.log('[MapView] Statut permission géoloc:', status);
 
-          // Créer marker utilisateur avec cercle pulsant
-          const el = document.createElement('div');
-          el.className = 'user-location-marker';
-          el.innerHTML = `
-            <div class="relative w-10 h-10 flex items-center justify-center">
-              <div class="absolute inset-0 bg-[#3B82F6] rounded-full opacity-30 animate-ping"></div>
-              <div class="relative w-5 h-5 bg-[#3B82F6] border-4 border-white rounded-full shadow-lg"></div>
-            </div>
-          `;
-
-          userMarkerRef.current = new mapboxgl.Marker({ 
-            element: el,
-            anchor: 'center'
-          })
-            .setLngLat([longitude, latitude])
-            .addTo(map.current);
-
-          // Zoom sur position
-          map.current.flyTo({
-            center: [longitude, latitude],
-            zoom: 15,
-            duration: 2000,
-          });
-        }
-        
+      if (status === 'denied') {
+        // Ne pas tenter de re-prompt (impossible) ; indiquer la marche à suivre
+        toast.error('Permission géolocalisation bloquée. Ouvrez les paramètres du site (icône cadenas) et autorisez la localisation.', { duration: 7000 });
         setIsTracking(false);
-        console.log('✅ Position utilisateur:', { longitude, latitude });
-      },
-      (error) => {
-        // Erreur silencieuse si permission refusée
-        if (error.code !== 1) { // Pas PERMISSION_DENIED
-          console.warn('⚠️ Géolocalisation:', error.message);
-        }
-        setIsTracking(false);
-      },
-      {
-        enableHighAccuracy: true,
-        timeout: 10000,
-        maximumAge: 0,
+        return;
       }
-    );
+
+      // Si 'prompt' ou 'granted', tenter d'obtenir la position (le navigateur affichera la popup si nécessaire)
+      const position = await geolocationService.getCurrentPosition({ enableHighAccuracy: true, timeout: 10000 });
+      const { longitude, latitude } = position.coords;
+      setUserLocation([longitude, latitude]);
+
+      if (map.current) {
+        // Supprimer ancien marker utilisateur
+        if (userMarkerRef.current) {
+          userMarkerRef.current.remove();
+        }
+
+        // Créer marker utilisateur avec cercle pulsant (jaune thème)
+        const el = document.createElement('div');
+        el.className = 'user-location-marker';
+        el.innerHTML = `
+          <div class="relative w-10 h-10 flex items-center justify-center">
+            <div class="absolute inset-0 bg-[#f3cd08] rounded-full opacity-30 animate-ping"></div>
+            <div class="relative w-5 h-5 bg-[#f3cd08] border-4 border-white rounded-full shadow-lg"></div>
+          </div>
+        `;
+
+        userMarkerRef.current = new mapboxgl.Marker({
+          element: el,
+          anchor: 'center'
+        })
+          .setLngLat([longitude, latitude])
+          .addTo(map.current);
+
+        // Zoom sur position
+        map.current.flyTo({
+          center: [longitude, latitude],
+          zoom: 15,
+          duration: 2000,
+        });
+      }
+
+      toast.success('Position localisée');
+      console.log('✅ Position utilisateur:', { longitude, latitude });
+    } catch (error) {
+      // Gestion d'erreur claire
+      console.warn('⚠️ Géolocalisation échouée:', error.message || error.userMessage || error);
+      if (error.code === 1) {
+        toast.error('Permission géolocalisation refusée');
+      } else {
+        toast.error(error.userMessage || 'Impossible d\'obtenir la position');
+      }
+    } finally {
+      setIsTracking(false);
+    }
   };
 
   // Contrôles zoom

@@ -14,6 +14,7 @@ import { Search, MapPin, Loader2, Navigation, MapPinned } from 'lucide-react';
 import toast from 'react-hot-toast';
 import { searchPlaces } from '../services/nominatimService';
 import { getCurrentPositionWithAddress } from '../services/geolocationService';
+import geolocationService from '../services/geolocationService';
 
 export default function SearchBar({
   onSelect,
@@ -119,6 +120,16 @@ export default function SearchBar({
     });
     
     try {
+      // Vérifier permission avant de déclencher
+      const status = await geolocationService.checkGeolocationPermission();
+      console.log('[SearchBar] Statut permission géoloc:', status);
+
+      if (status === 'denied') {
+        toast.error('Autorisation géolocalisation bloquée. Autorisez depuis les paramètres du site (icône cadenas).', { duration: 7000 });
+        setLoadingLocation(false);
+        return;
+      }
+
       const point = await getCurrentPositionWithAddress();
       console.log('📍 Position obtenue:', point);
       

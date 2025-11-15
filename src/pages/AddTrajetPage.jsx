@@ -318,7 +318,7 @@ export default function AddTrajetPage() {
             className="absolute bottom-8 left-1/2 -translate-x-1/2 px-6 py-3 bg-[#f3cd08] text-gray-700 rounded-full font-bold shadow-2xl z-10"
             aria-label="Ajouter un trajet"
           >
-            Ajouter un trajet effectué
+            Ajouter un trajet
           </button>
         </Drawer.Trigger>
 

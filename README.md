@@ -1,22 +1,22 @@
 # Fare Calculator - Frontend PWA
 
-# 🚕 Fare Calculator Frontend
+# -> Fare Calculator Frontend
 
 Application web PWA moderne pour l'estimation de prix de taxi au Cameroun (focus Yaoundé).
 
-## ✨ Fonctionnalités
+## -> Fonctionnalités
 
-- 🗺️ **Carte interactive** Mapbox avec itinéraires animés
-- 📍 **Système POI** avec suggestions intelligentes
-- 💰 **Estimation prix** avec 3 méthodes (exact, similaire, inconnu)
-- 🌤️ **Ajustements météo** et tranches horaires
-- 📱 **Bottom sheet** draggable mobile-first
-- 💾 **Historique anonyme** dans localStorage
-- 🎨 **Design moderne** avec Framer Motion
-- 🌓 **Mode sombre** (à venir)
-- 📴 **Fonctionnement offline** PWA
+- -> **Carte interactive** Mapbox avec itinéraires animés
+- -> **Système POI** avec suggestions intelligentes
+- -> **Estimation prix** avec 3 méthodes (exact, similaire, inconnu)
+- -> **Ajustements météo** et tranches horaires
+- -> **Bottom sheet** draggable mobile-first
+- -> **Historique anonyme** dans localStorage
+- -> **Design moderne** avec Framer Motion
+- -> **Mode sombre** (à venir)
+- -> **Fonctionnement offline** PWA
 
-## 🛠️ Technologies
+## -> Technologies
 
 - **React 19** + **Vite 7** - Framework moderne ultra-rapide
 - **Tailwind CSS 4** - Styling utility-first
@@ -27,7 +27,7 @@ Application web PWA moderne pour l'estimation de prix de taxi au Cameroun (focus
 - **Axios** - API calls
 - **Lottie React** - Animations JSON
 
-## 📋 Vue d'ensemble
+## -> Vue d'ensemble
 
 Cette application React/Vite permet aux utilisateurs de :
 - **Estimer le prix** d'un trajet taxi entre deux points (POI connus)
@@ -51,7 +51,7 @@ Cette application React/Vite permet aux utilisateurs de :
 
 ---
 
-## 🚀 Installation et Configuration
+## -> Installation et Configuration
 
 ### Prérequis
 
@@ -111,28 +111,71 @@ VITE_API_TIMEOUT=30000
 
 ---
 
-## 📁 Structure du projet
+## -> Structure du projet
 
 ```
 fare_calculator_front_end/
-├── src/
-│   ├── config/
-│   │   ├── api.js                # Configuration Axios (intercepteurs, retry)
-│   │   └── constants.js          # Constantes globales (météo, tranches horaires, etc.)
-│   ├── models/
-│   │   └── types.js              # Définitions types JSDoc (Point, Trajet, Prediction)
-│   ├── services/
-│   │   ├── estimateService.js    # API /estimate (estimations prix)
-│   │   ├── trajetService.js      # API /trajets (CRUD trajets)
-│   │   ├── pointService.js       # API /points (POI)
-│   │   ├── geolocationService.js # Géolocalisation HTML5 + reverse geocoding
-│   │   ├── mapboxService.js      # Mapbox API (search, directions, isochrones)
-│   │   └── weatherService.js     # Open-Meteo API (météo actuelle)
-│   ├── components/               # Composants réutilisables (prochaine itération)
-│   ├── pages/                    # Pages principales (prochaine itération)
-│   ├── App.jsx
-│   ├── main.jsx
-│   └── index.css
+src/
+│   App.css
+│   App.jsx
+│   index.css
+│   main.jsx
+│
+├───assets
+│   ├───images
+│   │       taxi-logo.png
+│   │
+│   └───lotties
+│           Car driving on road.json
+│           Making Money.json
+│           Man waiting car.json
+│           yellow taxi.json
+│
+├───components
+│       Button.jsx
+│       ConfirmationModal.jsx
+│       ErrorMessage.jsx
+│       FormInput.jsx
+│       index.js
+│       LoadingSkeleton.jsx
+│       LottieAnimation.jsx
+│       MapView.jsx
+│       PriceCard.jsx
+│       PWAInstallPrompt.jsx
+│       SearchBar.jsx
+│
+├───config
+│       api.js
+│       constants.js
+│       index.js
+│
+├───hooks
+│       useMediaQuery.js
+│
+├───models
+│       types.js
+│
+├───pages
+│       AddTrajetPage.jsx
+│       EstimatePageDesktop.jsx
+│       EstimatePageMobile.jsx
+│       EstimatePageRouter.jsx
+│       HomePage.jsx
+│
+├───services
+│       estimateService.js
+│       geolocationService.js
+│       index.js
+│       localStorageService.js
+│       mapboxService.js
+│       nominatimService.js
+│       pointService.js
+│       pwaService.js
+│       trajetService.js
+│       weatherService.js
+│
+└───styles
+        theme.js
 ├── doc/
 │   ├── DESCRIPTION DU PROJET.MD
 │   ├── APPORT DE MAPBOX.MD
@@ -146,7 +189,7 @@ fare_calculator_front_end/
 
 ---
 
-## 🧩 Services (Couche API)
+## -> Services (Couche API)
 
 Tous les appels API sont centralisés dans `src/services/` :
 
@@ -177,7 +220,7 @@ Tous les appels API sont centralisés dans `src/services/` :
 
 ---
 
-## 📊 API Backend Django REST Framework
+## -> API Backend Django REST Framework
 
 ### Endpoints principaux
 
@@ -199,7 +242,7 @@ Authorization: ApiKey <uuid>
 
 ---
 
-## 🔧 Scripts NPM
+## -> Scripts NPM
 
 ```bash
 # Développement (hot reload)
@@ -217,36 +260,6 @@ npm run lint
 
 ---
 
-## 📚 Documentation complète
-
-- **Description projet** : `doc/DESCRIPTION DU PROJET.MD`
-- **Intégration Mapbox** : `doc/APPORT DE MAPBOX.MD` + `doc/DETAILS SUR MAPBOX.MD`
+## -> Documentation complète
 - **API Backend** : `doc/API_DOC.md` (endpoints, modèles, exemples)
 
----
-
-## 📌 État actuel (Itération 1)
-
-✅ **Config + Services** : Terminé
-- Configuration Axios avec intercepteurs
-- Constantes globales (météo, tranches horaires, etc.)
-- 6 services complets (estimate, trajet, point, geolocation, mapbox, weather)
-- Modèles types JSDoc
-
-⏳ **Prochaines étapes (Itération 2)** :
-- Composants réutilisables (SearchBar, MapView, PriceCard, etc.)
-- Pages principales (Home, Estimate, AddTrajet, History, Stats)
-- React Router pour navigation
-- Design final Tailwind + animations Lottie
-
----
-
-## 👤 Auteur
-
-**Arthur DONFACK**
-- Email : donfackarthur750@gmail.com
-
----
-
-**Version actuelle** : 0.1.0 (Config + Services)  
-**Dernière mise à jour** : 6 novembre 2025

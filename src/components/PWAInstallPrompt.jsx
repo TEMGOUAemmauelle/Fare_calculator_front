@@ -37,6 +37,9 @@ export default function PWAInstallPrompt() {
       return;
     }
 
+    // Afficher le prompt custom à chaque visite (fallback si beforeinstallprompt non émis)
+    setShowPrompt(true);
+
     // Écouter l'événement beforeinstallprompt (Android/Chrome)
     const handleBeforeInstallPrompt = (e) => {
       e.preventDefault();
@@ -60,23 +63,27 @@ export default function PWAInstallPrompt() {
 
   const handleInstallClick = async () => {
     if (!deferredPrompt) {
-      // iOS - instructions manuelles
+      // Pas d'API beforeinstallprompt (ou non émis) : afficher instructions manuelles
+      // Sur Android/Chrome : Menu (⋮) → "Ajouter à l'écran d'accueil"
+      alert('Pour installer l\'application : ouvrez le menu du navigateur (⋮) puis sélectionnez "Ajouter à l\'écran d\'accueil".');
       return;
     }
 
     // Android/Chrome - installation automatique
-    console.log('📱 Lancement installation PWA...');
-    deferredPrompt.prompt();
-    
-    const { outcome } = await deferredPrompt.userChoice;
-    console.log(`🎯 Résultat installation: ${outcome}`);
-    
-    if (outcome === 'accepted') {
-      console.log('✅ PWA installée avec succès!');
+    try {
+      console.log('📱 Lancement installation PWA...');
+      deferredPrompt.prompt();
+      const { outcome } = await deferredPrompt.userChoice;
+      console.log(`🎯 Résultat installation: ${outcome}`);
+      if (outcome === 'accepted') {
+        console.log('✅ PWA installée avec succès!');
+      }
+    } catch (e) {
+      console.warn('❌ Erreur installation PWA:', e);
+    } finally {
+      setDeferredPrompt(null);
+      setShowPrompt(false);
     }
-    
-    setDeferredPrompt(null);
-    setShowPrompt(false);
   };
 
   const handleDismiss = () => {

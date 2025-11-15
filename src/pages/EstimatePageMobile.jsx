@@ -8,7 +8,8 @@
  * - Erreurs géolocalisation silencieuses
  */
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
+import { flushSync } from 'react-dom';
 import { useNavigate } from 'react-router-dom';
 import { Drawer } from 'vaul';
 import { motion } from 'framer-motion';
@@ -66,6 +67,7 @@ export default function EstimatePageMobile() {
   const [mapZoom, setMapZoom] = useState(12);
   const [markers, setMarkers] = useState([]);
   const [routeData, setRouteData] = useState(null);
+  const drawerFirstFocusRef = useRef(null);
 
   useEffect(() => {
     let mounted = true;
@@ -254,7 +256,14 @@ export default function EstimatePageMobile() {
       return;
     }
 
-    setIsLoading(true);
+    // Mettre isLoading à true de façon synchrone pour forcer le rendu
+    // immédiat du loader et éviter le clignotement du formulaire.
+    try {
+      flushSync(() => setIsLoading(true));
+    } catch (e) {
+      // Si flushSync indisponible ou échoue, fallback classique
+      setIsLoading(true);
+    }
     setError(null);
     setPrediction(null);
 
@@ -341,7 +350,29 @@ export default function EstimatePageMobile() {
       </div>
 
       {/* Bottom Sheet CORRIGÉ */}
-      <Drawer.Root shouldScaleBackground={false} modal={true}>
+      <Drawer.Root
+        shouldScaleBackground={false}
+        modal={true}
+        onOpenChange={(open) => {
+          // Quand le drawer s'ouvre, focuser un élément interne pour éviter
+          // que le trigger conserve le focus et déclenche l'avertissement
+          // aria-hidden (élément caché avec focus). On utilise un petit
+          // élément sr-only pour faire le transfert de focus.
+          if (open) {
+            setTimeout(() => {
+              try {
+                // blur l'élément actif (le trigger) pour éviter le blocage
+                if (document.activeElement && typeof document.activeElement.blur === 'function') {
+                  document.activeElement.blur();
+                }
+              } catch (e) {
+                // noop
+              }
+              drawerFirstFocusRef.current?.focus();
+            }, 50);
+          }
+        }}
+      >
         <Drawer.Trigger asChild>
           <button 
             className="absolute bottom-8 left-1/2 -translate-x-1/2 px-6 py-3 bg-[#f3cd08] text-gray-700 rounded-full font-bold shadow-2xl z-10"
@@ -353,7 +384,7 @@ export default function EstimatePageMobile() {
 
         <Drawer.Portal>
           <Drawer.Overlay className="fixed inset-0 bg-black/40 z-40" />
-          <Drawer.Content 
+          <Drawer.Content
             className="bg-white flex flex-col rounded-t-3xl h-auto max-h-[80vh] fixed bottom-0 left-0 right-0 z-50"
             aria-describedby="drawer-description"
           >
@@ -366,10 +397,24 @@ export default function EstimatePageMobile() {
                 <p id="drawer-description" className="sr-only">
                   Formulaire pour estimer le prix d'un trajet en taxi
                 </p>
+                {/* Élément focalisable caché : reçoit le focus à l'ouverture */}
+                <div id="drawer-first-focus" ref={drawerFirstFocusRef} tabIndex={-1} className="sr-only" />
               </div>
             </div>
 
-            <div className="p-4 bg-white overflow-y-auto flex-1">
+            <div className="p-4 bg-white overflow-y-auto flex-1 relative">
+              {/* Overlay de chargement pour éviter le clignotement du formulaire
+                  lorsque l'utilisateur lance une estimation. */}
+                {isLoading && (
+                <div className="absolute inset-0 z-60 flex items-center justify-center bg-white/80">
+                  <div className="flex flex-col items-center gap-3">
+                    <div className="w-24 h-24">
+                      <LottieAnimation animationData={carDrivingAnimation} loop={true} autoplay={true} />
+                    </div>
+                    <span className="font-bold text-lg text-[#231f0f]">Calcul en cours…</span>
+                  </div>
+                </div>
+              )}
               <div className="max-w-md mx-auto">
                 {!prediction ? (
                   <>
