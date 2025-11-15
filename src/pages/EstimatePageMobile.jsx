@@ -68,6 +68,7 @@ export default function EstimatePageMobile() {
   const [markers, setMarkers] = useState([]);
   const [routeData, setRouteData] = useState(null);
   const drawerFirstFocusRef = useRef(null);
+  const [drawerMounted, setDrawerMounted] = useState(false);
 
   useEffect(() => {
     let mounted = true;
@@ -99,6 +100,15 @@ export default function EstimatePageMobile() {
     return () => {
       mounted = false;
     };
+  }, []);
+
+  // Monter le Drawer après le premier rendu pour éviter un flash
+  // (certains navigateurs peuvent déclencher un rendu du portail
+  // pendant la transition de route). Le Drawer sera monté juste
+  // après le premier paint du composant.
+  useEffect(() => {
+    const t = setTimeout(() => setDrawerMounted(true), 20);
+    return () => clearTimeout(t);
   }, []);
 
   const setCurrentTimeSlot = () => {
@@ -350,10 +360,11 @@ export default function EstimatePageMobile() {
       </div>
 
       {/* Bottom Sheet CORRIGÉ */}
-      <Drawer.Root
-        shouldScaleBackground={false}
-        modal={true}
-        onOpenChange={(open) => {
+      {drawerMounted && (
+        <Drawer.Root
+          shouldScaleBackground={false}
+          modal={true}
+          onOpenChange={(open) => {
           // Quand le drawer s'ouvre, focuser un élément interne pour éviter
           // que le trigger conserve le focus et déclenche l'avertissement
           // aria-hidden (élément caché avec focus). On utilise un petit
@@ -372,7 +383,7 @@ export default function EstimatePageMobile() {
             }, 50);
           }
         }}
-      >
+        >
         <Drawer.Trigger asChild>
           <button 
             className="absolute bottom-8 left-1/2 -translate-x-1/2 px-6 py-3 bg-[#f3cd08] text-gray-700 rounded-full font-bold shadow-2xl z-10"
@@ -562,7 +573,8 @@ export default function EstimatePageMobile() {
             </div>
           </Drawer.Content>
         </Drawer.Portal>
-      </Drawer.Root>
+        </Drawer.Root>
+      )}
     </div>
   );
 }
