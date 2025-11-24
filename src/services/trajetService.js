@@ -56,9 +56,10 @@ export const addTrajet = async (data) => {
       throw new Error('Le prix doit être strictement positif.');
     }
     
-    // Appel API
+    // Appel API - Utiliser l'alias /add-trajet/ qui devrait accepter POST
+    // (le backend rejette POST /trajets/ avec 405, mais doc indique alias disponible)
     const response = await retryRequest(() =>
-      apiClient.post('/trajets/', data)
+      apiClient.post('/add-trajet/', data)
     );
     
     return response.data;

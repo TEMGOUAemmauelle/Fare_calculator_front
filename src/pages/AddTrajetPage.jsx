@@ -57,6 +57,7 @@ export default function AddTrajetPage() {
   const [error, setError] = useState(null);
   const [showSuccessModal, setShowSuccessModal] = useState(false);
   const [validationErrors, setValidationErrors] = useState({});
+  const [drawerOpen, setDrawerOpen] = useState(false); // Contrôler ouverture Drawer
   
   // États carte
   const [mapCenter, setMapCenter] = useState([11.5021, 3.8480]); // Yaoundé
@@ -226,21 +227,37 @@ export default function AddTrajetPage() {
     setError(null);
 
     try {
-      // Le service addTrajet enrichit automatiquement avec géoloc/météo
-      const response = await addTrajet({
-        depart_point: formData.depart_point,
-        arrivee_point: formData.arrivee_point,
-        prix_paye: parseFloat(formData.prix_paye),
+      // Construire payload avec structure PointNested attendue par le backend
+      const payload = {
+        point_depart: {
+          coords_latitude: formData.depart_coords[1], // [lon, lat] -> lat
+          coords_longitude: formData.depart_coords[0], // [lon, lat] -> lon
+          label: formData.depart_point,
+        },
+        point_arrivee: {
+          coords_latitude: formData.arrivee_coords[1],
+          coords_longitude: formData.arrivee_coords[0],
+          label: formData.arrivee_point,
+        },
+        prix: parseFloat(formData.prix_paye), // 'prix' et non 'prix_paye'
         meteo: formData.meteo,
-        heure_tranche: formData.heure_tranche,
-        depart_coords: formData.depart_coords,
-        arrivee_coords: formData.arrivee_coords,
-      });
+        heure: formData.heure_tranche, // 'heure' et non 'heure_tranche'
+      };
 
-      console.log('✅ Trajet ajouté:', response.data);
+      console.log('📤 Envoi trajet:', payload);
       
-      // Afficher modal succès
-      setShowSuccessModal(true);
+      // Le service addTrajet enrichit automatiquement avec géoloc/météo
+      const response = await addTrajet(payload);
+
+      console.log('✅ Trajet ajouté:', response); // response est déjà .data du service
+      
+      // Fermer le Drawer AVANT d'afficher la modal
+      setDrawerOpen(false);
+      
+      // Attendre un peu que le Drawer se ferme, puis afficher modal succès
+      setTimeout(() => {
+        setShowSuccessModal(true);
+      }, 300);
 
       // Reset formulaire après 2s
       setTimeout(() => {
@@ -312,7 +329,12 @@ export default function AddTrajetPage() {
       </div>
 
       {/* Bottom Sheet avec Formulaire */}
-      <Drawer.Root shouldScaleBackground={false} modal={true}>
+      <Drawer.Root 
+        shouldScaleBackground={false} 
+        modal={true}
+        open={drawerOpen}
+        onOpenChange={setDrawerOpen}
+      >
         <Drawer.Trigger asChild>
           <button 
             className="absolute bottom-8 left-1/2 -translate-x-1/2 px-6 py-3 bg-[#f3cd08] text-gray-700 rounded-full font-bold shadow-2xl z-10"

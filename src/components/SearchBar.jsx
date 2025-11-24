@@ -31,16 +31,23 @@ export default function SearchBar({
   const [selectedIndex, setSelectedIndex] = useState(-1);
   const [loadingLocation, setLoadingLocation] = useState(false);
   const [isFocused, setIsFocused] = useState(false);
+  const [justSelected, setJustSelected] = useState(false); // Flag pour éviter re-trigger
   
   const debounceTimer = useRef(null);
   const wrapperRef = useRef(null);
 
   // Synchroniser query avec value externe (mode controlé)
+  // MAIS éviter de re-synchroniser juste après une sélection
   useEffect(() => {
-    if (value !== null && value !== query) {
+    if (value !== null && value !== query && !justSelected) {
       setQuery(value);
     }
-  }, [value]);
+    // Reset flag après montage
+    if (justSelected) {
+      const timer = setTimeout(() => setJustSelected(false), 100);
+      return () => clearTimeout(timer);
+    }
+  }, [value, justSelected]);
 
   useEffect(() => {
     if (query.length < 2) {
@@ -90,6 +97,7 @@ export default function SearchBar({
   }, []);
 
   const handleSelect = async (suggestion) => {
+    setJustSelected(true); // Flag pour éviter re-trigger
     setQuery(suggestion.name);
     setIsOpen(false);
     setIsFocused(false);
@@ -110,6 +118,7 @@ export default function SearchBar({
   };
 
   const handleCurrentLocation = async () => {
+    setJustSelected(true); // Flag pour éviter re-trigger
     setLoadingLocation(true);
     setIsLoading(false);
     setSuggestions([]);

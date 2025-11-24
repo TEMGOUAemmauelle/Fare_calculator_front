@@ -62,6 +62,7 @@ export default function EstimatePageMobile() {
   const [prediction, setPrediction] = useState(null);
   const [error, setError] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
+  const [drawerOpen, setDrawerOpen] = useState(false);
   
   const [mapCenter, setMapCenter] = useState([11.5021, 3.8480]);
   const [mapZoom, setMapZoom] = useState(12);
@@ -357,6 +358,7 @@ export default function EstimatePageMobile() {
         shouldScaleBackground={false}
         modal={true}
         onOpenChange={(open) => {
+          setDrawerOpen(open);
           // Quand le drawer s'ouvre, focuser un élément interne pour éviter
           // que le trigger conserve le focus et déclenche l'avertissement
           // aria-hidden (élément caché avec focus). On utilise un petit
@@ -378,7 +380,7 @@ export default function EstimatePageMobile() {
         >
         <Drawer.Trigger asChild>
           <button 
-            className="fixed bottom-8 left-1/2 -translate-x-1/2 px-6 py-3 bg-[#f3cd08] text-gray-700 rounded-full font-bold shadow-2xl z-20"
+            className={`fixed bottom-8 left-1/2 -translate-x-1/2 px-6 py-3 bg-[#f3cd08] text-gray-700 rounded-full font-bold shadow-2xl z-20 ${drawerOpen ? 'hidden' : ''}`}
             aria-label="Estimer un trajet"
           >
             Estimer un trajet
