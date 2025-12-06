@@ -89,11 +89,15 @@
  * @typedef {Object} DetailsTrajet
  * @property {PointDetails} depart - Détails point départ
  * @property {PointDetails} arrivee - Détails point arrivée
- * @property {number} distance_estimee - Distance routière en mètres
- * @property {number} duree_estimee - Durée en secondes
+ * @property {number} distance_metres - Distance routière en mètres
+ * @property {number} duree_secondes - Durée en secondes
  * @property {string|null} heure - Tranche horaire
  * @property {number|null} meteo - Code météo
+ * @property {string|null} meteo_label - Label météo (ex: "Soleil", "Pluie forte")
  * @property {number|null} type_zone - Type zone
+ * @property {string|null} type_zone_label - Label type zone (ex: "Urbaine", "Mixte")
+ * @property {number|null} congestion_mapbox - Congestion Mapbox (0-100)
+ * @property {string|null} route_classe - Classe route dominante
  */
 
 /**
