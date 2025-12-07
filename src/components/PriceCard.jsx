@@ -35,6 +35,10 @@ export default function PriceCard({ prediction, onAddTrajet }) {
   const bgColor = isInconnu ? 'bg-gray-50' : 'bg-yellow-50';
   const borderColor = isInconnu ? 'border-gray-100' : 'border-yellow-100';
 
+  const estimSup = prediction.estimations_supplementaires || {};
+  const mlPrediction = estimSup?.ml_prediction;
+  const featuresUsed = estimSup?.features_utilisees;
+
   // Icône Météo dynamique
   const getWeatherIcon = (meteoCode) => {
     switch(meteoCode) {
@@ -197,33 +201,31 @@ export default function PriceCard({ prediction, onAddTrajet }) {
       </div>
 
       {/* 5. ESTIMATIONS ALTERNATIVES COMPACTES (Si inconnu) */}
-      {isInconnu && prediction.estimations_supplementaires && (
+        {isInconnu && prediction.estimations_supplementaires && (
         <div className="px-6 pb-6">
-            <div className="text-[10px] font-bold text-gray-400 uppercase tracking-wide mb-3">
-                Détail des calculs
+          <div className="text-[10px] font-bold text-gray-400 uppercase tracking-wide mb-3">
+            Détail des calculs (fallback)
+          </div>
+          <div className="space-y-2">
+            <div className="flex justify-between items-center py-2 border-b border-gray-50 border-dashed">
+              <span className="text-xs text-gray-600">Prédiction ML</span>
+              <span className="text-xs font-bold text-gray-900">
+                {mlPrediction ? `${mlPrediction} FCFA` : 'Non disponible'}
+              </span>
             </div>
-            <div className="space-y-2">
-                <div className="flex justify-between items-center py-2 border-b border-gray-50 border-dashed">
-                    <span className="text-xs text-gray-600">Tarif par distance</span>
-                    <span className="text-xs font-bold text-gray-900">
-                        {prediction.estimations_supplementaires.distance_based} FCFA
-                    </span>
-                </div>
-                <div className="flex justify-between items-center py-2 border-b border-gray-50 border-dashed">
-                    <span className="text-xs text-gray-600">Tarif officiel</span>
-                    <span className="text-xs font-bold text-gray-900">
-                        {prediction.estimations_supplementaires.standardise} FCFA
-                    </span>
-                </div>
-                <div className="flex justify-between items-center py-2">
-                    <span className="text-xs text-gray-600">Moyenne zone</span>
-                    <span className="text-xs font-bold text-gray-900">
-                        {prediction.estimations_supplementaires.zone_based} FCFA
-                    </span>
-                </div>
-            </div>
+            {featuresUsed && (
+                  <div className="grid grid-cols-2 gap-2 text-[11px] text-gray-600 bg-white border border-gray-100 rounded-xl px-3 py-2">
+                    <div>Distance: {((featuresUsed.distance_metres || 0) / 1000).toFixed(2)} km</div>
+                    <div>Durée: {Math.round((featuresUsed.duree_secondes || 0) / 60)} min</div>
+                    <div>Sinuosité: {(featuresUsed.sinuosite || 0).toFixed(2)}</div>
+                    <div>Virages: {featuresUsed.nb_virages ?? 0}</div>
+                    <div>Heure: {featuresUsed.heure || '-'}</div>
+                    <div>Météo: {featuresUsed.meteo ?? '-'}</div>
+                  </div>
+            )}
+          </div>
         </div>
-      )}
+        )}
 
       {/* 6. MESSAGE CONSEIL (Footer) */}
       <div className="bg-yellow-50/50 p-4 border-t border-yellow-100/50">
