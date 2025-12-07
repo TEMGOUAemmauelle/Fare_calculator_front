@@ -18,6 +18,7 @@ import { useEffect } from 'react';
 import HomePage from './pages/HomePage';
 import EstimatePage from './pages/EstimatePageRouter';
 import AddTrajetPage from './pages/AddTrajetPage';
+import AllTrajetsPage from './pages/AllTrajetsPage';
 
 // Components
 import PWAInstallPrompt from './components/PWAInstallPrompt';
@@ -81,6 +82,7 @@ function App() {
         <Route path="/" element={<HomePage />} />
         <Route path="/estimate" element={<EstimatePage />} />
         <Route path="/add-trajet" element={<AddTrajetPage />} />
+        <Route path="/trajets" element={<AllTrajetsPage />} />
         
         {/* Redirect unknown routes to home */}
         <Route path="*" element={<Navigate to="/" replace />} />

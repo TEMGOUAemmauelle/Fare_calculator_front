@@ -12,9 +12,10 @@
  */
 
 import { useEffect, useRef, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import mapboxgl from 'mapbox-gl';
 import 'mapbox-gl/dist/mapbox-gl.css';
-import { MapPin, Navigation, Layers, ZoomIn, ZoomOut, Maximize2, Clock, Route as RouteIcon } from 'lucide-react';
+import { MapPin, Navigation, Layers, ZoomIn, ZoomOut, Maximize2, Clock, Route as RouteIcon, List } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import LottieAnimation from './LottieAnimation';
 import yellowTaxiAnimation from '../assets/lotties/yellow taxi.json';
@@ -63,6 +64,7 @@ export default function MapView({
   className = '',
   height = '100%',
 }) {
+  const navigate = useNavigate();
   const mapContainer = useRef(null);
   const map = useRef(null);
   const markersRef = useRef([]);
@@ -561,6 +563,17 @@ export default function MapView({
             title="Zoom out"
           >
             <ZoomOut className="w-5 h-5 text-gray-700" />
+          </motion.button>
+
+          {/* Bouton Liste Trajets */}
+          <motion.button
+            whileHover={{ scale: 1.05 }}
+            whileTap={{ scale: 0.95 }}
+            onClick={() => navigate('/trajets')}
+            className="p-3 bg-white hover:bg-gray-50 rounded-xl shadow-lg border border-gray-200 transition-colors"
+            title="Voir tous les trajets"
+          >
+            <List className="w-5 h-5 text-gray-700" />
           </motion.button>
 
           {/* Bouton géolocalisation - Jaune */}
