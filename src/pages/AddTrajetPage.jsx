@@ -306,7 +306,7 @@ export default function AddTrajetPage() {
         prix: parseFloat(formData.prix_paye), // 'prix' et non 'prix_paye'
         meteo: formData.meteo,
         heure: formData.heure_tranche, // 'heure' et non 'heure_tranche'
-        qualite_trajet: formData.qualite_trajet, // Nouveau paramètre
+        qualite_trajet: Math.round(formData.qualite_trajet), // Arrondir avant envoi
       };
 
       console.log('📤 Envoi trajet:', payload);
@@ -585,35 +585,35 @@ export default function AddTrajetPage() {
               <div className="space-y-3">
                 <div className="flex items-center justify-between text-xs text-gray-600 font-medium">
                   <div className="flex items-center gap-1">
-                    <ThumbsUp className="w-4 h-4 text-green-600" />
-                    <span>Facile</span>
-                  </div>
-                  <span className="text-lg font-black text-yellow-600">{formData.qualite_trajet}</span>
-                  <div className="flex items-center gap-1">
                     <ThumbsDown className="w-4 h-4 text-red-600" />
                     <span>Difficile</span>
+                  </div>
+                  <span className="text-lg font-black text-yellow-600">{Math.round(formData.qualite_trajet)}</span>
+                  <div className="flex items-center gap-1">
+                    <ThumbsUp className="w-4 h-4 text-green-600" />
+                    <span>Facile</span>
                   </div>
                 </div>
                 <input
                   type="range"
                   min="1"
                   max="10"
-                  value={formData.qualite_trajet}
-                  onChange={(e) => handleInputChange('qualite_trajet', parseInt(e.target.value))}
+                  value={11 - formData.qualite_trajet}
+                  onChange={(e) => handleInputChange('qualite_trajet', 11 - parseFloat(e.target.value))}
                   className="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer slider-yellow"
                   style={{
-                    background: `linear-gradient(to right, #10b981 0%, #fbbf24 ${(formData.qualite_trajet - 1) * 11.11}%, #fbbf24 ${(formData.qualite_trajet - 1) * 11.11}%, #ef4444 100%)`
+                    background: `linear-gradient(to right, #ef4444 0%, #fbbf24 ${(10 - formData.qualite_trajet) * 11.11}%, #fbbf24 ${(10 - formData.qualite_trajet) * 11.11}%, #10b981 100%)`
                   }}
                 />
                 <div className="flex justify-between text-xs text-gray-500">
-                  <span>1</span>
-                  <span>5</span>
                   <span>10</span>
+                  <span>5</span>
+                  <span>1</span>
                 </div>
                 <p className="text-xs text-gray-500 italic">
-                  {formData.qualite_trajet <= 3 && "Trajet fluide, peu d'obstacles"}
-                  {formData.qualite_trajet > 3 && formData.qualite_trajet <= 7 && "Trajet normal avec quelques difficultés"}
-                  {formData.qualite_trajet > 7 && "Trajet difficile (embouteillages, nids de poule...)"}
+                  {Math.round(formData.qualite_trajet) <= 3 && "Trajet fluide, peu d'obstacles"}
+                  {Math.round(formData.qualite_trajet) > 3 && Math.round(formData.qualite_trajet) <= 7 && "Trajet normal avec quelques difficultés"}
+                  {Math.round(formData.qualite_trajet) > 7 && "Trajet difficile (embouteillages, nids de poule...)"}
                 </p>
               </div>
             </div>
