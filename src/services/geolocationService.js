@@ -201,7 +201,7 @@ export const reverseGeocode = async (lat, lon) => {
     
     const response = await fetch(`${url}?${params}`, {
       headers: {
-        'User-Agent': 'FareCalculatorApp/1.0', // Requis par Nominatim
+        // 'User-Agent': 'FareCalculatorApp/1.0', // Requis par Nominatim mais bloque CORS en local
       },
     });
     

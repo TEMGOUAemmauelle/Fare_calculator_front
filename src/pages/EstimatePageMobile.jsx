@@ -69,6 +69,8 @@ export default function EstimatePageMobile() {
   const [markers, setMarkers] = useState([]);
   const [routeData, setRouteData] = useState(null);
   const drawerFirstFocusRef = useRef(null);
+  const [autoLocationAttempted, setAutoLocationAttempted] = useState(false);
+  const [isLocating, setIsLocating] = useState(false);
 
   useEffect(() => {
     let mounted = true;
@@ -76,22 +78,68 @@ export default function EstimatePageMobile() {
     const init = async () => {
       setCurrentTimeSlot();
       
+      // Ouvrir le drawer automatiquement dès l'arrivée sur la page
+      setDrawerOpen(true);
+      
+      // Éviter double exécution
+      if (autoLocationAttempted) return;
+      
+      setAutoLocationAttempted(true);
+      setIsLocating(true);
+
       try {
-        const position = await getCurrentPosition({ timeout: 5000 });
+        // 1. Récupérer position et adresse (une seule demande de permission)
+        const { getCurrentPositionWithAddress, checkGeolocationPermission } = await import('../services/geolocationService');
+        
+        // Vérifier permission (optionnel, getCurrentPosition le fait aussi mais permet message custom)
+        try {
+            const status = await checkGeolocationPermission();
+            if (status === 'denied') {
+                toast('Activez la localisation pour une saisie plus rapide', {
+                    icon: '📍',
+                    duration: 5000,
+                });
+                // On continue quand même au cas où
+            }
+        } catch (e) { /* ignore */ }
+
+        const point = await getCurrentPositionWithAddress();
+        
         if (!mounted) return;
-        
-        const weatherData = await getCurrentWeather(
-          position.coords.latitude,
-          position.coords.longitude
-        );
-        
-        if (mounted && weatherData?.meteo !== undefined) {
-          setMeteo(weatherData.meteo);
+
+        if (point) {
+          // 2. Mettre à jour le lieu de départ
+          setDepartPlace({
+            label: point.label || 'Ma position',
+            longitude: point.coords_longitude,
+            latitude: point.coords_latitude,
+          });
+          
+          // Centrer carte
+          setMapCenter([point.coords_longitude, point.coords_latitude]);
+          setMapZoom(15);
+          
+          toast.success('Position détectée');
+
+          // 3. Récupérer météo avec ces coordonnées
+          try {
+            const weatherData = await getCurrentWeather(
+              point.coords_latitude,
+              point.coords_longitude
+            );
+            if (mounted && weatherData?.meteo !== undefined) {
+              setMeteo(weatherData.meteo);
+            }
+          } catch (wErr) {
+            console.warn('Météo auto échouée:', wErr);
+            if (mounted) setMeteo(0); // Défaut
+          }
         }
       } catch (error) {
-        if (mounted) {
-          setMeteo(0);
-        }
+        console.warn('Géolocalisation auto échouée:', error);
+        if (mounted) setMeteo(0);
+      } finally {
+        if (mounted) setIsLocating(false);
       }
     };
     
@@ -100,7 +148,7 @@ export default function EstimatePageMobile() {
     return () => {
       mounted = false;
     };
-  }, []);
+  }, [autoLocationAttempted]);
 
   // NOTE: removed delayed mounting for Drawer to avoid timing issues
   // and layout jumps. Drawer is mounted immediately (like AddTrajetPage).
@@ -357,6 +405,7 @@ export default function EstimatePageMobile() {
       <Drawer.Root
         shouldScaleBackground={false}
         modal={true}
+        open={drawerOpen}
         onOpenChange={(open) => {
           setDrawerOpen(open);
           // Quand le drawer s'ouvre, focuser un élément interne pour éviter
@@ -396,9 +445,17 @@ export default function EstimatePageMobile() {
             <div className="p-4 bg-white rounded-t-3xl flex-shrink-0">
               <div className="mx-auto w-12 h-1.5 flex-shrink-0 rounded-full bg-gray-300 mb-8" />
               <div className="max-w-md mx-auto">
-                <Drawer.Title className="font-black text-2xl mb-6 text-gray-700">
-                  Estimer un trajet
-                </Drawer.Title>
+                <div className="flex items-center justify-between mb-6">
+                  <Drawer.Title className="font-black text-2xl text-gray-700">
+                    Estimer un trajet
+                  </Drawer.Title>
+                  <button
+                    onClick={() => navigate('/trajets')}
+                    className="px-3 py-1.5 bg-gray-200 hover:bg-gray-300 text-gray-800 rounded-lg text-xs font-semibold transition-colors"
+                  >
+                    Trajets commu
+                  </button>
+                </div>
                 <p id="drawer-description" className="sr-only">
                   Formulaire pour estimer le prix d'un trajet en taxi
                 </p>
@@ -426,6 +483,7 @@ export default function EstimatePageMobile() {
                             onSelect={handleDepartSelect}
                             showCurrentLocation={true}
                             value={departPlace?.label || ''}
+                            externalLoading={isLocating}
                           />
                           
                           <SearchBar
