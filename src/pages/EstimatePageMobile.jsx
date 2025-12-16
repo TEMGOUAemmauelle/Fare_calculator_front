@@ -105,15 +105,21 @@ export default function EstimatePageMobile() {
 
         const point = await getCurrentPositionWithAddress();
         
+        console.log('📍 [EstimatePageMobile] Point retourné par getCurrentPositionWithAddress:', point);
+
         if (!mounted) return;
 
         if (point) {
+          console.log('📍 [EstimatePageMobile] Label obtenu:', point.label);
+          
           // 2. Mettre à jour le lieu de départ
           setDepartPlace({
             label: point.label || 'Ma position',
             longitude: point.coords_longitude,
             latitude: point.coords_latitude,
           });
+          
+          console.log('📍 [EstimatePageMobile] departPlace mis à jour avec label:', point.label || 'Ma position');
           
           // Centrer carte
           setMapCenter([point.coords_longitude, point.coords_latitude]);

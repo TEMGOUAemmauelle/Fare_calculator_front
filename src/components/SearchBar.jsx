@@ -43,7 +43,9 @@ export default function SearchBar({
   // Synchroniser query avec value externe (mode controlé)
   // MAIS éviter de re-synchroniser juste après une sélection
   useEffect(() => {
+    console.log('🔍 [SearchBar] useEffect value sync - value:', value, 'query:', query, 'justSelected:', justSelected);
     if (value !== null && value !== query && !justSelected) {
+      console.log('🔍 [SearchBar] Mise à jour query avec value:', value);
       setQuery(value);
     }
     // Reset flag après montage

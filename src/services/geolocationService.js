@@ -189,6 +189,7 @@ export const checkGeolocationPermission = async () => {
  * console.log(`Vous êtes à: ${point.label || point.quartier || point.ville}`);
  */
 export const reverseGeocode = async (lat, lon) => {
+  console.log('🗺️ [reverseGeocode] Début avec coords:', { lat, lon });
   try {
     const url = `${NOMINATIM_CONFIG.BASE_URL || 'https://nominatim.openstreetmap.org'}/reverse`;
     const params = new URLSearchParams({
@@ -199,20 +200,26 @@ export const reverseGeocode = async (lat, lon) => {
       zoom: '18', // Niveau détail max (POI/adresse précise)
     });
     
+    console.log('🗺️ [reverseGeocode] URL:', `${url}?${params}`);
+    
     const response = await fetch(`${url}?${params}`, {
       headers: {
         // 'User-Agent': 'FareCalculatorApp/1.0', // Requis par Nominatim mais bloque CORS en local
       },
     });
     
+    console.log('🗺️ [reverseGeocode] Response status:', response.status);
+    
     if (!response.ok) {
       throw new Error(`Nominatim API error: ${response.status}`);
     }
     
     const data = await response.json();
+    console.log('🗺️ [reverseGeocode] Data reçu:', data);
     
     // Extraire infos pertinentes depuis address
     const address = data.address || {};
+    console.log('🗺️ [reverseGeocode] Address:', address);
     
     // Label : POI > rue > quartier > village
     const label = data.display_name?.split(',')[0] ||
@@ -222,6 +229,8 @@ export const reverseGeocode = async (lat, lon) => {
                   address.suburb ||
                   address.village ||
                   'Position actuelle';
+    
+    console.log('🗺️ [reverseGeocode] Label final:', label);
     
     return {
       id: null,
