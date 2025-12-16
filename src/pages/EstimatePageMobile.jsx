@@ -69,11 +69,13 @@ export default function EstimatePageMobile() {
   const [markers, setMarkers] = useState([]);
   const [routeData, setRouteData] = useState(null);
   const drawerFirstFocusRef = useRef(null);
-  const [autoLocationAttempted, setAutoLocationAttempted] = useState(false);
+  const autoLocationAttemptedRef = useRef(false); // Utiliser ref au lieu de state pour éviter re-render
+  const mountedRef = useRef(true); // Ref pour survivre aux StrictMode double-mount
   const [isLocating, setIsLocating] = useState(false);
 
   useEffect(() => {
-    let mounted = true;
+    // Reset mounted à true à chaque mount
+    mountedRef.current = true;
     
     const init = async () => {
       setCurrentTimeSlot();
@@ -81,10 +83,10 @@ export default function EstimatePageMobile() {
       // Ouvrir le drawer automatiquement dès l'arrivée sur la page
       setDrawerOpen(true);
       
-      // Éviter double exécution
-      if (autoLocationAttempted) return;
+      // Éviter double exécution (utiliser ref pour ne pas trigger de re-render)
+      if (autoLocationAttemptedRef.current) return;
+      autoLocationAttemptedRef.current = true;
       
-      setAutoLocationAttempted(true);
       setIsLocating(true);
 
       try {
@@ -106,8 +108,9 @@ export default function EstimatePageMobile() {
         const point = await getCurrentPositionWithAddress();
         
         console.log('📍 [EstimatePageMobile] Point retourné par getCurrentPositionWithAddress:', point);
+        console.log('📍 [EstimatePageMobile] mountedRef.current:', mountedRef.current);
 
-        if (!mounted) return;
+        if (!mountedRef.current) return;
 
         if (point) {
           console.log('📍 [EstimatePageMobile] Label obtenu:', point.label);
@@ -133,28 +136,28 @@ export default function EstimatePageMobile() {
               point.coords_latitude,
               point.coords_longitude
             );
-            if (mounted && weatherData?.meteo !== undefined) {
+            if (mountedRef.current && weatherData?.meteo !== undefined) {
               setMeteo(weatherData.meteo);
             }
           } catch (wErr) {
             console.warn('Météo auto échouée:', wErr);
-            if (mounted) setMeteo(0); // Défaut
+            if (mountedRef.current) setMeteo(0); // Défaut
           }
         }
       } catch (error) {
         console.warn('Géolocalisation auto échouée:', error);
-        if (mounted) setMeteo(0);
+        if (mountedRef.current) setMeteo(0);
       } finally {
-        if (mounted) setIsLocating(false);
+        if (mountedRef.current) setIsLocating(false);
       }
     };
     
     init();
     
     return () => {
-      mounted = false;
+      mountedRef.current = false;
     };
-  }, [autoLocationAttempted]);
+  }, []); // Dépendances vides - s'exécute une seule fois au montage
 
   // NOTE: removed delayed mounting for Drawer to avoid timing issues
   // and layout jumps. Drawer is mounted immediately (like AddTrajetPage).
