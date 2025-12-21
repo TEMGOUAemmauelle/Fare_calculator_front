@@ -10,7 +10,7 @@
  * - Switch élégant pour navigation
  */
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { motion } from 'framer-motion';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { Drawer } from 'vaul';
@@ -68,6 +68,10 @@ export default function AddTrajetPage() {
   const [mapZoom, setMapZoom] = useState(12);
   const [markers, setMarkers] = useState([]);
   const [routeData, setRouteData] = useState(null);
+  
+  // Refs pour éviter les problèmes de StrictMode
+  const autoLocationAttemptedRef = useRef(false);
+  const mountedRef = useRef(true);
 
   // Fonction pour détecter automatiquement la tranche horaire
   const setCurrentTimeSlot = () => {
@@ -84,6 +88,9 @@ export default function AddTrajetPage() {
 
   // Initialisation : Ouverture Drawer + Géolocalisation auto
   useEffect(() => {
+    // Reset mounted à true à chaque mount
+    mountedRef.current = true;
+    
     // 0. Détecter la tranche horaire actuelle
     setCurrentTimeSlot();
     
@@ -92,6 +99,10 @@ export default function AddTrajetPage() {
 
     // 2. Tenter la géolocalisation si pas de données pré-remplies
     const attemptAutoGeoloc = async () => {
+      // Éviter double exécution avec StrictMode
+      if (autoLocationAttemptedRef.current) return;
+      autoLocationAttemptedRef.current = true;
+      
       if (!location.state?.depart) {
         setIsLocating(true);
         try {
@@ -110,24 +121,38 @@ export default function AddTrajetPage() {
 
           // Si accordé ou prompt, on tente
           const point = await getCurrentPositionWithAddress();
+          
+          console.log('📍 [AddTrajetPage] Point retourné:', point);
+          
+          if (!mountedRef.current) return;
+          
           if (point) {
             setFormData(prev => ({
               ...prev,
               depart_point: point.label || 'Ma position',
               depart_coords: [point.coords_longitude, point.coords_latitude],
             }));
+            
+            // Centrer la carte sur la position
+            setMapCenter([point.coords_longitude, point.coords_latitude]);
+            setMapZoom(15);
+            
             toast.success('Position actuelle détectée', { id: 'geoloc-success' });
           }
         } catch (e) {
           console.warn('Auto-geoloc failed:', e);
         } finally {
-          setIsLocating(false);
+          if (mountedRef.current) setIsLocating(false);
         }
       }
     };
 
     attemptAutoGeoloc();
-  }, []);
+    
+    return () => {
+      mountedRef.current = false;
+    };
+  }, [location.state?.depart]);
 
   // Pré-remplir depuis estimation précédente
   useEffect(() => {
