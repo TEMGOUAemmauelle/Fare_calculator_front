@@ -21,7 +21,7 @@ import { useTranslation } from 'react-i18next';
 import LottieAnimation from './LottieAnimation';
 import yellowTaxiAnimation from '../assets/lotties/yellow taxi.json';
 import geolocationService from '../services/geolocationService';
-import { toast } from 'react-hot-toast';
+import showToast from '../utils/customToast';
 
 // Configuration Mapbox
 const MAPBOX_TOKEN = import.meta.env.VITE_MAPBOX_TOKEN;
@@ -436,7 +436,7 @@ export default function MapView({
   // Géolocalisation
   const handleGeolocate = async () => {
     if (!navigator.geolocation) {
-      toast.error(t('map.unsupported'));
+      showToast.error(t('map.unsupported'));
       return;
     }
 
@@ -448,7 +448,7 @@ export default function MapView({
 
       if (status === 'denied') {
         // Ne pas tenter de re-prompt (impossible) ; indiquer la marche à suivre
-        toast.error('Permission géolocalisation bloquée. Ouvrez les paramètres du site (icône cadenas) et autorisez la localisation.', { duration: 7000 });
+        showToast.error('Permission géolocalisation bloquée. Ouvrez les paramètres du site (icône cadenas) et autorisez la localisation.');
         setIsTracking(false);
         return;
       }
@@ -489,15 +489,15 @@ export default function MapView({
         });
       }
 
-      toast.success(t('map.localized'));
+      showToast.success(t('map.localized'));
       console.log('✅ Position utilisateur:', { longitude, latitude });
     } catch (error) {
       // Gestion d'erreur claire
       console.warn('⚠️ Géolocalisation échouée:', error.message || error.userMessage || error);
       if (error.code === 1) {
-        toast.error(t('geolocation.denied'));
+        showToast.error(t('geolocation.denied'));
       } else {
-        toast.error(error.userMessage || t('geolocation.unknown_error'));
+        showToast.error(error.userMessage || t('geolocation.unknown_error'));
       }
     } finally {
       setIsTracking(false);

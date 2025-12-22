@@ -25,7 +25,7 @@ import {
   Calculator,
   PlusCircle,
 } from 'lucide-react';
-import toast from 'react-hot-toast';
+import showToast from '../utils/customToast';
 
 // Components
 import MapView from '../components/MapView';
@@ -101,10 +101,7 @@ export default function EstimatePageMobile() {
         try {
             const status = await checkGeolocationPermission();
             if (status === 'denied') {
-                toast('Activez la localisation pour une saisie plus rapide', {
-                    icon: '📍',
-                    duration: 5000,
-                });
+                showToast.info('Activez la localisation pour une saisie plus rapide', '📍');
                 // On continue quand même au cas où
             }
         } catch (e) { /* ignore */ }
@@ -132,7 +129,7 @@ export default function EstimatePageMobile() {
           setMapCenter([point.coords_longitude, point.coords_latitude]);
           setMapZoom(15);
           
-          toast.success(t('estimate.detecting_location'));
+          showToast.success(t('estimate.detecting_location'));
 
           // 3. Récupérer météo avec ces coordonnées
           try {
@@ -317,7 +314,7 @@ export default function EstimatePageMobile() {
 
   const handleEstimate = async () => {
     if (!departPlace || !arriveePlace) {
-      toast.error('Veuillez sélectionner départ et arrivée');
+      showToast.error('Veuillez sélectionner départ et arrivée');
       return;
     }
 
@@ -355,17 +352,17 @@ export default function EstimatePageMobile() {
         });
       }
 
-      toast.success('Estimation calculée');
+      showToast.success('Estimation calculée');
     } catch (err) {
       console.error('❌ Erreur estimation:', err);
       
       // Message spécifique pour erreur 401
       if (err.response?.status === 401) {
         setError('Erreur d\'authentification avec le serveur. Vérifiez la configuration backend (CORS).');
-        toast.error('Erreur d\'authentification serveur');
+        showToast.error('Erreur d\'authentification serveur');
       } else {
         setError(err.response?.data?.detail || err.userMessage || 'Impossible de calculer');
-        toast.error('Erreur lors du calcul');
+        showToast.error('Erreur lors du calcul');
       }
     } finally {
       setIsLoading(false);
