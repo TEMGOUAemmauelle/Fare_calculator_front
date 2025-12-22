@@ -1,0 +1,265 @@
+{
+  "common": {
+    "loading": "Loading...",
+    "error": "An error occurred",
+    "back": "Back",
+    "confirm": "Confirm",
+    "cancel": "Cancel",
+    "save": "Save",
+    "delete": "Delete",
+    "retry": "Retry",
+    "search": "Search",
+    "see_all": "See all",
+    "close": "Close",
+    "thank_you": "Thank you!",
+    "success": "Success!",
+    "done": "Done",
+    "swipe": "Swipe →",
+    "unknown": "Unknown",
+    "unknown_sector": "Unknown Sector",
+    "select": "Select...",
+    "home_shortcut": "Home",
+    "work_shortcut": "Work",
+    "my_position": "My position",
+    "result": "Result",
+    "new_search": "New search"
+  },
+  "nav": {
+    "home": "Home",
+    "estimate": "Estimate",
+    "add": "Add",
+    "stats": "Stats",
+    "history": "History"
+  },
+  "home": {
+    "status": "Taxi Fares",
+    "status_subtitle": "Don't pay too much",
+    "headline_1": "FARE",
+    "headline_2": "CALCULATOR.",
+    "description": "Estimate your costs or enrich the database.",
+    "cta_estimate": "Estimate",
+    "cta_estimate_sub": "Price calculator",
+    "cta_contribute": "Contribute",
+    "cta_contribute_sub": "Database",
+    "core_version": "Core v2.0",
+    "ai_engine": "AI"
+  },
+  "estimate": {
+    "title": "ESTIMATE",
+    "drawer_title": "ESTIMATE A TRIP",
+    "drawer_description": "Form to estimate the price of a taxi trip",
+    "placeholder_from": "Current position...",
+    "placeholder_to": "Where are you going?",
+    "label_from": "From",
+    "label_to": "To",
+    "conditions": "Conditions",
+    "moment": "Moment",
+    "launch": "Start estimation",
+    "calculating": "Calculating...",
+    "result": "Result",
+    "new_search": "New search",
+    "community_trips": "Community trips",
+    "detecting_location": "Location detected"
+  },
+  "add": {
+    "title": "ADD",
+    "subtitle": "TRIP",
+    "contribution": "Community contribution",
+    "placeholder_from": "Starting point...",
+    "placeholder_to": "Destination...",
+    "price_paid": "Price paid (FCFA)",
+    "weather": "Weather",
+    "difficulty": "Rate this trip - Is it difficult?",
+    "easy": "Easy",
+    "hard": "Hard",
+    "sending": "Sending...",
+    "success_note": "Your data is anonymous and helps improve estimations for everyone.",
+    "weather_sunny": "Sunny",
+    "weather_rainy": "Rainy",
+    "success_title": "Thank you!",
+    "success_message": "Your trip has been successfully recorded. Thank you for contributing to the community!",
+    "add_a_trip": "Add a trip",
+    "quality_smooth": "Smooth trip, few obstacles",
+    "quality_normal": "Normal trip with some difficulties",
+    "quality_hard_desc": "Hard trip (traffic, potholes...)"
+  },
+  "price_card": {
+    "standard_estimation": "Standard estimation",
+    "intelligent_estimation": "Intelligent estimation",
+    "reliability": "Reliability",
+    "estimated_price": "Estimated price",
+    "depart": "Departure",
+    "arrival": "Arrival",
+    "distance": "Distance",
+    "duration": "Duration",
+    "weather": "Weather",
+    "zone": "Zone",
+    "calculation_details": "Calculation details (fallback)",
+    "ml_prediction": "ML Prediction",
+    "not_available": "Not available",
+    "indicative_price": "Indicative price based on available data."
+  },
+  "predict": {
+    "estimate_a_trip": "Estimate a trip"
+  },
+  "all_trajets": {
+    "title": "Trips",
+    "subtitle": "Commu",
+    "description": "Shared database",
+    "search_placeholder": "Where do you want to go ?",
+    "no_results": "No results found",
+    "no_results_subtitle": "Try adjusting your search criteria.",
+    "syncing": "Syncing...",
+    "depart": "Departure",
+    "arrivee": "Arrival",
+    "error_loading": "Unable to load the list of trips.",
+    "filters": {
+      "period": "Period",
+      "weather": "Weather",
+      "all": "All"
+    }
+  },
+  "stats": {
+    "dashboard": "Dashboard",
+    "error_loading": "Unable to load statistics.",
+    "hero": {
+      "trend": "Trending",
+      "featured": "Top Destination",
+      "description": "The most popular destination of the period.",
+      "visits": "recorded visits"
+    },
+    "kpi": {
+      "total_trajets": "Total Trips",
+      "period": "Period"
+    },
+    "filters": {
+      "title": "Filter Statistics",
+      "all": "All Time",
+      "month": "This Month",
+      "week": "This Week"
+    },
+    "sections": {
+      "feared": "Most Dreaded",
+      "costly": "Most Costly",
+      "longest": "Longest Trips",
+      "top_destinations": "Top Destinations"
+    }
+  },
+  "geolocation": {
+    "prompt": "Enable geolocation for a better experience (tap the location icon or current position button).",
+    "denied": "Geolocation blocked. Open site settings (padlock icon) and enable location.",
+    "detecting": "Detecting your position...",
+    "my_position": "My position",
+    "unavailable": "Position unavailable. Please check your internet connection.",
+    "timeout": "Timed out. Please try again.",
+    "unknown_error": "Location error",
+    "unsupported": "Geolocation not supported by your device",
+    "localized": "Position localized"
+  },
+  "search": {
+    "placeholder": "Search for a place...",
+    "no_results": "No results found",
+    "try_another": "Try searching with a different name",
+    "use_current": "Use current location"
+  },
+  "map": {
+    "loading": "Loading map...",
+    "distance": "Distance",
+    "duration": "Duration",
+    "traffic": "Traffic",
+    "traffic_low": "Fluid",
+    "traffic_moderate": "Moderate",
+    "traffic_heavy": "Heavy",
+    "traffic_severe": "Severe",
+    "zoom_in": "Zoom In",
+    "zoom_out": "Zoom Out",
+    "see_all": "See All Trips",
+    "see_stats": "See Statistics",
+    "center_view": "Recenter View",
+    "change_style": "Change Map Style"
+  },
+  "constants": {
+    "weather": {
+      "0": "Sunny",
+      "1": "Light Rain",
+      "2": "Heavy Rain",
+      "3": "Thunderstorm"
+    },
+    "time": {
+      "matin": "Morning",
+      "apres-midi": "Afternoon",
+      "soir": "Evening",
+      "nuit": "Night"
+    },
+    "status": {
+      "exact": {
+        "label": "Exact Trip",
+        "description": "Based on identical trips in database"
+      },
+      "similaire": {
+        "label": "Similar Trip",
+        "description": "Adjusted estimation from nearby trips"
+      },
+      "inconnu": {
+        "label": "Unknown Trip",
+        "description": "Rough estimation (lower reliability)"
+      }
+    },
+    "zone": {
+      "0": {
+        "label": "Urban",
+        "description": "Dense area, main roads"
+      },
+      "1": {
+        "label": "Mixed",
+        "description": "Semi-urban area"
+      },
+      "2": {
+        "label": "Rural",
+        "description": "Low density, secondary roads"
+      }
+    },
+    "congestion": {
+      "low": "Fluid",
+      "moderate": "Moderate",
+      "dense": "Dense",
+      "blocked": "Blocked"
+    }
+  },
+  "error": {
+    "network_title": "Connection Problem",
+    "api_title": "Server Error",
+    "auth_title": "Authentication Required",
+    "geolocation_title": "Geolocation Unavailable",
+    "validation_title": "Invalid Data",
+    "default_title": "An error occurred",
+    "unexpected": "An unexpected error occurred",
+    "retry": "Retry",
+    "close": "Close",
+    "dismiss": "Dismiss",
+    "technical_details": "Technical details"
+  },
+  "messages": {
+    "error_network": "Search failed. Check your internet connection.",
+    "error_geolocation_denied": "Geolocation permission denied. Please enter your location manually.",
+    "error_geolocation_unavailable": "Geolocation not available on this device.",
+    "error_api_key": "Invalid API key. Please contact the administrator.",
+    "error_same_points": "Pickup and drop-off points must be different.",
+    "success_trajet_added": "Trip successfully added! Thank you for contributing to the community 🎉",
+    "success_copied": "Copied to clipboard!",
+    "info_loading_estimate": "Calculating estimate...",
+    "info_detecting_location": "Detecting your position...",
+    "info_no_results": "No results found. Try another place.",
+    "invite_add_trajet": "This trip is unknown. Help the community by adding your fare after the trip!"
+  },
+  "pwa": {
+    "install_title": "Install App",
+    "install_description": "Access Fare Calculator in one click from your home screen and enjoy a faster experience.",
+    "ios_instruction": "Install on iPhone / iPad",
+    "ios_share": "Tap the share icon",
+    "ios_add_home": "then 'Add to Home Screen'",
+    "install_btn": "Install Now",
+    "later": "Later",
+    "manual_instruction": "To install the app, open your browser menu and select 'Add to Home Screen'."
+  }
+}

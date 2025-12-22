@@ -11,6 +11,7 @@
 import React, { useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { X } from 'lucide-react';
+import { useTranslation } from 'react-i18next';
 import LottieAnimation from './LottieAnimation';
 
 // Import des animations Lottie
@@ -19,15 +20,21 @@ import makingMoneyAnimation from '../assets/lotties/Making Money.json';
 export default function ConfirmationModal({
   isOpen = false,
   onClose,
-  title = 'Merci !',
-  message = 'Votre action a été effectuée avec succès.',
+  title,
+  message,
   lottieAnimation = makingMoneyAnimation,
-  buttonText = 'Terminé',
+  buttonText,
   onButtonClick,
   showCloseButton = false,
   autoClose = false,
   autoCloseDelay = 3000,
 }) {
+  const { t } = useTranslation();
+  
+  // Default values localized
+  const modalTitle = title || t('common.thank_you');
+  const modalMessage = message || t('common.success_message') || t('common.done');
+  const modalButtonText = buttonText || t('common.done');
   // Auto-fermeture optionnelle
   useEffect(() => {
     if (isOpen && autoClose) {
@@ -61,7 +68,7 @@ export default function ConfirmationModal({
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
             onClick={handleClose}
-            className="fixed inset-0 z-[100] bg-black/50 backdrop-blur-sm flex items-center justify-center p-4"
+            className="fixed inset-0 z-100 bg-black/50 backdrop-blur-sm flex items-center justify-center p-4"
           >
             {/* Modal content */}
             <motion.div
@@ -117,7 +124,7 @@ export default function ConfirmationModal({
                   transition={{ delay: 0.4 }}
                   className="text-3xl font-black text-gray-900 mb-4"
                 >
-                  {title}
+                  {modalTitle}
                 </motion.h2>
 
                 {/* Message */}
@@ -127,7 +134,7 @@ export default function ConfirmationModal({
                   transition={{ delay: 0.5 }}
                   className="text-gray-700 text-base leading-relaxed mb-8 max-w-sm mx-auto"
                 >
-                  {message}
+                  {modalMessage}
                 </motion.p>
 
                 {/* Action button */}
@@ -138,9 +145,9 @@ export default function ConfirmationModal({
                   whileHover={{ scale: 1.02 }}
                   whileTap={{ scale: 0.98 }}
                   onClick={handleButtonClick}
-                  className="w-full py-4 bg-gradient-to-r from-yellow-400 to-yellow-500 hover:from-yellow-500 hover:to-yellow-600 text-gray-900 font-bold text-lg rounded-2xl shadow-lg shadow-yellow-500/30 transition-all"
+                  className="w-full py-4 bg-linear-to-r from-yellow-400 to-yellow-500 hover:from-yellow-500 hover:to-yellow-600 text-gray-900 font-bold text-lg rounded-2xl shadow-lg shadow-yellow-500/30 transition-all"
                 >
-                  {buttonText}
+                  {modalButtonText}
                 </motion.button>
               </div>
             </motion.div>
@@ -156,9 +163,10 @@ export default function ConfirmationModal({
  */
 
 export function SuccessModal(props) {
+  const { t } = useTranslation();
   return (
     <ConfirmationModal
-      title="Succès !"
+      title={t('common.success')}
       lottieAnimation={makingMoneyAnimation}
       {...props}
     />
@@ -166,12 +174,13 @@ export function SuccessModal(props) {
 }
 
 export function TrajetAddedModal(props) {
+  const { t } = useTranslation();
   return (
     <ConfirmationModal
-      title="Merci !"
-      message="Votre trajet a bien été enregistré. Merci de contribuer à la communauté !"
+      title={t('add.success_title')}
+      message={t('add.success_message')}
       lottieAnimation={makingMoneyAnimation}
-      buttonText="Terminé"
+      buttonText={t('common.done')}
       autoClose={false}
       {...props}
     />

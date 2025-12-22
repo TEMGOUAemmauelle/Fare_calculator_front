@@ -13,19 +13,19 @@
   "dir": "ltr",
   "icons": [
     {
-      "src": "/pwa-icon.svg",
+      "src": "/taxi-logo-v2.png",
       "sizes": "any",
       "type": "image/svg+xml",
       "purpose": "any maskable"
     },
     {
-      "src": "/taxi-logo.png",
+      "src": "/taxi-logo-v2.png",
       "sizes": "192x192",
       "type": "image/png",
       "purpose": "any maskable"
     },
     {
-      "src": "/taxi-logo.png",
+      "src": "/taxi-logo-v2.png",
       "sizes": "512x512",
       "type": "image/png",
       "purpose": "any maskable"
@@ -51,14 +51,14 @@
       "short_name": "Estimer",
       "description": "Calculer le prix d'un trajet",
       "url": "/estimate",
-      "icons": [{ "src": "/pwa-icon.svg", "sizes": "192x192" }]
+      "icons": [{ "src": "/taxi-logo-v2.png", "sizes": "192x192" }]
     },
     {
       "name": "Ajouter un trajet",
       "short_name": "Ajouter",
       "description": "Contribuer avec un nouveau trajet",
       "url": "/add-trajet",
-      "icons": [{ "src": "/pwa-icon.svg", "sizes": "192x192" }]
+      "icons": [{ "src": "/taxi-logo-v2.png", "sizes": "192x192" }]
     }
   ],
   "prefer_related_applications": false

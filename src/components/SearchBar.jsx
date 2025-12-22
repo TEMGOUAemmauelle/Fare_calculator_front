@@ -12,19 +12,22 @@ import { useState, useEffect, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Search, MapPin, Loader2, Navigation, MapPinned } from 'lucide-react';
 import toast from 'react-hot-toast';
+import { useTranslation } from 'react-i18next';
 import { searchPlaces } from '../services/nominatimService';
 import { getCurrentPositionWithAddress } from '../services/geolocationService';
 import geolocationService from '../services/geolocationService';
 
 export default function SearchBar({
   onSelect,
-  placeholder = 'Rechercher un lieu...',
+  placeholder,
   initialValue = '',
   showCurrentLocation = false,
   label = null,
   value = null, // Ajout prop value pour mode controlé
   externalLoading = false, // Ajout prop pour loading externe
 }) {
+  const { t } = useTranslation();
+  const defaultPlaceholder = placeholder || t('search.placeholder');
   const [query, setQuery] = useState(initialValue);
   const [suggestions, setSuggestions] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
@@ -130,7 +133,7 @@ export default function SearchBar({
     setSuggestions([]);
     
     // Afficher toast pendant la recherche
-    const loadingToast = toast.loading('Détection de votre position...', {
+    const loadingToast = toast.loading(t('geolocation.detecting'), {
       duration: 3000,
     });
     
@@ -140,7 +143,7 @@ export default function SearchBar({
       console.log('[SearchBar] Statut permission géoloc:', status);
 
       if (status === 'denied') {
-        toast.error('Autorisation géolocalisation bloquée. Autorisez depuis les paramètres du site (icône cadenas).', { duration: 7000 });
+        toast.error(t('geolocation.denied'), { duration: 7000 });
         setLoadingLocation(false);
         return;
       }
@@ -151,7 +154,7 @@ export default function SearchBar({
       // Dismiss loading toast
       toast.dismiss(loadingToast);
       
-      const locationLabel = point.label || 'Ma position';
+      const locationLabel = point.label || t('geolocation.my_position');
       setQuery(locationLabel);
       
       const coords = [point.coords_longitude, point.coords_latitude];
@@ -185,7 +188,7 @@ export default function SearchBar({
       if (error.code === 1) {
         // Permission réellement refusée
         toast.error(
-          'Autorisation refusée,autorisez la géolocalisation.',
+          t('geolocation.denied'),
           {
             duration: 7000,
             icon: '🔒',
@@ -194,7 +197,7 @@ export default function SearchBar({
       } else if (error.code === 2) {
         // Position indisponible (pas de GPS, pas de réseau)
         toast.error(
-          'Position indisponible. Vérifiez votre connexion internet.',
+          t('geolocation.unavailable'),
           {
             duration: 5000,
             icon: '📡',
@@ -203,7 +206,7 @@ export default function SearchBar({
       } else if (error.code === 3) {
         // Timeout
         toast.error(
-          'Délai dépassé. Réessayez.',
+          t('geolocation.timeout'),
           {
             duration: 4000,
             icon: '⏱️',
@@ -211,7 +214,7 @@ export default function SearchBar({
         );
       } else {
         // Erreur inconnue
-        toast.error(`Erreur de localisation`, {
+        toast.error(t('geolocation.unknown_error'), {
           duration: 4000,
           icon: '📍',
         });
@@ -274,8 +277,8 @@ export default function SearchBar({
               }}
               onBlur={() => setIsFocused(false)}
               onKeyDown={handleKeyDown}
-              placeholder={placeholder}
-              className="w-full pl-12 pr-12 py-4 bg-white border-1 border-gray-200 rounded-xl text-gray-900 placeholder-gray-400 transition-all duration-200 focus:outline-none focus:border-[#f3cd08] focus:ring-2 focus:ring-[#f3cd08]/20"
+              placeholder={defaultPlaceholder}
+              className="w-full pl-12 pr-12 py-4 bg-white border border-gray-200 rounded-xl text-gray-900 placeholder-gray-400 transition-all duration-200 focus:outline-none focus:border-[#f3cd08] focus:ring-2 focus:ring-[#f3cd08]/20"
             />
             
             <div className="absolute right-4 top-1/2 -translate-y-1/2">
@@ -295,7 +298,7 @@ export default function SearchBar({
             onClick={handleCurrentLocation}
             disabled={showLoading}
             className="px-4 py-4 bg-[#f3cd08] text-[#231f0f] rounded-xl hover:bg-[#e0bc07] disabled:bg-gray-300 disabled:cursor-not-allowed flex items-center justify-center shadow-lg transition-all duration-200"
-            title="Utiliser ma position actuelle"
+            title={t('search.use_current')}
           >
             {showLoading ? (
               <Loader2 className="w-5 h-5 animate-spin" />
@@ -326,7 +329,7 @@ export default function SearchBar({
                       : 'hover:bg-gray-50 border-l-4 border-transparent'
                   } ${index !== suggestions.length - 1 ? 'border-b border-gray-100' : ''}`}
                 >
-                  <MapPinned className={`w-5 h-5 mt-0.5 flex-shrink-0 ${
+                  <MapPinned className={`w-5 h-5 mt-0.5 shrink-0 ${
                     index === selectedIndex ? 'text-[#f3cd08]' : 'text-gray-400'
                   }`} />
                   <div className="flex-1 min-w-0">
@@ -353,8 +356,8 @@ export default function SearchBar({
             className="absolute z-50 w-full mt-3 bg-white border border-gray-200 rounded-xl shadow-xl p-6 text-center"
           >
             <Search className="w-12 h-12 text-gray-300 mx-auto mb-3" />
-            <p className="text-gray-600 font-medium">Aucun lieu trouvé</p>
-            <p className="text-sm text-gray-400 mt-1">Essayez avec un autre nom</p>
+            <p className="text-gray-600 font-medium">{t('search.no_results')}</p>
+            <p className="text-sm text-gray-400 mt-1">{t('search.try_another')}</p>
           </motion.div>
         )}
       </AnimatePresence>

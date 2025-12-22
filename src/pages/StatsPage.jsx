@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
 import { useNavigate } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
+import { useAppNavigate } from '../hooks/useAppNavigate';
 import { 
   ArrowLeft, TrendingUp, MapPin, DollarSign, Clock, 
   AlertTriangle, Award, Filter, X, Calendar, ChevronRight 
@@ -8,10 +9,13 @@ import {
 import { getStats } from '../services/statsService';
 import LoadingSkeleton from '../components/LoadingSkeleton';
 import ErrorMessage from '../components/ErrorMessage';
+import LanguageSwitcher from '../components/LanguageSwitcher';
 import bgImage from '../assets/images/yaounde.png';
+import { motion, AnimatePresence } from 'framer-motion';
 
 export default function StatsPage() {
-  const navigate = useNavigate();
+  const { t, i18n } = useTranslation();
+  const navigate = useAppNavigate();
   const [stats, setStats] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -25,7 +29,7 @@ export default function StatsPage() {
         const data = await getStats(period);
         setStats(data);
       } catch (err) {
-        setError("Impossible de charger les statistiques.");
+        setError(t('stats.error_loading') || "Impossible de charger les statistiques.");
       } finally {
         setLoading(false);
       }
@@ -55,7 +59,7 @@ export default function StatsPage() {
           {title}
         </h2>
         {/* Indicateur de scroll */}
-        <span className="text-xs text-gray-500 font-medium">Glisser →</span>
+        <span className="text-xs text-gray-500 font-medium">{t('common.swipe') || 'Glisser →'}</span>
       </div>
       
       <div className="flex overflow-x-auto pb-6 px-6 gap-4 snap-x hide-scrollbar">
@@ -68,16 +72,16 @@ export default function StatsPage() {
             className="snap-center shrink-0 w-[280px] bg-white/5 backdrop-blur-md border border-white/10 rounded-2xl p-4 relative overflow-hidden group"
           >
             {/* Effet de gradient au survol */}
-            <div className={`absolute inset-0 bg-gradient-to-br from-${color}-500/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity`} />
+            <div className={`absolute inset-0 bg-linear-to-br from-${color}-500/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity`} />
             
             <div className="flex justify-between items-start mb-3 relative z-10">
               <div className="flex flex-col">
-                <span className="text-xs text-gray-400 uppercase tracking-wider font-semibold mb-1">Départ</span>
+                <span className="text-xs text-gray-400 uppercase tracking-wider font-semibold mb-1">{t('all_trajets.depart')}</span>
                 <span className="text-sm font-bold text-white truncate w-40">{item.point_depart.label}</span>
               </div>
               <div className={`px-2 py-1 rounded-lg bg-${color}-500/20 border border-${color}-500/30`}>
                 <span className={`text-xs font-bold text-${color}-400`}>
-                  {type === 'price' && `${item.prix} FCFA`}
+                  {type === 'price' && `${new Intl.NumberFormat(i18n.language === 'fr' ? 'fr-CM' : 'en-CM', { maximumFractionDigits: 0 }).format(item.prix)} FCFA`}
                   {type === 'quality' && `${item.qualite_trajet}/10`}
                   {type === 'duration' && `${Math.round(item.duree_estimee / 60)} min`}
                 </span>
@@ -87,14 +91,14 @@ export default function StatsPage() {
             <div className="relative z-10">
               <div className="w-0.5 h-4 bg-gray-700 ml-1 my-1" /> {/* Ligne de connexion visuelle */}
               <div className="flex flex-col">
-                <span className="text-xs text-gray-400 uppercase tracking-wider font-semibold mb-1">Arrivée</span>
+                <span className="text-xs text-gray-400 uppercase tracking-wider font-semibold mb-1">{t('all_trajets.arrivee')}</span>
                 <span className="text-sm font-bold text-white truncate w-full">{item.point_arrivee.label}</span>
               </div>
             </div>
 
             <div className="mt-4 pt-3 border-t border-white/5 flex justify-between items-center">
               <span className="text-[10px] text-gray-500">
-                {new Date(item.date_ajout).toLocaleDateString()}
+                {new Date(item.date_ajout).toLocaleDateString(i18n.language === 'fr' ? 'fr-FR' : 'en-GB')}
               </span>
               <ChevronRight className="w-4 h-4 text-gray-600" />
             </div>
@@ -117,7 +121,7 @@ export default function StatsPage() {
       {/* Background Immersif */}
       <div className="fixed inset-0 z-0">
         <img src={bgImage} alt="Background" className="w-full h-full object-cover opacity-20" />
-        <div className="absolute inset-0 bg-gradient-to-b from-black via-black/80 to-black" />
+        <div className="absolute inset-0 bg-linear-to-b from-black via-black/80 to-black" />
       </div>
 
       {/* Header Flottant */}
@@ -126,16 +130,19 @@ export default function StatsPage() {
           <button onClick={() => navigate(-1)} className="p-2 hover:bg-white/10 rounded-full transition-colors">
             <ArrowLeft className="w-6 h-6 text-white" />
           </button>
-          <h1 className="text-lg font-bold tracking-tight">Tableau de Bord</h1>
-          <button 
-            onClick={() => setShowFilterModal(true)}
-            className="p-2 hover:bg-white/10 rounded-full transition-colors relative"
-          >
-            <Filter className="w-5 h-5 text-yellow-400" />
-            {period !== 'all' && (
-              <span className="absolute top-2 right-2 w-2 h-2 bg-red-500 rounded-full border border-black" />
-            )}
-          </button>
+          <h1 className="text-lg font-bold tracking-tight">{t('stats.dashboard')}</h1>
+          <div className="flex items-center gap-2">
+            <LanguageSwitcher />
+            <button 
+              onClick={() => setShowFilterModal(true)}
+              className="p-2 hover:bg-white/10 rounded-full transition-colors relative"
+            >
+              <Filter className="w-5 h-5 text-yellow-400" />
+              {period !== 'all' && (
+                <span className="absolute top-2 right-2 w-2 h-2 bg-red-500 rounded-full border border-black" />
+              )}
+            </button>
+          </div>
         </div>
       </div>
 
@@ -150,7 +157,7 @@ export default function StatsPage() {
           <div className="px-6 mb-8">
             <motion.div 
               variants={itemVariants}
-              className="relative overflow-hidden rounded-3xl bg-gradient-to-br from-yellow-500 to-yellow-600 shadow-2xl shadow-yellow-900/20"
+              className="relative overflow-hidden rounded-3xl bg-linear-to-br from-yellow-500 to-yellow-600 shadow-2xl shadow-yellow-900/20"
             >
               <div className="absolute top-0 right-0 p-4 opacity-20">
                 <Award className="w-32 h-32 text-white rotate-12" />
@@ -158,15 +165,15 @@ export default function StatsPage() {
               <div className="p-6 relative z-10">
                 <div className="flex items-center gap-2 mb-2">
                   <span className="px-2 py-1 bg-white/20 backdrop-blur-md rounded-lg text-[10px] font-bold uppercase tracking-wider text-white">
-                    Tendance
+                    {t('stats.hero.trend')}
                   </span>
-                  <span className="text-xs font-medium text-yellow-100">Destination Phare</span>
+                  <span className="text-xs font-medium text-yellow-100">{t('stats.hero.featured')}</span>
                 </div>
                 <h2 className="text-2xl font-black text-white leading-tight mb-1">
                   {stats.lieu_du_mois.point_arrivee__label}
                 </h2>
                 <p className="text-yellow-100 text-sm mb-4">
-                  Le point de chute le plus populaire de la période.
+                  {t('stats.hero.description')}
                 </p>
                 <div className="flex items-center gap-2">
                   <div className="flex -space-x-2">
@@ -175,7 +182,7 @@ export default function StatsPage() {
                     ))}
                   </div>
                   <span className="text-xs font-bold text-white ml-2">
-                    {stats.lieu_du_mois.count} visites enregistrées
+                    {stats.lieu_du_mois.count} {t('stats.hero.visits')}
                   </span>
                 </div>
               </div>
@@ -189,17 +196,17 @@ export default function StatsPage() {
             <motion.div variants={itemVariants} className="bg-white/5 backdrop-blur-md border border-white/10 p-4 rounded-2xl">
               <div className="flex items-center gap-2 mb-2 text-gray-400">
                 <TrendingUp className="w-4 h-4" />
-                <span className="text-xs font-medium uppercase">Total Trajets</span>
+                <span className="text-xs font-medium uppercase">{t('stats.kpi.total_trajets')}</span>
               </div>
               <div className="text-3xl font-black text-white">{stats.total_trajets}</div>
             </motion.div>
             <motion.div variants={itemVariants} className="bg-white/5 backdrop-blur-md border border-white/10 p-4 rounded-2xl">
               <div className="flex items-center gap-2 mb-2 text-gray-400">
                 <Clock className="w-4 h-4" />
-                <span className="text-xs font-medium uppercase">Période</span>
+                <span className="text-xs font-medium uppercase">{t('stats.kpi.period')}</span>
               </div>
               <div className="text-lg font-bold text-white capitalize">
-                {period === 'all' ? 'Toujours' : period === 'month' ? 'Ce Mois' : 'Cette Semaine'}
+                {t(`stats.filters.${period}`)}
               </div>
             </motion.div>
           </div>
@@ -207,7 +214,7 @@ export default function StatsPage() {
 
         {/* 3. Sections Horizontales */}
         <HorizontalCard 
-          title="Les plus redoutés" 
+          title={t('stats.sections.feared')} 
           icon={AlertTriangle} 
           color="red" 
           data={stats.trajets_difficiles} 
@@ -215,7 +222,7 @@ export default function StatsPage() {
         />
 
         <HorizontalCard 
-          title="Les plus coûteux" 
+          title={t('stats.sections.costly')} 
           icon={DollarSign} 
           color="green" 
           data={stats.trajets_chers} 
@@ -223,7 +230,7 @@ export default function StatsPage() {
         />
 
         <HorizontalCard 
-          title="Les plus longs" 
+          title={t('stats.sections.longest')} 
           icon={Clock} 
           color="purple" 
           data={stats.trajets_longs} 
@@ -234,7 +241,7 @@ export default function StatsPage() {
         <div className="px-6 mb-8">
           <h2 className="text-lg font-bold text-white mb-4 flex items-center gap-2">
             <MapPin className="w-5 h-5 text-blue-400" />
-            Top Destinations
+            {t('stats.sections.top_destinations')}
           </h2>
           <div className="bg-white/5 backdrop-blur-md border border-white/10 rounded-2xl overflow-hidden">
             {stats.lieux_populaires.arrivee.map((lieu, index) => (
@@ -289,7 +296,7 @@ export default function StatsPage() {
               <div className="w-12 h-1.5 bg-gray-700 rounded-full mx-auto mb-6" />
               
               <div className="flex justify-between items-center mb-6">
-                <h3 className="text-xl font-bold text-white">Filtrer les statistiques</h3>
+                <h3 className="text-xl font-bold text-white">{t('stats.filters.title')}</h3>
                 <button onClick={() => setShowFilterModal(false)} className="p-2 bg-white/10 rounded-full">
                   <X className="w-5 h-5 text-white" />
                 </button>
@@ -297,9 +304,9 @@ export default function StatsPage() {
 
               <div className="space-y-3">
                 {[
-                  { id: 'all', label: 'Tout le temps', icon: Calendar },
-                  { id: 'month', label: 'Ce mois-ci', icon: Calendar },
-                  { id: 'week', label: 'Cette semaine', icon: Clock },
+                  { id: 'all', label: t('stats.filters.all'), icon: Calendar },
+                  { id: 'month', label: t('stats.filters.month'), icon: Calendar },
+                  { id: 'week', label: t('stats.filters.week'), icon: Clock },
                 ].map((option) => (
                   <button
                     key={option.id}

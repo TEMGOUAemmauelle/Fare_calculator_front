@@ -17,6 +17,7 @@ import mapboxgl from 'mapbox-gl';
 import 'mapbox-gl/dist/mapbox-gl.css';
 import { MapPin, Navigation, Layers, ZoomIn, ZoomOut, Maximize2, Clock, Route as RouteIcon, List, BarChart2 } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
+import { useTranslation } from 'react-i18next';
 import LottieAnimation from './LottieAnimation';
 import yellowTaxiAnimation from '../assets/lotties/yellow taxi.json';
 import geolocationService from '../services/geolocationService';
@@ -64,6 +65,7 @@ export default function MapView({
   className = '',
   height = '100%',
 }) {
+  const { t } = useTranslation();
   const navigate = useNavigate();
   const mapContainer = useRef(null);
   const map = useRef(null);
@@ -434,7 +436,7 @@ export default function MapView({
   // Géolocalisation
   const handleGeolocate = async () => {
     if (!navigator.geolocation) {
-      toast.error('Géolocalisation non supportée par votre appareil');
+      toast.error(t('map.unsupported'));
       return;
     }
 
@@ -487,15 +489,15 @@ export default function MapView({
         });
       }
 
-      toast.success('Position localisée');
+      toast.success(t('map.localized'));
       console.log('✅ Position utilisateur:', { longitude, latitude });
     } catch (error) {
       // Gestion d'erreur claire
       console.warn('⚠️ Géolocalisation échouée:', error.message || error.userMessage || error);
       if (error.code === 1) {
-        toast.error('Permission géolocalisation refusée');
+        toast.error(t('geolocation.denied'));
       } else {
-        toast.error(error.userMessage || 'Impossible d\'obtenir la position');
+        toast.error(error.userMessage || t('geolocation.unknown_error'));
       }
     } finally {
       setIsTracking(false);
@@ -549,7 +551,7 @@ export default function MapView({
             whileTap={{ scale: 0.95 }}
             onClick={handleZoomIn}
             className="p-3 bg-white hover:bg-gray-50 rounded-xl shadow-lg border border-gray-200 transition-colors"
-            title="Zoom in"
+            title={t('map.zoom_in')}
           >
             <ZoomIn className="w-5 h-5 text-gray-700" />
           </motion.button>
@@ -560,7 +562,7 @@ export default function MapView({
             whileTap={{ scale: 0.95 }}
             onClick={handleZoomOut}
             className="p-3 bg-white hover:bg-gray-50 rounded-xl shadow-lg border border-gray-200 transition-colors"
-            title="Zoom out"
+            title={t('map.zoom_out')}
           >
             <ZoomOut className="w-5 h-5 text-gray-700" />
           </motion.button>
@@ -571,7 +573,7 @@ export default function MapView({
             whileTap={{ scale: 0.95 }}
             onClick={() => navigate('/trajets')}
             className="p-3 bg-white hover:bg-gray-50 rounded-xl shadow-lg border border-gray-200 transition-colors"
-            title="Voir tous les trajets"
+            title={t('map.see_all')}
           >
             <List className="w-5 h-5 text-gray-700" />
           </motion.button>
@@ -582,7 +584,7 @@ export default function MapView({
             whileTap={{ scale: 0.95 }}
             onClick={() => navigate('/stats')}
             className="p-3 bg-white hover:bg-gray-50 rounded-xl shadow-lg border border-gray-200 transition-colors"
-            title="Voir les statistiques"
+            title={t('map.see_stats')}
           >
             <BarChart2 className="w-5 h-5 text-gray-700" />
           </motion.button>
@@ -594,8 +596,8 @@ export default function MapView({
               whileTap={{ scale: 0.95 }}
               onClick={handleGeolocate}
               disabled={isTracking}
-              className="p-3 bg-gradient-to-r from-yellow-400 to-yellow-500 hover:from-yellow-500 hover:to-yellow-600 disabled:from-gray-300 disabled:to-gray-400 rounded-xl shadow-lg border border-yellow-300 transition-colors"
-              title="Ma position"
+              className="p-3 bg-linear-to-r from-yellow-400 to-yellow-500 hover:from-yellow-500 hover:to-yellow-600 disabled:from-gray-300 disabled:to-gray-400 rounded-xl shadow-lg border border-yellow-300 transition-colors"
+              title={t('geolocation.my_position')}
             >
               {isTracking ? (
                 <motion.div
@@ -617,7 +619,7 @@ export default function MapView({
               whileTap={{ scale: 0.95 }}
               onClick={handleFitBounds}
               className="p-3 bg-white hover:bg-gray-50 rounded-xl shadow-lg border border-gray-200 transition-colors"
-              title="Voir tout"
+              title={t('map.see_all')}
             >
               <Maximize2 className="w-5 h-5 text-gray-700" />
             </motion.button>
@@ -635,7 +637,7 @@ export default function MapView({
                 setCurrentStyle(styles[nextIndex]);
               }}
               className="p-3 bg-white hover:bg-gray-50 rounded-xl shadow-lg border border-gray-200 transition-colors"
-              title="Changer de style"
+              title={t('map.change_style')}
             >
               <Layers className="w-5 h-5 text-gray-700" />
             </motion.button>
@@ -659,7 +661,7 @@ export default function MapView({
                   loop={true}
                 />
               </div>
-              <p className="text-[#231f0f] text-lg font-semibold">Chargement de la carte...</p>
+              <p className="text-[#231f0f] text-lg font-semibold">{t('map.loading')}</p>
             </div>
           </motion.div>
         )}
@@ -681,7 +683,7 @@ export default function MapView({
                 <RouteIcon className="w-5 h-5 text-blue-600" />
               </div>
               <div>
-                <div className="text-xs font-semibold text-gray-500 uppercase">Distance</div>
+                <div className="text-xs font-semibold text-gray-500 uppercase">{t('map.distance')}</div>
                 <div className="text-lg font-black text-gray-900">
                   {(route.distance / 1000).toFixed(1)} km
                 </div>
@@ -694,7 +696,7 @@ export default function MapView({
                 <Clock className="w-5 h-5 text-purple-600" />
               </div>
               <div>
-                <div className="text-xs font-semibold text-gray-500 uppercase">Durée</div>
+                <div className="text-xs font-semibold text-gray-500 uppercase">{t('map.duration')}</div>
                 <div className="text-lg font-black text-gray-900">
                   {Math.ceil(route.duration / 60)} min
                 </div>
@@ -705,16 +707,16 @@ export default function MapView({
             {route.congestion_level && (
               <div className="pt-2 border-t border-gray-100">
                 <div className="flex items-center justify-between">
-                  <span className="text-xs font-semibold text-gray-500 uppercase">Trafic</span>
+                  <span className="text-xs font-semibold text-gray-500 uppercase">{t('map.traffic')}</span>
                   <span className={`text-xs font-bold px-2 py-1 rounded-full ${
                     route.congestion_level === 'low' ? 'bg-green-100 text-green-700' :
                     route.congestion_level === 'moderate' ? 'bg-yellow-100 text-yellow-700' :
                     route.congestion_level === 'heavy' ? 'bg-orange-100 text-orange-700' :
                     'bg-red-100 text-red-700'
                   }`}>
-                    {route.congestion_level === 'low' ? 'Fluide' :
-                     route.congestion_level === 'moderate' ? 'Modéré' :
-                     route.congestion_level === 'heavy' ? 'Dense' : 'Saturé'}
+                    {route.congestion_level === 'low' ? t('map.traffic_low') :
+                     route.congestion_level === 'moderate' ? t('map.traffic_moderate') :
+                     route.congestion_level === 'heavy' ? t('map.traffic_heavy') : t('map.traffic_severe')}
                   </span>
                 </div>
               </div>

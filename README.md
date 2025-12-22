@@ -30,6 +30,7 @@ Application web PWA moderne pour l'estimation de prix de taxi au Cameroun (focus
 ## -> Vue d'ensemble
 
 Cette application React/Vite permet aux utilisateurs de :
+
 - **Estimer le prix** d'un trajet taxi entre deux points (POI connus)
 - **Ajouter des trajets réels** après un ride pour enrichir la base de données communautaire
 - **Visualiser l'itinéraire** sur une carte interactive (Mapbox GL JS)
@@ -106,6 +107,7 @@ VITE_API_TIMEOUT=30000
 ```
 
 **Obtenir les clés** :
+
 - **API Backend** : Via interface Django Admin (`/admin/` → créer clé API)
 - **Mapbox** : https://account.mapbox.com/ (compte gratuit)
 
@@ -123,7 +125,7 @@ src/
 │
 ├───assets
 │   ├───images
-│   │       taxi-logo.png
+│   │       taxi-logo-v2.png
 │   │
 │   └───lotties
 │           Car driving on road.json
@@ -193,24 +195,29 @@ src/
 
 Tous les appels API sont centralisés dans `src/services/` :
 
-1. **estimateService.js** : 
+1. **estimateService.js** :
+
    - `estimatePrice(data)` : POST /estimate/ (estimation principale)
    - `getEstimateHistory()` : Récupère historique localStorage
 
 2. **trajetService.js** :
+
    - `addTrajet(data)` : POST /trajets/ (ajouter trajet)
    - `getTrajets(params)` : GET /trajets/ (liste paginée)
    - `getTrajetStats()` : GET /trajets/stats/ (statistiques)
 
 3. **pointService.js** :
+
    - `getPoints(params)` : GET /points/ (liste POI)
    - `searchPoints(query)` : Recherche textuelle POI
 
 4. **geolocationService.js** :
+
    - `getCurrentPosition()` : Position GPS actuelle
    - `reverseGeocode(lat, lon)` : Coords → POI nommé (via Nominatim)
 
 5. **mapboxService.js** :
+
    - `searchSuggestions(query)` : Auto-complétion POI
    - `getDirections(coords)` : Calcul itinéraire avec trafic
    - `getIsochrone(center, contours)` : Zones temporelles
@@ -224,18 +231,19 @@ Tous les appels API sont centralisés dans `src/services/` :
 
 ### Endpoints principaux
 
-| Endpoint | Méthode | Description |
-|----------|---------|-------------|
-| `/api/estimate/` | POST | Estimation prix trajet |
-| `/api/trajets/` | POST | Ajouter trajet réel |
-| `/api/trajets/` | GET | Liste trajets (paginée, filtres) |
-| `/api/trajets/stats/` | GET | Statistiques globales |
-| `/api/points/` | GET | Liste POI |
-| `/api/health/` | GET | Health check (public) |
+| Endpoint              | Méthode | Description                      |
+| --------------------- | ------- | -------------------------------- |
+| `/api/estimate/`      | POST    | Estimation prix trajet           |
+| `/api/trajets/`       | POST    | Ajouter trajet réel              |
+| `/api/trajets/`       | GET     | Liste trajets (paginée, filtres) |
+| `/api/trajets/stats/` | GET     | Statistiques globales            |
+| `/api/points/`        | GET     | Liste POI                        |
+| `/api/health/`        | GET     | Health check (public)            |
 
 ### Authentification
 
 Header requis :
+
 ```http
 Authorization: ApiKey <uuid>
 ```
@@ -261,5 +269,5 @@ npm run lint
 ---
 
 ## -> Documentation complète
-- **API Backend** : `doc/API_DOC.md` (endpoints, modèles, exemples)
 
+- **API Backend** : `doc/API_DOC.md` (endpoints, modèles, exemples)

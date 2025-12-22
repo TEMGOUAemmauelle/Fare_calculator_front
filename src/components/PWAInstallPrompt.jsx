@@ -13,9 +13,11 @@
 
 import { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
+import { useTranslation } from 'react-i18next';
 import { X, Download, Smartphone, Zap, MapPin, TrendingUp } from 'lucide-react';
 
 export default function PWAInstallPrompt() {
+  const { t } = useTranslation();
   const [deferredPrompt, setDeferredPrompt] = useState(null);
   const [showPrompt, setShowPrompt] = useState(false);
   const [isIOS, setIsIOS] = useState(false);
@@ -65,7 +67,7 @@ export default function PWAInstallPrompt() {
     if (!deferredPrompt) {
       // Pas d'API beforeinstallprompt (ou non émis) : afficher instructions manuelles
       // Sur Android/Chrome : Menu (⋮) → "Ajouter à l'écran d'accueil"
-      alert('Pour installer l\'application : ouvrez le menu du navigateur (⋮) puis sélectionnez "Ajouter à l\'écran d\'accueil".');
+      alert(t('pwa.manual_instruction'));
       return;
     }
 
@@ -105,7 +107,7 @@ export default function PWAInstallPrompt() {
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
-            className="fixed inset-0 bg-black/40 backdrop-blur-sm z-[9998]"
+            className="fixed inset-0 bg-black/40 backdrop-blur-sm z-9998"
             onClick={handleDismiss}
           />
 
@@ -115,7 +117,7 @@ export default function PWAInstallPrompt() {
             animate={{ opacity: 1, y: 0, scale: 1 }}
             exit={{ opacity: 0, y: 100, scale: 0.9 }}
             transition={{ type: 'spring', damping: 25, stiffness: 300 }}
-            className="fixed bottom-4 left-4 right-4 md:left-auto md:right-8 md:bottom-8 md:w-[420px] z-[9999]"
+            className="fixed bottom-4 left-4 right-4 md:left-auto md:right-8 md:bottom-8 md:w-[420px] z-9999"
           >
             <div className="bg-white rounded-3xl shadow-2xl border border-gray-200 overflow-hidden">
               {/* Header avec dégradé jaune */}
@@ -130,7 +132,7 @@ export default function PWAInstallPrompt() {
                 <button
                   onClick={handleDismiss}
                   className="absolute top-4 right-4 p-2 rounded-full bg-white/20 hover:bg-white/30 transition-colors"
-                  aria-label="Fermer"
+                  aria-label={t('common.close') || 'Fermer'}
                 >
                   <X className="w-5 h-5 text-white" />
                 </button>
@@ -147,7 +149,7 @@ export default function PWAInstallPrompt() {
                   </motion.div>
 
                   <h3 className="text-xl font-black text-white uppercase tracking-wider mb-0.5">
-                    Installez Fare-Calc
+                    {t('pwa.install_title')}
                   </h3>
                 </div>
               </div>
@@ -155,7 +157,7 @@ export default function PWAInstallPrompt() {
               {/* Contenu - Plus clean et direct */}
               <div className="px-6 py-5 bg-white">
                 <p className="text-gray-600 text-sm mb-6 text-center leading-relaxed">
-                  Profitez d'une expérience plus fluide et rapide.
+                  {t('pwa.install_description')}
                 </p>
 
                 {/* Boutons d'action */}
@@ -164,13 +166,13 @@ export default function PWAInstallPrompt() {
                     // Instructions iOS simplifiées
                     <div className="bg-gray-50 rounded-xl p-4 border border-gray-100">
                       <p className="text-gray-900 font-bold text-xs mb-2 text-center">
-                        SUR IOS (SAFARI)
+                        {t('pwa.ios_instruction')}
                       </p>
                       <div className="flex justify-center items-center gap-2 text-xs text-gray-600">
-                        <span>Partager</span>
+                        <span>{t('pwa.ios_share')}</span>
                         <div className="px-2 py-0.5 bg-gray-200 rounded text-[10px]">⎙</div>
                         <span>→</span>
-                        <span>Sur l'écran d'accueil</span>
+                        <span>{t('pwa.ios_add_home')}</span>
                         <div className="px-2 py-0.5 bg-gray-200 rounded text-[10px]">+</div>
                       </div>
                     </div>
@@ -181,7 +183,7 @@ export default function PWAInstallPrompt() {
                       className="w-full bg-[#0a0a0a] text-white font-bold py-3.5 px-6 rounded-2xl shadow-xl active:scale-[0.98] transition-all flex items-center justify-center gap-2"
                     >
                       <Download className="w-4 h-4" />
-                      <span className="text-sm uppercase tracking-wide">Installer</span>
+                      <span className="text-sm uppercase tracking-wide">{t('pwa.install_btn')}</span>
                     </button>
                   )}
 
@@ -189,7 +191,7 @@ export default function PWAInstallPrompt() {
                     onClick={handleDismiss}
                     className="w-full text-gray-400 hover:text-gray-900 font-semibold py-2 text-xs uppercase tracking-wider transition-colors"
                   >
-                    Pas maintenant
+                    {t('pwa.later')}
                   </button>
                 </div>
               </div>
