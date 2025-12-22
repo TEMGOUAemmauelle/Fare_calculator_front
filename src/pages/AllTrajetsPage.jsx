@@ -195,63 +195,72 @@ const AllTrajetsPage = () => {
             ) : (
               <AnimatePresence>
                 {filteredTrajets.map((trajet, index) => (
-                  <motion.div
-                    key={trajet.id}
-                    initial={{ opacity: 0, y: 30 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    transition={{ delay: index * 0.04, type: "spring", damping: 20 }}
-                    className="relative bg-white p-6 rounded-[2.5rem] shadow-[0_10px_35px_-10px_rgba(0,0,0,0.03)] border border-gray-100 hover:shadow-[0_20px_50px_-15px_rgba(0,0,0,0.08)] hover:border-[#f3cd08]/30 transition-all group overflow-hidden"
-                  >
-                    {/* Background Glow on Hover */}
-                    <div className="absolute top-0 right-0 w-32 h-32 bg-[#f3cd08]/5 rounded-full blur-3xl -mr-16 -mt-16 group-hover:bg-[#f3cd08]/15 transition-colors" />
+                    <motion.div
+                      key={trajet.id}
+                      initial={{ opacity: 0, y: 20 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      transition={{ delay: index * 0.04, type: "spring", damping: 20 }}
+                      className="relative bg-white p-5 rounded-3xl shadow-[0_5px_20px_-10px_rgba(0,0,0,0.02)] border border-gray-100 hover:shadow-[0_15px_40px_-10px_rgba(0,0,0,0.06)] hover:border-[#f3cd08]/30 transition-all group overflow-hidden"
+                    >
+                      {/* Background Glow on Hover */}
+                      <div className="absolute top-0 right-0 w-32 h-32 bg-[#f3cd08]/5 rounded-full blur-3xl -mr-16 -mt-16 group-hover:bg-[#f3cd08]/15 transition-colors" />
 
-                    <div className="flex flex-col md:flex-row md:items-center gap-6 mb-6">
-                      {/* Route visualization */}
-                      <div className="flex flex-row md:flex-col items-center gap-3 pt-1">
-                        <div className="w-4 h-4 rounded-full bg-blue-500 border-[3px] border-white shadow-lg ring-2 ring-blue-50" />
-                        <div className="h-[2px] w-6 md:w-[2px] md:h-8 bg-gray-100 border-r border-dashed border-gray-300" />
-                        <div className="w-4 h-4 rounded-full bg-black border-[3px] border-white shadow-lg ring-2 ring-gray-100" />
+                      <div className="flex flex-col md:flex-row gap-5 mb-5 relative z-10">
+                        {/* Route visualization - Thinner */}
+                        <div className="hidden md:flex flex-col items-center gap-1 pt-2 w-4">
+                          <div className="w-2.5 h-2.5 rounded-full bg-black ring-2 ring-gray-100" />
+                          <div className="flex-1 w-[1.5px] bg-linear-to-b from-black/20 to-gray-200 border-l border-dashed border-gray-300 min-h-[40px]" />
+                          <div className="w-2.5 h-2.5 rounded-full bg-[#f3cd08] ring-2 ring-[#f3cd08]/20" />
+                        </div>
+
+                        <div className="flex-1 space-y-4">
+                          {/* Depart - Plus fin */}
+                          <div className="relative pl-5 md:pl-0">
+                            <div className="md:hidden absolute left-0 top-1.5 w-2 h-2 rounded-full bg-black" />
+                            <span className="text-[9px] font-bold uppercase tracking-widest text-gray-400 mb-0.5 block">Départ</span>
+                            <h4 className="text-base font-bold text-gray-900 leading-tight truncate pr-4">
+                              {trajet.point_depart?.label || 'Secteur Inconnu'}
+                            </h4>
+                          </div>
+                          
+                          {/* Connecteur Mobile */}
+                          <div className="md:hidden absolute left-[3.5px] top-[42px] bottom-[70px] w-[1.5px] bg-gray-100" />
+
+                          {/* Arrivee - Plus fin */}
+                          <div className="relative pl-5 md:pl-0">
+                            <div className="md:hidden absolute left-0 top-1.5 w-2 h-2 rounded-full bg-[#f3cd08]" />
+                            <span className="text-[9px] font-bold uppercase tracking-widest text-gray-400 mb-0.5 block">Arrivée</span>
+                            <h4 className="text-base font-bold text-gray-900 leading-tight truncate pr-4">
+                              {trajet.point_arrivee?.label || 'Secteur Inconnu'}
+                            </h4>
+                          </div>
+                        </div>
+
+                        {/* Price & Date - Sleek Layout */}
+                        <div className="flex flex-row md:flex-col items-center md:items-end justify-between md:justify-start gap-3 mt-2 md:mt-0">
+                          <div className="bg-[#0a0a0a] text-[#f3cd08] px-4 py-2 rounded-xl shadow-lg shadow-[#f3cd08]/10 group-hover:scale-105 transition-transform">
+                            <span className="text-sm font-black tracking-wide">{formatPrice(trajet.prix).replace(',00', '')}</span>
+                          </div>
+                          <div className="flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-gray-50 border border-gray-100">
+                            <Calendar className="w-3 h-3 text-gray-400" />
+                            <span className="text-[10px] font-bold text-gray-500 uppercase tracking-tight">{formatDate(trajet.date_ajout)}</span>
+                          </div>
+                        </div>
                       </div>
 
-                      <div className="flex-1 space-y-4">
-                        <div>
-                          <span className="text-[10px] font-black uppercase tracking-[0.2em] text-gray-300">Départ</span>
-                          <h4 className="text-xl font-black text-gray-900 leading-none truncate md:max-w-[300px]">
-                            {trajet.point_depart?.label || 'Secteur Inconnu'}
-                          </h4>
-                        </div>
-                        <div>
-                          <span className="text-[10px] font-black uppercase tracking-[0.2em] text-gray-300">Arrivée</span>
-                          <h4 className="text-xl font-black text-gray-900 leading-none truncate md:max-w-[300px]">
-                            {trajet.point_arrivee?.label || 'Secteur Inconnu'}
-                          </h4>
-                        </div>
+                      {/* Metadata Footer - Compact */}
+                      <div className="flex flex-wrap items-center gap-2 pt-4 border-t border-gray-50 relative z-10">
+                        <MetaBadge icon={Clock} label={trajet.heure} />
+                        <MetaBadge icon={Cloud} label={getMeteoLabel(trajet.meteo)} />
+                        {trajet.distance && (
+                          <MetaBadge 
+                            icon={MapPin} 
+                            label={`${(trajet.distance / 1000).toFixed(1)} km`} 
+                            highlight
+                          />
+                        )}
                       </div>
-
-                      <div className="flex flex-row md:flex-col items-center md:items-end justify-between md:justify-center gap-4">
-                        <div className="bg-[#f3cd08] text-black px-6 py-4 rounded-[1.75rem] shadow-xl shadow-[#f3cd08]/10 group-hover:scale-110 transition-transform">
-                          <span className="text-2xl font-black tracking-tighter">{formatPrice(trajet.prix).replace(',00', '')}</span>
-                        </div>
-                        <div className="flex items-center gap-2 bg-gray-50 px-3 py-1.5 rounded-xl border border-gray-100">
-                          <Calendar className="w-3 h-3 text-gray-400" />
-                          <span className="text-[10px] font-bold text-gray-500 uppercase tracking-wider">{formatDate(trajet.date_ajout)}</span>
-                        </div>
-                      </div>
-                    </div>
-
-                    {/* Metadata Footer */}
-                    <div className="flex flex-wrap items-center gap-2 pt-6 border-t border-gray-50">
-                      <MetaBadge icon={Clock} label={trajet.heure} />
-                      <MetaBadge icon={Cloud} label={getMeteoLabel(trajet.meteo)} />
-                      {trajet.distance && (
-                        <MetaBadge 
-                          icon={MapPin} 
-                          label={`${(trajet.distance / 1000).toFixed(1)} km`} 
-                          highlight
-                        />
-                      )}
-                    </div>
-                  </motion.div>
+                    </motion.div>
                 ))}
               </AnimatePresence>
             )}
