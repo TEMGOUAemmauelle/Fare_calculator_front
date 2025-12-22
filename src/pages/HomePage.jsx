@@ -136,7 +136,6 @@ export default function HomePage() {
         <motion.div variants={itemVariants} className="flex gap-3 overflow-x-auto pb-2 scrollbar-hide">
           <Badge icon={Zap} label="Rapide" />
           <Badge icon={Shield} label="Fiable" />
-          <Badge icon={Clock} label="24/7" />
         </motion.div>
 
       </motion.div>
