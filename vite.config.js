@@ -1,25 +1,20 @@
 import { defineConfig } from 'vite'
 import react from '@vitejs/plugin-react'
 import { VitePWA } from 'vite-plugin-pwa'
-import tailwindcss from '@tailwindcss/vite'
+import tailwindcss from '@tailwindcss/vite';
 
+
+// https://vite.dev/config/
 export default defineConfig({
   plugins: [
     react({
       jsxRuntime: 'automatic'
     }),
-
     VitePWA({
       registerType: 'autoUpdate',
       injectRegister: 'auto',
-
       workbox: {
-        // ✅ On enlève png du precache
-        globPatterns: ['**/*.{js,css,html,ico,svg,json,woff2}'],
-
-        // ✅ On augmente la limite pour le JS
-        maximumFileSizeToCacheInBytes: 6 * 1024 * 1024, // 6 MB
-
+        globPatterns: ['**/*.{js,css,html,ico,png,svg,json,woff2}'],
         runtimeCaching: [
           {
             urlPattern: /^https:\/\/api\.mapbox\.com\/.*/i,
@@ -28,7 +23,7 @@ export default defineConfig({
               cacheName: 'mapbox-cache',
               expiration: {
                 maxEntries: 50,
-                maxAgeSeconds: 60 * 60 * 24,
+                maxAgeSeconds: 60 * 60 * 24, // 24 heures
               },
               cacheableResponse: {
                 statuses: [0, 200],
@@ -42,7 +37,7 @@ export default defineConfig({
               cacheName: 'nominatim-cache',
               expiration: {
                 maxEntries: 30,
-                maxAgeSeconds: 60 * 60 * 24 * 7,
+                maxAgeSeconds: 60 * 60 * 24 * 7, // 7 jours
               },
             },
           },
@@ -53,18 +48,17 @@ export default defineConfig({
               cacheName: 'api-cache',
               expiration: {
                 maxEntries: 100,
-                maxAgeSeconds: 60 * 60,
+                maxAgeSeconds: 60 * 60, // 1 heure
               },
               networkTimeoutSeconds: 10,
             },
           },
         ],
       },
-
       manifest: {
         name: 'Fare Calculator - Taxi Cameroun',
         short_name: 'FareCalc',
-        description: 'Estimation de prix de taxi au Cameroun avec données de trafic en temps réel',
+        description: "Estimation de prix de taxi au Cameroun avec données de trafic en temps réel",
         theme_color: '#f3cd08',
         background_color: '#f8f8f5',
         display: 'standalone',
@@ -97,7 +91,7 @@ export default defineConfig({
           {
             name: 'Estimer un trajet',
             short_name: 'Estimer',
-            description: "Calculer le prix d'un trajet",
+            description: 'Calculer le prix d\'un trajet',
             url: '/estimate',
             icons: [{ src: '/pwa-icon.svg', sizes: '192x192' }]
           },
@@ -111,7 +105,6 @@ export default defineConfig({
         ]
       }
     }),
-
     tailwindcss(),
   ],
 })
