@@ -79,7 +79,7 @@ export default function HomePage() {
           initial={{ y: -40, opacity: 0 }}
           animate={{ y: 0, opacity: 1 }}
           transition={{ delay: 0.5, type: "spring", damping: 18, stiffness: 80 }}
-          className="self-start mt-8 ml-1"
+          className="self-start mt-8 ml-9"
         >
           {/* Glass Platform */}
           <div className="relative group">
@@ -88,7 +88,7 @@ export default function HomePage() {
               
               {/* Le Taxi qui 'sort' du cadre (Pop-out effect) */}
               <div className="relative w-14 h-10 shrink-0 z-10">
-                 <div className="absolute inset-0 scale-[2.5] -translate-y-2 -translate-x-1 filter drop-shadow-[0_10px_10px_rgba(0,0,0,0.5)]">
+                 <div className="absolute inset-0 scale-[2.5] -translate-y-2 -translate-x-2 filter drop-shadow-[0_10px_10px_rgba(0,0,0,0.5)]">
                     <LottieAnimation
                       animationData={taxiAnimation}
                       loop={true}
