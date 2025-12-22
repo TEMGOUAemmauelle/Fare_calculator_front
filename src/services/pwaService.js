@@ -28,23 +28,23 @@ export async function register() {
         console.log('🔄 PWA: Vérification des mises à jour...');
       }, 60 * 60 * 1000);
       
-      // Écouter les mises à jour
-      registration.addEventListener('updatefound', () => {
-        const newWorker = registration.installing;
-        console.log('🆕 PWA: Nouvelle version détectée');
+      // // Écouter les mises à jour
+      // registration.addEventListener('updatefound', () => {
+      //   const newWorker = registration.installing;
+      //   console.log('🆕 PWA: Nouvelle version détectée');
         
-        newWorker.addEventListener('statechange', () => {
-          if (newWorker.state === 'installed' && navigator.serviceWorker.controller) {
-            console.log('✨ PWA: Nouvelle version prête');
+      //   newWorker.addEventListener('statechange', () => {
+      //     if (newWorker.state === 'installed' && navigator.serviceWorker.controller) {
+      //       console.log('✨ PWA: Nouvelle version prête');
             
-            // Notifier l'utilisateur qu'une mise à jour est disponible
-            if (window.confirm('Une nouvelle version est disponible ! Recharger maintenant ?')) {
-              newWorker.postMessage({ type: 'SKIP_WAITING' });
-              window.location.reload();
-            }
-          }
-        });
-      });
+      //       // Notifier l'utilisateur qu'une mise à jour est disponible
+      //       if (window.confirm('Une nouvelle version est disponible ! Recharger maintenant ?')) {
+      //         newWorker.postMessage({ type: 'SKIP_WAITING' });
+      //         window.location.reload();
+      //       }
+      //     }
+      //   });
+      // });
       
       return registration;
     } catch (error) {

@@ -72,41 +72,52 @@ const AllTrajetsPage = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gray-50 flex flex-col font-sans">
-      {/* Header Jaune & Blanc */}
-      <div className="bg-white sticky top-0 z-20 shadow-sm border-b border-gray-100">
-        <div className="max-w-3xl mx-auto px-4 py-3">
-          <div className="flex items-center gap-4 mb-4">
-            <button 
-              onClick={() => navigate(-1)}
-              className="p-2 hover:bg-yellow-50 rounded-full transition-colors text-gray-700"
-            >
-              <ArrowLeft className="w-6 h-6" />
-            </button>
-            <h1 className="text-xl font-bold text-gray-900">
-              Trajets <span className="text-yellow-500">Communautaires</span>
-            </h1>
+    <div className="min-h-screen bg-[#fafaf9] flex flex-col font-sans selection:bg-[#f3cd08]/30">
+      {/* 1. STICKY HEADER - PREMIUM BLUR */}
+      <div className="bg-white/80 backdrop-blur-xl sticky top-0 z-30 border-b border-gray-100/50">
+        <div className="max-w-3xl mx-auto px-6 py-4">
+          <div className="flex items-center justify-between mb-6">
+            <div className="flex items-center gap-4">
+              <button 
+                onClick={() => navigate(-1)}
+                className="p-2.5 bg-gray-50 hover:bg-yellow-50 rounded-2xl transition-all text-gray-700 active:scale-90"
+              >
+                <ArrowLeft className="w-5 h-5" />
+              </button>
+              <div>
+                <h1 className="text-2xl font-black text-gray-900 tracking-tight">
+                  Trajets <span className="text-[#f3cd08]">Commu</span>
+                </h1>
+                <p className="text-[10px] uppercase tracking-widest text-gray-400 font-bold">Base de données partagée</p>
+              </div>
+            </div>
+            
+            <div className="w-12 h-12 bg-gray-50 rounded-2xl flex items-center justify-center overflow-hidden border border-gray-100">
+               <LottieAnimation animationData={yellowTaxiAnimation} loop={true} />
+            </div>
           </div>
 
-          {/* Barre de recherche */}
-          <div className="relative">
-            <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 w-5 h-5" />
-            <input
-              type="text"
-              placeholder="Rechercher un point de départ ou d'arrivée..."
-              value={searchTerm}
-              onChange={(e) => setSearchTerm(e.target.value)}
-              className="w-full pl-10 pr-4 py-3 bg-gray-50 border-none rounded-xl focus:ring-2 focus:ring-yellow-400 focus:bg-white transition-all outline-none text-gray-700 placeholder-gray-400"
-            />
+          {/* Search & Filter Bar */}
+          <div className="flex gap-2">
+            <div className="relative flex-1 group">
+              <Search className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-300 w-5 h-5 group-focus-within:text-[#f3cd08] transition-colors" />
+              <input
+                type="text"
+                placeholder="Où voulez-vous aller ?"
+                value={searchTerm}
+                onChange={(e) => setSearchTerm(e.target.value)}
+                className="w-full pl-12 pr-4 py-4 bg-gray-50 border border-transparent rounded-[1.25rem] focus:bg-white focus:border-[#f3cd08]/30 focus:ring-4 focus:ring-[#f3cd08]/5 transition-all outline-none text-gray-700 font-medium placeholder-gray-400 shadow-sm"
+              />
+            </div>
             <button 
               onClick={() => setShowFilters(!showFilters)}
-              className={`absolute right-2 top-1/2 -translate-y-1/2 p-2 rounded-lg transition-colors ${showFilters ? 'bg-yellow-100 text-yellow-700' : 'hover:bg-gray-200 text-gray-500'}`}
+              className={`p-4 rounded-[1.25rem] border transition-all active:scale-95 ${showFilters ? 'bg-[#f3cd08] border-[#f3cd08] text-black shadow-lg shadow-[#f3cd08]/20' : 'bg-white border-gray-200 text-gray-500 hover:border-gray-300'}`}
             >
-              <Filter className="w-5 h-5" />
+              <Filter className="w-5 h-5" strokeWidth={2.5} />
             </button>
           </div>
 
-          {/* Filtres Expandable */}
+          {/* Expandable Filters */}
           <AnimatePresence>
             {showFilters && (
               <motion.div
@@ -115,37 +126,38 @@ const AllTrajetsPage = () => {
                 exit={{ height: 0, opacity: 0 }}
                 className="overflow-hidden"
               >
-                <div className="pt-4 pb-2 flex flex-wrap gap-3">
-                  <select 
+                <div className="pt-6 pb-2 flex flex-wrap gap-2">
+                  <FilterChip 
+                    label="Période"
                     value={filterHeure}
-                    onChange={(e) => setFilterHeure(e.target.value)}
-                    className="px-4 py-2 bg-gray-50 rounded-lg text-sm font-medium text-gray-700 border-none focus:ring-2 focus:ring-yellow-400 outline-none"
-                  >
-                    <option value="all">Toutes les heures</option>
-                    <option value="matin">Matin</option>
-                    <option value="apres-midi">Après-midi</option>
-                    <option value="soir">Soir</option>
-                    <option value="nuit">Nuit</option>
-                  </select>
+                    onChange={setFilterHeure}
+                    options={[
+                      { id: 'all', label: 'Tout' },
+                      { id: 'matin', label: 'Matin' },
+                      { id: 'apres-midi', label: 'Midi' },
+                      { id: 'soir', label: 'Soir' },
+                      { id: 'nuit', label: 'Nuit' },
+                    ]}
+                  />
 
-                  <select 
+                  <FilterChip 
+                    label="Météo"
                     value={filterMeteo}
-                    onChange={(e) => setFilterMeteo(e.target.value)}
-                    className="px-4 py-2 bg-gray-50 rounded-lg text-sm font-medium text-gray-700 border-none focus:ring-2 focus:ring-yellow-400 outline-none"
-                  >
-                    <option value="all">Toutes météos</option>
-                    <option value="0">Soleil</option>
-                    <option value="1">Pluie légère</option>
-                    <option value="2">Pluie forte</option>
-                    <option value="3">Orage</option>
-                  </select>
+                    onChange={setFilterMeteo}
+                    options={[
+                      { id: 'all', label: 'Tout' },
+                      { id: '0', label: 'Soleil' },
+                      { id: '1', label: 'Pluie' },
+                      { id: '2', label: 'Orage' },
+                    ]}
+                  />
 
                   {(filterHeure !== 'all' || filterMeteo !== 'all') && (
                     <button 
                       onClick={() => { setFilterHeure('all'); setFilterMeteo('all'); }}
-                      className="px-4 py-2 text-sm text-red-500 font-medium hover:bg-red-50 rounded-lg transition-colors flex items-center gap-1"
+                      className="px-4 py-2 text-xs font-bold text-red-500 bg-red-50 rounded-xl hover:bg-red-100 transition-colors"
                     >
-                      <X className="w-4 h-4" /> Réinitialiser
+                      RESET
                     </button>
                   )}
                 </div>
@@ -155,96 +167,100 @@ const AllTrajetsPage = () => {
         </div>
       </div>
 
-      {/* Content */}
-      <div className="flex-1 max-w-3xl mx-auto w-full p-4">
+      {/* 2. MAIN FEED */}
+      <div className="flex-1 max-w-3xl mx-auto w-full px-6 py-8">
         {error && (
-          <div className="bg-red-50 text-red-600 p-4 rounded-xl mb-4 text-center border border-red-100">
+          <div className="bg-red-50 text-red-600 p-6 rounded-4xl mb-6 text-center border-2 border-red-100/50 font-bold">
             {error}
           </div>
         )}
 
         {loading ? (
-          <div className="flex flex-col items-center justify-center py-20">
-            <div className="w-48 h-48">
+          <div className="flex flex-col items-center justify-center py-20 opacity-50">
+            <div className="w-40 h-40 scale-150">
               <LottieAnimation animationData={yellowTaxiAnimation} loop={true} />
             </div>
-            <p className="text-gray-500 font-medium mt-4 animate-pulse">Chargement des trajets...</p>
+            <p className="text-gray-400 font-black uppercase tracking-[0.3em] text-xs mt-12 animate-pulse">Sync en cours...</p>
           </div>
         ) : (
-          <div className="space-y-4">
+          <div className="space-y-6">
             {filteredTrajets.length === 0 ? (
-              <div className="text-center py-20">
-                <div className="bg-gray-100 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4">
-                  <Search className="w-8 h-8 text-gray-400" />
+              <div className="text-center py-32">
+                <div className="w-24 h-24 bg-gray-100 rounded-[2.5rem] flex items-center justify-center mx-auto mb-8 text-gray-300">
+                  <Search className="w-10 h-10" strokeWidth={1.5} />
                 </div>
-                <h3 className="text-lg font-semibold text-gray-900">Aucun trajet trouvé</h3>
-                <p className="text-gray-500 mt-1">Essayez de modifier vos filtres de recherche.</p>
+                <h3 className="text-xl font-black text-gray-900 leading-tight">Aucun résultat</h3>
+                <p className="text-gray-400 text-sm mt-2 max-w-[200px] mx-auto">Essayez d'ajuster vos critères de recherche.</p>
               </div>
             ) : (
               <AnimatePresence>
                 {filteredTrajets.map((trajet, index) => (
-                  <motion.div
-                    key={trajet.id}
-                    initial={{ opacity: 0, y: 20 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    transition={{ delay: index * 0.05 }}
-                    className="bg-white p-5 rounded-2xl shadow-sm border border-gray-100 hover:shadow-md hover:border-yellow-200 transition-all group"
-                  >
-                    {/* Route Header */}
-                    <div className="flex items-start gap-4 mb-4">
-                      {/* Timeline visuelle */}
-                      <div className="flex flex-col items-center gap-1 mt-1.5">
-                        <div className="w-3 h-3 rounded-full bg-yellow-400 ring-4 ring-yellow-50"></div>
-                        <div className="w-0.5 h-10 bg-gray-100 border-l border-dashed border-gray-300"></div>
-                        <div className="w-3 h-3 rounded-full bg-gray-900 ring-4 ring-gray-50"></div>
+                    <motion.div
+                      key={trajet.id}
+                      initial={{ opacity: 0, y: 20 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      transition={{ delay: index * 0.04, type: "spring", damping: 20 }}
+                      className="relative bg-white p-5 rounded-3xl shadow-[0_5px_20px_-10px_rgba(0,0,0,0.02)] border border-gray-100 hover:shadow-[0_15px_40px_-10px_rgba(0,0,0,0.06)] hover:border-[#f3cd08]/30 transition-all group overflow-hidden"
+                    >
+                      {/* Background Glow on Hover */}
+                      <div className="absolute top-0 right-0 w-32 h-32 bg-[#f3cd08]/5 rounded-full blur-3xl -mr-16 -mt-16 group-hover:bg-[#f3cd08]/15 transition-colors" />
+
+                      <div className="flex flex-col md:flex-row gap-5 mb-5 relative z-10">
+                        {/* Route visualization - Thinner */}
+                        <div className="hidden md:flex flex-col items-center gap-1 pt-2 w-4">
+                          <div className="w-2.5 h-2.5 rounded-full bg-black ring-2 ring-gray-100" />
+                          <div className="flex-1 w-[1.5px] bg-linear-to-b from-black/20 to-gray-200 border-l border-dashed border-gray-300 min-h-[40px]" />
+                          <div className="w-2.5 h-2.5 rounded-full bg-[#f3cd08] ring-2 ring-[#f3cd08]/20" />
+                        </div>
+
+                        <div className="flex-1 space-y-4">
+                          {/* Depart - Plus fin */}
+                          <div className="relative pl-5 md:pl-0">
+                            <div className="md:hidden absolute left-0 top-1.5 w-2 h-2 rounded-full bg-black" />
+                            <span className="text-[9px] font-bold uppercase tracking-widest text-gray-400 mb-0.5 block">Départ</span>
+                            <h4 className="text-base font-bold text-gray-900 leading-tight truncate pr-4">
+                              {trajet.point_depart?.label || 'Secteur Inconnu'}
+                            </h4>
+                          </div>
+                          
+                          {/* Connecteur Mobile */}
+                          <div className="md:hidden absolute left-[3.5px] top-[42px] bottom-[70px] w-[1.5px] bg-gray-100" />
+
+                          {/* Arrivee - Plus fin */}
+                          <div className="relative pl-5 md:pl-0">
+                            <div className="md:hidden absolute left-0 top-1.5 w-2 h-2 rounded-full bg-[#f3cd08]" />
+                            <span className="text-[9px] font-bold uppercase tracking-widest text-gray-400 mb-0.5 block">Arrivée</span>
+                            <h4 className="text-base font-bold text-gray-900 leading-tight truncate pr-4">
+                              {trajet.point_arrivee?.label || 'Secteur Inconnu'}
+                            </h4>
+                          </div>
+                        </div>
+
+                        {/* Price & Date - Sleek Layout */}
+                        <div className="flex flex-row md:flex-col items-center md:items-end justify-between md:justify-start gap-3 mt-2 md:mt-0">
+                          <div className="bg-[#0a0a0a] text-[#f3cd08] px-4 py-2 rounded-xl shadow-lg shadow-[#f3cd08]/10 group-hover:scale-105 transition-transform">
+                            <span className="text-sm font-black tracking-wide">{formatPrice(trajet.prix).replace(',00', '')}</span>
+                          </div>
+                          <div className="flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-gray-50 border border-gray-100">
+                            <Calendar className="w-3 h-3 text-gray-400" />
+                            <span className="text-[10px] font-bold text-gray-500 uppercase tracking-tight">{formatDate(trajet.date_ajout)}</span>
+                          </div>
+                        </div>
                       </div>
 
-                      <div className="flex-1 min-w-0">
-                        <div className="mb-4">
-                          <p className="text-xs text-gray-400 font-medium uppercase tracking-wider mb-0.5">Départ</p>
-                          <p className="text-gray-900 font-bold text-lg leading-tight truncate">
-                            {trajet.point_depart?.label || 'Point inconnu'}
-                          </p>
-                        </div>
-                        <div>
-                          <p className="text-xs text-gray-400 font-medium uppercase tracking-wider mb-0.5">Arrivée</p>
-                          <p className="text-gray-900 font-bold text-lg leading-tight truncate">
-                            {trajet.point_arrivee?.label || 'Point inconnu'}
-                          </p>
-                        </div>
+                      {/* Metadata Footer - Compact */}
+                      <div className="flex flex-wrap items-center gap-2 pt-4 border-t border-gray-50 relative z-10">
+                        <MetaBadge icon={Clock} label={trajet.heure} />
+                        <MetaBadge icon={Cloud} label={getMeteoLabel(trajet.meteo)} />
+                        {trajet.distance && (
+                          <MetaBadge 
+                            icon={MapPin} 
+                            label={`${(trajet.distance / 1000).toFixed(1)} km`} 
+                            highlight
+                          />
+                        )}
                       </div>
-
-                      <div className="text-right flex flex-col items-end">
-                        <div className="bg-yellow-400 text-[#231f0f] px-4 py-2 rounded-xl font-black text-xl shadow-sm group-hover:scale-105 transition-transform">
-                          {formatPrice(trajet.prix)}
-                        </div>
-                        <div className="text-xs text-gray-400 mt-2 flex items-center gap-1 bg-gray-50 px-2 py-1 rounded-md">
-                          <Calendar className="w-3 h-3" />
-                          {formatDate(trajet.date_ajout)}
-                        </div>
-                      </div>
-                    </div>
-
-                    {/* Details Footer */}
-                    <div className="flex items-center gap-4 pt-4 border-t border-gray-50 text-sm">
-                      <div className="flex items-center gap-2 px-3 py-1.5 bg-gray-50 rounded-lg text-gray-600">
-                        <Clock className="w-4 h-4 text-gray-400" />
-                        <span className="capitalize font-medium">{trajet.heure || 'N/A'}</span>
-                      </div>
-                      
-                      <div className="flex items-center gap-2 px-3 py-1.5 bg-gray-50 rounded-lg text-gray-600">
-                        <Cloud className="w-4 h-4 text-gray-400" />
-                        <span className="font-medium">{getMeteoLabel(trajet.meteo)}</span>
-                      </div>
-
-                      {trajet.distance && (
-                        <div className="flex items-center gap-2 px-3 py-1.5 bg-gray-50 rounded-lg text-gray-600 ml-auto">
-                          <MapPin className="w-4 h-4 text-gray-400" />
-                          <span className="font-medium">{(trajet.distance / 1000).toFixed(1)} km</span>
-                        </div>
-                      )}
-                    </div>
-                  </motion.div>
+                    </motion.div>
                 ))}
               </AnimatePresence>
             )}
@@ -254,5 +270,35 @@ const AllTrajetsPage = () => {
     </div>
   );
 };
+
+// UI Components
+function FilterChip({ label, value, onChange, options }) {
+  return (
+    <div className="flex flex-col gap-1.5">
+      <span className="text-[9px] font-black text-gray-300 uppercase tracking-widest pl-1">{label}</span>
+      <div className="flex gap-1.5 bg-gray-50 p-1 rounded-2xl border border-gray-100">
+        {options.map(opt => (
+          <button
+            key={opt.id}
+            onClick={() => onChange(opt.id)}
+            className={`px-4 py-2 rounded-xl text-xs font-bold transition-all ${value === opt.id ? 'bg-white text-black shadow-sm' : 'text-gray-400 hover:text-gray-600'}`}
+          >
+            {opt.label}
+          </button>
+        ))}
+      </div>
+    </div>
+  );
+}
+
+function MetaBadge({ icon: Icon, label, highlight }) {
+  if (!label) return null;
+  return (
+    <div className={`flex items-center gap-2 px-4 py-2 rounded-2xl border transition-colors ${highlight ? 'bg-black text-white border-black' : 'bg-gray-50 text-gray-600 border-gray-100 group-hover:bg-white group-hover:border-gray-200'}`}>
+      <Icon className={`w-3 h-3 ${highlight ? 'text-[#f3cd08]' : 'text-gray-400'}`} />
+      <span className="text-[11px] font-black uppercase tracking-tight">{label}</span>
+    </div>
+  );
+}
 
 export default AllTrajetsPage;
