@@ -11,6 +11,7 @@
 
 import { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
+import { useTranslation } from 'react-i18next';
 import { 
   Eye, 
   EyeOff, 
@@ -221,7 +222,7 @@ export default function FormInput({
             className="mt-2 flex items-start gap-1.5"
           >
             {hasError && (
-              <AlertCircle className="w-4 h-4 text-red-500 flex-shrink-0 mt-0.5" />
+              <AlertCircle className="w-4 h-4 text-red-500 shrink-0 mt-0.5" />
             )}
             <p className={`text-sm ${hasError ? 'text-red-600 font-medium' : 'text-gray-600'}`}>
               {error || helperText}
@@ -242,17 +243,14 @@ export function FormSelect({
   value,
   onChange,
   options = [],
-  placeholder = 'Sélectionner...',
-  error,
-  helperText,
-  required = false,
-  disabled = false,
-  icon: Icon,
   className = '',
   containerClassName = '',
 }) {
+  const { t } = useTranslation();
   const [isFocused, setIsFocused] = useState(false);
   const hasError = Boolean(error);
+  
+  const displayPlaceholder = placeholder || t('common.select');
 
   const borderColor = hasError 
     ? 'border-red-300 focus:border-red-500 focus:ring-red-500/20'
@@ -304,9 +302,9 @@ export function FormSelect({
             cursor-pointer
           `}
         >
-          {placeholder && (
+          {displayPlaceholder && (
             <option value="" disabled>
-              {placeholder}
+              {displayPlaceholder}
             </option>
           )}
           {options.map((option) => (
@@ -315,7 +313,7 @@ export function FormSelect({
               value={option.value}
               disabled={option.disabled}
             >
-              {option.label}
+              {option.labelKey ? t(option.labelKey) : option.label}
             </option>
           ))}
         </select>
@@ -337,7 +335,7 @@ export function FormSelect({
             className="mt-2 flex items-start gap-1.5"
           >
             {hasError && (
-              <AlertCircle className="w-4 h-4 text-red-500 flex-shrink-0 mt-0.5" />
+              <AlertCircle className="w-4 h-4 text-red-500 shrink-0 mt-0.5" />
             )}
             <p className={`text-sm ${hasError ? 'text-red-600 font-medium' : 'text-gray-600'}`}>
               {error || helperText}

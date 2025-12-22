@@ -13,6 +13,9 @@
 import { useState, useEffect, useRef } from 'react';
 import { motion } from 'framer-motion';
 import { useNavigate, useLocation } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
+import { useAppNavigate } from '../hooks/useAppNavigate';
+import LanguageSwitcher from '../components/LanguageSwitcher';
 import { Drawer } from 'vaul';
 import { 
   MapPin, 
@@ -38,10 +41,11 @@ import { TrajetAddedModal } from '../components/ConfirmationModal';
 import { addTrajet } from '../services';
 
 // Constants
-import { HEURE_TRANCHES } from '../config/constants';
+import { HEURE_TRANCHES, METEO_CODES } from '../config/constants';
 
 export default function AddTrajetPage() {
-  const navigate = useNavigate();
+  const { t } = useTranslation();
+  const navigate = useAppNavigate();
   const location = useLocation();
   
   // États formulaire
@@ -137,7 +141,7 @@ export default function AddTrajetPage() {
             setMapCenter([point.coords_longitude, point.coords_latitude]);
             setMapZoom(15);
             
-            toast.success('Position actuelle détectée', { id: 'geoloc-success' });
+            toast.success(t('add.detecting_location') || 'Position actuelle détectée', { id: 'geoloc-success' });
           }
         } catch (e) {
           console.warn('Auto-geoloc failed:', e);
@@ -176,7 +180,7 @@ export default function AddTrajetPage() {
         coordinates: formData.depart_coords,
         type: 'depart',
         color: '#3B82F6',
-        label: formData.depart_point || 'Départ',
+        label: formData.depart_point || t('all_trajets.depart'),
       });
     }
     
@@ -185,7 +189,7 @@ export default function AddTrajetPage() {
         coordinates: formData.arrivee_coords,
         type: 'arrivee',
         color: '#EF4444',
-        label: formData.arrivee_point || 'Arrivée',
+        label: formData.arrivee_point || t('all_trajets.arrivee'),
       });
     }
     
@@ -365,8 +369,8 @@ export default function AddTrajetPage() {
 
     } catch (err) {
       console.error('❌ Erreur ajout trajet:', err);
-      setError(err.response?.data?.detail || 'Impossible d\'ajouter le trajet');
-      toast.error('Erreur lors de l\'ajout');
+      setError(err.response?.data?.detail || t('error.unexpected'));
+      toast.error(t('error.default_title'));
     } finally {
       setIsLoading(false);
     }
@@ -404,7 +408,7 @@ export default function AddTrajetPage() {
             className="px-6 py-2.5 bg-transparent hover:bg-black/5 text-gray-500 rounded-full font-bold text-xs uppercase tracking-wide flex items-center gap-2 transition-all active:scale-95"
           >
             <Calculator className="w-3.5 h-3.5" strokeWidth={2.5} />
-            <span>Estimer</span>
+            <span>{t('nav.estimate')}</span>
           </button>
           
           <button
@@ -412,7 +416,7 @@ export default function AddTrajetPage() {
             className="px-6 py-2.5 bg-[#f3cd08] text-[#0a0a0a] rounded-full font-black text-xs uppercase tracking-wide flex items-center gap-2 shadow-sm transition-transform active:scale-95"
           >
             <PlusCircle className="w-3.5 h-3.5" strokeWidth={3} />
-            <span>Ajouter</span>
+            <span>{t('nav.add')}</span>
           </button>
         </motion.div>
       </div>
@@ -427,9 +431,9 @@ export default function AddTrajetPage() {
         <Drawer.Trigger asChild>
           <button 
             className="absolute bottom-8 left-1/2 -translate-x-1/2 px-6 py-3 bg-[#f3cd08] text-gray-700 rounded-full font-bold shadow-2xl z-10"
-            aria-label="Ajouter un trajet"
+            aria-label={t('add.add_a_trip') || 'Ajouter un trajet'}
           >
-            Ajouter un trajet
+            {t('add.add_a_trip') || 'Ajouter un trajet'}
           </button>
         </Drawer.Trigger>
 
@@ -445,18 +449,21 @@ export default function AddTrajetPage() {
                 <div className="flex items-center justify-between mb-8">
                   <div className="flex-1">
                     <Drawer.Title className="font-black text-2xl text-[#0a0a0a] tracking-tight">
-                       AJOUTER <span className="text-gray-300">/</span> TRAJET
+                       {t('add.title')} <span className="text-gray-300">/</span> {t('add.subtitle')}
                     </Drawer.Title>
                     <p id="drawer-description-add" className="text-[10px] uppercase font-bold text-gray-400 mt-1 tracking-widest">
-                      Contribution communautaire
+                      {t('add.contribution')}
                     </p>
                   </div>
-                  <button
-                    onClick={() => navigate('/trajets')}
-                    className="px-4 py-2 bg-gray-50 hover:bg-gray-100 text-[#0a0a0a] rounded-xl text-[10px] font-black uppercase tracking-wider transition-colors flex-shrink-0"
-                  >
-                    Voir tout
-                  </button>
+                  <div className="flex items-center gap-2">
+                    <button
+                      onClick={() => navigate('/trajets')}
+                      className="px-4 py-2 bg-gray-50 hover:bg-gray-100 text-[#0a0a0a] rounded-xl text-[10px] font-black uppercase tracking-wider transition-colors flex-shrink-0"
+                    >
+                      {t('common.see_all')}
+                    </button>
+                    <LanguageSwitcher variant="dark" />
+                  </div>
                 </div>
               </div>
             </div>
@@ -476,9 +483,9 @@ export default function AddTrajetPage() {
 
                  <div className="flex-1 space-y-4">
                     <div className="relative">
-                       <span className="absolute -top-2 left-0 text-[9px] font-bold text-gray-400 uppercase tracking-wider">De</span>
+                       <span className="absolute -top-2 left-0 text-[9px] font-bold text-gray-400 uppercase tracking-wider">{t('estimate.label_from')}</span>
                        <SearchBar
-                         placeholder="Lieu de départ..."
+                         placeholder={t('add.placeholder_from')}
                          value={formData.depart_point}
                          onSelect={handleDepartSelect}
                          showCurrentLocation={true}
@@ -491,9 +498,9 @@ export default function AddTrajetPage() {
                     <div className="h-px w-full bg-gray-200" />
 
                     <div className="relative">
-                       <span className="absolute -top-2 left-0 text-[9px] font-bold text-gray-400 uppercase tracking-wider">À</span>
+                       <span className="absolute -top-2 left-0 text-[9px] font-bold text-gray-400 uppercase tracking-wider">{t('estimate.label_to')}</span>
                        <SearchBar
-                         placeholder="Lieu d'arrivée..."
+                         placeholder={t('add.placeholder_to')}
                          value={formData.arrivee_point}
                          onSelect={handleArriveeSelect}
                          className="bg-transparent border-none p-0 focus:ring-0 text-[#0a0a0a] font-bold placeholder:text-gray-300"
@@ -507,7 +514,7 @@ export default function AddTrajetPage() {
             {/* Section Prix - Minimalist */}
             <div className="mb-6">
               <label className="block text-[10px] font-black text-gray-400 uppercase tracking-widest pl-1 mb-2">
-                Prix payé (FCFA)
+                {t('add.price_paid')}
               </label>
               <div className="relative">
                 <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
@@ -528,7 +535,7 @@ export default function AddTrajetPage() {
             <div className="grid grid-cols-2 gap-4 mb-8">
               {/* Météo */}
               <div className="space-y-2">
-                <label className="text-[10px] font-black text-gray-400 uppercase tracking-widest pl-1">Météo</label>
+                <label className="text-[10px] font-black text-gray-400 uppercase tracking-widest pl-1">{t('add.weather')}</label>
                 <div className="flex flex-col gap-2">
                   <button
                     type="button"
@@ -538,7 +545,7 @@ export default function AddTrajetPage() {
                     }`}
                   >
                     <Sun className={`w-4 h-4 ${formData.meteo === 0 ? 'text-[#f3cd08]' : 'text-gray-300'}`} />
-                    <span className="text-xs font-bold">Soleil</span>
+                    <span className="text-xs font-bold">{t('add.weather_sunny')}</span>
                   </button>
                   <button
                     type="button"
@@ -548,16 +555,16 @@ export default function AddTrajetPage() {
                     }`}
                   >
                     <CloudRain className={`w-4 h-4 ${formData.meteo === 2 ? 'text-[#3b82f6]' : 'text-gray-300'}`} />
-                    <span className="text-xs font-bold">Pluie</span>
+                    <span className="text-xs font-bold">{t('add.weather_rainy')}</span>
                   </button>
                 </div>
               </div>
 
               {/* Heure */}
               <div className="space-y-2">
-                <label className="text-[10px] font-black text-gray-400 uppercase tracking-widest pl-1">Moment</label>
+                <label className="text-[10px] font-black text-gray-400 uppercase tracking-widest pl-1">{t('estimate.moment')}</label>
                 <div className="grid grid-cols-1 gap-2">
-                  {Object.entries(HEURE_TRANCHES).map(([key, { label }]) => (
+                  {Object.entries(HEURE_TRANCHES).map(([key, data]) => (
                     <button
                       key={key}
                       type="button"
@@ -568,7 +575,7 @@ export default function AddTrajetPage() {
                           : 'bg-white border-gray-100 text-gray-400 hover:bg-gray-50'
                       }`}
                     >
-                      {label}
+                      {t(data.labelKey)}
                     </button>
                   ))}
                 </div>
@@ -578,40 +585,40 @@ export default function AddTrajetPage() {
             {/* Qualité du trajet */}
             <div>
               <label className="block text-sm font-semibold text-gray-900 mb-2">
-                Notez ce trajet - Est-il difficile ?
+                {t('add.difficulty')}
               </label>
               <div className="space-y-3">
                 <div className="flex items-center justify-between text-xs text-gray-600 font-medium">
                   <div className="flex items-center gap-1">
                     <ThumbsDown className="w-4 h-4 text-red-600" />
-                    <span>Difficile</span>
+                    <span>{t('add.hard')}</span>
                   </div>
                   <span className="text-lg font-black text-yellow-600">{Math.round(formData.qualite_trajet)}</span>
                   <div className="flex items-center gap-1">
                     <ThumbsUp className="w-4 h-4 text-green-600" />
-                    <span>Facile</span>
+                    <span>{t('add.easy')}</span>
                   </div>
                 </div>
                 <input
                   type="range"
                   min="1"
                   max="10"
-                  value={11 - formData.qualite_trajet}
-                  onChange={(e) => handleInputChange('qualite_trajet', 11 - parseFloat(e.target.value))}
+                  value={formData.qualite_trajet}
+                  onChange={(e) => handleInputChange('qualite_trajet', parseFloat(e.target.value))}
                   className="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer slider-yellow"
                   style={{
-                    background: `linear-gradient(to right, #ef4444 0%, #fbbf24 ${(10 - formData.qualite_trajet) * 11.11}%, #fbbf24 ${(10 - formData.qualite_trajet) * 11.11}%, #10b981 100%)`
+                    background: `linear-gradient(to right, #ef4444 0%, #fbbf24 ${(formData.qualite_trajet - 1) * 11.11}%, #fbbf24 ${(formData.qualite_trajet - 1) * 11.11}%, #10b981 100%)`
                   }}
                 />
                 <div className="flex justify-between text-xs text-gray-500">
-                  <span>10</span>
-                  <span>5</span>
                   <span>1</span>
+                  <span>5</span>
+                  <span>10</span>
                 </div>
                 <p className="text-xs text-gray-500 italic">
-                  {Math.round(formData.qualite_trajet) <= 3 && "Trajet fluide, peu d'obstacles"}
-                  {Math.round(formData.qualite_trajet) > 3 && Math.round(formData.qualite_trajet) <= 7 && "Trajet normal avec quelques difficultés"}
-                  {Math.round(formData.qualite_trajet) > 7 && "Trajet difficile (embouteillages, nids de poule...)"}
+                  {Math.round(formData.qualite_trajet) >= 8 && t('add.quality_smooth')}
+                  {Math.round(formData.qualite_trajet) >= 4 && Math.round(formData.qualite_trajet) <= 7 && t('add.quality_normal')}
+                  {Math.round(formData.qualite_trajet) <= 3 && t('add.quality_hard_desc')}
                 </p>
               </div>
             </div>
@@ -637,11 +644,11 @@ export default function AddTrajetPage() {
             {isLoading ? (
               <>
                 <div className="w-5 h-5 border-2 border-white/30 border-t-white rounded-full animate-spin" />
-                <span className="text-white/80">Envoi en cours...</span>
+                <span className="text-white/80">{t('add.sending')}</span>
               </>
             ) : (
               <>
-                <span>Confirmer</span>
+                <span>{t('common.confirm')}</span>
                 <div className="w-6 h-6 bg-[#f3cd08] rounded-full flex items-center justify-center text-black">
                    <PlusCircle className="w-3.5 h-3.5 stroke-[3px]" />
                 </div>
@@ -651,7 +658,7 @@ export default function AddTrajetPage() {
 
           {/* Note */}
           <p className="text-center text-xs text-gray-500">
-            Vos données sont anonymes et aident à améliorer les estimations pour tous.
+            {t('add.success_note')}
           </p>
                 </form>
               </div>

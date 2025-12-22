@@ -15,15 +15,14 @@
 // MÉTÉO - Mappings codes API → labels/icônes
 // ===========================================
 export const METEO_CODES = {
-  0: { label: 'Soleil', emoji: '☀️', color: 'text-yellow-500', bg: 'bg-yellow-50' },
-  1: { label: 'Pluie légère', emoji: '🌦️', color: 'text-blue-400', bg: 'bg-blue-50' },
-  2: { label: 'Pluie forte', emoji: '🌧️', color: 'text-blue-600', bg: 'bg-blue-100' },
-  3: { label: 'Orage', emoji: '⛈️', color: 'text-purple-600', bg: 'bg-purple-100' },
+  0: { labelKey: 'constants.weather.0', emoji: '☀️', color: 'text-yellow-500', bg: 'bg-yellow-50' },
+  1: { labelKey: 'constants.weather.1', emoji: '🌦️', color: 'text-blue-400', bg: 'bg-blue-50' },
+  2: { labelKey: 'constants.weather.2', emoji: '🌧️', color: 'text-blue-600', bg: 'bg-blue-100' },
+  3: { labelKey: 'constants.weather.3', emoji: '⛈️', color: 'text-purple-600', bg: 'bg-purple-100' },
 };
 
 export const METEO_OPTIONS = Object.entries(METEO_CODES).map(([code, data]) => ({
   value: parseInt(code),
-  label: `${data.emoji} ${data.label}`,
   ...data,
 }));
 
@@ -31,15 +30,14 @@ export const METEO_OPTIONS = Object.entries(METEO_CODES).map(([code, data]) => (
 // TRANCHES HORAIRES - Mappings API → labels/icônes
 // ===========================================
 export const HEURE_TRANCHES = {
-  matin: { label: '6h-12h', emoji: '🌅', color: 'text-orange-500', bg: 'bg-orange-50' },
-  'apres-midi': { label: '12h-18h', emoji: '☀️', color: 'text-yellow-600', bg: 'bg-yellow-50' },
-  soir: { label: '18h-22h', emoji: '🌆', color: 'text-indigo-500', bg: 'bg-indigo-50' },
-  nuit: { label: '22h-6h', emoji: '🌙', color: 'text-blue-700', bg: 'bg-blue-100' },
+  matin: { labelKey: 'constants.time.matin', range: '6h-12h', emoji: '🌅', color: 'text-orange-500', bg: 'bg-orange-50' },
+  'apres-midi': { labelKey: 'constants.time.apres-midi', range: '12h-18h', emoji: '☀️', color: 'text-yellow-600', bg: 'bg-yellow-50' },
+  soir: { labelKey: 'constants.time.soir', range: '18h-22h', emoji: '🌆', color: 'text-indigo-500', bg: 'bg-indigo-50' },
+  nuit: { labelKey: 'constants.time.nuit', range: '22h-6h', emoji: '🌙', color: 'text-blue-700', bg: 'bg-blue-100' },
 };
 
 export const HEURE_OPTIONS = Object.entries(HEURE_TRANCHES).map(([key, data]) => ({
   value: key,
-  label: `${data.emoji} ${data.label}`,
   ...data,
 }));
 
@@ -55,14 +53,13 @@ export const getHeureTrancheFromTime = (heure) => {
 // TYPES DE ZONES - Mappings codes 0-2 → labels
 // ===========================================
 export const TYPE_ZONE_CODES = {
-  0: { label: 'Urbaine', emoji: '🏙️', color: 'text-gray-700', bg: 'bg-gray-50', description: 'Zone dense, routes principales' },
-  1: { label: 'Mixte', emoji: '🏘️', color: 'text-green-600', bg: 'bg-green-50', description: 'Zone semi-urbaine' },
-  2: { label: 'Rurale', emoji: '🌾', color: 'text-amber-600', bg: 'bg-amber-50', description: 'Zone peu dense, routes secondaires' },
+  0: { labelKey: 'constants.zone.0.label', descriptionKey: 'constants.zone.0.description', emoji: '🏙️', color: 'text-gray-700', bg: 'bg-gray-50' },
+  1: { labelKey: 'constants.zone.1.label', descriptionKey: 'constants.zone.1.description', emoji: '🏘️', color: 'text-green-600', bg: 'bg-green-50' },
+  2: { labelKey: 'constants.zone.2.label', descriptionKey: 'constants.zone.2.description', emoji: '🌾', color: 'text-amber-600', bg: 'bg-amber-50' },
 };
 
 export const TYPE_ZONE_OPTIONS = Object.entries(TYPE_ZONE_CODES).map(([code, data]) => ({
   value: parseInt(code),
-  label: `${data.emoji} ${data.label}`,
   ...data,
 }));
 
@@ -71,25 +68,25 @@ export const TYPE_ZONE_OPTIONS = Object.entries(TYPE_ZONE_CODES).map(([code, dat
 // ===========================================
 export const STATUT_ESTIMATION = {
   exact: {
-    label: 'Trajet Exact',
+    labelKey: 'constants.status.exact.label',
+    descriptionKey: 'constants.status.exact.description',
     color: 'text-green-600',
     bg: 'bg-green-100',
     icon: '✅',
-    description: 'Basé sur trajets identiques en base de données',
   },
   similaire: {
-    label: 'Trajet Similaire',
+    labelKey: 'constants.status.similaire.label',
+    descriptionKey: 'constants.status.similaire.description',
     color: 'text-blue-600',
     bg: 'bg-blue-100',
     icon: '≈',
-    description: 'Estimation ajustée depuis trajets proches',
   },
   inconnu: {
-    label: 'Trajet Inconnu',
+    labelKey: 'constants.status.inconnu.label',
+    descriptionKey: 'constants.status.inconnu.description',
     color: 'text-orange-600',
     bg: 'bg-orange-100',
     icon: '⚠️',
-    description: 'Estimation approximative (fiabilité réduite)',
   },
 };
 
@@ -98,27 +95,27 @@ export const STATUT_ESTIMATION = {
 // ===========================================
 export const CONGESTION_SCALE = Array.from({ length: 10 }, (_, i) => {
   const value = i + 1;
-  let label, emoji, color;
+  let labelKey, emoji, color;
   
   if (value <= 3) {
-    label = 'Fluide';
+    labelKey = 'constants.congestion.low';
     emoji = '🟢';
     color = 'text-green-600';
   } else if (value <= 6) {
-    label = 'Modéré';
+    labelKey = 'constants.congestion.moderate';
     emoji = '🟡';
     color = 'text-yellow-600';
   } else if (value <= 8) {
-    label = 'Dense';
+    labelKey = 'constants.congestion.dense';
     emoji = '🟠';
     color = 'text-orange-600';
   } else {
-    label = 'Bloqué';
+    labelKey = 'constants.congestion.blocked';
     emoji = '🔴';
     color = 'text-red-600';
   }
   
-  return { value, label: `${emoji} ${value}/10 - ${label}`, emoji, color };
+  return { value, labelKey, emoji, color };
 });
 
 // ===========================================
@@ -222,27 +219,27 @@ export const UI_CONFIG = {
 };
 
 // ===========================================
-// MESSAGES UTILISATEUR - Templates
+// MESSAGES UTILISATEUR - Templates (Key-based)
 // ===========================================
 export const MESSAGES = {
   // Erreurs
-  ERROR_NETWORK: 'Impossible de contacter le serveur. Vérifiez votre connexion Internet.',
-  ERROR_GEOLOCATION_DENIED: 'Permission géolocalisation refusée. Saisissez manuellement votre position.',
-  ERROR_GEOLOCATION_UNAVAILABLE: 'Géolocalisation non disponible sur cet appareil.',
-  ERROR_API_KEY: 'Clé API invalide. Contactez l\'administrateur.',
-  ERROR_SAME_POINTS: 'Les points de départ et d\'arrivée doivent être différents.',
+  ERROR_NETWORK: 'messages.error_network',
+  ERROR_GEOLOCATION_DENIED: 'messages.error_geolocation_denied',
+  ERROR_GEOLOCATION_UNAVAILABLE: 'messages.error_geolocation_unavailable',
+  ERROR_API_KEY: 'messages.error_api_key',
+  ERROR_SAME_POINTS: 'messages.error_same_points',
   
   // Succès
-  SUCCESS_TRAJET_ADDED: 'Trajet ajouté avec succès ! Merci de contribuer à la communauté 🎉',
-  SUCCESS_COPIED: 'Copié dans le presse-papiers !',
+  SUCCESS_TRAJET_ADDED: 'messages.success_trajet_added',
+  SUCCESS_COPIED: 'messages.success_copied',
   
   // Info
-  INFO_LOADING_ESTIMATE: 'Calcul de l\'estimation en cours...',
-  INFO_DETECTING_LOCATION: 'Détection de votre position...',
-  INFO_NO_RESULTS: 'Aucun résultat trouvé. Essayez avec un autre lieu.',
+  INFO_LOADING_ESTIMATE: 'messages.info_loading_estimate',
+  INFO_DETECTING_LOCATION: 'messages.info_detecting_location',
+  INFO_NO_RESULTS: 'messages.info_no_results',
   
   // Invites ajout trajet
-  INVITE_ADD_TRAJET: 'Ce trajet est inconnu. Aidez la communauté en ajoutant votre prix après le trajet !',
+  INVITE_ADD_TRAJET: 'messages.invite_add_trajet',
 };
 
 // ===========================================

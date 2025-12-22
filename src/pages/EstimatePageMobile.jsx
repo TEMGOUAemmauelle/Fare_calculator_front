@@ -11,6 +11,9 @@
 import { useState, useEffect, useRef } from 'react';
 import { flushSync } from 'react-dom';
 import { useNavigate } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
+import { useAppNavigate } from '../hooks/useAppNavigate';
+import LanguageSwitcher from '../components/LanguageSwitcher';
 import { Drawer } from 'vaul';
 import { motion } from 'framer-motion';
 import { 
@@ -41,19 +44,20 @@ import carDrivingAnimation from '../assets/lotties/Car driving on road.json';
 
 // Constants
 const WEATHER_OPTIONS = [
-  { value: 0, label: 'Ensoleillé', icon: Sun },
-  { value: 2, label: 'Pluvieux', icon: CloudRain },
+  { value: 0, labelKey: 'constants.weather.0', icon: Sun },
+  { value: 2, labelKey: 'constants.weather.2', icon: CloudRain },
 ];
 
 const TIME_SLOTS = [
-  { value: 'matin', label: 'Matin' },
-  { value: 'apres-midi', label: 'Midi' },
-  { value: 'soir', label: 'Soir' },
-  { value: 'nuit', label: 'Nuit' },
+  { value: 'matin', labelKey: 'constants.time.matin' },
+  { value: 'apres-midi', labelKey: 'constants.time.apres-midi' },
+  { value: 'soir', labelKey: 'constants.time.soir' },
+  { value: 'nuit', labelKey: 'constants.time.nuit' },
 ];
 
 export default function EstimatePageMobile() {
-  const navigate = useNavigate();
+  const { t } = useTranslation();
+  const navigate = useAppNavigate();
   
   const [departPlace, setDepartPlace] = useState(null);
   const [arriveePlace, setArriveePlace] = useState(null);
@@ -128,7 +132,7 @@ export default function EstimatePageMobile() {
           setMapCenter([point.coords_longitude, point.coords_latitude]);
           setMapZoom(15);
           
-          toast.success('Position détectée');
+          toast.success(t('estimate.detecting_location'));
 
           // 3. Récupérer météo avec ces coordonnées
           try {
@@ -395,7 +399,7 @@ export default function EstimatePageMobile() {
             className="px-6 py-2.5 bg-[#f3cd08] text-[#0a0a0a] rounded-full font-black text-xs uppercase tracking-wide flex items-center gap-2 shadow-sm transition-transform active:scale-95"
           >
             <Calculator className="w-3.5 h-3.5" strokeWidth={3} />
-            <span>Estimer</span>
+            <span>{t('nav.estimate')}</span>
           </button>
           
           <button
@@ -403,7 +407,7 @@ export default function EstimatePageMobile() {
             className="px-6 py-2.5 bg-transparent hover:bg-black/5 text-gray-500 rounded-full font-bold text-xs uppercase tracking-wide flex items-center gap-2 transition-all active:scale-95"
           >
             <PlusCircle className="w-3.5 h-3.5" strokeWidth={2.5} />
-            <span>Ajouter</span>
+            <span>{t('nav.add')}</span>
           </button>
         </motion.div>
       </div>
@@ -437,9 +441,9 @@ export default function EstimatePageMobile() {
         <Drawer.Trigger asChild>
           <button 
             className={`fixed bottom-8 left-1/2 -translate-x-1/2 px-6 py-3 bg-[#f3cd08] text-gray-700 rounded-full font-bold shadow-2xl z-20 ${drawerOpen ? 'hidden' : ''}`}
-            aria-label="Estimer un trajet"
+            aria-label={t('predict.estimate_a_trip')}
           >
-            Estimer un trajet
+            {t('predict.estimate_a_trip')}
           </button>
         </Drawer.Trigger>
 
@@ -454,17 +458,20 @@ export default function EstimatePageMobile() {
               <div className="max-w-md mx-auto">
                 <div className="flex items-center justify-between mb-8">
                   <Drawer.Title className="font-black text-2xl text-[#0a0a0a] tracking-tight">
-                    ESTIMER
+                    {t('estimate.title')}
                   </Drawer.Title>
-                  <button
-                    onClick={() => navigate('/trajets')}
-                    className="px-3 py-1.5 bg-gray-200 hover:bg-gray-300 text-gray-800 rounded-lg text-xs font-semibold transition-colors"
-                  >
-                    Trajets commu
-                  </button>
+                  <div className="flex items-center gap-2">
+                    <button
+                      onClick={() => navigate('/trajets')}
+                      className="px-3 py-1.5 bg-gray-200 hover:bg-gray-300 text-gray-800 rounded-lg text-xs font-semibold transition-colors"
+                    >
+                      {t('estimate.community_trips')}
+                    </button>
+                    <LanguageSwitcher variant="dark" />
+                  </div>
                 </div>
                 <p id="drawer-description" className="sr-only">
-                  Formulaire pour estimer le prix d'un trajet en taxi
+                  {t('estimate.drawer_description')}
                 </p>
                 {/* Élément focalisable caché : reçoit le focus à l'ouverture */}
                 <div id="drawer-first-focus" ref={drawerFirstFocusRef} tabIndex={-1} className="sr-only" />
@@ -487,9 +494,9 @@ export default function EstimatePageMobile() {
 
                         <div className="flex-1 space-y-4">
                           <div className="relative">
-                            <span className="absolute -top-2 left-0 text-[9px] font-bold text-gray-400 uppercase tracking-wider">De</span>
+                            <span className="absolute -top-2 left-0 text-[9px] font-bold text-gray-400 uppercase tracking-wider">{t('estimate.label_from')}</span>
                             <SearchBar
-                              placeholder="Position actuelle..."
+                              placeholder={t('estimate.placeholder_from')}
                               onSelect={handleDepartSelect}
                               showCurrentLocation={true}
                               value={departPlace?.label || ''}
@@ -501,9 +508,9 @@ export default function EstimatePageMobile() {
                           <div className="h-px w-full bg-gray-200" />
 
                           <div className="relative">
-                             <span className="absolute -top-2 left-0 text-[9px] font-bold text-gray-400 uppercase tracking-wider">À</span>
+                             <span className="absolute -top-2 left-0 text-[9px] font-bold text-gray-400 uppercase tracking-wider">{t('estimate.label_to')}</span>
                              <SearchBar
-                              placeholder="Où allez-vous ?"
+                              placeholder={t('estimate.placeholder_to')}
                               onSelect={handleArriveeSelect}
                               value={arriveePlace?.label || ''}
                               className="bg-transparent border-none p-0 focus:ring-0 text-[#0a0a0a] font-bold placeholder:text-gray-300"
@@ -513,40 +520,40 @@ export default function EstimatePageMobile() {
                       </div>
                     </div>
 
-                    {/* Options Grid */}
-                    <div className="grid grid-cols-2 gap-4 mb-8">
-                       {/* Météo */}
-                       <div className="space-y-2">
-                         <label className="text-[10px] font-black text-gray-400 uppercase tracking-widest pl-1">
-                           Conditions
-                         </label>
-                         <div className="flex flex-col gap-2">
-                           {WEATHER_OPTIONS.map((option) => {
-                             const Icon = option.icon;
-                             const isActive = meteo === option.value;
-                             return (
-                               <button
-                                 key={option.value}
-                                 onClick={() => setMeteo(option.value)}
-                                 className={`flex items-center gap-3 px-4 py-3 rounded-2xl transition-all border ${
-                                   isActive
-                                     ? 'bg-[#0a0a0a] border-[#0a0a0a] text-white shadow-lg'
-                                     : 'bg-white border-gray-100 text-gray-400 hover:border-gray-200'
-                                 }`}
-                               >
-                                 <Icon className={`w-4 h-4 ${isActive ? 'text-[#f3cd08]' : 'text-gray-300'}`} />
-                                 <span className="text-xs font-bold">{option.label}</span>
-                               </button>
-                             );
-                           })}
-                         </div>
-                       </div>
+                     {/* Options Grid */}
+                     <div className="grid grid-cols-2 gap-4 mb-8">
+                        {/* Météo */}
+                        <div className="space-y-2">
+                          <label className="text-[10px] font-black text-gray-400 uppercase tracking-widest pl-1">
+                            {t('estimate.conditions')}
+                          </label>
+                          <div className="flex flex-col gap-2">
+                            {WEATHER_OPTIONS.map((option) => {
+                              const Icon = option.icon;
+                              const isActive = meteo === option.value;
+                              return (
+                                <button
+                                  key={option.value}
+                                  onClick={() => setMeteo(option.value)}
+                                  className={`flex items-center gap-3 px-4 py-3 rounded-2xl transition-all border ${
+                                    isActive
+                                      ? 'bg-[#0a0a0a] border-[#0a0a0a] text-white shadow-lg'
+                                      : 'bg-white border-gray-100 text-gray-400 hover:border-gray-200'
+                                  }`}
+                                >
+                                  <Icon className={`w-4 h-4 ${isActive ? 'text-[#f3cd08]' : 'text-gray-300'}`} />
+                                  <span className="text-xs font-bold">{t(option.labelKey)}</span>
+                                </button>
+                              );
+                            })}
+                          </div>
+                        </div>
 
-                       {/* Heure */}
-                       <div className="space-y-2">
-                         <label className="text-[10px] font-black text-gray-400 uppercase tracking-widest pl-1">
-                           Moment
-                         </label>
+                        {/* Heure */}
+                        <div className="space-y-2">
+                          <label className="text-[10px] font-black text-gray-400 uppercase tracking-widest pl-1">
+                            {t('estimate.moment')}
+                          </label>
                          <div className="grid grid-cols-1 gap-2">
                            {TIME_SLOTS.map((slot) => {
                              const isActive = heureTrajet === slot.value;
@@ -560,7 +567,7 @@ export default function EstimatePageMobile() {
                                      : 'bg-white border-gray-100 text-gray-400 hover:bg-gray-50'
                                  }`}
                                >
-                                 {slot.label}
+                                 {t(slot.labelKey)}
                                </button>
                              );
                            })}
@@ -578,11 +585,11 @@ export default function EstimatePageMobile() {
                       {isLoading ? (
                         <>
                           <div className="w-5 h-5 border-2 border-white/30 border-t-white rounded-full animate-spin" />
-                          <span className="text-white/80">Calcul en cours...</span>
+                          <span className="text-white/80">{t('estimate.calculating')}</span>
                         </>
                       ) : (
                         <>
-                          <span>Lancer l'estimation</span>
+                          <span>{t('estimate.launch')}</span>
                           <div className="w-6 h-6 bg-[#f3cd08] rounded-full flex items-center justify-center text-black">
                              <TrendingUp className="w-3.5 h-3.5 stroke-[3px]" />
                           </div>
@@ -604,7 +611,7 @@ export default function EstimatePageMobile() {
                     <div className="space-y-4">
                       <div className="flex items-center justify-between mb-4">
                         <h2 className="text-2xl font-black text-[#231f0f]">
-                          Résultat
+                          {t('estimate.result')}
                         </h2>
                         <button
                           onClick={() => {
@@ -613,7 +620,7 @@ export default function EstimatePageMobile() {
                           }}
                           className="px-4 py-2 bg-gray-100 rounded-xl font-medium text-gray-700"
                         >
-                          Nouvelle recherche
+                          {t('estimate.new_search')}
                         </button>
                       </div>
 

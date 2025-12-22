@@ -1,0 +1,265 @@
+{
+  "common": {
+    "loading": "Chargement...",
+    "error": "Une erreur est survenue",
+    "back": "Retour",
+    "confirm": "Confirmer",
+    "cancel": "Annuler",
+    "save": "Enregistrer",
+    "delete": "Supprimer",
+    "retry": "Réessayer",
+    "search": "Rechercher",
+    "see_all": "Voir tout",
+    "close": "Fermer",
+    "thank_you": "Merci !",
+    "success": "Succès !",
+    "done": "Terminé",
+    "swipe": "Glisser →",
+    "unknown": "Inconnue",
+    "unknown_sector": "Secteur Inconnu",
+    "select": "Sélectionner...",
+    "home_shortcut": "Domicile",
+    "work_shortcut": "Travail",
+    "my_position": "Ma position",
+    "result": "Résultat",
+    "new_search": "Nouvelle recherche"
+  },
+  "nav": {
+    "home": "Accueil",
+    "estimate": "Estimer",
+    "add": "Ajouter",
+    "stats": "Stats",
+    "history": "Historique"
+  },
+  "home": {
+    "status": "Tarifs de Taxi",
+    "status_subtitle": "Ne payez plus trop cher",
+    "headline_1": "FARE",
+    "headline_2": "CALCULATOR.",
+    "description": "Estimez vos coûts ou enrichissez la base de données.",
+    "cta_estimate": "Estimer",
+    "cta_estimate_sub": "Calculateur de prix",
+    "cta_contribute": "Contribuer",
+    "cta_contribute_sub": "Base de données",
+    "core_version": "Core v2.0",
+    "ai_engine": "AI"
+  },
+  "estimate": {
+    "title": "ESTIMER",
+    "drawer_title": "ESTIMER UN TRAJET",
+    "drawer_description": "Formulaire pour estimer le prix d'un trajet en taxi",
+    "placeholder_from": "Position actuelle...",
+    "placeholder_to": "Où allez-vous ?",
+    "label_from": "De",
+    "label_to": "À",
+    "conditions": "Conditions",
+    "moment": "Moment",
+    "launch": "Lancer l'estimation",
+    "calculating": "Calcul en cours...",
+    "result": "Résultat",
+    "new_search": "Nouvelle recherche",
+    "community_trips": "Trajets commu",
+    "detecting_location": "Position détectée"
+  },
+  "add": {
+    "title": "AJOUTER",
+    "subtitle": "TRAJET",
+    "contribution": "Contribution communautaire",
+    "placeholder_from": "Lieu de départ...",
+    "placeholder_to": "Lieu d'arrivée...",
+    "price_paid": "Prix payé (FCFA)",
+    "weather": "Météo",
+    "difficulty": "Notez ce trajet - Est-il difficile ?",
+    "easy": "Facile",
+    "hard": "Difficile",
+    "sending": "Envoi en cours...",
+    "success_note": "Vos données sont anonymes et aident à améliorer les estimations pour tous.",
+    "weather_sunny": "Soleil",
+    "weather_rainy": "Pluie",
+    "success_title": "Merci !",
+    "success_message": "Votre trajet a bien été enregistré. Merci de contribuer à la communauté !",
+    "add_a_trip": "Ajouter un trajet",
+    "quality_smooth": "Trajet fluide, peu d'obstacles",
+    "quality_normal": "Trajet normal avec quelques difficultés",
+    "quality_hard_desc": "Trajet difficile (embouteillages, nids de poule...)"
+  },
+  "price_card": {
+    "standard_estimation": "Estimation standard",
+    "intelligent_estimation": "Estimation intelligente",
+    "reliability": "Fiabilité",
+    "estimated_price": "Prix estimé",
+    "depart": "Départ",
+    "arrival": "Arrivée",
+    "distance": "Distance",
+    "duration": "Durée",
+    "weather": "Météo",
+    "zone": "Zone",
+    "calculation_details": "Détail des calculs (fallback)",
+    "ml_prediction": "Prédiction ML",
+    "not_available": "Non disponible",
+    "indicative_price": "Prix indicatif basé sur les données disponibles."
+  },
+  "predict": {
+    "estimate_a_trip": "Estimer un trajet"
+  },
+  "all_trajets": {
+    "title": "Trajets",
+    "subtitle": "Commu",
+    "description": "Base de données partagée",
+    "search_placeholder": "Où voulez-vous aller ?",
+    "no_results": "Aucun résultat trouvé",
+    "no_results_subtitle": "Essayez d'ajuster vos critères de recherche.",
+    "syncing": "Sync en cours...",
+    "depart": "Départ",
+    "arrivee": "Arrivée",
+    "error_loading": "Impossible de charger la liste des trajets.",
+    "filters": {
+      "period": "Période",
+      "weather": "Météo",
+      "all": "Tout"
+    }
+  },
+  "stats": {
+    "dashboard": "Tableau de Bord",
+    "error_loading": "Impossible de charger les statistiques.",
+    "hero": {
+      "trend": "Tendance",
+      "featured": "Destination Phare",
+      "description": "Le point de chute le plus populaire de la période.",
+      "visits": "visites enregistrées"
+    },
+    "kpi": {
+      "total_trajets": "Total Trajets",
+      "period": "Période"
+    },
+    "filters": {
+      "title": "Filtrer les statistiques",
+      "all": "Toujours",
+      "month": "Ce mois-ci",
+      "week": "Cette semaine"
+    },
+    "sections": {
+      "feared": "Les plus redoutés",
+      "costly": "Les plus coûteux",
+      "longest": "Les plus longs",
+      "top_destinations": "Top Destinations"
+    }
+  },
+  "geolocation": {
+    "prompt": "Autorisez la géolocalisation pour une meilleure expérience (tapez sur l'icône de localisation ou sur le bouton ma position).",
+    "denied": "Géolocalisation bloquée. Ouvrez les paramètres du site (icône cadenas) et autorisez la localisation.",
+    "detecting": "Détection de votre position...",
+    "my_position": "Ma position",
+    "unavailable": "Position indisponible. Vérifiez votre connexion internet.",
+    "timeout": "Délai dépassé. Réessayez.",
+    "unknown_error": "Erreur de localisation",
+    "unsupported": "Géolocalisation non supportée par votre appareil",
+    "localized": "Position localisée"
+  },
+  "search": {
+    "placeholder": "Rechercher un lieu...",
+    "no_results": "Aucun lieu trouvé",
+    "try_another": "Essayez avec un autre nom",
+    "use_current": "Utiliser ma position actuelle"
+  },
+  "map": {
+    "loading": "Chargement de la carte...",
+    "distance": "Distance",
+    "duration": "Durée",
+    "traffic": "Trafic",
+    "traffic_low": "Fluide",
+    "traffic_moderate": "Modéré",
+    "traffic_heavy": "Dense",
+    "traffic_severe": "Saturé",
+    "zoom_in": "Zoomer",
+    "zoom_out": "Dézoomer",
+    "see_all": "Voir tout",
+    "see_stats": "Voir les statistiques",
+    "center_view": "Recentrer la vue",
+    "change_style": "Changer le style"
+  },
+  "constants": {
+    "weather": {
+      "0": "Soleil",
+      "1": "Pluie légère",
+      "2": "Pluie forte",
+      "3": "Orage"
+    },
+    "time": {
+      "matin": "Matin",
+      "apres-midi": "Midi",
+      "soir": "Soir",
+      "nuit": "Nuit"
+    },
+    "status": {
+      "exact": {
+        "label": "Trajet Exact",
+        "description": "Basé sur trajets identiques en base de données"
+      },
+      "similaire": {
+        "label": "Trajet Similaire",
+        "description": "Estimation ajustée depuis trajets proches"
+      },
+      "inconnu": {
+        "label": "Trajet Inconnu",
+        "description": "Estimation approximative (fiabilité réduite)"
+      }
+    },
+    "zone": {
+      "0": {
+        "label": "Urbaine",
+        "description": "Zone dense, routes principales"
+      },
+      "1": {
+        "label": "Mixte",
+        "description": "Zone semi-urbaine"
+      },
+      "2": {
+        "label": "Rurale",
+        "description": "Zone peu dense, routes secondaires"
+      }
+    },
+    "congestion": {
+      "low": "Fluide",
+      "moderate": "Modéré",
+      "dense": "Dense",
+      "blocked": "Bloqué"
+    }
+  },
+  "error": {
+    "network_title": "Problème de connexion",
+    "api_title": "Erreur serveur",
+    "auth_title": "Authentification requise",
+    "geolocation_title": "Géolocalisation indisponible",
+    "validation_title": "Données invalides",
+    "default_title": "Une erreur est survenue",
+    "unexpected": "Une erreur inattendue s'est produite",
+    "retry": "Réessayer",
+    "close": "Fermer",
+    "dismiss": "Ignorer",
+    "technical_details": "Détails techniques"
+  },
+  "messages": {
+    "error_network": "Impossible de contacter le serveur. Vérifiez votre connexion Internet.",
+    "error_geolocation_denied": "Permission géolocalisation refusée. Saisissez manuellement votre position.",
+    "error_geolocation_unavailable": "Géolocalisation non disponible sur cet appareil.",
+    "error_api_key": "Clé API invalide. Contactez l'administrateur.",
+    "error_same_points": "Les points de départ et d'arrivée doivent être différents.",
+    "success_trajet_added": "Trajet ajouté avec succès ! Merci de contribuer à la communauté 🎉",
+    "success_copied": "Copié dans le presse-papiers !",
+    "info_loading_estimate": "Calcul de l'estimation en cours...",
+    "info_detecting_location": "Détection de votre position...",
+    "info_no_results": "Aucun résultat trouvé. Essayez avec un autre lieu.",
+    "invite_add_trajet": "Ce trajet est inconnu. Aidez la communauté en ajoutant votre prix après le trajet !"
+  },
+  "pwa": {
+    "install_title": "Installer l'App",
+    "install_description": "Accédez à Fare Calculator en un clic depuis votre écran d'accueil et profitez d'une expérience plus rapide.",
+    "ios_instruction": "Installation sur iPhone / iPad",
+    "ios_share": "Tapez sur l'icône de partage",
+    "ios_add_home": "puis 'Sur l'écran d'accueil'",
+    "install_btn": "Installer maintenant",
+    "later": "Plus tard",
+    "manual_instruction": "Pour installer l'application, ouvrez le menu de votre navigateur et sélectionnez 'Ajouter à l'écran d'accueil'."
+  }
+}

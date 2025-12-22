@@ -8,8 +8,11 @@
 import { useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { useNavigate } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
+import { useAppNavigate } from '../hooks/useAppNavigate';
 import { ArrowRight, PlusCircle, Zap,Sparkle, Sparkles } from 'lucide-react';
 import LottieAnimation from '../components/LottieAnimation';
+import LanguageSwitcher from '../components/LanguageSwitcher';
 import taxiAnimation from '../assets/lotties/yellow taxi.json';
 
 // Import de l'image locale (Vite gère les imports d'images ainsi)
@@ -17,7 +20,8 @@ import taxiAnimation from '../assets/lotties/yellow taxi.json';
 import bgImage from '../assets/images/yaounde.png';
 
 export default function HomePage() {
-  const navigate = useNavigate();
+  const { t } = useTranslation();
+  const navigate = useAppNavigate();
 
   // Animation variants pour l'apparition en cascade (Stagger)
   const containerVariants = {
@@ -46,7 +50,11 @@ export default function HomePage() {
 
   return (
     <div className="relative h-[100dvh] w-full overflow-hidden bg-[#0a0a0a] font-sans selection:bg-[#f3cd08]/30">
-      
+      {/* LANGUAGE SWITCHER - Top Right */}
+      <div className="absolute top-6 right-6 z-50">
+        <LanguageSwitcher />
+      </div>
+
       {/* 1. BACKGROUND IMMERSIF */}
       <div className="absolute inset-0 z-0">
         <img 
@@ -90,8 +98,8 @@ export default function HomePage() {
               </div>
 
               <div className="flex flex-col pr-2">
-                <span className="text-[9px] text-[#f3cd08] font-black uppercase tracking-[0.15em] leading-none mb-0.5">Tarifs de Taxi </span>
-                <span className="text-[10px] font-bold text-gray-400">Ne payez plus trop cher</span>
+                <span className="text-[9px] text-[#f3cd08] font-black uppercase tracking-[0.15em] leading-none mb-0.5">{t('home.status')}</span>
+                <span className="text-[10px] font-bold text-gray-400">{t('home.status_subtitle')}</span>
               </div>
             </div>
           </div>
@@ -107,12 +115,12 @@ export default function HomePage() {
           {/* Headline Section */}
           <motion.div variants={itemVariants} className="mb-10 pl-2">
             <h1 className="text-5xl md:text-8xl font-black text-white leading-[0.85] tracking-tighter mb-6 drop-shadow-2xl">
-              FARE <br />
-              <span className="text-transparent bg-clip-text bg-linear-to-r from-[#f3cd08] to-[#f59e0b]">CALCULATOR.</span>
+              {t('home.headline_1')} <br />
+              <span className="text-transparent bg-clip-text bg-linear-to-r from-[#f3cd08] to-[#f59e0b]">{t('home.headline_2')}</span>
             </h1>
             
             <p className="text-gray-400 text-sm md:text-xl font-medium max-w-[280px] md:max-w-md leading-relaxed border-l-2 border-[#f3cd08] pl-5 opacity-90">
-              Estimez vos coûts ou enrichissez la base de données.
+              {t('home.description')}
             </p>
           </motion.div>
 
@@ -124,8 +132,8 @@ export default function HomePage() {
               className="group relative w-full flex items-center justify-between p-2.5 bg-[#f3cd08] rounded-4xl hover:bg-[#ffda29] active:scale-[0.98] transition-all duration-300 shadow-[0_20px_40px_-10px_rgba(243,205,8,0.3)]"
             >
               <div className="flex flex-col items-start px-6 py-1">
-                <span className="text-[#0a0a0a] font-black text-lg md:text-xl uppercase tracking-wider leading-tight">Estimer</span>
-                <span className="text-[#0a0a0a]/50 text-[10px] font-bold uppercase tracking-tight">Calculateur de prix</span>
+                <span className="text-[#0a0a0a] font-black text-lg md:text-xl uppercase tracking-wider leading-tight">{t('home.cta_estimate')}</span>
+                <span className="text-[#0a0a0a]/50 text-[10px] font-bold uppercase tracking-tight">{t('home.cta_estimate_sub')}</span>
               </div>
               <div className="w-14 h-14 bg-[#0a0a0a] rounded-3xl flex items-center justify-center text-[#f3cd08] group-hover:-rotate-45 transition-transform duration-300">
                 <ArrowRight className="w-6 h-6 stroke-[3px]" />
@@ -139,8 +147,8 @@ export default function HomePage() {
                 className="group flex items-center justify-between px-7 py-5 bg-white/5 backdrop-blur-md border border-white/10 rounded-4xl hover:bg-white/10 active:scale-[0.98] transition-all"
               >
                 <div className="flex flex-col items-start">
-                  <span className="text-white font-bold text-sm uppercase tracking-wide">Contribuer</span>
-                  <span className="text-gray-500 text-[9px] font-bold uppercase tracking-tighter">Base de données</span>
+                  <span className="text-white font-bold text-sm uppercase tracking-wide">{t('home.cta_contribute')}</span>
+                  <span className="text-gray-500 text-[9px] font-bold uppercase tracking-tighter">{t('home.cta_contribute_sub')}</span>
                 </div>
                 <div className="w-9 h-9 rounded-full bg-white/5 flex items-center justify-center group-hover:bg-[#f3cd08] group-hover:text-black transition-all">
                    <PlusCircle className="w-4 h-4 stroke-[2.5px]" />
@@ -151,7 +159,7 @@ export default function HomePage() {
               <div className="flex items-center justify-center px-6 bg-white/5 backdrop-blur-md border border-white/10 rounded-4xl">
                  <div className="flex flex-col items-center">
                     <Sparkles className="w-5 h-5 text-[#f3cd08] mb-1.5 drop-shadow-[0_0_8px_rgba(255,255,255,0.4)]" />
-                    <span className="text-[9px] font-black text-gray-400 uppercase tracking-widest">AI</span>
+                    <span className="text-[9px] font-black text-gray-400 uppercase tracking-widest">{t('home.ai_engine')}</span>
                  </div>
               </div>
             </div>
@@ -159,7 +167,7 @@ export default function HomePage() {
           
           {/* Footer Version - Refined Visibility */}
           <motion.div variants={itemVariants} className="flex items-center gap-5 text-white/40 px-3">
-             <span className="text-[10px] font-black uppercase tracking-[0.4em] whitespace-nowrap">Core v2.0</span>
+             <span className="text-[10px] font-black uppercase tracking-[0.4em] whitespace-nowrap">{t('home.core_version')}</span>
              <div className="h-px flex-1 bg-white/20 rounded-full" />
              <span className="text-[10px] font-black uppercase tracking-[0.4em] whitespace-nowrap">YDE</span>
           </motion.div>

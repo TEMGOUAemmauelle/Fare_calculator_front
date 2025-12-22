@@ -1,6 +1,6 @@
 <div align="center">
 
-<img src="doc/taxi-logo.png" alt="Taxi Fare Calculator" width="200"/>
+<img src="doc/taxi-logo-v2.png" alt="Taxi Fare Calculator" width="200"/>
 
 # Taxi Fare Calculator API
 
@@ -38,16 +38,16 @@ API REST complète pour **estimer intelligemment les prix de courses de taxi** a
 
 ## 🛠️ Stack Technique
 
-| Catégorie | Technologies |
-|-----------|-------------|
-| **Backend** | Django 5.2.1, Django REST Framework 3.16.0 |
-| **Python** | Python 3.11+ |
-| **Géospatial** | Shapely 2.0.6 (isochrones), Geopy 2.4.1 |
-| **APIs Externes** | Mapbox API, Nominatim OSM, OpenMeteo |
-| **Async Tasks** | Celery 5.4.0, Redis 5.0.7 |
+| Catégorie              | Technologies                                      |
+| ---------------------- | ------------------------------------------------- |
+| **Backend**            | Django 5.2.1, Django REST Framework 3.16.0        |
+| **Python**             | Python 3.11+                                      |
+| **Géospatial**         | Shapely 2.0.6 (isochrones), Geopy 2.4.1           |
+| **APIs Externes**      | Mapbox API, Nominatim OSM, OpenMeteo              |
+| **Async Tasks**        | Celery 5.4.0, Redis 5.0.7                         |
 | **ML (À implémenter)** | scikit-learn, XGBoost (classification 18 classes) |
-| **Base de Données** | PostgreSQL / SQLite (dev) |
-| **Conteneurisation** | Docker, Docker Compose |
+| **Base de Données**    | PostgreSQL / SQLite (dev)                         |
+| **Conteneurisation**   | Docker, Docker Compose                            |
 
 ---
 
@@ -104,7 +104,6 @@ Accédez à l'admin Django : http://localhost:8000/admin/
 - Cliquez **"Ajouter API Key"**
 - Notez l'UUID généré (ex: `550e8400-e29b-41d4-a716-446655440000`)
 
-
 ---
 
 ## Table des Matières
@@ -136,12 +135,14 @@ Authorization: ApiKey <votre-uuid-cle>
 ```
 
 ### Exemple avec curl
+
 ```bash
 curl -H "Authorization: ApiKey 550e8400-e29b-41d4-a716-446655440000" \
      http://localhost:8000/api/estimate/
 ```
 
 ### Exemple avec Python requests
+
 ```python
 import requests
 
@@ -158,6 +159,7 @@ response = requests.post(
 ```
 
 ### Obtenir une clé API
+
 - Les clés API sont générées via l'**interface Django Admin** : `/admin/`
 - Seuls les administrateurs peuvent créer/désactiver des clés
 - Chaque clé a un compteur `usage_count` pour tracker l'utilisation
@@ -165,16 +167,18 @@ response = requests.post(
 ### Erreurs d'authentification
 
 **401 Unauthorized - Clé manquante**
+
 ```json
 {
-    "error": "API key requise. Header 'Authorization: ApiKey <uuid>' manquant."
+  "error": "API key requise. Header 'Authorization: ApiKey <uuid>' manquant."
 }
 ```
 
 **401 Unauthorized - Clé invalide**
+
 ```json
 {
-    "error": "API key invalide ou inactive."
+  "error": "API key invalide ou inactive."
 }
 ```
 
@@ -189,6 +193,7 @@ response = requests.post(
 #### Requête
 
 **Headers**
+
 ```http
 Authorization: ApiKey <uuid>
 Content-Type: application/json
@@ -199,54 +204,58 @@ Content-Type: application/json
 Le `depart` et l'`arrivee` peuvent être fournis sous **2 formats** :
 
 **Format 1 : Coordonnées GPS**
+
 ```json
 {
-    "depart": {
-        "lat": 3.8547,
-        "lon": 11.5021
-    },
-    "arrivee": {
-        "lat": 3.8667,
-        "lon": 11.5174
-    },
-    "heure": "matin",
-    "meteo": 1,
-    "type_zone": 0,
-    "congestion_user": 5
+  "depart": {
+    "lat": 3.8547,
+    "lon": 11.5021
+  },
+  "arrivee": {
+    "lat": 3.8667,
+    "lon": 11.5174
+  },
+  "heure": "matin",
+  "meteo": 1,
+  "type_zone": 0,
+  "congestion_user": 5
 }
 ```
 
 **Format 2 : Nom de lieu (conversion automatique)**
+
 ```json
 {
-    "depart": "Polytechnique Yaoundé",
-    "arrivee": "Carrefour Ekounou",
-    "heure": "matin"
+  "depart": "Polytechnique Yaoundé",
+  "arrivee": "Carrefour Ekounou",
+  "heure": "matin"
 }
 ```
 
 **Format 3 : Mixte**
+
 ```json
 {
-    "depart": {"lat": 3.8547, "lon": 11.5021},
-    "arrivee": "Carrefour Ekounou",
-    "heure": null,
-    "meteo": null
+  "depart": { "lat": 3.8547, "lon": 11.5021 },
+  "arrivee": "Carrefour Ekounou",
+  "heure": null,
+  "meteo": null
 }
 ```
 
 #### Paramètres détaillés
 
-| Paramètre | Type | Obligatoire | Description | Valeurs autorisées |
-|-----------|------|-------------|-------------|-------------------|
-| `depart` | Object/String | ✅ Oui | Point de départ | Coords `{lat, lon}` OU nom lieu |
-| `arrivee` | Object/String | ✅ Oui | Point d'arrivée | Coords `{lat, lon}` OU nom lieu |
-| `heure` | String | ❌ Non | Tranche horaire | `"matin"`, `"apres-midi"`, `"soir"`, `"nuit"`, `null` (auto) |
-| `meteo` | Integer | ❌ Non | Code météo | `0` (soleil), `1` (pluie légère), `2` (pluie forte), `3` (orage), `null` (auto) |
-| `type_zone` | Integer | ❌ Non | Type de zone | `0` (urbaine), `1` (mixte), `2` (rurale), `null` (auto) |
-| `congestion_user` | Integer | ❌ Non | Embouteillages ressentis | `1` (fluide) à `10` (bloqué), `null` |
+| Paramètre         | Type          | Obligatoire | Description              | Valeurs autorisées                                                              |
+| ----------------- | ------------- | ----------- | ------------------------ | ------------------------------------------------------------------------------- |
+| `depart`          | Object/String | ✅ Oui      | Point de départ          | Coords `{lat, lon}` OU nom lieu                                                 |
+| `arrivee`         | Object/String | ✅ Oui      | Point d'arrivée          | Coords `{lat, lon}` OU nom lieu                                                 |
+| `heure`           | String        | ❌ Non      | Tranche horaire          | `"matin"`, `"apres-midi"`, `"soir"`, `"nuit"`, `null` (auto)                    |
+| `meteo`           | Integer       | ❌ Non      | Code météo               | `0` (soleil), `1` (pluie légère), `2` (pluie forte), `3` (orage), `null` (auto) |
+| `type_zone`       | Integer       | ❌ Non      | Type de zone             | `0` (urbaine), `1` (mixte), `2` (rurale), `null` (auto)                         |
+| `congestion_user` | Integer       | ❌ Non      | Embouteillages ressentis | `1` (fluide) à `10` (bloqué), `null`                                            |
 
 **Notes importantes :**
+
 - Si `heure` est `null`, l'API utilise l'heure actuelle (serveur timezone Africa/Douala)
 - Si `meteo` est `null`, l'API interroge OpenMeteo avec les coordonnées de départ
 - Si un **nom de lieu** est fourni, l'API le convertit en coordonnées via **Nominatim** (OpenStreetMap)
@@ -260,51 +269,51 @@ La réponse varie selon le **type de match** trouvé :
 
 ```json
 {
-    "statut": "exact",
-    "prix_moyen": 250.0,
-    "prix_min": 200.0,
-    "prix_max": 300.0,
-    "fiabilite": 0.95,
-    "message": "Estimation basée sur 8 trajets exacts similaires.",
-    "nb_trajets_utilises": 8,
-    "details_trajet": {
-        "depart": {
-            "label": "Polytechnique Yaoundé",
-            "coords": [3.8547, 11.5021],
-            "quartier": "Ngoa-Ekelle",
-            "ville": "Yaoundé"
-        },
-        "arrivee": {
-            "label": "Carrefour Ekounou",
-            "coords": [3.8667, 11.5174],
-            "quartier": "Ekounou",
-            "ville": "Yaoundé"
-        },
-        "distance_estimee": 5212.5,
-        "duree_estimee": 730.0,
-        "heure": "matin",
-        "meteo": 1,
-        "type_zone": 0
+  "statut": "exact",
+  "prix_moyen": 250.0,
+  "prix_min": 200.0,
+  "prix_max": 300.0,
+  "fiabilite": 0.95,
+  "message": "Estimation basée sur 8 trajets exacts similaires.",
+  "nb_trajets_utilises": 8,
+  "details_trajet": {
+    "depart": {
+      "label": "Polytechnique Yaoundé",
+      "coords": [3.8547, 11.5021],
+      "quartier": "Ngoa-Ekelle",
+      "ville": "Yaoundé"
     },
-    "ajustements_appliques": {
-        "congestion_actuelle": 45.0,
-        "ajustement_congestion_pourcent": 0,
-        "meteo_opposee": {
-            "code": 0,
-            "label": "Soleil",
-            "prix_estime": 240.0,
-            "message": "Estimation si météo change (soleil au lieu de pluie légère)"
-        },
-        "heure_opposee": {
-            "tranche": "nuit",
-            "prix_estime": 290.0,
-            "message": "Estimation pour trajet de nuit (+17%)"
-        }
+    "arrivee": {
+      "label": "Carrefour Ekounou",
+      "coords": [3.8667, 11.5174],
+      "quartier": "Ekounou",
+      "ville": "Yaoundé"
     },
-    "suggestions": [
-        "Tarif fiable basé sur historique communautaire",
-        "Négociez entre 200 et 300 CFA selon embouteillages"
-    ]
+    "distance_estimee": 5212.5,
+    "duree_estimee": 730.0,
+    "heure": "matin",
+    "meteo": 1,
+    "type_zone": 0
+  },
+  "ajustements_appliques": {
+    "congestion_actuelle": 45.0,
+    "ajustement_congestion_pourcent": 0,
+    "meteo_opposee": {
+      "code": 0,
+      "label": "Soleil",
+      "prix_estime": 240.0,
+      "message": "Estimation si météo change (soleil au lieu de pluie légère)"
+    },
+    "heure_opposee": {
+      "tranche": "nuit",
+      "prix_estime": 290.0,
+      "message": "Estimation pour trajet de nuit (+17%)"
+    }
+  },
+  "suggestions": [
+    "Tarif fiable basé sur historique communautaire",
+    "Négociez entre 200 et 300 CFA selon embouteillages"
+  ]
 }
 ```
 
@@ -312,52 +321,52 @@ La réponse varie selon le **type de match** trouvé :
 
 ```json
 {
-    "statut": "similaire",
-    "prix_moyen": 270.0,
-    "prix_min": 250.0,
-    "prix_max": 290.0,
-    "fiabilite": 0.75,
-    "message": "Estimation ajustée depuis 5 trajets similaires (+20 CFA pour distance extra de 200m).",
-    "nb_trajets_utilises": 5,
-    "details_trajet": {
-        "depart": {
-            "label": "Proche École Polytechnique",
-            "coords": [3.8550, 11.5025],
-            "quartier": "Ngoa-Ekelle",
-            "ville": "Yaoundé"
-        },
-        "arrivee": {
-            "label": "Proche Carrefour Ekounou",
-            "coords": [3.8670, 11.5180],
-            "quartier": "Ekounou",
-            "ville": "Yaoundé"
-        },
-        "distance_estimee": 5412.3,
-        "duree_estimee": 780.0,
-        "heure": "matin",
-        "meteo": 1,
-        "type_zone": 0
+  "statut": "similaire",
+  "prix_moyen": 270.0,
+  "prix_min": 250.0,
+  "prix_max": 290.0,
+  "fiabilite": 0.75,
+  "message": "Estimation ajustée depuis 5 trajets similaires (+20 CFA pour distance extra de 200m).",
+  "nb_trajets_utilises": 5,
+  "details_trajet": {
+    "depart": {
+      "label": "Proche École Polytechnique",
+      "coords": [3.855, 11.5025],
+      "quartier": "Ngoa-Ekelle",
+      "ville": "Yaoundé"
     },
-    "ajustements_appliques": {
-        "distance_extra_metres": 200,
-        "ajustement_distance_cfa": 20,
-        "ajustement_congestion_pourcent": 5,
-        "facteur_ajustement_total": 1.08,
-        "meteo_opposee": {
-            "code": 2,
-            "label": "Pluie forte",
-            "prix_estime": 285.0
-        },
-        "heure_opposee": {
-            "tranche": "soir",
-            "prix_estime": 280.0
-        }
+    "arrivee": {
+      "label": "Proche Carrefour Ekounou",
+      "coords": [3.867, 11.518],
+      "quartier": "Ekounou",
+      "ville": "Yaoundé"
     },
-    "suggestions": [
-        "Trajets similaires trouvés dans le quartier",
-        "Prix ajusté pour distance légèrement différente",
-        "Ajoutez votre prix réel après le trajet pour améliorer les estimations"
-    ]
+    "distance_estimee": 5412.3,
+    "duree_estimee": 780.0,
+    "heure": "matin",
+    "meteo": 1,
+    "type_zone": 0
+  },
+  "ajustements_appliques": {
+    "distance_extra_metres": 200,
+    "ajustement_distance_cfa": 20,
+    "ajustement_congestion_pourcent": 5,
+    "facteur_ajustement_total": 1.08,
+    "meteo_opposee": {
+      "code": 2,
+      "label": "Pluie forte",
+      "prix_estime": 285.0
+    },
+    "heure_opposee": {
+      "tranche": "soir",
+      "prix_estime": 280.0
+    }
+  },
+  "suggestions": [
+    "Trajets similaires trouvés dans le quartier",
+    "Prix ajusté pour distance légèrement différente",
+    "Ajoutez votre prix réel après le trajet pour améliorer les estimations"
+  ]
 }
 ```
 
@@ -365,77 +374,78 @@ La réponse varie selon le **type de match** trouvé :
 
 ```json
 {
-    "statut": "inconnu",
-    "prix_moyen": 300.0,
-    "prix_min": 250.0,
-    "prix_max": 350.0,
-    "fiabilite": 0.55,
-    "message": "Trajet inconnu dans notre base. Estimation ML prioritaire avec transparence des features.",
-    "estimations_supplementaires": {
-        "ml_prediction": 300,
-        "features_utilisees": {
-            "distance_metres": 5738.7,
-            "duree_secondes": 1207.8,
-            "congestion": 50,
-            "sinuosite": 1.30,
-            "nb_virages": 7,
-            "heure": "apres-midi",
-            "meteo": 0,
-            "type_zone": 0
-        }
+  "statut": "inconnu",
+  "prix_moyen": 300.0,
+  "prix_min": 250.0,
+  "prix_max": 350.0,
+  "fiabilite": 0.55,
+  "message": "Trajet inconnu dans notre base. Estimation ML prioritaire avec transparence des features.",
+  "estimations_supplementaires": {
+    "ml_prediction": 300,
+    "features_utilisees": {
+      "distance_metres": 5738.7,
+      "duree_secondes": 1207.8,
+      "congestion": 50,
+      "sinuosite": 1.3,
+      "nb_virages": 7,
+      "heure": "apres-midi",
+      "meteo": 0,
+      "type_zone": 0
+    }
+  },
+  "details_trajet": {
+    "depart": {
+      "label": "Point inconnu",
+      "coords": [3.8547, 11.5021],
+      "quartier": null,
+      "ville": "Yaoundé"
     },
-    "details_trajet": {
-        "depart": {
-            "label": "Point inconnu",
-            "coords": [3.8547, 11.5021],
-            "quartier": null,
-            "ville": "Yaoundé"
-        },
-        "arrivee": {
-            "label": "Destination inconnue",
-            "coords": [3.9000, 11.5500],
-            "quartier": null,
-            "ville": null
-        },
-        "distance_metres": 5738.7,
-        "duree_secondes": 1207.8,
-        "heure": "apres-midi",
-        "meteo": 0,
-        "type_zone": 0,
-        "congestion_mapbox": null,
-        "sinuosite_indice": 1.30,
-        "nb_virages_estimes": 7,
-        "route_classe": "primary"
+    "arrivee": {
+      "label": "Destination inconnue",
+      "coords": [3.9, 11.55],
+      "quartier": null,
+      "ville": null
     },
-    "ajustements_appliques": {
-        "note": "Aucun ajustement (pas de trajets similaires en BD)"
-    },
-    "suggestions": [
-        "Distance calculee : 5.74 km",
-        "Duree estimee : 20.1 minutes",
-        "Fiabilite faible : negociez prudemment",
-        "Votre contribution enrichira les estimations futures !"
-    ]
+    "distance_metres": 5738.7,
+    "duree_secondes": 1207.8,
+    "heure": "apres-midi",
+    "meteo": 0,
+    "type_zone": 0,
+    "congestion_mapbox": null,
+    "sinuosite_indice": 1.3,
+    "nb_virages_estimes": 7,
+    "route_classe": "primary"
+  },
+  "ajustements_appliques": {
+    "note": "Aucun ajustement (pas de trajets similaires en BD)"
+  },
+  "suggestions": [
+    "Distance calculee : 5.74 km",
+    "Duree estimee : 20.1 minutes",
+    "Fiabilite faible : negociez prudemment",
+    "Votre contribution enrichira les estimations futures !"
+  ]
 }
 ```
 
 #### Champs de réponse détaillés
 
-| Champ | Type | Description |
-|-------|------|-------------|
-| `statut` | String | Type de match : `"exact"`, `"similaire"`, `"inconnu"` |
-| `prix_moyen` | Float | Prix moyen estimé en CFA |
-| `prix_min` | Float/null | Prix minimum (si trajets exacts/similaires trouvés) |
-| `prix_max` | Float/null | Prix maximum (si trajets exacts/similaires trouvés) |
-| `fiabilite` | Float | Score fiabilité 0.0-1.0 (0.5=faible, 0.75=moyenne, 0.95=haute) |
-| `message` | String | Description estimation en français |
-| `nb_trajets_utilises` | Integer/Null | Nombre de trajets BD utilisés (absent/0 pour inconnu) |
-| `details_trajet` | Object | Informations complètes trajet (départ, arrivée, distance, durée) |
-| `ajustements_appliques` | Object | Détails ajustements prix (congestion, météo, heure) |
-| `estimations_supplementaires` | Object | (Inconnu) Données ML : `ml_prediction`, `features_utilisees` |
-| `suggestions` | Array[String] | Conseils utilisateur |
+| Champ                         | Type          | Description                                                      |
+| ----------------------------- | ------------- | ---------------------------------------------------------------- |
+| `statut`                      | String        | Type de match : `"exact"`, `"similaire"`, `"inconnu"`            |
+| `prix_moyen`                  | Float         | Prix moyen estimé en CFA                                         |
+| `prix_min`                    | Float/null    | Prix minimum (si trajets exacts/similaires trouvés)              |
+| `prix_max`                    | Float/null    | Prix maximum (si trajets exacts/similaires trouvés)              |
+| `fiabilite`                   | Float         | Score fiabilité 0.0-1.0 (0.5=faible, 0.75=moyenne, 0.95=haute)   |
+| `message`                     | String        | Description estimation en français                               |
+| `nb_trajets_utilises`         | Integer/Null  | Nombre de trajets BD utilisés (absent/0 pour inconnu)            |
+| `details_trajet`              | Object        | Informations complètes trajet (départ, arrivée, distance, durée) |
+| `ajustements_appliques`       | Object        | Détails ajustements prix (congestion, météo, heure)              |
+| `estimations_supplementaires` | Object        | (Inconnu) Données ML : `ml_prediction`, `features_utilisees`     |
+| `suggestions`                 | Array[String] | Conseils utilisateur                                             |
 
 **Météo opposée & Heure opposée** :
+
 - L'API retourne **TOUJOURS** des estimations pour la météo actuelle **ET** la météo opposée
 - Exemple : Si requête avec `meteo=1` (pluie légère), la réponse inclut estimation pour `meteo=0` (soleil)
 - Idem pour heure : Si `heure="matin"` (jour), la réponse inclut estimation pour `"nuit"`
@@ -444,31 +454,39 @@ La réponse varie selon le **type de match** trouvé :
 #### Erreurs possibles
 
 **400 Bad Request - Paramètres invalides**
+
 ```json
 {
-    "depart": ["Ce champ est requis."],
-    "arrivee": ["Format coords invalide. Attendu {lat: X, lon: Y}."]
+  "depart": ["Ce champ est requis."],
+  "arrivee": ["Format coords invalide. Attendu {lat: X, lon: Y}."]
 }
 ```
 
 **400 Bad Request - Géolocalisation échouée**
+
 ```json
 {
-    "arrivee": ["Impossible de géolocaliser 'Carrefour XYZ'. Vérifiez l'orthographe ou fournissez les coordonnées."]
+  "arrivee": [
+    "Impossible de géolocaliser 'Carrefour XYZ'. Vérifiez l'orthographe ou fournissez les coordonnées."
+  ]
 }
 ```
 
 **400 Bad Request - Points identiques**
+
 ```json
 {
-    "non_field_errors": ["Les points de départ et d'arrivée doivent être différents."]
+  "non_field_errors": [
+    "Les points de départ et d'arrivée doivent être différents."
+  ]
 }
 ```
 
 **500 Internal Server Error - Mapbox indisponible**
+
 ```json
 {
-    "error": "Impossible de calculer la distance via Mapbox (NoRoute ou erreur API)"
+  "error": "Impossible de calculer la distance via Mapbox (NoRoute ou erreur API)"
 }
 ```
 
@@ -481,6 +499,7 @@ La réponse varie selon le **type de match** trouvé :
 #### Requête
 
 **Headers**
+
 ```http
 Authorization: ApiKey <uuid>
 ```
@@ -491,16 +510,16 @@ Authorization: ApiKey <uuid>
 GET /api/estimate/?depart_lat=3.8547&depart_lon=11.5021&arrivee_lat=3.8667&arrivee_lon=11.5174&heure=matin&meteo=1
 ```
 
-| Paramètre | Type | Obligatoire | Description |
-|-----------|------|-------------|-------------|
-| `depart_lat` | Float | ✅ Oui | Latitude départ |
-| `depart_lon` | Float | ✅ Oui | Longitude départ |
-| `arrivee_lat` | Float | ✅ Oui | Latitude arrivée |
-| `arrivee_lon` | Float | ✅ Oui | Longitude arrivée |
-| `heure` | String | ❌ Non | Tranche horaire |
-| `meteo` | Integer | ❌ Non | Code météo 0-3 |
-| `type_zone` | Integer | ❌ Non | Type zone 0-2 |
-| `congestion_user` | Integer | ❌ Non | Congestion 1-10 |
+| Paramètre         | Type    | Obligatoire | Description       |
+| ----------------- | ------- | ----------- | ----------------- |
+| `depart_lat`      | Float   | ✅ Oui      | Latitude départ   |
+| `depart_lon`      | Float   | ✅ Oui      | Longitude départ  |
+| `arrivee_lat`     | Float   | ✅ Oui      | Latitude arrivée  |
+| `arrivee_lon`     | Float   | ✅ Oui      | Longitude arrivée |
+| `heure`           | String  | ❌ Non      | Tranche horaire   |
+| `meteo`           | Integer | ❌ Non      | Code météo 0-3    |
+| `type_zone`       | Integer | ❌ Non      | Type zone 0-2     |
+| `congestion_user` | Integer | ❌ Non      | Congestion 1-10   |
 
 **Note** : Le GET ne supporte **QUE les coordonnées**, pas les noms de lieux (limitation URL encoding).
 
@@ -519,6 +538,7 @@ Identique au POST `/estimate/`.
 #### Requête
 
 **Headers**
+
 ```http
 Authorization: ApiKey <uuid>
 Content-Type: application/json
@@ -528,25 +548,25 @@ Content-Type: application/json
 
 ```json
 {
-    "point_depart": {
-        "coords_latitude": 3.8547,
-        "coords_longitude": 11.5021,
-        "label": "Polytechnique Yaoundé",
-        "quartier": "Ngoa-Ekelle",
-        "ville": "Yaoundé"
-    },
-    "point_arrivee": {
-        "coords_latitude": 3.8667,
-        "coords_longitude": 11.5174,
-        "label": "Carrefour Ekounou",
-        "quartier": "Ekounou",
-        "ville": "Yaoundé"
-    },
-    "prix": 250.0,
-    "heure": "matin",
-    "meteo": 1,
-    "type_zone": 0,
-    "congestion_user": 5
+  "point_depart": {
+    "coords_latitude": 3.8547,
+    "coords_longitude": 11.5021,
+    "label": "Polytechnique Yaoundé",
+    "quartier": "Ngoa-Ekelle",
+    "ville": "Yaoundé"
+  },
+  "point_arrivee": {
+    "coords_latitude": 3.8667,
+    "coords_longitude": 11.5174,
+    "label": "Carrefour Ekounou",
+    "quartier": "Ekounou",
+    "ville": "Yaoundé"
+  },
+  "prix": 250.0,
+  "heure": "matin",
+  "meteo": 1,
+  "type_zone": 0,
+  "congestion_user": 5
 }
 ```
 
@@ -554,30 +574,31 @@ Content-Type: application/json
 
 **Champs obligatoires** :
 
-| Paramètre | Type | Description | Validation |
-|-----------|------|-------------|-----------|
-| `point_depart` | Object | Point départ (nested) | - |
-| `point_depart.coords_latitude` | Float | Latitude départ | -90 à 90 |
-| `point_depart.coords_longitude` | Float | Longitude départ | -180 à 180 |
-| `point_arrivee` | Object | Point arrivée (nested) | - |
-| `point_arrivee.coords_latitude` | Float | Latitude arrivée | -90 à 90 |
-| `point_arrivee.coords_longitude` | Float | Longitude arrivée | -180 à 180 |
-| `prix` | Float | Prix payé en CFA | > 0 |
+| Paramètre                        | Type   | Description            | Validation |
+| -------------------------------- | ------ | ---------------------- | ---------- |
+| `point_depart`                   | Object | Point départ (nested)  | -          |
+| `point_depart.coords_latitude`   | Float  | Latitude départ        | -90 à 90   |
+| `point_depart.coords_longitude`  | Float  | Longitude départ       | -180 à 180 |
+| `point_arrivee`                  | Object | Point arrivée (nested) | -          |
+| `point_arrivee.coords_latitude`  | Float  | Latitude arrivée       | -90 à 90   |
+| `point_arrivee.coords_longitude` | Float  | Longitude arrivée      | -180 à 180 |
+| `prix`                           | Float  | Prix payé en CFA       | > 0        |
 
 **Champs optionnels (enrichissement auto si manquants)** :
 
-| Paramètre | Type | Description | Fallback si null |
-|-----------|------|-------------|------------------|
-| `point_depart.label` | String | Nom POI départ | Reverse-geocode via Nominatim |
-| `point_depart.quartier` | String | Quartier départ | Extrait via Nominatim |
-| `point_depart.ville` | String | Ville départ | Extrait via Nominatim |
-| `point_arrivee.*` | String | Idem pour arrivée | Idem |
-| `heure` | String | Tranche horaire | Détectée via `datetime.now()` |
-| `meteo` | Integer | Code météo 0-3 | Appelé OpenMeteo API |
-| `type_zone` | Integer | Type zone 0-2 | Déduit via classes routes Mapbox |
-| `congestion_user` | Integer | Embouteillages 1-10 | null (optionnel user) |
+| Paramètre               | Type    | Description         | Fallback si null                 |
+| ----------------------- | ------- | ------------------- | -------------------------------- |
+| `point_depart.label`    | String  | Nom POI départ      | Reverse-geocode via Nominatim    |
+| `point_depart.quartier` | String  | Quartier départ     | Extrait via Nominatim            |
+| `point_depart.ville`    | String  | Ville départ        | Extrait via Nominatim            |
+| `point_arrivee.*`       | String  | Idem pour arrivée   | Idem                             |
+| `heure`                 | String  | Tranche horaire     | Détectée via `datetime.now()`    |
+| `meteo`                 | Integer | Code météo 0-3      | Appelé OpenMeteo API             |
+| `type_zone`             | Integer | Type zone 0-2       | Déduit via classes routes Mapbox |
+| `congestion_user`       | Integer | Embouteillages 1-10 | null (optionnel user)            |
 
 **Enrichissements automatiques (calculés par API)** :
+
 - `distance` : Calculée via **Mapbox Directions API** (distance routière réelle en mètres)
 - `duree_estimee` : Durée trajet avec trafic (secondes)
 - `congestion_moyen` : Moyenne congestion Mapbox (0-100) ou fallback 50.0 si "unknown"
@@ -590,64 +611,69 @@ Content-Type: application/json
 
 ```json
 {
-    "id": 42,
-    "point_depart": {
-        "id": 10,
-        "coords_latitude": 3.8547,
-        "coords_longitude": 11.5021,
-        "label": "Polytechnique Yaoundé",
-        "quartier": "Ngoa-Ekelle",
-        "ville": "Yaoundé",
-        "arrondissement": "Yaoundé II",
-        "departement": "Mfoundi"
-    },
-    "point_arrivee": {
-        "id": 11,
-        "coords_latitude": 3.8667,
-        "coords_longitude": 11.5174,
-        "label": "Carrefour Ekounou",
-        "quartier": "Ekounou",
-        "ville": "Yaoundé",
-        "arrondissement": "Yaoundé II",
-        "departement": "Mfoundi"
-    },
-    "distance": 5212.176,
-    "prix": 250.0,
-    "heure": "matin",
-    "meteo": 1,
-    "type_zone": 0,
-    "congestion_user": 5,
-    "congestion_moyen": 45.3,
-    "sinuosite_indice": 2.48,
-    "route_classe_dominante": "primary",
-    "nb_virages": 7,
-    "force_virages": 71.8,
-    "duree_estimee": 730.888,
-    "date_ajout": "2025-11-05T14:30:00Z",
-    "updated_at": "2025-11-05T14:30:00Z"
+  "id": 42,
+  "point_depart": {
+    "id": 10,
+    "coords_latitude": 3.8547,
+    "coords_longitude": 11.5021,
+    "label": "Polytechnique Yaoundé",
+    "quartier": "Ngoa-Ekelle",
+    "ville": "Yaoundé",
+    "arrondissement": "Yaoundé II",
+    "departement": "Mfoundi"
+  },
+  "point_arrivee": {
+    "id": 11,
+    "coords_latitude": 3.8667,
+    "coords_longitude": 11.5174,
+    "label": "Carrefour Ekounou",
+    "quartier": "Ekounou",
+    "ville": "Yaoundé",
+    "arrondissement": "Yaoundé II",
+    "departement": "Mfoundi"
+  },
+  "distance": 5212.176,
+  "prix": 250.0,
+  "heure": "matin",
+  "meteo": 1,
+  "type_zone": 0,
+  "congestion_user": 5,
+  "congestion_moyen": 45.3,
+  "sinuosite_indice": 2.48,
+  "route_classe_dominante": "primary",
+  "nb_virages": 7,
+  "force_virages": 71.8,
+  "duree_estimee": 730.888,
+  "date_ajout": "2025-11-05T14:30:00Z",
+  "updated_at": "2025-11-05T14:30:00Z"
 }
 ```
 
 #### Erreurs possibles
 
 **400 Bad Request - Prix invalide**
+
 ```json
 {
-    "prix": ["Le prix doit être strictement positif."]
+  "prix": ["Le prix doit être strictement positif."]
 }
 ```
 
 **400 Bad Request - Points identiques**
+
 ```json
 {
-    "non_field_errors": ["Les points de départ et d'arrivée doivent être différents."]
+  "non_field_errors": [
+    "Les points de départ et d'arrivée doivent être différents."
+  ]
 }
 ```
 
 **500 Internal Server Error - Mapbox échec**
+
 ```json
 {
-    "error": "Impossible de calculer la distance via Mapbox (NoRoute ou erreur API)"
+  "error": "Impossible de calculer la distance via Mapbox (NoRoute ou erreur API)"
 }
 ```
 
@@ -660,6 +686,7 @@ Content-Type: application/json
 #### Requête
 
 **Headers**
+
 ```http
 Authorization: ApiKey <uuid>
 ```
@@ -670,16 +697,16 @@ Authorization: ApiKey <uuid>
 GET /api/trajets/?heure=matin&meteo=1&quartier_depart=Ekounou&limit=20&offset=0
 ```
 
-| Paramètre | Type | Description |
-|-----------|------|-------------|
-| `heure` | String | Filtrer par tranche horaire |
-| `meteo` | Integer | Filtrer par code météo 0-3 |
-| `type_zone` | Integer | Filtrer par type zone 0-2 |
-| `route_classe_dominante` | String | Filtrer par classe route |
-| `search` | String | Recherche textuelle (labels départ/arrivée) |
-| `ordering` | String | Tri (`-date_ajout`, `prix`, `-distance`) |
-| `limit` | Integer | Pagination : nombre résultats (défaut 20) |
-| `offset` | Integer | Pagination : décalage (défaut 0) |
+| Paramètre                | Type    | Description                                 |
+| ------------------------ | ------- | ------------------------------------------- |
+| `heure`                  | String  | Filtrer par tranche horaire                 |
+| `meteo`                  | Integer | Filtrer par code météo 0-3                  |
+| `type_zone`              | Integer | Filtrer par type zone 0-2                   |
+| `route_classe_dominante` | String  | Filtrer par classe route                    |
+| `search`                 | String  | Recherche textuelle (labels départ/arrivée) |
+| `ordering`               | String  | Tri (`-date_ajout`, `prix`, `-distance`)    |
+| `limit`                  | Integer | Pagination : nombre résultats (défaut 20)   |
+| `offset`                 | Integer | Pagination : décalage (défaut 0)            |
 
 #### Réponse réussie (200 OK)
 
@@ -719,6 +746,7 @@ GET /api/trajets/42/
 ```
 
 **Headers**
+
 ```http
 Authorization: ApiKey <uuid>
 ```
@@ -759,9 +787,10 @@ Authorization: ApiKey <uuid>
 #### Erreurs possibles
 
 **404 Not Found**
+
 ```json
 {
-    "detail": "Non trouvé."
+  "detail": "Non trouvé."
 }
 ```
 
@@ -778,6 +807,7 @@ GET /api/trajets/stats/
 ```
 
 **Headers**
+
 ```http
 Authorization: ApiKey <uuid>
 ```
@@ -786,45 +816,45 @@ Authorization: ApiKey <uuid>
 
 ```json
 {
-    "total_trajets": 150,
-    "prix": {
-        "moyen": 275.5,
-        "min": 100.0,
-        "max": 600.0,
-        "mediane": 250.0
-    },
-    "distance": {
-        "moyenne": 4850.3,
-        "min": 500.0,
-        "max": 15000.0
-    },
-    "repartition_heure": {
-        "matin": 50,
-        "apres-midi": 45,
-        "soir": 35,
-        "nuit": 20
-    },
-    "repartition_meteo": {
-        "0": 80,
-        "1": 40,
-        "2": 20,
-        "3": 10
-    },
-    "repartition_zone": {
-        "0": 100,
-        "1": 30,
-        "2": 20
-    },
-    "top_quartiers_depart": [
-        {"quartier": "Ekounou", "count": 25},
-        {"quartier": "Ngoa-Ekelle", "count": 20},
-        {"quartier": "Bastos", "count": 15}
-    ],
-    "top_quartiers_arrivee": [
-        {"quartier": "Centre-ville", "count": 30},
-        {"quartier": "Ekounou", "count": 22},
-        {"quartier": "Melen", "count": 18}
-    ]
+  "total_trajets": 150,
+  "prix": {
+    "moyen": 275.5,
+    "min": 100.0,
+    "max": 600.0,
+    "mediane": 250.0
+  },
+  "distance": {
+    "moyenne": 4850.3,
+    "min": 500.0,
+    "max": 15000.0
+  },
+  "repartition_heure": {
+    "matin": 50,
+    "apres-midi": 45,
+    "soir": 35,
+    "nuit": 20
+  },
+  "repartition_meteo": {
+    "0": 80,
+    "1": 40,
+    "2": 20,
+    "3": 10
+  },
+  "repartition_zone": {
+    "0": 100,
+    "1": 30,
+    "2": 20
+  },
+  "top_quartiers_depart": [
+    { "quartier": "Ekounou", "count": 25 },
+    { "quartier": "Ngoa-Ekelle", "count": 20 },
+    { "quartier": "Bastos", "count": 15 }
+  ],
+  "top_quartiers_arrivee": [
+    { "quartier": "Centre-ville", "count": 30 },
+    { "quartier": "Ekounou", "count": 22 },
+    { "quartier": "Melen", "count": 18 }
+  ]
 }
 ```
 
@@ -837,6 +867,7 @@ Authorization: ApiKey <uuid>
 #### Requête
 
 **Headers**
+
 ```http
 Authorization: ApiKey <uuid>
 ```
@@ -847,15 +878,15 @@ Authorization: ApiKey <uuid>
 GET /api/points/?ville=Yaoundé&quartier=Ekounou&search=Carrefour&limit=20&offset=0
 ```
 
-| Paramètre | Type | Description |
-|-----------|------|-------------|
-| `ville` | String | Filtrer par ville |
-| `quartier` | String | Filtrer par quartier |
-| `arrondissement` | String | Filtrer par arrondissement |
-| `search` | String | Recherche textuelle (label, quartier, ville) |
-| `ordering` | String | Tri (`-created_at`, `label`) |
-| `limit` | Integer | Pagination : nombre résultats |
-| `offset` | Integer | Pagination : décalage |
+| Paramètre        | Type    | Description                                  |
+| ---------------- | ------- | -------------------------------------------- |
+| `ville`          | String  | Filtrer par ville                            |
+| `quartier`       | String  | Filtrer par quartier                         |
+| `arrondissement` | String  | Filtrer par arrondissement                   |
+| `search`         | String  | Recherche textuelle (label, quartier, ville) |
+| `ordering`       | String  | Tri (`-created_at`, `label`)                 |
+| `limit`          | Integer | Pagination : nombre résultats                |
+| `offset`         | Integer | Pagination : décalage                        |
 
 #### Réponse réussie (200 OK)
 
@@ -894,6 +925,7 @@ GET /api/points/10/
 ```
 
 **Headers**
+
 ```http
 Authorization: ApiKey <uuid>
 ```
@@ -902,16 +934,16 @@ Authorization: ApiKey <uuid>
 
 ```json
 {
-    "id": 10,
-    "coords_latitude": 3.8547,
-    "coords_longitude": 11.5021,
-    "label": "Polytechnique Yaoundé",
-    "quartier": "Ngoa-Ekelle",
-    "ville": "Yaoundé",
-    "arrondissement": "Yaoundé II",
-    "departement": "Mfoundi",
-    "created_at": "2025-11-05T10:00:00Z",
-    "updated_at": "2025-11-05T10:00:00Z"
+  "id": 10,
+  "coords_latitude": 3.8547,
+  "coords_longitude": 11.5021,
+  "label": "Polytechnique Yaoundé",
+  "quartier": "Ngoa-Ekelle",
+  "ville": "Yaoundé",
+  "arrondissement": "Yaoundé II",
+  "departement": "Mfoundi",
+  "created_at": "2025-11-05T10:00:00Z",
+  "updated_at": "2025-11-05T10:00:00Z"
 }
 ```
 
@@ -933,42 +965,40 @@ GET /api/health/
 
 ```json
 {
-    "status": "healthy",
-    "timestamp": "2025-11-05T14:30:00Z",
-    "version": "1.0.0",
-    "checks": {
-        "database": "ok",
-        "redis": "ok",
-        "mapbox": "ok",
-        "nominatim": "ok",
-        "openmeteo": "ok"
-    },
-    "stats": {
-        "total_trajets": 150,
-        "total_points": 75,
-        "total_api_keys": 5
-    }
+  "status": "healthy",
+  "timestamp": "2025-11-05T14:30:00Z",
+  "version": "1.0.0",
+  "checks": {
+    "database": "ok",
+    "redis": "ok",
+    "mapbox": "ok",
+    "nominatim": "ok",
+    "openmeteo": "ok"
+  },
+  "stats": {
+    "total_trajets": 150,
+    "total_points": 75,
+    "total_api_keys": 5
+  }
 }
 ```
 
 #### Erreurs possibles
 
 **503 Service Unavailable**
+
 ```json
 {
-    "status": "unhealthy",
-    "timestamp": "2025-11-05T14:30:00Z",
-    "checks": {
-        "database": "error",
-        "redis": "ok",
-        "mapbox": "timeout",
-        "nominatim": "ok",
-        "openmeteo": "ok"
-    },
-    "errors": [
-        "Database connection failed",
-        "Mapbox API timeout"
-    ]
+  "status": "unhealthy",
+  "timestamp": "2025-11-05T14:30:00Z",
+  "checks": {
+    "database": "error",
+    "redis": "ok",
+    "mapbox": "timeout",
+    "nominatim": "ok",
+    "openmeteo": "ok"
+  },
+  "errors": ["Database connection failed", "Mapbox API timeout"]
 }
 ```
 
@@ -980,31 +1010,31 @@ GET /api/health/
 
 ```json
 {
-    "id": 10,
-    "coords_latitude": 3.8547,
-    "coords_longitude": 11.5021,
-    "label": "Polytechnique Yaoundé",
-    "quartier": "Ngoa-Ekelle",
-    "ville": "Yaoundé",
-    "arrondissement": "Yaoundé II",
-    "departement": "Mfoundi",
-    "created_at": "2025-11-05T10:00:00Z",
-    "updated_at": "2025-11-05T10:00:00Z"
+  "id": 10,
+  "coords_latitude": 3.8547,
+  "coords_longitude": 11.5021,
+  "label": "Polytechnique Yaoundé",
+  "quartier": "Ngoa-Ekelle",
+  "ville": "Yaoundé",
+  "arrondissement": "Yaoundé II",
+  "departement": "Mfoundi",
+  "created_at": "2025-11-05T10:00:00Z",
+  "updated_at": "2025-11-05T10:00:00Z"
 }
 ```
 
-| Champ | Type | Description |
-|-------|------|-------------|
-| `id` | Integer | ID unique point |
-| `coords_latitude` | Float | Latitude décimale (-90 à 90) |
-| `coords_longitude` | Float | Longitude décimale (-180 à 180) |
-| `label` | String | Nom POI (ex. "Carrefour Ekounou") |
-| `quartier` | String/null | Quartier/sous-quartier |
-| `ville` | String/null | Ville (ex. "Yaoundé") |
-| `arrondissement` | String/null | Commune/arrondissement |
-| `departement` | String/null | Département administratif |
-| `created_at` | DateTime | Date création ISO 8601 |
-| `updated_at` | DateTime | Date dernière modification |
+| Champ              | Type        | Description                       |
+| ------------------ | ----------- | --------------------------------- |
+| `id`               | Integer     | ID unique point                   |
+| `coords_latitude`  | Float       | Latitude décimale (-90 à 90)      |
+| `coords_longitude` | Float       | Longitude décimale (-180 à 180)   |
+| `label`            | String      | Nom POI (ex. "Carrefour Ekounou") |
+| `quartier`         | String/null | Quartier/sous-quartier            |
+| `ville`            | String/null | Ville (ex. "Yaoundé")             |
+| `arrondissement`   | String/null | Commune/arrondissement            |
+| `departement`      | String/null | Département administratif         |
+| `created_at`       | DateTime    | Date création ISO 8601            |
+| `updated_at`       | DateTime    | Date dernière modification        |
 
 ### Trajet
 
@@ -1030,39 +1060,39 @@ GET /api/health/
 }
 ```
 
-| Champ | Type | Description |
-|-------|------|-------------|
-| `id` | Integer | ID unique trajet |
-| `point_depart` | Object | Point départ (nested, voir Point) |
-| `point_arrivee` | Object | Point arrivée (nested) |
-| `distance` | Float | Distance routière en mètres (Mapbox) |
-| `prix` | Float | Prix payé en CFA |
-| `heure` | String/null | Tranche horaire : `"matin"`, `"apres-midi"`, `"soir"`, `"nuit"` |
-| `meteo` | Integer/null | Code météo : `0` (soleil), `1` (pluie légère), `2` (pluie forte), `3` (orage) |
-| `type_zone` | Integer/null | Type zone : `0` (urbaine), `1` (mixte), `2` (rurale) |
-| `congestion_user` | Integer/null | Embouteillages ressentis (1-10 scale) |
-| `congestion_moyen` | Float/null | Congestion moyenne Mapbox (0-100) |
-| `sinuosite_indice` | Float/null | Indice sinuosité route (≥1.0) |
-| `route_classe_dominante` | String/null | Classe route principale : `"motorway"`, `"primary"`, `"secondary"`, `"tertiary"`, etc. |
-| `nb_virages` | Integer/null | Nombre de virages comptabilisés |
-| `force_virages` | Float/null | Force virages (°/km) |
-| `duree_estimee` | Float/null | Durée trajet en secondes (Mapbox avec trafic) |
-| `date_ajout` | DateTime | Date création ISO 8601 |
-| `updated_at` | DateTime | Date modification |
+| Champ                    | Type         | Description                                                                            |
+| ------------------------ | ------------ | -------------------------------------------------------------------------------------- |
+| `id`                     | Integer      | ID unique trajet                                                                       |
+| `point_depart`           | Object       | Point départ (nested, voir Point)                                                      |
+| `point_arrivee`          | Object       | Point arrivée (nested)                                                                 |
+| `distance`               | Float        | Distance routière en mètres (Mapbox)                                                   |
+| `prix`                   | Float        | Prix payé en CFA                                                                       |
+| `heure`                  | String/null  | Tranche horaire : `"matin"`, `"apres-midi"`, `"soir"`, `"nuit"`                        |
+| `meteo`                  | Integer/null | Code météo : `0` (soleil), `1` (pluie légère), `2` (pluie forte), `3` (orage)          |
+| `type_zone`              | Integer/null | Type zone : `0` (urbaine), `1` (mixte), `2` (rurale)                                   |
+| `congestion_user`        | Integer/null | Embouteillages ressentis (1-10 scale)                                                  |
+| `congestion_moyen`       | Float/null   | Congestion moyenne Mapbox (0-100)                                                      |
+| `sinuosite_indice`       | Float/null   | Indice sinuosité route (≥1.0)                                                          |
+| `route_classe_dominante` | String/null  | Classe route principale : `"motorway"`, `"primary"`, `"secondary"`, `"tertiary"`, etc. |
+| `nb_virages`             | Integer/null | Nombre de virages comptabilisés                                                        |
+| `force_virages`          | Float/null   | Force virages (°/km)                                                                   |
+| `duree_estimee`          | Float/null   | Durée trajet en secondes (Mapbox avec trafic)                                          |
+| `date_ajout`             | DateTime     | Date création ISO 8601                                                                 |
+| `updated_at`             | DateTime     | Date modification                                                                      |
 
 ---
 
 ## ⚠️ Codes d'erreur
 
-| Code HTTP | Signification | Exemple |
-|-----------|---------------|---------|
-| **200** | ✅ Succès | Estimation réussie |
-| **201** | ✅ Créé | Trajet ajouté |
-| **400** | ❌ Requête invalide | Paramètres manquants/invalides |
-| **401** | ❌ Non authentifié | Clé API manquante ou invalide |
-| **404** | ❌ Non trouvé | Trajet ID inexistant |
-| **500** | ❌ Erreur serveur | Mapbox indisponible, erreur BD |
-| **503** | ❌ Service indisponible | Health check échec |
+| Code HTTP | Signification           | Exemple                        |
+| --------- | ----------------------- | ------------------------------ |
+| **200**   | ✅ Succès               | Estimation réussie             |
+| **201**   | ✅ Créé                 | Trajet ajouté                  |
+| **400**   | ❌ Requête invalide     | Paramètres manquants/invalides |
+| **401**   | ❌ Non authentifié      | Clé API manquante ou invalide  |
+| **404**   | ❌ Non trouvé           | Trajet ID inexistant           |
+| **500**   | ❌ Erreur serveur       | Mapbox indisponible, erreur BD |
+| **503**   | ❌ Service indisponible | Health check échec             |
 
 ---
 
@@ -1109,35 +1139,35 @@ const API_KEY = "550e8400-e29b-41d4-a716-446655440000";
 const BASE_URL = "http://localhost:8000/api";
 
 const headers = {
-    'Authorization': `ApiKey ${API_KEY}`,
-    'Content-Type': 'application/json'
+  Authorization: `ApiKey ${API_KEY}`,
+  "Content-Type": "application/json",
 };
 
 const data = {
-    depart: "Polytechnique Yaoundé",
-    arrivee: "Carrefour Ekounou",
-    heure: null,  // Auto-détecté
-    meteo: null   // Auto-détecté via OpenMeteo
+  depart: "Polytechnique Yaoundé",
+  arrivee: "Carrefour Ekounou",
+  heure: null, // Auto-détecté
+  meteo: null, // Auto-détecté via OpenMeteo
 };
 
 fetch(`${BASE_URL}/estimate/`, {
-    method: 'POST',
-    headers: headers,
-    body: JSON.stringify(data)
+  method: "POST",
+  headers: headers,
+  body: JSON.stringify(data),
 })
-.then(response => response.json())
-.then(result => {
+  .then((response) => response.json())
+  .then((result) => {
     console.log(`Statut : ${result.statut}`);
     console.log(`Prix moyen : ${result.prix_moyen} CFA`);
     console.log(`Fiabilité : ${(result.fiabilite * 100).toFixed(0)}%`);
-    
+
     // Afficher estimation météo opposée
     if (result.ajustements_appliques.meteo_opposee) {
-        const meteo_opp = result.ajustements_appliques.meteo_opposee;
-        console.log(`Si météo ${meteo_opp.label} : ${meteo_opp.prix_estime} CFA`);
+      const meteo_opp = result.ajustements_appliques.meteo_opposee;
+      console.log(`Si météo ${meteo_opp.label} : ${meteo_opp.prix_estime} CFA`);
     }
-})
-.catch(error => console.error('Erreur :', error));
+  })
+  .catch((error) => console.error("Erreur :", error));
 ```
 
 ### Exemple 3 : Ajouter un trajet (curl)
@@ -1198,39 +1228,45 @@ curl http://localhost:8000/api/health/
 
 ### Limites par défaut
 
-| Limite | Valeur | Description |
-|--------|--------|-------------|
-| **Rate limit** | 100 req/min | Maximum requêtes par minute par clé API |
-| **Pagination** | 20 résultats | Pagination par défaut (max 100) |
-| **Timeout** | 30 secondes | Timeout requêtes externes (Mapbox, Nominatim) |
-| **Coords max** | 25 points | Mapbox Matrix API (limitation gratuite) |
+| Limite         | Valeur       | Description                                   |
+| -------------- | ------------ | --------------------------------------------- |
+| **Rate limit** | 100 req/min  | Maximum requêtes par minute par clé API       |
+| **Pagination** | 20 résultats | Pagination par défaut (max 100)               |
+| **Timeout**    | 30 secondes  | Timeout requêtes externes (Mapbox, Nominatim) |
+| **Coords max** | 25 points    | Mapbox Matrix API (limitation gratuite)       |
 
 ### Quotas APIs externes
 
 **Mapbox (Gratuit)** :
+
 - Directions : 100 000 req/mois
 - Matrix : 100 000 req/mois
 - Isochrone : 100 000 req/mois
 - Geocoding : 100 000 req/mois
 
 **Nominatim (Gratuit)** :
+
 - Rate limit : 1 req/seconde (respecté via cache)
 
 **OpenMeteo (Gratuit)** :
+
 - Illimité (cache 15 min)
 
 ### Optimisations implémentées
 
 ✅ **Caching agressif** :
+
 - Mapbox : 1h TTL (trafic dynamique)
 - Nominatim : 24h TTL (adresses stables)
 - OpenMeteo : 15 min TTL (météo)
 - Isochrones : 24h TTL (topologie stable)
 
 ✅ **Batch requests** :
+
 - Matrix API utilisée pour trajets similaires (1 req au lieu de N)
 
 ✅ **Fallbacks** :
+
 - Si Mapbox échoue -> cercles Haversine
 - Si Nominatim échoue -> labels génériques
 
@@ -1238,14 +1274,14 @@ curl http://localhost:8000/api/health/
 
 ## Support & Ressources
 
-**Contact** : donfackarthur750@gmail.com 
+**Contact** : donfackarthur750@gmail.com
 **Documentation Mapbox** : https://docs.mapbox.com/api/  
 **Documentation OpenMeteo** : https://open-meteo.com/en/docs  
-**Documentation Nominatim** : https://nominatim.org/release-docs/latest/  
+**Documentation Nominatim** : https://nominatim.org/release-docs/latest/
 
 ---
 
-##  Guide d'Implémentation ML pour l'Équipe
+## Guide d'Implémentation ML pour l'Équipe
 
 État actuel : le backend charge un **RandomForestClassifier** sérialisé (`core/ml/models/classifier_model.pkl`) via `TaxiFareClassifierPredictor`. Le fallback "inconnu" utilise uniquement ce modèle ML (classification 18 classes) et expose les features utilisées (`features_utilisees`). Il n'y a plus d'estimations distance/zone/officielles dans la réponse.
 
@@ -1260,7 +1296,7 @@ Les sections ci-dessous décrivent l'architecture cible ; adaptez-les si vous mo
 ```python
 # Constante définie dans settings.py
 PRIX_CLASSES_CFA = [
-    100, 150, 200, 250, 300, 350, 400, 450, 500, 
+    100, 150, 200, 250, 300, 350, 400, 450, 500,
     600, 700, 800, 900, 1000, 1200, 1500, 1700, 2000
 ]
 # 18 classes au total
@@ -1271,12 +1307,14 @@ PRIX_CLASSES_CFA = [
 
 **Conséquences pour l'implémentation** :
 
-1. **Fonction `check_similar_match()`** : 
+1. **Fonction `check_similar_match()`** :
+
    - Tous prix retournés (prix_moyen, prix_min, prix_max) doivent être arrondis aux classes valides
    - Helper `_arrondir_prix_vers_classe(prix)` créée pour mapper float -> classe proche
    - Ex: 247.8 CFA -> 250 CFA, 312.5 -> 300 CFA
 
 2. **Fonction `predict_prix_ml()`** :
+
    - Modèle = **Classification Multiclasse** (18 classes), PAS régression
    - Return type : `int` (classe valide), pas `float`
    - Métriques : accuracy, f1-score, tolérance ±1 classe (PAS R²/RMSE)
@@ -1302,13 +1340,13 @@ PRIX_CLASSES_CFA = [
    │   └─ Match trouvé avec heure/météo différentes -> Prix ajusté + note
    │
    └─ Aucun match -> Passer à fallback_inconnu()
-   
+
 2. fallback_inconnu()           ❌ À IMPLÉMENTER - ESTIMATIONS MULTIPLES
    └─ Retourne 4 estimations (distance-based, standardisé, zone-based, ML)
-   
+
 3. predict_prix_ml()           ❌ À IMPLÉMENTER - MODÈLE ML
    └─ Appelé par fallback_inconnu() pour estimation ML
-   
+
 4. train_ml_model()            ❌ À IMPLÉMENTER - ENTRAÎNEMENT (Celery task)
    └─ Entraîne modèle ML sur données BD accumulées
 ```
@@ -1324,6 +1362,7 @@ PRIX_CLASSES_CFA = [
 **Localisation** : `core/views.py`, lignes ~400-700 (voir docstring détaillée)
 
 **Signature** :
+
 ```python
 def check_similar_match(
     depart_coords: List[float],
@@ -1398,11 +1437,11 @@ try:
         contours_minutes=[2],
         profile='driving-traffic'
     )
-    
+
     # Convertir GeoJSON en polygone Shapely pour tests containment
     from shapely.geometry import shape, Point as ShapelyPoint
     polygon_depart_etroit = shape(isochrone_depart_etroit['features'][0]['geometry'])
-    
+
 except Exception as e:
     # Fallback cercles Haversine si Mapbox échoue (routes manquantes Cameroun)
     logger.warning(f"Isochrone Mapbox 2min échoué pour départ {depart_coords}: {e}")
@@ -1431,7 +1470,7 @@ trajets_niveau1 = []
 for trajet in trajets_candidats:
     pt_depart_bd = (trajet.point_depart.coords_latitude, trajet.point_depart.coords_longitude)
     pt_arrivee_bd = (trajet.point_arrivee.coords_latitude, trajet.point_arrivee.coords_longitude)
-    
+
     # Vérifier départ : Isochrone OU cercle 50m
     if polygon_depart_etroit is not None:
         # Méthode 1 : Isochrone Mapbox (préférée)
@@ -1441,7 +1480,7 @@ for trajet in trajets_candidats:
         # Méthode 2 : Cercle Haversine 50m fallback
         dist_depart = haversine_distance(depart_coords, pt_depart_bd)  # mètres
         depart_match = (dist_depart <= settings.CIRCLE_RADIUS_ETROIT_M)  # 50m
-    
+
     # Vérifier arrivée : Idem
     if polygon_arrivee_etroit is not None:
         shapely_pt_arrivee = ShapelyPoint(pt_arrivee_bd[1], pt_arrivee_bd[0])
@@ -1449,7 +1488,7 @@ for trajet in trajets_candidats:
     else:
         dist_arrivee = haversine_distance(arrivee_coords, pt_arrivee_bd)
         arrivee_match = (dist_arrivee <= settings.CIRCLE_RADIUS_ETROIT_M)
-    
+
     # Si DÉPART + ARRIVÉE dans périmètre étroit : MATCH NIVEAU 1 ✓
     if depart_match and arrivee_match:
         # Vérifier distance routière ±10% (tolérance petite pour niveau étroit)
@@ -1464,7 +1503,7 @@ if trajets_niveau1:
     prix_moyen = sum(t.prix for t in trajets_niveau1) / len(trajets_niveau1)
     prix_min = min(t.prix for t in trajets_niveau1)
     prix_max = max(t.prix for t in trajets_niveau1)
-    
+
     return {
         'statut': 'similaire_etroit',
         'prix_moyen': round(prix_moyen, 2),
@@ -1538,7 +1577,7 @@ trajets_niveau2 = []
 for trajet in trajets_candidats:
     pt_depart_bd = (trajet.point_depart.coords_latitude, trajet.point_depart.coords_longitude)
     pt_arrivee_bd = (trajet.point_arrivee.coords_latitude, trajet.point_arrivee.coords_longitude)
-    
+
     # Isochrone 5min OU cercle 150m
     if polygon_depart_elargi is not None:
         shapely_pt_depart = ShapelyPoint(pt_depart_bd[1], pt_depart_bd[0])
@@ -1546,26 +1585,26 @@ for trajet in trajets_candidats:
     else:
         dist_depart = haversine_distance(depart_coords, pt_depart_bd)
         depart_match = (dist_depart <= settings.CIRCLE_RADIUS_ELARGI_M)  # 150m
-    
+
     if polygon_arrivee_elargi is not None:
         shapely_pt_arrivee = ShapelyPoint(pt_arrivee_bd[1], pt_arrivee_bd[0])
         arrivee_match = polygon_arrivee_elargi.contains(shapely_pt_arrivee)
     else:
         dist_arrivee = haversine_distance(arrivee_coords, pt_arrivee_bd)
         arrivee_match = (dist_arrivee <= settings.CIRCLE_RADIUS_ELARGI_M)
-    
+
     if depart_match and arrivee_match:
         trajets_niveau2.append(trajet)
 
 if trajets_niveau2:
     # MATCH ÉLARGI TROUVÉ -> Calculer ajustements prix
-    
+
     # Calculer distances extra via Mapbox Matrix API
     coords_depart_candidats = [depart_coords] + [
-        (t.point_depart.coords_latitude, t.point_depart.coords_longitude) 
+        (t.point_depart.coords_latitude, t.point_depart.coords_longitude)
         for t in trajets_niveau2
     ]
-    
+
     try:
         matrix_depart = mapbox_client.get_matrix(
             coordinates=coords_depart_candidats,
@@ -1580,13 +1619,13 @@ if trajets_niveau2:
             haversine_distance(depart_coords, (t.point_depart.coords_latitude, t.point_depart.coords_longitude))
             for t in trajets_niveau2
         ]
-    
+
     # Idem pour arrivée
     coords_arrivee_candidats = [arrivee_coords] + [
         (t.point_arrivee.coords_latitude, t.point_arrivee.coords_longitude)
         for t in trajets_niveau2
     ]
-    
+
     try:
         matrix_arrivee = mapbox_client.get_matrix(
             coordinates=coords_arrivee_candidats,
@@ -1600,33 +1639,33 @@ if trajets_niveau2:
             haversine_distance(arrivee_coords, (t.point_arrivee.coords_latitude, t.point_arrivee.coords_longitude))
             for t in trajets_niveau2
         ]
-    
+
     # Calculer ajustements pour chaque trajet
     trajets_avec_ajustements = []
-    
+
     for i, trajet in enumerate(trajets_niveau2):
         distance_extra_total = distances_extra_depart[i] + distances_extra_arrivee[i]  # mètres
         distance_extra_km = distance_extra_total / 1000
-        
+
         # Ajustement 1 : Distance extra
         ajust_distance_cfa = distance_extra_km * settings.ADJUSTMENT_PRIX_PAR_KM  # Ex : 50 CFA/km
-        
+
         # Ajustement 2 : Congestion différente (si user fournit congestion_user)
         ajust_congestion_pourcent = 0
         if congestion_user and trajet.congestion_moyen:
             delta_congestion = (congestion_user * 10) - trajet.congestion_moyen  # user 1-10 -> 0-100
             if delta_congestion > 20:  # Si >20 points de congestion extra
                 ajust_congestion_pourcent = settings.ADJUSTMENT_CONGESTION_POURCENT  # +10%
-        
+
         # Ajustement 3 : Sinuosité (si trajet BD tortueux)
         ajust_sinuosite_cfa = 0
         if trajet.sinuosite_indice and trajet.sinuosite_indice > 1.5:
             ajust_sinuosite_cfa = settings.ADJUSTMENT_SINUOSITE_CFA  # +20 CFA si sinueux
-        
+
         # Calcul prix ajusté
         prix_base = trajet.prix
         prix_ajuste = (prix_base + ajust_distance_cfa + ajust_sinuosite_cfa) * (1 + ajust_congestion_pourcent / 100)
-        
+
         trajets_avec_ajustements.append({
             'trajet': trajet,
             'prix_ajuste': prix_ajuste,
@@ -1638,15 +1677,15 @@ if trajets_niveau2:
                 'facteur_ajustement_total': round(prix_ajuste / prix_base, 2)
             }
         })
-    
+
     # Trier par ajustement croissant (plus proches d'abord)
     trajets_avec_ajustements.sort(key=lambda x: x['ajustements']['facteur_ajustement_total'])
-    
+
     # Moyennes prix ajustés
     prix_moyen = sum(t['prix_ajuste'] for t in trajets_avec_ajustements) / len(trajets_avec_ajustements)
     prix_min = min(t['prix_ajuste'] for t in trajets_avec_ajustements)
     prix_max = max(t['prix_ajuste'] for t in trajets_avec_ajustements)
-    
+
     # Ajustements moyens pour réponse
     ajustements_moyens = {
         'distance_extra_metres': int(sum(t['ajustements']['distance_extra_metres'] for t in trajets_avec_ajustements) / len(trajets_avec_ajustements)),
@@ -1654,7 +1693,7 @@ if trajets_niveau2:
         'ajustement_congestion_pourcent': int(sum(t['ajustements']['ajustement_congestion_pourcent'] for t in trajets_avec_ajustements) / len(trajets_avec_ajustements)),
         'facteur_ajustement_total': round(prix_moyen / sum(t['trajet'].prix for t in trajets_avec_ajustements) * len(trajets_avec_ajustements), 2)
     }
-    
+
     return {
         'statut': 'similaire_elargi',
         'prix_moyen': round(prix_moyen, 2),
@@ -1715,7 +1754,7 @@ if trajets_variables_diff:
     # Calculer ajustements standards heure/météo
     trajet_ref = trajets_variables_diff[0]
     prix_base = trajet_ref.prix
-    
+
     ajust_heure_cfa = 0
     note_heure = None
     if heure and trajet_ref.heure and heure != trajet_ref.heure:
@@ -1726,7 +1765,7 @@ if trajets_variables_diff:
         elif heure == 'nuit' and trajet_ref.heure in ['matin', 'apres-midi', 'soir']:
             ajust_heure_cfa = settings.ADJUSTMENT_HEURE_JOUR_NUIT_CFA  # +50 CFA
             note_heure = f"Prix basé sur trajets de jour (+50 CFA vs nuit demandée)"
-    
+
     ajust_meteo_cfa = 0
     note_meteo = None
     if meteo is not None and trajet_ref.meteo is not None and meteo != trajet_ref.meteo:
@@ -1737,9 +1776,9 @@ if trajets_variables_diff:
         else:
             ajust_meteo_cfa = -prix_base * 0.05  # -5% si inverse
             note_meteo = f"Ajustement −5% (BD pluie, demandé soleil)"
-    
+
     prix_ajuste = prix_base + ajust_heure_cfa + ajust_meteo_cfa
-    
+
     return {
         'statut': 'similaire_variables_diff',
         'prix_moyen': round(prix_ajuste, 2),
@@ -1799,7 +1838,7 @@ trajets_similaires = []
 for trajet in trajets_candidats:
     pt_depart = ShapelyPoint(trajet.point_depart.coords_longitude, trajet.point_depart.coords_latitude)
     pt_arrivee = ShapelyPoint(trajet.point_arrivee.coords_longitude, trajet.point_arrivee.coords_latitude)
-    
+
     if polygon_depart.contains(pt_depart) and polygon_arrivee.contains(pt_arrivee):
         trajets_similaires.append(trajet)
 ```
@@ -1940,19 +1979,20 @@ depart_coords = (3.5000, 11.0000)  # Zone rurale inconnue
 **Localisation** : `core/views.py`, lignes ~260-285
 
 **Signature actuelle** :
+
 ```python
 def fallback_inconnu(depart_coords, arrivee_coords, distance_mapbox, heure, meteo, type_zone, quartier_depart):
     """
     Génère des estimations pour trajet totalement inconnu (aucun historique).
-    
+
     Méthodes multiples :
     1. DISTANCE_BASED : Prix = distance_mapbox * prix_au_km_moyen_BD
     2. ZONE_BASED : Moyenne prix trajets dans même arrondissement/ville
     3. STANDARDISE : Tarif officiel Cameroun (300 CFA jour, 350 CFA nuit)
     4. ML_PREDICTION : Appeler predict_prix_ml() avec features (voir ci-dessous)
-    
+
     Retourner moyenne pondérée des 4 méthodes.
-    
+
     Args:
         depart_coords (tuple): (lat, lon) départ
         arrivee_coords (tuple): (lat, lon) arrivée
@@ -1961,7 +2001,7 @@ def fallback_inconnu(depart_coords, arrivee_coords, distance_mapbox, heure, mete
         meteo (int|None): Code météo 0-3
         type_zone (int|None): Type zone 0-2
         quartier_depart (str|None): Quartier départ (extrait via Nominatim)
-    
+
     Returns:
         dict: Structure INCONNU avec estimations multiples
         {
@@ -2156,7 +2196,7 @@ settings.ML_MODEL_R2_SCORE  # 0.78 (à update après training)
 
 ```python
 PRIX_CLASSES_CFA = [
-    100, 150, 200, 250, 300, 350, 400, 450, 500, 
+    100, 150, 200, 250, 300, 350, 400, 450, 500,
     600, 700, 800, 900, 1000, 1200, 1500, 1700, 2000
 ]
 # 18 classes au total
@@ -2166,15 +2206,16 @@ PRIX_CLASSES_CFA = [
 **Localisation** : `core/views.py`, lignes ~285-310
 
 **Signature actuelle** :
+
 ```python
 def predict_prix_ml(distance, heure, meteo, type_zone, congestion_moyen, sinuosite, nb_virages):
     """
     Prédiction prix via modèle ML de CLASSIFICATION MULTICLASSE.
-    
-    ⚠️ IMPORTANT : Ce N'EST PAS une régression ! 
+
+    ⚠️ IMPORTANT : Ce N'EST PAS une régression !
     Les prix taxis Cameroun appartiennent à des tranches fixes (100, 150, 200, 250, ..., 2000 CFA).
     Le modèle doit prédire la CLASSE (tranche de prix) la plus probable.
-    
+
     Features recommandées :
     - distance (float, mètres)
     - heure_encoded (int, 0-3 : matin=0, apres-midi=1, soir=2, nuit=3)
@@ -2184,16 +2225,16 @@ def predict_prix_ml(distance, heure, meteo, type_zone, congestion_moyen, sinuosi
     - sinuosite_indice (float, ≥1.0)
     - nb_virages (int)
     - feature_interaction : distance * congestion_moyen (pour capturer non-linéarité)
-    
+
     Modèle recommandé :
     - RandomForestClassifier (sklearn) avec 18 classes
     - XGBoost Classifier
     - OU réseau neuronal avec softmax output (18 neurones)
-    
+
     Target encoding :
     - Mapper chaque prix BD (ex: 275 CFA) à la classe la plus proche (250 ou 300)
     - Classes = [100, 150, 200, 250, 300, 350, 400, 450, 500, 600, 700, 800, 900, 1000, 1200, 1500, 1700, 2000]
-    
+
     Args:
         distance (float): Distance routière (mètres)
         heure (str|None): Tranche horaire
@@ -2202,10 +2243,10 @@ def predict_prix_ml(distance, heure, meteo, type_zone, congestion_moyen, sinuosi
         congestion_moyen (float): Congestion Mapbox 0-100
         sinuosite (float): Indice sinuosité ≥1.0
         nb_virages (int): Nombre virages
-    
+
     Returns:
         int: Prix prédit (une des 18 classes) en CFA
-        
+
     Exemple :
         >>> predict_prix_ml(5200, 'matin', 1, 0, 45.0, 1.2, 8)
         250  # Classe prédite (pas 247.8 ou autre float !)
@@ -2220,20 +2261,20 @@ def predict_prix_ml(distance, heure, meteo, type_zone, congestion_moyen, sinuosi
 ```python
 # Classes fixes des prix taxis Cameroun (18 classes)
 PRIX_CLASSES_CFA = [
-    100, 150, 200, 250, 300, 350, 400, 450, 500, 
+    100, 150, 200, 250, 300, 350, 400, 450, 500,
     600, 700, 800, 900, 1000, 1200, 1500, 1700, 2000
 ]
 
 def mapper_prix_vers_classe(prix_reel):
     """
     Mapper un prix réel BD (ex: 275 CFA) vers la classe la plus proche.
-    
+
     Args:
         prix_reel (float): Prix exact payé par user
-        
+
     Returns:
         int: Classe de prix la plus proche
-        
+
     Exemple:
         >>> mapper_prix_vers_classe(275)
         300  # Plus proche de 300 que de 250
@@ -2292,12 +2333,12 @@ classes_path = os.path.join(settings.BASE_DIR, 'core', 'ml_models', 'prix_classe
 try:
     model = joblib.load(model_path)  # RandomForestClassifier ou XGBoost
     scaler = joblib.load(scaler_path)
-    
+
     # Charger liste classes (ordre important pour predict)
     import json
     with open(classes_path, 'r') as f:
         prix_classes = json.load(f)  # [100, 150, 200, ..., 2000]
-        
+
 except FileNotFoundError:
     # Fallback si modèle pas encore entraîné
     logger.warning("Modèle ML non entraîné. Retour prix standard.")
@@ -2384,6 +2425,7 @@ print(classification_report(y_test_classes, y_pred_classes, target_names=[str(p)
 **Localisation** : `core/tasks.py`, lignes ~25-50
 
 **Signature actuelle** :
+
 ```python
 from celery import shared_task
 
@@ -2391,7 +2433,7 @@ from celery import shared_task
 def train_ml_model():
     """
     Tâche Celery pour entraîner le modèle ML.
-    
+
     Pipeline :
     1. Charger tous les trajets BD (Point + Trajet) avec features
     2. Feature engineering : encodage heure, imputation NaN, interaction terms
@@ -2400,12 +2442,12 @@ def train_ml_model():
     5. Évaluation : R², RMSE, MAE
     6. Sauvegarde modèle + scaler + metrics
     7. Logging résultats
-    
+
     Déclenché via :
     - Commande Django : `python manage.py train_model`
     - Celery Beat : Schedule quotidien (minuit) pour ré-entraînement
     - API endpoint : POST /api/train/ (admin uniquement)
-    
+
     Returns:
         dict: Metrics du modèle entraîné
     """
@@ -2564,7 +2606,7 @@ from core.tasks import train_ml_model
 
 class Command(BaseCommand):
     help = "Entraîne le modèle ML de prédiction de prix"
-    
+
     def handle(self, *args, **options):
         self.stdout.write("Entraînement du modèle ML...")
         metrics = train_ml_model()
@@ -2673,18 +2715,18 @@ class MLFunctionsTestCase(TestCase):
                 heure='matin',
                 meteo=0
             )
-    
+
     def test_train_ml_model(self):
         """Test entraînement modèle ML"""
         metrics = train_ml_model()
         self.assertIn('r2_score', metrics)
         self.assertGreater(metrics['r2_score'], 0.5)  # R² > 0.5 minimum
-    
+
     def test_predict_prix_ml(self):
         """Test prédiction ML"""
         # Entraîner d'abord
         train_ml_model()
-        
+
         prix = predict_prix_ml(
             distance=5000,
             heure='matin',
@@ -2696,7 +2738,7 @@ class MLFunctionsTestCase(TestCase):
         )
         self.assertGreater(prix, 0)
         self.assertLess(prix, 2000)  # Prix réaliste
-    
+
     def test_check_similar_match(self):
         """Test recherche trajets similaires"""
         result = check_similar_match(
@@ -2712,7 +2754,7 @@ class MLFunctionsTestCase(TestCase):
         if result:
             self.assertEqual(result['statut'], 'similaire')
             self.assertIn('ajustements_appliques', result)
-    
+
     def test_fallback_inconnu(self):
         """Test fallback trajet inconnu"""
         result = fallback_inconnu(
@@ -2742,11 +2784,13 @@ python manage.py test core.tests.MLFunctionsTestCase
 ### Métriques à tracker
 
 1. **Taux de match** :
+
    - % trajets avec match EXACT
    - % trajets avec match SIMILAIRE
    - % trajets INCONNU (cible : <20%)
 
 2. **Qualité prédictions ML** :
+
    - R² score (cible : >0.75)
    - RMSE (cible : <50 CFA)
    - MAE (cible : <35 CFA)
@@ -2758,17 +2802,20 @@ python manage.py test core.tests.MLFunctionsTestCase
 ### Amélioration modèle
 
 **Ré-entraînement automatique** :
+
 - Schedule Celery Beat : chaque nuit à minuit
 - Trigger manuel : `python manage.py train_model`
 - Condition : Si +50 nouveaux trajets depuis dernier training
 
 **Feature engineering avancé** :
+
 - Distance à CBD (Central Business District)
 - Prix historiques quartier départ/arrivée
 - Features temporelles : jour semaine, vacances scolaires
 - Weather API plus granulaire : température, humidité, vent
 
 **Modèles alternatifs** :
+
 - XGBoost (meilleure performance que RandomForest généralement)
 - LightGBM (plus rapide, même performance)
 - Réseau neuronal simple (TensorFlow/Keras) pour non-linéarités complexes
@@ -2777,14 +2824,15 @@ python manage.py test core.tests.MLFunctionsTestCase
 
 ## Récapitulatif des tâches ML
 
-| Fonction | Priorité | Complexité | Temps estimé | Dépendances |
-|----------|----------|------------|--------------|-------------|
-| `check_similar_match()` | 🔴 Haute | ⭐⭐⭐ Moyenne | 4-6h | Mapbox Isochrone/Matrix, Shapely |
-| `fallback_inconnu()` | 🔴 Haute | ⭐⭐ Facile | 2-3h | `predict_prix_ml()` |
-| `predict_prix_ml()` | 🟡 Moyenne | ⭐⭐⭐ Moyenne | 3-4h | Modèle entraîné |
-| `train_ml_model()` | 🟡 Moyenne | ⭐⭐⭐⭐ Difficile | 5-8h | Scikit-learn, Pandas |
+| Fonction                | Priorité   | Complexité         | Temps estimé | Dépendances                      |
+| ----------------------- | ---------- | ------------------ | ------------ | -------------------------------- |
+| `check_similar_match()` | 🔴 Haute   | ⭐⭐⭐ Moyenne     | 4-6h         | Mapbox Isochrone/Matrix, Shapely |
+| `fallback_inconnu()`    | 🔴 Haute   | ⭐⭐ Facile        | 2-3h         | `predict_prix_ml()`              |
+| `predict_prix_ml()`     | 🟡 Moyenne | ⭐⭐⭐ Moyenne     | 3-4h         | Modèle entraîné                  |
+| `train_ml_model()`      | 🟡 Moyenne | ⭐⭐⭐⭐ Difficile | 5-8h         | Scikit-learn, Pandas             |
 
 **Ordre recommandé d'implémentation** :
+
 1. `train_ml_model()` d'abord (pour avoir un modèle dispo)
 2. `predict_prix_ml()` ensuite (test prédictions)
 3. `fallback_inconnu()` (utilise `predict_prix_ml()`)

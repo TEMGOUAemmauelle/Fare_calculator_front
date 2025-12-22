@@ -20,8 +20,7 @@ const STATIC_ASSETS = [
   '/',
   '/index.html',
   '/manifest.webmanifest',
-  '/pwa-icon.svg',
-  '/taxi-logo.png',
+  '/taxi-logo-v2.png',
 ];
 
 // Durée de vie du cache API (24 heures)

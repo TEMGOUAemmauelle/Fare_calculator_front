@@ -71,19 +71,19 @@ export default defineConfig({
         categories: ['travel', 'navigation', 'utilities'],
         icons: [
           {
-            src: '/taxi-logo.png',
+            src: '/taxi-logo-v2.png',
             sizes: '192x192',
             type: 'image/png',
             purpose: 'any'
           },
           {
-            src: '/taxi-logo.png',
+            src: '/taxi-logo-v2.png',
             sizes: '512x512',
             type: 'image/png',
             purpose: 'maskable'
           },
           {
-            src: '/pwa-icon.svg',
+            src: '/taxi-logo-v2.png',
             sizes: 'any',
             type: 'image/svg+xml',
             purpose: 'any'
@@ -95,14 +95,14 @@ export default defineConfig({
             short_name: 'Estimer',
             description: 'Calculer le prix d\'un trajet',
             url: '/estimate',
-            icons: [{ src: '/pwa-icon.svg', sizes: '192x192' }]
+            icons: [{ src: '/taxi-logo-v2.png', sizes: '192x192' }]
           },
           {
             name: 'Ajouter un trajet',
             short_name: 'Ajouter',
             description: 'Contribuer avec un nouveau trajet',
             url: '/add-trajet',
-            icons: [{ src: '/pwa-icon.svg', sizes: '192x192' }]
+            icons: [{ src: '/taxi-logo-v2.png', sizes: '192x192' }]
           }
         ]
       }

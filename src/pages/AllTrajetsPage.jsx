@@ -1,13 +1,17 @@
-import React, { useState, useEffect, useMemo } from 'react';
+import { useState, useEffect, useMemo } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
+import { useAppNavigate } from '../hooks/useAppNavigate';
 import { getTrajets } from '../services/trajetService';
 import { ArrowLeft, MapPin, Clock, Cloud, Search, Filter, Calendar, X } from 'lucide-react';
 import LottieAnimation from '../components/LottieAnimation';
+import LanguageSwitcher from '../components/LanguageSwitcher';
 import yellowTaxiAnimation from '../assets/lotties/yellow taxi.json';
 import { motion, AnimatePresence } from 'framer-motion';
 
 const AllTrajetsPage = () => {
-  const navigate = useNavigate();
+  const { t, i18n } = useTranslation();
+  const navigate = useAppNavigate();
   const [trajets, setTrajets] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -26,7 +30,7 @@ const AllTrajetsPage = () => {
         setTrajets(list);
       } catch (err) {
         console.error("Erreur chargement trajets:", err);
-        setError("Impossible de charger la liste des trajets.");
+        setError(t('common.error') + ": " + t('all_trajets.error_loading'));
       } finally {
         // Petit délai artificiel pour laisser voir l'animation si c'est trop rapide
         setTimeout(() => setLoading(false), 800);
@@ -56,19 +60,22 @@ const AllTrajetsPage = () => {
   }, [trajets, searchTerm, filterHeure, filterMeteo]);
 
   const formatPrice = (price) => {
-    return new Intl.NumberFormat('fr-CM', { style: 'currency', currency: 'XAF' }).format(price);
+    return new Intl.NumberFormat(i18n.language === 'fr' ? 'fr-CM' : 'en-CM', { 
+      style: 'currency', 
+      currency: 'XAF',
+      maximumFractionDigits: 0
+    }).format(price);
   };
 
   const formatDate = (dateString) => {
     if (!dateString) return '';
-    return new Date(dateString).toLocaleDateString('fr-FR', {
+    return new Date(dateString).toLocaleDateString(i18n.language === 'fr' ? 'fr-FR' : 'en-GB', {
       day: 'numeric', month: 'short', year: 'numeric'
     });
   };
 
   const getMeteoLabel = (code) => {
-    const meteos = { 0: 'Soleil', 1: 'Pluie légère', 2: 'Pluie forte', 3: 'Orage' };
-    return meteos[code] || 'Inconnue';
+    return t(`constants.weather.${code}`) || t('common.unknown');
   };
 
   return (
@@ -86,14 +93,17 @@ const AllTrajetsPage = () => {
               </button>
               <div>
                 <h1 className="text-2xl font-black text-gray-900 tracking-tight">
-                  Trajets <span className="text-[#f3cd08]">Commu</span>
+                  {t('all_trajets.title')} <span className="text-[#f3cd08]">{t('all_trajets.subtitle')}</span>
                 </h1>
-                <p className="text-[10px] uppercase tracking-widest text-gray-400 font-bold">Base de données partagée</p>
+                <p className="text-[10px] uppercase tracking-widest text-gray-400 font-bold">{t('all_trajets.description')}</p>
               </div>
             </div>
             
-            <div className="w-12 h-12 bg-gray-50 rounded-2xl flex items-center justify-center overflow-hidden border border-gray-100">
-               <LottieAnimation animationData={yellowTaxiAnimation} loop={true} />
+            <div className="flex items-center gap-3">
+              <div className="w-12 h-12 bg-gray-50 rounded-2xl flex items-center justify-center overflow-hidden border border-gray-100">
+                <LottieAnimation animationData={yellowTaxiAnimation} loop={true} />
+              </div>
+              <LanguageSwitcher />
             </div>
           </div>
 
@@ -103,7 +113,7 @@ const AllTrajetsPage = () => {
               <Search className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-300 w-5 h-5 group-focus-within:text-[#f3cd08] transition-colors" />
               <input
                 type="text"
-                placeholder="Où voulez-vous aller ?"
+                placeholder={t('all_trajets.search_placeholder')}
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
                 className="w-full pl-12 pr-4 py-4 bg-gray-50 border border-transparent rounded-[1.25rem] focus:bg-white focus:border-[#f3cd08]/30 focus:ring-4 focus:ring-[#f3cd08]/5 transition-all outline-none text-gray-700 font-medium placeholder-gray-400 shadow-sm"
@@ -128,27 +138,27 @@ const AllTrajetsPage = () => {
               >
                 <div className="pt-6 pb-2 flex flex-wrap gap-2">
                   <FilterChip 
-                    label="Période"
+                    label={t('all_trajets.filters.period')}
                     value={filterHeure}
                     onChange={setFilterHeure}
                     options={[
-                      { id: 'all', label: 'Tout' },
-                      { id: 'matin', label: 'Matin' },
-                      { id: 'apres-midi', label: 'Midi' },
-                      { id: 'soir', label: 'Soir' },
-                      { id: 'nuit', label: 'Nuit' },
+                      { id: 'all', label: t('all_trajets.filters.all') },
+                      { id: 'matin', label: t('constants.time.matin') },
+                      { id: 'apres-midi', label: t('constants.time.apres-midi') },
+                      { id: 'soir', label: t('constants.time.soir') },
+                      { id: 'nuit', label: t('constants.time.nuit') },
                     ]}
                   />
 
                   <FilterChip 
-                    label="Météo"
+                    label={t('all_trajets.filters.weather')}
                     value={filterMeteo}
                     onChange={setFilterMeteo}
                     options={[
-                      { id: 'all', label: 'Tout' },
-                      { id: '0', label: 'Soleil' },
-                      { id: '1', label: 'Pluie' },
-                      { id: '2', label: 'Orage' },
+                      { id: 'all', label: t('all_trajets.filters.all') },
+                      { id: '0', label: t('constants.weather.0') },
+                      { id: '1', label: t('constants.weather.1') },
+                      { id: '2', label: t('constants.weather.2') },
                     ]}
                   />
 
@@ -180,7 +190,7 @@ const AllTrajetsPage = () => {
             <div className="w-40 h-40 scale-150">
               <LottieAnimation animationData={yellowTaxiAnimation} loop={true} />
             </div>
-            <p className="text-gray-400 font-black uppercase tracking-[0.3em] text-xs mt-12 animate-pulse">Sync en cours...</p>
+            <p className="text-gray-400 font-black uppercase tracking-[0.3em] text-xs mt-12 animate-pulse">{t('all_trajets.syncing')}</p>
           </div>
         ) : (
           <div className="space-y-6">
@@ -189,8 +199,8 @@ const AllTrajetsPage = () => {
                 <div className="w-24 h-24 bg-gray-100 rounded-[2.5rem] flex items-center justify-center mx-auto mb-8 text-gray-300">
                   <Search className="w-10 h-10" strokeWidth={1.5} />
                 </div>
-                <h3 className="text-xl font-black text-gray-900 leading-tight">Aucun résultat</h3>
-                <p className="text-gray-400 text-sm mt-2 max-w-[200px] mx-auto">Essayez d'ajuster vos critères de recherche.</p>
+                <h3 className="text-xl font-black text-gray-900 leading-tight">{t('all_trajets.no_results')}</h3>
+                <p className="text-gray-400 text-sm mt-2 max-w-[200px] mx-auto">{t('all_trajets.no_results_subtitle') || "Essayez d'ajuster vos critères de recherche."}</p>
               </div>
             ) : (
               <AnimatePresence>
@@ -217,9 +227,9 @@ const AllTrajetsPage = () => {
                           {/* Depart - Plus fin */}
                           <div className="relative pl-5 md:pl-0">
                             <div className="md:hidden absolute left-0 top-1.5 w-2 h-2 rounded-full bg-black" />
-                            <span className="text-[9px] font-bold uppercase tracking-widest text-gray-400 mb-0.5 block">Départ</span>
+                            <span className="text-[9px] font-bold uppercase tracking-widest text-gray-400 mb-0.5 block">{t('all_trajets.depart')}</span>
                             <h4 className="text-base font-bold text-gray-900 leading-tight truncate pr-4">
-                              {trajet.point_depart?.label || 'Secteur Inconnu'}
+                              {trajet.point_depart?.label || t('common.unknown_sector')}
                             </h4>
                           </div>
                           
@@ -229,9 +239,9 @@ const AllTrajetsPage = () => {
                           {/* Arrivee - Plus fin */}
                           <div className="relative pl-5 md:pl-0">
                             <div className="md:hidden absolute left-0 top-1.5 w-2 h-2 rounded-full bg-[#f3cd08]" />
-                            <span className="text-[9px] font-bold uppercase tracking-widest text-gray-400 mb-0.5 block">Arrivée</span>
+                            <span className="text-[9px] font-bold uppercase tracking-widest text-gray-400 mb-0.5 block">{t('all_trajets.arrivee')}</span>
                             <h4 className="text-base font-bold text-gray-900 leading-tight truncate pr-4">
-                              {trajet.point_arrivee?.label || 'Secteur Inconnu'}
+                              {trajet.point_arrivee?.label || t('common.unknown_sector')}
                             </h4>
                           </div>
                         </div>
@@ -250,7 +260,7 @@ const AllTrajetsPage = () => {
 
                       {/* Metadata Footer - Compact */}
                       <div className="flex flex-wrap items-center gap-2 pt-4 border-t border-gray-50 relative z-10">
-                        <MetaBadge icon={Clock} label={trajet.heure} />
+                        <MetaBadge icon={Clock} label={t(`constants.time.${trajet.heure}`)} />
                         <MetaBadge icon={Cloud} label={getMeteoLabel(trajet.meteo)} />
                         {trajet.distance && (
                           <MetaBadge 

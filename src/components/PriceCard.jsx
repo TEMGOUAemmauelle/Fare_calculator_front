@@ -9,6 +9,8 @@
  */
 
 import { motion } from 'framer-motion';
+import { useTranslation } from 'react-i18next';
+import { METEO_CODES, TYPE_ZONE_CODES } from '../config/constants';
 import { 
   MapPin, 
   Clock, 
@@ -27,6 +29,7 @@ import {
 } from 'lucide-react';
 
 export default function PriceCard({ prediction, onAddTrajet }) {
+  const { t, i18n } = useTranslation();
   if (!prediction) return null;
 
   // Variables de style
@@ -68,11 +71,11 @@ export default function PriceCard({ prediction, onAddTrajet }) {
             )}
           </div>
           <span className="text-sm font-semibold text-gray-900 capitalize">
-            {isInconnu ? 'Estimation standard' : 'Estimation intelligente'}
+            {isInconnu ? t('price_card.standard_estimation') : t('price_card.intelligent_estimation')}
           </span>
         </div>
         <div className="flex items-center gap-1.5">
-           <span className="text-xs font-medium text-gray-400">Fiabilité</span>
+           <span className="text-xs font-medium text-gray-400">{t('price_card.reliability')}</span>
            <div className="flex px-2 py-0.5 rounded-full bg-gray-50 border border-gray-100">
              <span className={`text-xs font-bold ${isInconnu ? 'text-gray-600' : 'text-green-600'}`}>
                {(prediction.fiabilite * 100).toFixed(0)}%
@@ -91,10 +94,10 @@ export default function PriceCard({ prediction, onAddTrajet }) {
             animate={{ scale: 1, opacity: 1 }}
             transition={{ delay: 0.2 }}
         >
-          <div className="text-xs font-medium text-gray-400 uppercase tracking-widest mb-2">Prix estimé</div>
+          <div className="text-xs font-medium text-gray-400 uppercase tracking-widest mb-2">{t('price_card.estimated_price')}</div>
           <div className="flex items-baseline justify-center gap-1">
             <span className="text-6xl font-black text-gray-900 tracking-tight">
-              {prediction.prix_moyen?.toLocaleString('fr-FR')}
+              {prediction.prix_moyen?.toLocaleString(i18n.language === 'fr' ? 'fr-FR' : 'en-US')}
             </span>
             <span className="text-xl font-bold text-gray-400">FCFA</span>
           </div>
@@ -103,7 +106,7 @@ export default function PriceCard({ prediction, onAddTrajet }) {
           {prediction.prix_min && prediction.prix_max && (
             <div className="mt-3 inline-flex items-center gap-3 px-4 py-1.5 bg-gray-50 rounded-full border border-gray-100">
               <span className="text-sm font-semibold text-gray-600">
-                {prediction.prix_min.toLocaleString('fr-FR')}
+                {prediction.prix_min.toLocaleString(i18n.language === 'fr' ? 'fr-FR' : 'en-US')}
               </span>
               <div className="w-8 h-1 bg-gray-200 rounded-full overflow-hidden">
                 <div 
@@ -112,7 +115,7 @@ export default function PriceCard({ prediction, onAddTrajet }) {
                 ></div>
               </div>
               <span className="text-sm font-semibold text-gray-600">
-                {prediction.prix_max.toLocaleString('fr-FR')}
+                {prediction.prix_max.toLocaleString(i18n.language === 'fr' ? 'fr-FR' : 'en-US')}
               </span>
             </div>
           )}
@@ -123,13 +126,13 @@ export default function PriceCard({ prediction, onAddTrajet }) {
       <div className="px-6 py-2">
         <div className="relative pl-4 space-y-6">
           {/* Ligne connectrice */}
-          <div className="absolute left-[19px] top-3 bottom-3 w-0.5 bg-gradient-to-b from-yellow-400 to-gray-200 border-l border-dashed border-gray-300"></div>
+          <div className="absolute left-[19px] top-3 bottom-3 w-0.5 bg-linear-to-b from-yellow-400 to-gray-200 border-l border-dashed border-gray-300"></div>
 
           {/* Point Départ */}
           <div className="relative flex items-start gap-4">
             <div className="relative z-10 w-2.5 h-2.5 mt-1.5 rounded-full bg-yellow-400 ring-4 ring-white shadow-sm"></div>
             <div className="flex-1 min-w-0">
-               <div className="text-[10px] font-bold text-gray-400 uppercase tracking-wide">Départ</div>
+               <div className="text-[10px] font-bold text-gray-400 uppercase tracking-wide">{t('price_card.depart')}</div>
                <div className="text-sm font-bold text-gray-900 truncate">
                   {prediction.details_trajet?.depart?.label || 'Départ'}
                </div>
@@ -143,7 +146,7 @@ export default function PriceCard({ prediction, onAddTrajet }) {
           <div className="relative flex items-start gap-4">
             <div className="relative z-10 w-2.5 h-2.5 mt-1.5 rounded-full bg-gray-900 ring-4 ring-white shadow-sm"></div>
              <div className="flex-1 min-w-0">
-               <div className="text-[10px] font-bold text-gray-400 uppercase tracking-wide">Arrivée</div>
+               <div className="text-[10px] font-bold text-gray-400 uppercase tracking-wide">{t('price_card.arrival')}</div>
                <div className="text-sm font-bold text-gray-900 truncate">
                   {prediction.details_trajet?.arrivee?.label || 'Arrivée'}
                </div>
@@ -161,7 +164,7 @@ export default function PriceCard({ prediction, onAddTrajet }) {
             {/* Distance */}
             <div className="flex flex-col gap-1">
                <div className="flex items-center gap-1.5 text-xs text-gray-500">
-                  <Route className="w-3.5 h-3.5" /> Distance
+                  <Route className="w-3.5 h-3.5" /> {t('price_card.distance')}
                </div>
                <div className="text-sm font-bold text-gray-900">
                   {((prediction.details_trajet?.distance_metres || prediction.distance || 0) / 1000).toFixed(1)} km
@@ -171,7 +174,7 @@ export default function PriceCard({ prediction, onAddTrajet }) {
             {/* Durée */}
             <div className="flex flex-col gap-1">
                <div className="flex items-center gap-1.5 text-xs text-gray-500">
-                  <Clock className="w-3.5 h-3.5" /> Durée
+                  <Clock className="w-3.5 h-3.5" /> {t('price_card.duration')}
                </div>
                <div className="text-sm font-bold text-gray-900">
                   {Math.ceil((prediction.details_trajet?.duree_secondes || prediction.duree || 0) / 60)} min
@@ -181,20 +184,20 @@ export default function PriceCard({ prediction, onAddTrajet }) {
             {/* Météo (Nouveau) */}
             <div className="flex flex-col gap-1">
                <div className="flex items-center gap-1.5 text-xs text-gray-500">
-                  {getWeatherIcon(prediction.details_trajet?.meteo)} Météo
+                  {getWeatherIcon(prediction.details_trajet?.meteo)} {t('price_card.weather')}
                </div>
                <div className="text-sm font-bold text-gray-900 capitalize">
-                  {prediction.details_trajet?.meteo_label || 'Normale'}
+                  {METEO_CODES[prediction.details_trajet?.meteo]?.labelKey ? t(METEO_CODES[prediction.details_trajet?.meteo].labelKey) : (prediction.details_trajet?.meteo_label || 'Normal')}
                </div>
             </div>
 
             {/* Zone (Nouveau) */}
             <div className="flex flex-col gap-1">
                <div className="flex items-center gap-1.5 text-xs text-gray-500">
-                  <Navigation className="w-3.5 h-3.5" /> Zone
+                  <Navigation className="w-3.5 h-3.5" /> {t('price_card.zone')}
                </div>
                <div className="text-sm font-bold text-gray-900 capitalize">
-                  {prediction.details_trajet?.type_zone_label || 'Urbaine'}
+                  {TYPE_ZONE_CODES[prediction.details_trajet?.type_zone]?.labelKey ? t(TYPE_ZONE_CODES[prediction.details_trajet?.type_zone].labelKey) : (prediction.details_trajet?.type_zone_label || 'Urbaine')}
                </div>
             </div>
          </div>
@@ -204,13 +207,13 @@ export default function PriceCard({ prediction, onAddTrajet }) {
         {isInconnu && prediction.estimations_supplementaires && (
         <div className="px-6 pb-6">
           <div className="text-[10px] font-bold text-gray-400 uppercase tracking-wide mb-3">
-            Détail des calculs (fallback)
+            {t('price_card.calculation_details')}
           </div>
           <div className="space-y-2">
             <div className="flex justify-between items-center py-2 border-b border-gray-50 border-dashed">
-              <span className="text-xs text-gray-600">Prédiction ML</span>
+              <span className="text-xs text-gray-600">{t('price_card.ml_prediction')}</span>
               <span className="text-xs font-bold text-gray-900">
-                {mlPrediction ? `${mlPrediction} FCFA` : 'Non disponible'}
+                {mlPrediction ? `${mlPrediction} FCFA` : t('price_card.not_available')}
               </span>
             </div>
             {featuresUsed && (
@@ -234,7 +237,7 @@ export default function PriceCard({ prediction, onAddTrajet }) {
                 <Info className="w-4 h-4 text-yellow-600" />
             </div>
             <p className="text-xs text-yellow-800 leading-relaxed font-medium">
-                {prediction.message || "Prix indicatif basé sur les données disponibles."}
+                {prediction.message || t('price_card.indicative_price')}
             </p>
         </div>
       </div>

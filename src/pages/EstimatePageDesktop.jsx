@@ -12,10 +12,13 @@
 import { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { useNavigate } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
+import { useAppNavigate } from '../hooks/useAppNavigate';
+import LanguageSwitcher from '../components/LanguageSwitcher';
 import { 
   MapPin, 
   Navigation, 
-  Sun, 
+  Sun as SunIcon, 
   CloudRain,
   Home,
   Briefcase,
@@ -48,20 +51,24 @@ import {
 } from '../services';
 
 // Constants
-const WEATHER_OPTIONS = [
-  { value: 0, label: 'Ensoleillé', icon: Sun },
-  { value: 2, label: 'Pluvieux', icon: CloudRain },
-];
+import { METEO_OPTIONS, HEURE_OPTIONS } from '../config/constants';
 
-const TIME_SLOTS = [
-  { value: 'matin', label: 'Matin', icon: Sunrise },
-  { value: 'apres-midi', label: 'Midi', icon: Sun },
-  { value: 'soir', label: 'Soir', icon: Sunset },
-  { value: 'nuit', label: 'Nuit', icon: Moon },
-];
+const WEATHER_ICONS = {
+  0: SunIcon,
+  2: CloudRain,
+};
+
+const TIME_ICONS = {
+  'matin': Sunrise,
+  'apres-midi': SunIcon,
+  'soir': Sunset,
+  'nuit': Moon,
+};
+
 
 export default function EstimatePageDesktop() {
-  const navigate = useNavigate();
+  const { t } = useTranslation();
+  const navigate = useAppNavigate();
   
   // États principaux
   const [depart, setDepart] = useState(null);
@@ -92,7 +99,7 @@ export default function EstimatePageDesktop() {
         if (!mounted) return;
         
         setDepart({
-          label: 'Ma position',
+          label: t('common.my_position'),
           coordinates: [position.coords.longitude, position.coords.latitude],
           type: 'current',
         });
@@ -299,7 +306,7 @@ export default function EstimatePageDesktop() {
 
   const handleEstimate = async () => {
     if (!depart || !arrivee) {
-      toast.error('Veuillez sélectionner un départ et une arrivée');
+      toast.error(t('messages.error_same_points')); // Use same points error as placeholder for missing points
       return;
     }
 
@@ -337,18 +344,18 @@ export default function EstimatePageDesktop() {
           color: '#3B82F6',
         });
       }
-
-      toast.success('Estimation calculée');
+      
+      toast.success(t('common.done'));
     } catch (err) {
       console.error('❌ Erreur estimation:', err);
       
       // Message spécifique pour erreur 401
       if (err.response?.status === 401) {
-        setError('Erreur d\'authentification avec le serveur. Vérifiez la configuration backend (CORS).');
-        toast.error('Erreur d\'authentification serveur');
+        setError(t('error.auth_title') + ": " + t('messages.error_api_key'));
+        toast.error(t('error.auth_title'));
       } else {
-        setError(err.response?.data?.detail || err.userMessage || 'Impossible de calculer l\'estimation');
-        toast.error('Erreur lors du calcul');
+        setError(err.response?.data?.detail || err.userMessage || t('error.unexpected'));
+        toast.error(t('error.default_title'));
       }
     } finally {
       setIsLoading(false);
@@ -370,20 +377,21 @@ export default function EstimatePageDesktop() {
           height="100vh"
         />
         
-        {/* Switch élégant en haut au centre */}
+        {/* Central switch en haut - Premium Glass */}
         <div className="absolute top-6 left-1/2 -translate-x-1/2 z-20">
           <motion.div
             initial={{ opacity: 0, y: -20 }}
             animate={{ opacity: 1, y: 0 }}
-            className="bg-white/95 backdrop-blur-sm rounded-full p-1 shadow-2xl border border-gray-200"
+            className="bg-white/80 backdrop-blur-xl rounded-full p-1.5 shadow-[0_8px_30px_rgba(0,0,0,0.08)] border border-white/40"
           >
             <div className="flex gap-1">
+
               <button
                 onClick={() => navigate('/estimate')}
-                className="px-6 py-3 bg-gradient-to-r from-yellow-400 to-yellow-500 text-[#231f0f] rounded-full font-bold text-sm flex items-center gap-2 shadow-lg"
+                className="px-6 py-3 bg-linear-to-r from-yellow-400 to-yellow-500 text-[#231f0f] rounded-full font-bold text-sm flex items-center gap-2 shadow-lg"
               >
                 <Calculator className="w-4 h-4" strokeWidth={3} />
-                <span>Estimer</span>
+                <span>{t('nav.estimate')}</span>
               </button>
               
               <button
@@ -391,7 +399,7 @@ export default function EstimatePageDesktop() {
                 className="px-6 py-3 bg-transparent hover:bg-gray-100 text-gray-700 rounded-full font-bold text-sm flex items-center gap-2 transition-all"
               >
                 <PlusCircle className="w-4 h-4" strokeWidth={2.5} />
-                <span>Ajouter</span>
+                <span>{t('nav.add')}</span>
               </button>
             </div>
           </motion.div>
@@ -405,11 +413,14 @@ export default function EstimatePageDesktop() {
             <>
               {/* Header */}
               <div className="mb-8">
-                <h2 className="text-3xl font-black text-gray-700">
-                  Estimer un trajet
-                </h2>
-                <p className="text-sm text-gray-600 mt-2">
-                  Calculez le prix estimé de votre course
+                <div className="flex items-center justify-between mb-2">
+                  <h2 className="text-3xl font-black text-gray-700">
+                    {t('predict.estimate_a_trip')}
+                  </h2>
+                  <LanguageSwitcher variant="dark" />
+                </div>
+                <p className="text-sm text-gray-600">
+                  {t('estimate.subtitle')}
                 </p>
               </div>
 
@@ -424,14 +435,14 @@ export default function EstimatePageDesktop() {
 
                   <div className="flex-1 space-y-4">
                     <SearchBar
-                      placeholder="Départ"
+                      placeholder={t('estimate.label_from')}
                       onSelect={handleDepartSelect}
                       showCurrentLocation={true}
                       value={depart?.label || ''}
                     />
                     
                     <SearchBar
-                      placeholder="Arrivée"
+                      placeholder={t('estimate.label_to')}
                       onSelect={handleArriveeSelect}
                       value={arrivee?.label || ''}
                     />
@@ -450,7 +461,7 @@ export default function EstimatePageDesktop() {
                       className="flex-1 flex items-center gap-3 p-4 bg-gray-50 hover:bg-gray-100 rounded-2xl transition-all"
                     >
                       <Home className="w-5 h-5 text-blue-600" />
-                      <span className="font-bold text-[#231f0f]">Domicile</span>
+                      <span className="font-bold text-[#231f0f]">{t('common.home_shortcut')}</span>
                     </motion.button>
                   )}
                   
@@ -462,7 +473,7 @@ export default function EstimatePageDesktop() {
                       className="flex-1 flex items-center gap-3 p-4 bg-gray-50 hover:bg-gray-100 rounded-2xl transition-all"
                     >
                       <Briefcase className="w-5 h-5 text-purple-600" />
-                      <span className="font-bold text-[#231f0f]">Travail</span>
+                      <span className="font-bold text-[#231f0f]">{t('common.work_shortcut')}</span>
                     </motion.button>
                   )}
                 </div>
@@ -472,7 +483,7 @@ export default function EstimatePageDesktop() {
               {recentSearches.length > 0 && (
                 <div className="mb-6">
                   <h3 className="text-sm font-bold text-gray-500 uppercase tracking-wide mb-3">
-                    Recherches récentes
+                    {t('estimate.recent')}
                   </h3>
                   <div className="space-y-2">
                     {recentSearches.slice(0, 3).map((search, index) => (
@@ -498,11 +509,11 @@ export default function EstimatePageDesktop() {
               {/* Météo - Toggle moderne */}
               <div className="mb-6">
                 <label className="block text-sm font-bold text-[#231f0f]/70 mb-2">
-                  Météo
+                  {t('add.weather')}
                 </label>
                 <div className="flex gap-2 p-1 bg-[#f5f5f0] rounded-xl">
-                  {WEATHER_OPTIONS.map((option) => {
-                    const Icon = option.icon;
+                  {METEO_OPTIONS.filter(o => [0, 2].includes(o.value)).map((option) => {
+                    const Icon = WEATHER_ICONS[option.value] || SunIcon;
                     const isActive = meteo === option.value;
                     
                     return (
@@ -516,7 +527,7 @@ export default function EstimatePageDesktop() {
                         }`}
                       >
                         <Icon className={`w-5 h-5 ${isActive ? 'text-[#f3cd08]' : ''}`} />
-                        <span>{option.label}</span>
+                        <span>{t(option.labelKey)}</span>
                       </button>
                     );
                   })}
@@ -526,10 +537,10 @@ export default function EstimatePageDesktop() {
               {/* Heure - Toggle moderne */}
               <div className="mb-6">
                 <label className="block text-sm font-bold text-[#231f0f]/70 mb-2">
-                  Tranche horaire
+                  {t('estimate.moment')}
                 </label>
                 <div className="grid grid-cols-4 gap-2 p-1 bg-[#f5f5f0] rounded-xl">
-                  {TIME_SLOTS.map((slot) => {
+                  {HEURE_OPTIONS.map((slot) => {
                     const isActive = heure === slot.value;
                     
                     return (
@@ -542,7 +553,7 @@ export default function EstimatePageDesktop() {
                             : 'text-[#8a8a60] hover:text-[#231f0f]'
                         }`}
                       >
-                        {slot.label}
+                        {t(slot.labelKey)}
                       </button>
                     );
                   })}
@@ -566,12 +577,12 @@ export default function EstimatePageDesktop() {
                         autoplay={true}
                       />
                     </div>
-                    <span>Calcul...</span>
+                    <span>{t('common.loading')}</span>
                   </>
                 ) : (
                   <>
                     <TrendingUp className="w-6 h-6" />
-                    Estimer le tarif
+                    {t('estimate.button')}
                   </>
                 )}
               </motion.button>
@@ -593,7 +604,7 @@ export default function EstimatePageDesktop() {
               <div className="space-y-4">
                 <div className="flex items-center justify-between mb-4">
                   <h2 className="text-2xl font-black text-[#231f0f]">
-                    Résultat
+                    {t('common.result')}
                   </h2>
                   <motion.button
                     whileHover={{ scale: 1.05 }}
@@ -605,7 +616,7 @@ export default function EstimatePageDesktop() {
                     }}
                     className="px-4 py-2 bg-gray-100 hover:bg-gray-200 rounded-xl font-medium text-gray-700 transition-colors"
                   >
-                    Nouvelle recherche
+                    {t('common.new_search')}
                   </motion.button>
                 </div>
 
