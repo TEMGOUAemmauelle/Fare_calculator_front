@@ -69,38 +69,95 @@ export default function EstimatePageMobile() {
   const [markers, setMarkers] = useState([]);
   const [routeData, setRouteData] = useState(null);
   const drawerFirstFocusRef = useRef(null);
+  const autoLocationAttemptedRef = useRef(false); // Utiliser ref au lieu de state pour éviter re-render
+  const mountedRef = useRef(true); // Ref pour survivre aux StrictMode double-mount
+  const [isLocating, setIsLocating] = useState(false);
 
   useEffect(() => {
-    let mounted = true;
+    // Reset mounted à true à chaque mount
+    mountedRef.current = true;
     
     const init = async () => {
       setCurrentTimeSlot();
       
+      // Ouvrir le drawer automatiquement dès l'arrivée sur la page
+      setDrawerOpen(true);
+      
+      // Éviter double exécution (utiliser ref pour ne pas trigger de re-render)
+      if (autoLocationAttemptedRef.current) return;
+      autoLocationAttemptedRef.current = true;
+      
+      setIsLocating(true);
+
       try {
-        const position = await getCurrentPosition({ timeout: 5000 });
-        if (!mounted) return;
+        // 1. Récupérer position et adresse (une seule demande de permission)
+        const { getCurrentPositionWithAddress, checkGeolocationPermission } = await import('../services/geolocationService');
         
-        const weatherData = await getCurrentWeather(
-          position.coords.latitude,
-          position.coords.longitude
-        );
+        // Vérifier permission (optionnel, getCurrentPosition le fait aussi mais permet message custom)
+        try {
+            const status = await checkGeolocationPermission();
+            if (status === 'denied') {
+                toast('Activez la localisation pour une saisie plus rapide', {
+                    icon: '📍',
+                    duration: 5000,
+                });
+                // On continue quand même au cas où
+            }
+        } catch (e) { /* ignore */ }
+
+        const point = await getCurrentPositionWithAddress();
         
-        if (mounted && weatherData?.meteo !== undefined) {
-          setMeteo(weatherData.meteo);
+        console.log('📍 [EstimatePageMobile] Point retourné par getCurrentPositionWithAddress:', point);
+        console.log('📍 [EstimatePageMobile] mountedRef.current:', mountedRef.current);
+
+        if (!mountedRef.current) return;
+
+        if (point) {
+          console.log('📍 [EstimatePageMobile] Label obtenu:', point.label);
+          
+          // 2. Mettre à jour le lieu de départ
+          setDepartPlace({
+            label: point.label || 'Ma position',
+            longitude: point.coords_longitude,
+            latitude: point.coords_latitude,
+          });
+          
+          console.log('📍 [EstimatePageMobile] departPlace mis à jour avec label:', point.label || 'Ma position');
+          
+          // Centrer carte
+          setMapCenter([point.coords_longitude, point.coords_latitude]);
+          setMapZoom(15);
+          
+          toast.success('Position détectée');
+
+          // 3. Récupérer météo avec ces coordonnées
+          try {
+            const weatherData = await getCurrentWeather(
+              point.coords_latitude,
+              point.coords_longitude
+            );
+            if (mountedRef.current && weatherData?.meteo !== undefined) {
+              setMeteo(weatherData.meteo);
+            }
+          } catch (wErr) {
+            console.warn('Météo auto échouée:', wErr);
+            if (mountedRef.current) setMeteo(0); // Défaut
+          }
         }
       } catch (error) {
-        if (mounted) {
-          setMeteo(0);
-        }
+        console.warn('Géolocalisation auto échouée:', error);
+        if (mountedRef.current) setMeteo(0);
+      } finally {
+        if (mountedRef.current) setIsLocating(false);
       }
     };
     
     init();
     
     return () => {
-      mounted = false;
+      mountedRef.current = false;
     };
-  }, []);
+  }, []); // Dépendances vides - s'exécute une seule fois au montage
 
   // NOTE: removed delayed mounting for Drawer to avoid timing issues
   // and layout jumps. Drawer is mounted immediately (like AddTrajetPage).
@@ -357,6 +414,7 @@ export default function EstimatePageMobile() {
       <Drawer.Root
         shouldScaleBackground={false}
         modal={true}
+        open={drawerOpen}
         onOpenChange={(open) => {
           setDrawerOpen(open);
           // Quand le drawer s'ouvre, focuser un élément interne pour éviter
@@ -396,9 +454,17 @@ export default function EstimatePageMobile() {
             <div className="p-4 bg-white rounded-t-3xl flex-shrink-0">
               <div className="mx-auto w-12 h-1.5 flex-shrink-0 rounded-full bg-gray-300 mb-8" />
               <div className="max-w-md mx-auto">
-                <Drawer.Title className="font-black text-2xl mb-6 text-gray-700">
-                  Estimer un trajet
-                </Drawer.Title>
+                <div className="flex items-center justify-between mb-6">
+                  <Drawer.Title className="font-black text-2xl text-gray-700">
+                    Estimer un trajet
+                  </Drawer.Title>
+                  <button
+                    onClick={() => navigate('/trajets')}
+                    className="px-3 py-1.5 bg-gray-200 hover:bg-gray-300 text-gray-800 rounded-lg text-xs font-semibold transition-colors"
+                  >
+                    Trajets commu
+                  </button>
+                </div>
                 <p id="drawer-description" className="sr-only">
                   Formulaire pour estimer le prix d'un trajet en taxi
                 </p>
@@ -426,6 +492,7 @@ export default function EstimatePageMobile() {
                             onSelect={handleDepartSelect}
                             showCurrentLocation={true}
                             value={departPlace?.label || ''}
+                            externalLoading={isLocating}
                           />
                           
                           <SearchBar

@@ -96,8 +96,8 @@ export function addEstimateToHistory(estimation) {
     depart: estimation.depart,
     arrivee: estimation.arrivee,
     prix_moyen: estimation.prediction?.prix_moyen,
-    distance: estimation.prediction?.details_trajet?.distance_estimee,
-    duree: estimation.prediction?.details_trajet?.duree_estimee,
+    distance: estimation.prediction?.details_trajet?.distance_metres,
+    duree: estimation.prediction?.details_trajet?.duree_secondes,
     statut: estimation.prediction?.statut,
   };
   

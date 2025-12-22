@@ -1,386 +1,243 @@
 /**
  * @fileoverview Composant PriceCard - Affichage estimation prix
  * 
- * Carte élégante et moderne affichant résultats estimation API avec :
- * - Design gradient professionnel
- * - Animations fluides Framer Motion  
- * - Icônes Lucide React
- * - Typographie hiérarchisée
+ * Design "Pro & Pure" :
+ * - Dominante Blanche & Accents Jaune (#F59E0B / #FBBF24)
+ * - Typography Clean & Modern (Inter/Sans)
+ * - Mobile-first UX
+ * - Visualisation trajet type "Timeline"
  */
 
 import { motion } from 'framer-motion';
 import { 
-  CheckCircle2, 
-  AlertCircle, 
-  TrendingUp, 
   MapPin, 
   Clock, 
   Route,
-  Sun,
-  CloudRain,
-  CloudLightning,
-  Moon,
-  Sunrise,
-  Sunset,
   Info,
-  Plus,
-  ArrowRight,
-  Target
+  ChevronRight,
+  Navigation,
+  Cloud,
+  Umbrella,
+  Sun,
+  Moon,
+  Zap,
+  Car,
+  ShieldCheck,
+  AlertTriangle
 } from 'lucide-react';
-import { STATUT_ESTIMATION, METEO_CODES, HEURE_TRANCHES } from '../config/constants';
-
-// Helper pour icônes météo
-const getWeatherIcon = (code) => {
-  const icons = {
-    0: Sun,
-    1: CloudRain,
-    2: CloudRain,
-    3: CloudLightning,
-  };
-  return icons[code] || Sun;
-};
-
-// Helper pour icônes heure
-const getTimeIcon = (tranche) => {
-  const icons = {
-    matin: Sunrise,
-    'apres-midi': Sun,
-    soir: Sunset,
-    nuit: Moon,
-  };
-  return icons[tranche] || Clock;
-};
 
 export default function PriceCard({ prediction, onAddTrajet }) {
   if (!prediction) return null;
 
-  const statutInfo = STATUT_ESTIMATION[prediction.statut] || STATUT_ESTIMATION.inconnu;
-  const hasRange = prediction.prix_min !== null && prediction.prix_max !== null;
-  
-  // Icône statut
-  const StatusIcon = prediction.statut === 'exact' ? CheckCircle2 : 
-                     prediction.statut === 'similaire' ? TrendingUp : 
-                     AlertCircle;
+  // Variables de style
+  const isInconnu = prediction.statut === 'inconnu';
+  const accentColor = isInconnu ? 'text-gray-500' : 'text-yellow-500';
+  const bgColor = isInconnu ? 'bg-gray-50' : 'bg-yellow-50';
+  const borderColor = isInconnu ? 'border-gray-100' : 'border-yellow-100';
 
-  // Couleurs gradient selon statut - JAUNE au lieu de VERT
-  const gradientColors = {
-    exact: 'from-yellow-400 to-yellow-500',
-    similaire: 'from-blue-500 to-indigo-600',
-    inconnu: 'from-amber-500 to-orange-600',
-  };
+  const estimSup = prediction.estimations_supplementaires || {};
+  const mlPrediction = estimSup?.ml_prediction;
+  const featuresUsed = estimSup?.features_utilisees;
 
-  const bgColors = {
-    exact: 'bg-yellow-50',
-    similaire: 'bg-blue-50',
-    inconnu: 'bg-amber-50',
-  };
-
-  const textColors = {
-    exact: 'text-yellow-700',
-    similaire: 'text-blue-700',
-    inconnu: 'text-amber-700',
+  // Icône Météo dynamique
+  const getWeatherIcon = (meteoCode) => {
+    switch(meteoCode) {
+      case 0: return <Sun className="w-4 h-4" />;
+      case 1: 
+      case 2: return <Cloud className="w-4 h-4" />;
+      case 3: return <Zap className="w-4 h-4" />;
+      default: return <Sun className="w-4 h-4" />;
+    }
   };
 
   return (
     <motion.div
-      initial={{ opacity: 0, y: 20, scale: 0.95 }}
-      animate={{ opacity: 1, y: 0, scale: 1 }}
-      transition={{ duration: 0.4, type: "spring", bounce: 0.2 }}
-      className="bg-white rounded-2xl shadow-xl overflow-hidden max-w-lg mx-auto"
+      initial={{ opacity: 0, y: 30 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.5, type: "spring", damping: 25 }}
+      className="w-full max-w-md mx-auto bg-white rounded-3xl shadow-[0_10px_40px_-10px_rgba(0,0,0,0.08)] overflow-hidden border border-gray-100"
     >
-      {/* Header compact avec gradient selon statut */}
-      <div className={`relative bg-gradient-to-br ${gradientColors[prediction.statut]} px-6 py-4 text-white overflow-hidden`}>
-        {/* Pattern décoratif */}
-        <div className="absolute inset-0 opacity-10">
-          <div className="absolute inset-0" style={{
-            backgroundImage: 'radial-gradient(circle at 2px 2px, white 1px, transparent 0)',
-            backgroundSize: '32px 32px'
-          }}></div>
-        </div>
-
-        <div className="relative flex items-center justify-between">
-          <div className="flex items-center gap-3">
-            <div className="p-2.5 bg-white/20 rounded-xl backdrop-blur-sm">
-              <StatusIcon className="w-6 h-6" />
-            </div>
-            <div>
-              <h3 className="text-xl font-bold">
-                {statutInfo.label}
-              </h3>
-              <p className="text-white/90 text-xs mt-0.5">
-                {prediction.message}
-              </p>
-            </div>
-          </div>
-          
-          {/* Badge fiabilité compact */}
-          <motion.div 
-            initial={{ scale: 0 }}
-            animate={{ scale: 1 }}
-            transition={{ delay: 0.3, type: "spring" }}
-            className="text-center bg-white/20 backdrop-blur-md rounded-xl px-4 py-2 border border-white/30"
-          >
-            <div className="text-[10px] font-medium text-white/80 uppercase tracking-wider">
-              Fiabilité
-            </div>
-            <div className="text-2xl font-black">
-              {(prediction.fiabilite * 100).toFixed(0)}%
-            </div>
-          </motion.div>
-        </div>
-      </div>
-
-      {/* Prix principal compact */}
-      <div className={`relative px-6 py-6 ${bgColors[prediction.statut]}`}>
-        <div className="relative text-center">
-          <motion.div
-            initial={{ scale: 0.5, opacity: 0 }}
-            animate={{ scale: 1, opacity: 1 }}
-            transition={{ delay: 0.2, type: "spring", bounce: 0.4 }}
-          >
-            <div className={`text-xs font-semibold ${textColors[prediction.statut]} uppercase tracking-wider mb-2`}>
-              Prix estimé
-            </div>
-            <div className="flex items-baseline justify-center gap-2">
-              <span className="text-5xl font-black text-gray-900">
-                {prediction.prix_moyen.toFixed(0)}
-              </span>
-              <span className="text-2xl font-bold text-gray-600">
-                FCFA
-              </span>
-            </div>
-            
-            {hasRange && (
-              <motion.div 
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                transition={{ delay: 0.4 }}
-                className="mt-3 inline-flex items-center gap-2 px-4 py-2 bg-white/70 backdrop-blur-sm rounded-full border border-gray-200"
-              >
-                <Target className="w-3.5 h-3.5 text-gray-600" />
-                <span className="text-sm font-semibold text-gray-700">
-                  {prediction.prix_min} - {prediction.prix_max} FCFA
-                </span>
-              </motion.div>
+      {/* 1. EN-TÊTE STATUT & FIABILITÉ */}
+      <div className="px-6 py-4 flex items-center justify-between border-b border-gray-50">
+        <div className="flex items-center gap-2">
+          <div className={`p-1.5 rounded-full ${bgColor}`}>
+            {isInconnu ? (
+              <AlertTriangle className="w-4 h-4 text-gray-500" />
+            ) : (
+              <ShieldCheck className="w-4 h-4 text-yellow-500" />
             )}
-          </motion.div>
+          </div>
+          <span className="text-sm font-semibold text-gray-900 capitalize">
+            {isInconnu ? 'Estimation standard' : 'Estimation intelligente'}
+          </span>
+        </div>
+        <div className="flex items-center gap-1.5">
+           <span className="text-xs font-medium text-gray-400">Fiabilité</span>
+           <div className="flex px-2 py-0.5 rounded-full bg-gray-50 border border-gray-100">
+             <span className={`text-xs font-bold ${isInconnu ? 'text-gray-600' : 'text-green-600'}`}>
+               {(prediction.fiabilite * 100).toFixed(0)}%
+             </span>
+           </div>
         </div>
       </div>
 
-      {/* Détails du trajet - Compact en grille */}
-      <div className="px-6 py-4 border-t border-gray-100">
-        <div className="grid grid-cols-2 gap-3">
-          {/* Départ */}
-          <motion.div 
-            initial={{ x: -20, opacity: 0 }}
-            animate={{ x: 0, opacity: 1 }}
-            transition={{ delay: 0.3 }}
-            className="flex items-start gap-2 p-3 bg-gradient-to-br from-gray-50 to-gray-100 rounded-xl"
-          >
-            <div className="p-1.5 bg-blue-500 rounded-lg">
-              <MapPin className="w-4 h-4 text-white" />
+      {/* 2. PRIX CENTRAL */}
+      <div className="px-6 py-8 text-center relative overflow-hidden">
+        {/* Fond subtil jaune */}
+        <div className="absolute top-0 left-1/2 -translate-x-1/2 w-32 h-32 bg-yellow-400/5 rounded-full blur-3xl -z-10"></div>
+        
+        <motion.div 
+            initial={{ scale: 0.9, opacity: 0 }}
+            animate={{ scale: 1, opacity: 1 }}
+            transition={{ delay: 0.2 }}
+        >
+          <div className="text-xs font-medium text-gray-400 uppercase tracking-widest mb-2">Prix estimé</div>
+          <div className="flex items-baseline justify-center gap-1">
+            <span className="text-6xl font-black text-gray-900 tracking-tight">
+              {prediction.prix_moyen?.toLocaleString('fr-FR')}
+            </span>
+            <span className="text-xl font-bold text-gray-400">FCFA</span>
+          </div>
+          
+          {/* Fourchette Min-Max propre */}
+          {prediction.prix_min && prediction.prix_max && (
+            <div className="mt-3 inline-flex items-center gap-3 px-4 py-1.5 bg-gray-50 rounded-full border border-gray-100">
+              <span className="text-sm font-semibold text-gray-600">
+                {prediction.prix_min.toLocaleString('fr-FR')}
+              </span>
+              <div className="w-8 h-1 bg-gray-200 rounded-full overflow-hidden">
+                <div 
+                    className="h-full bg-yellow-400 rounded-full" 
+                    style={{ width: '60%' }} // Visuel statique pour l'esthétique
+                ></div>
+              </div>
+              <span className="text-sm font-semibold text-gray-600">
+                {prediction.prix_max.toLocaleString('fr-FR')}
+              </span>
             </div>
+          )}
+        </motion.div>
+      </div>
+
+      {/* 3. TIMELINE TRAJET (Départ -> Arrivée) */}
+      <div className="px-6 py-2">
+        <div className="relative pl-4 space-y-6">
+          {/* Ligne connectrice */}
+          <div className="absolute left-[19px] top-3 bottom-3 w-0.5 bg-gradient-to-b from-yellow-400 to-gray-200 border-l border-dashed border-gray-300"></div>
+
+          {/* Point Départ */}
+          <div className="relative flex items-start gap-4">
+            <div className="relative z-10 w-2.5 h-2.5 mt-1.5 rounded-full bg-yellow-400 ring-4 ring-white shadow-sm"></div>
             <div className="flex-1 min-w-0">
-              <div className="text-[10px] font-semibold text-gray-500 uppercase tracking-wide mb-0.5">
-                Départ
-              </div>
-              <div className="font-bold text-gray-900 truncate text-sm">
-                {prediction.details_trajet?.depart?.label || 'Non spécifié'}
-              </div>
+               <div className="text-[10px] font-bold text-gray-400 uppercase tracking-wide">Départ</div>
+               <div className="text-sm font-bold text-gray-900 truncate">
+                  {prediction.details_trajet?.depart?.label || 'Départ'}
+               </div>
+               <div className="text-xs text-gray-500 truncate">
+                  {prediction.details_trajet?.depart?.quartier || prediction.details_trajet?.depart?.ville || 'Yaoundé'}
+               </div>
             </div>
-          </motion.div>
+          </div>
 
-          {/* Arrivée */}
-          <motion.div 
-            initial={{ x: 20, opacity: 0 }}
-            animate={{ x: 0, opacity: 1 }}
-            transition={{ delay: 0.4 }}
-            className="flex items-start gap-2 p-3 bg-gradient-to-br from-gray-50 to-gray-100 rounded-xl"
-          >
-            <div className="p-1.5 bg-purple-500 rounded-lg">
-              <MapPin className="w-4 h-4 text-white fill-white" />
+          {/* Point Arrivée */}
+          <div className="relative flex items-start gap-4">
+            <div className="relative z-10 w-2.5 h-2.5 mt-1.5 rounded-full bg-gray-900 ring-4 ring-white shadow-sm"></div>
+             <div className="flex-1 min-w-0">
+               <div className="text-[10px] font-bold text-gray-400 uppercase tracking-wide">Arrivée</div>
+               <div className="text-sm font-bold text-gray-900 truncate">
+                  {prediction.details_trajet?.arrivee?.label || 'Arrivée'}
+               </div>
+               <div className="text-xs text-gray-500 truncate">
+                  {prediction.details_trajet?.arrivee?.quartier || prediction.details_trajet?.arrivee?.ville || 'Destination'}
+               </div>
             </div>
-            <div className="flex-1 min-w-0">
-              <div className="text-[10px] font-semibold text-gray-500 uppercase tracking-wide mb-0.5">
-                Arrivée
-              </div>
-              <div className="font-bold text-gray-900 truncate text-sm">
-                {prediction.details_trajet?.arrivee?.label || 'Non spécifié'}
-              </div>
-            </div>
-          </motion.div>
-
-          {/* Distance */}
-          <motion.div 
-            initial={{ y: 20, opacity: 0 }}
-            animate={{ y: 0, opacity: 1 }}
-            transition={{ delay: 0.5 }}
-            className="flex items-center gap-2 p-3 bg-gradient-to-br from-blue-50 to-blue-100 rounded-xl"
-          >
-            <div className="p-1.5 bg-blue-600 rounded-lg">
-              <Route className="w-4 h-4 text-white" />
-            </div>
-            <div>
-              <div className="text-[10px] font-semibold text-blue-600 uppercase tracking-wide">
-                Distance
-              </div>
-              <div className="text-lg font-black text-blue-900">
-                {(prediction.details_trajet?.distance_estimee / 1000).toFixed(1)} km
-              </div>
-            </div>
-          </motion.div>
-
-          {/* Durée */}
-          <motion.div 
-            initial={{ y: 20, opacity: 0 }}
-            animate={{ y: 0, opacity: 1 }}
-            transition={{ delay: 0.6 }}
-            className="flex items-center gap-2 p-3 bg-gradient-to-br from-purple-50 to-purple-100 rounded-xl"
-          >
-            <div className="p-1.5 bg-purple-600 rounded-lg">
-              <Clock className="w-4 h-4 text-white" />
-            </div>
-            <div>
-              <div className="text-[10px] font-semibold text-purple-600 uppercase tracking-wide">
-                Durée
-              </div>
-              <div className="text-lg font-black text-purple-900">
-                {Math.ceil(prediction.details_trajet?.duree_estimee / 60)} min
-              </div>
-            </div>
-          </motion.div>
+          </div>
         </div>
       </div>
 
-      {/* Ajustements - Compact */}
-      {prediction.ajustements_appliques && (
-        <div className="px-6 py-4 bg-gradient-to-br from-gray-50 to-white border-t border-gray-100">
-          <div className="flex items-center gap-2 mb-3">
-            <Info className="w-4 h-4 text-blue-600" />
-            <h4 className="font-bold text-gray-900 text-sm">
-              Estimations alternatives
-            </h4>
-          </div>
-          
-          <div className="grid grid-cols-2 gap-2">
-            {prediction.ajustements_appliques.meteo_opposee && (() => {
-              const WeatherIcon = getWeatherIcon(prediction.ajustements_appliques.meteo_opposee.code);
-              return (
-                <motion.div
-                  initial={{ scale: 0.9, opacity: 0 }}
-                  animate={{ scale: 1, opacity: 1 }}
-                  transition={{ delay: 0.7 }}
-                  whileHover={{ scale: 1.02 }}
-                  className="flex items-center justify-between p-3 bg-white rounded-xl border border-gray-200 hover:border-blue-400 transition-all cursor-pointer"
-                >
-                  <div className="flex items-center gap-2">
-                    <div className="p-1.5 bg-blue-100 rounded-lg">
-                      <WeatherIcon className="w-4 h-4 text-blue-600" />
-                    </div>
-                    <div>
-                      <div className="text-[10px] font-semibold text-gray-500 uppercase">
-                        {prediction.ajustements_appliques.meteo_opposee.label}
-                      </div>
-                    </div>
-                  </div>
-                  <div className="text-lg font-black text-blue-600">
-                    {prediction.ajustements_appliques.meteo_opposee.prix_estime?.toFixed(0)}
-                  </div>
-                </motion.div>
-              );
-            })()}
-            
-            {prediction.ajustements_appliques.heure_opposee && (() => {
-              const TimeIcon = getTimeIcon(prediction.ajustements_appliques.heure_opposee.tranche);
-              const heureInfo = HEURE_TRANCHES[prediction.ajustements_appliques.heure_opposee.tranche];
-              return (
-                <motion.div
-                  initial={{ scale: 0.9, opacity: 0 }}
-                  animate={{ scale: 1, opacity: 1 }}
-                  transition={{ delay: 0.8 }}
-                  whileHover={{ scale: 1.02 }}
-                  className="flex items-center justify-between p-3 bg-white rounded-xl border border-gray-200 hover:border-purple-400 transition-all cursor-pointer"
-                >
-                  <div className="flex items-center gap-2">
-                    <div className={`p-1.5 ${heureInfo?.bg || 'bg-purple-100'} rounded-lg`}>
-                      <TimeIcon className={`w-4 h-4 ${heureInfo?.color || 'text-purple-600'}`} />
-                    </div>
-                    <div>
-                      <div className="text-[10px] font-semibold text-gray-500 uppercase">
-                        {heureInfo?.label || prediction.ajustements_appliques.heure_opposee.tranche}
-                      </div>
-                    </div>
-                  </div>
-                  <div className="text-lg font-black text-purple-600">
-                    {prediction.ajustements_appliques.heure_opposee.prix_estime?.toFixed(0)}
-                  </div>
-                </motion.div>
-              );
-            })()}
-          </div>
-        </div>
-      )}
+      {/* 4. DETAILS GRID (Les nouvelles données API) */}
+      <div className="p-4 mx-4 mt-6 mb-6 bg-gray-50 rounded-2xl border border-gray-100">
+         <div className="grid grid-cols-2 gap-4">
+            {/* Distance */}
+            <div className="flex flex-col gap-1">
+               <div className="flex items-center gap-1.5 text-xs text-gray-500">
+                  <Route className="w-3.5 h-3.5" /> Distance
+               </div>
+               <div className="text-sm font-bold text-gray-900">
+                  {((prediction.details_trajet?.distance_metres || prediction.distance || 0) / 1000).toFixed(1)} km
+               </div>
+            </div>
 
-      {/* Estimations supplémentaires - Compact */}
-      {prediction.estimations_supplementaires && (
-        <div className="px-6 py-4 bg-gradient-to-br from-amber-50 to-orange-50 border-t border-amber-200">
-          <div className="flex items-center gap-2 mb-3">
-            <AlertCircle className="w-4 h-4 text-amber-600" />
-            <h4 className="font-bold text-amber-900 text-sm">
-              Méthodes alternatives
-            </h4>
-          </div>
-          
-          <div className="space-y-1.5">
-            {[
-              { key: 'distance_based', label: 'Distance' },
-              { key: 'standardise', label: 'Officiel' },
-              { key: 'zone_based', label: 'Zone' },
-            ].map((method, idx) => (
-              prediction.estimations_supplementaires[method.key] && (
-                <motion.div
-                  key={method.key}
-                  initial={{ x: -20, opacity: 0 }}
-                  animate={{ x: 0, opacity: 1 }}
-                  transition={{ delay: 0.7 + idx * 0.1 }}
-                  className="flex items-center justify-between p-2.5 bg-white rounded-lg border border-amber-200"
-                >
-                  <span className="text-xs font-medium text-gray-700">{method.label}</span>
-                  <span className="text-base font-bold text-amber-700">
-                    {prediction.estimations_supplementaires[method.key]?.toFixed(0)} FCFA
-                  </span>
-                </motion.div>
-              )
-            ))}
-          </div>
-        </div>
-      )}
+            {/* Durée */}
+            <div className="flex flex-col gap-1">
+               <div className="flex items-center gap-1.5 text-xs text-gray-500">
+                  <Clock className="w-3.5 h-3.5" /> Durée
+               </div>
+               <div className="text-sm font-bold text-gray-900">
+                  {Math.ceil((prediction.details_trajet?.duree_secondes || prediction.duree || 0) / 60)} min
+               </div>
+            </div>
 
-      {/* Suggestions - Compact */}
-      {prediction.suggestions && prediction.suggestions.length > 0 && (
-        <div className="px-6 py-4 bg-blue-50 border-t border-blue-100">
-          <div className="flex items-center gap-2 mb-2.5">
-            <Info className="w-4 h-4 text-blue-600" />
-            <h4 className="font-bold text-blue-900 text-sm">
-              Conseils
-            </h4>
+            {/* Météo (Nouveau) */}
+            <div className="flex flex-col gap-1">
+               <div className="flex items-center gap-1.5 text-xs text-gray-500">
+                  {getWeatherIcon(prediction.details_trajet?.meteo)} Météo
+               </div>
+               <div className="text-sm font-bold text-gray-900 capitalize">
+                  {prediction.details_trajet?.meteo_label || 'Normale'}
+               </div>
+            </div>
+
+            {/* Zone (Nouveau) */}
+            <div className="flex flex-col gap-1">
+               <div className="flex items-center gap-1.5 text-xs text-gray-500">
+                  <Navigation className="w-3.5 h-3.5" /> Zone
+               </div>
+               <div className="text-sm font-bold text-gray-900 capitalize">
+                  {prediction.details_trajet?.type_zone_label || 'Urbaine'}
+               </div>
+            </div>
+         </div>
+      </div>
+
+      {/* 5. ESTIMATIONS ALTERNATIVES COMPACTES (Si inconnu) */}
+        {isInconnu && prediction.estimations_supplementaires && (
+        <div className="px-6 pb-6">
+          <div className="text-[10px] font-bold text-gray-400 uppercase tracking-wide mb-3">
+            Détail des calculs (fallback)
           </div>
-          <ul className="space-y-1.5">
-            {prediction.suggestions.map((suggestion, i) => (
-              <motion.li
-                key={i}
-                initial={{ x: -10, opacity: 0 }}
-                animate={{ x: 0, opacity: 1 }}
-                transition={{ delay: 0.8 + i * 0.1 }}
-                className="flex items-start gap-2 text-blue-800"
-              >
-                <ArrowRight className="w-3.5 h-3.5 flex-shrink-0 mt-0.5 text-blue-600" />
-                <span className="text-xs">{suggestion}</span>
-              </motion.li>
-            ))}
-          </ul>
+          <div className="space-y-2">
+            <div className="flex justify-between items-center py-2 border-b border-gray-50 border-dashed">
+              <span className="text-xs text-gray-600">Prédiction ML</span>
+              <span className="text-xs font-bold text-gray-900">
+                {mlPrediction ? `${mlPrediction} FCFA` : 'Non disponible'}
+              </span>
+            </div>
+            {featuresUsed && (
+                  <div className="grid grid-cols-2 gap-2 text-[11px] text-gray-600 bg-white border border-gray-100 rounded-xl px-3 py-2">
+                    <div>Distance: {((featuresUsed.distance_metres || 0) / 1000).toFixed(2)} km</div>
+                    <div>Durée: {Math.round((featuresUsed.duree_secondes || 0) / 60)} min</div>
+                    <div>Sinuosité: {(featuresUsed.sinuosite || 0).toFixed(2)}</div>
+                    <div>Virages: {featuresUsed.nb_virages ?? 0}</div>
+                    <div>Heure: {featuresUsed.heure || '-'}</div>
+                    <div>Météo: {featuresUsed.meteo ?? '-'}</div>
+                  </div>
+            )}
+          </div>
         </div>
-      )}
+        )}
+
+      {/* 6. MESSAGE CONSEIL (Footer) */}
+      <div className="bg-yellow-50/50 p-4 border-t border-yellow-100/50">
+        <div className="flex gap-3">
+            <div className="mt-0.5">
+                <Info className="w-4 h-4 text-yellow-600" />
+            </div>
+            <p className="text-xs text-yellow-800 leading-relaxed font-medium">
+                {prediction.message || "Prix indicatif basé sur les données disponibles."}
+            </p>
+        </div>
+      </div>
     </motion.div>
   );
 }

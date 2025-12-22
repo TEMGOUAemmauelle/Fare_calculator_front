@@ -10,7 +10,7 @@
  * - Switch élégant pour navigation
  */
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { motion } from 'framer-motion';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { Drawer } from 'vaul';
@@ -22,6 +22,8 @@ import {
   Loader2,
   Calculator,
   PlusCircle,
+  ThumbsDown,
+  ThumbsUp,
 } from 'lucide-react';
 import toast from 'react-hot-toast';
 
@@ -49,6 +51,7 @@ export default function AddTrajetPage() {
     prix_paye: '',
     meteo: 0,
     heure_tranche: 'matin',
+    qualite_trajet: 5,
     depart_coords: null,
     arrivee_coords: null,
   });
@@ -58,12 +61,98 @@ export default function AddTrajetPage() {
   const [showSuccessModal, setShowSuccessModal] = useState(false);
   const [validationErrors, setValidationErrors] = useState({});
   const [drawerOpen, setDrawerOpen] = useState(false); // Contrôler ouverture Drawer
+  const [isLocating, setIsLocating] = useState(false);
   
   // États carte
   const [mapCenter, setMapCenter] = useState([11.5021, 3.8480]); // Yaoundé
   const [mapZoom, setMapZoom] = useState(12);
   const [markers, setMarkers] = useState([]);
   const [routeData, setRouteData] = useState(null);
+  
+  // Refs pour éviter les problèmes de StrictMode
+  const autoLocationAttemptedRef = useRef(false);
+  const mountedRef = useRef(true);
+
+  // Fonction pour détecter automatiquement la tranche horaire
+  const setCurrentTimeSlot = () => {
+    const hour = new Date().getHours();
+    let slot = 'matin';
+    
+    if (hour >= 5 && hour < 12) slot = 'matin';
+    else if (hour >= 12 && hour < 17) slot = 'apres-midi';
+    else if (hour >= 17 && hour < 21) slot = 'soir';
+    else slot = 'nuit';
+    
+    setFormData(prev => ({ ...prev, heure_tranche: slot }));
+  };
+
+  // Initialisation : Ouverture Drawer + Géolocalisation auto
+  useEffect(() => {
+    // Reset mounted à true à chaque mount
+    mountedRef.current = true;
+    
+    // 0. Détecter la tranche horaire actuelle
+    setCurrentTimeSlot();
+    
+    // 1. Ouvrir le drawer automatiquement
+    setDrawerOpen(true);
+
+    // 2. Tenter la géolocalisation si pas de données pré-remplies
+    const attemptAutoGeoloc = async () => {
+      // Éviter double exécution avec StrictMode
+      if (autoLocationAttemptedRef.current) return;
+      autoLocationAttemptedRef.current = true;
+      
+      if (!location.state?.depart) {
+        setIsLocating(true);
+        try {
+          const { checkGeolocationPermission, getCurrentPositionWithAddress } = await import('../services/geolocationService');
+          
+          try {
+            const status = await checkGeolocationPermission();
+            if (status === 'denied') {
+                toast('Activez la localisation pour une saisie plus rapide', {
+                icon: '📍',
+                duration: 5000,
+                });
+                // On continue quand même
+            }
+          } catch (e) { /* ignore */ }
+
+          // Si accordé ou prompt, on tente
+          const point = await getCurrentPositionWithAddress();
+          
+          console.log('📍 [AddTrajetPage] Point retourné:', point);
+          
+          if (!mountedRef.current) return;
+          
+          if (point) {
+            setFormData(prev => ({
+              ...prev,
+              depart_point: point.label || 'Ma position',
+              depart_coords: [point.coords_longitude, point.coords_latitude],
+            }));
+            
+            // Centrer la carte sur la position
+            setMapCenter([point.coords_longitude, point.coords_latitude]);
+            setMapZoom(15);
+            
+            toast.success('Position actuelle détectée', { id: 'geoloc-success' });
+          }
+        } catch (e) {
+          console.warn('Auto-geoloc failed:', e);
+        } finally {
+          if (mountedRef.current) setIsLocating(false);
+        }
+      }
+    };
+
+    attemptAutoGeoloc();
+    
+    return () => {
+      mountedRef.current = false;
+    };
+  }, [location.state?.depart]);
 
   // Pré-remplir depuis estimation précédente
   useEffect(() => {
@@ -242,6 +331,7 @@ export default function AddTrajetPage() {
         prix: parseFloat(formData.prix_paye), // 'prix' et non 'prix_paye'
         meteo: formData.meteo,
         heure: formData.heure_tranche, // 'heure' et non 'heure_tranche'
+        qualite_trajet: Math.round(formData.qualite_trajet), // Arrondir avant envoi
       };
 
       console.log('📤 Envoi trajet:', payload);
@@ -267,6 +357,7 @@ export default function AddTrajetPage() {
           prix_paye: '',
           meteo: 0,
           heure_tranche: 'matin',
+          qualite_trajet: 5,
           depart_coords: null,
           arrivee_coords: null,
         });
@@ -353,12 +444,22 @@ export default function AddTrajetPage() {
             <div className="p-4 bg-white rounded-t-3xl flex-shrink-0">
               <div className="mx-auto w-12 h-1.5 flex-shrink-0 rounded-full bg-gray-300 mb-8" />
               <div className="max-w-md mx-auto">
-                <Drawer.Title className="font-black text-2xl mb-2 text-gray-700">
-                  Ajouter un trajet
-                </Drawer.Title>
-                <p id="drawer-description-add" className="text-sm text-gray-600">
-                  Aidez la communauté en partageant vos données
-                </p>
+                <div className="flex items-start justify-between mb-2">
+                  <div className="flex-1">
+                    <Drawer.Title className="font-black text-2xl text-gray-700">
+                      Ajouter un trajet
+                    </Drawer.Title>
+                    <p id="drawer-description-add" className="text-sm text-gray-600 mt-1">
+                      Aidez la communauté en partageant vos données
+                    </p>
+                  </div>
+                  <button
+                    onClick={() => navigate('/trajets')}
+                    className="px-3 py-1.5 bg-gray-200 hover:bg-gray-300 text-gray-800 rounded-lg text-xs font-semibold transition-colors flex-shrink-0"
+                  >
+                    Trajets commu
+                  </button>
+                </div>
               </div>
             </div>
 
@@ -382,6 +483,7 @@ export default function AddTrajetPage() {
                   value={formData.depart_point}
                   onSelect={handleDepartSelect}
                   showCurrentLocation={true}
+                  externalLoading={isLocating}
                 />
                 {validationErrors.depart_point && (
                   <p className="mt-1 text-xs text-red-600">{validationErrors.depart_point}</p>
@@ -497,6 +599,47 @@ export default function AddTrajetPage() {
                     {label}
                   </motion.button>
                 ))}
+              </div>
+            </div>
+
+            {/* Qualité du trajet */}
+            <div>
+              <label className="block text-sm font-semibold text-gray-900 mb-2">
+                Notez ce trajet - Est-il difficile ?
+              </label>
+              <div className="space-y-3">
+                <div className="flex items-center justify-between text-xs text-gray-600 font-medium">
+                  <div className="flex items-center gap-1">
+                    <ThumbsDown className="w-4 h-4 text-red-600" />
+                    <span>Difficile</span>
+                  </div>
+                  <span className="text-lg font-black text-yellow-600">{Math.round(formData.qualite_trajet)}</span>
+                  <div className="flex items-center gap-1">
+                    <ThumbsUp className="w-4 h-4 text-green-600" />
+                    <span>Facile</span>
+                  </div>
+                </div>
+                <input
+                  type="range"
+                  min="1"
+                  max="10"
+                  value={11 - formData.qualite_trajet}
+                  onChange={(e) => handleInputChange('qualite_trajet', 11 - parseFloat(e.target.value))}
+                  className="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer slider-yellow"
+                  style={{
+                    background: `linear-gradient(to right, #ef4444 0%, #fbbf24 ${(10 - formData.qualite_trajet) * 11.11}%, #fbbf24 ${(10 - formData.qualite_trajet) * 11.11}%, #10b981 100%)`
+                  }}
+                />
+                <div className="flex justify-between text-xs text-gray-500">
+                  <span>10</span>
+                  <span>5</span>
+                  <span>1</span>
+                </div>
+                <p className="text-xs text-gray-500 italic">
+                  {Math.round(formData.qualite_trajet) <= 3 && "Trajet fluide, peu d'obstacles"}
+                  {Math.round(formData.qualite_trajet) > 3 && Math.round(formData.qualite_trajet) <= 7 && "Trajet normal avec quelques difficultés"}
+                  {Math.round(formData.qualite_trajet) > 7 && "Trajet difficile (embouteillages, nids de poule...)"}
+                </p>
               </div>
             </div>
           </div>

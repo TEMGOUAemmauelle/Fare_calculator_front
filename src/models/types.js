@@ -89,11 +89,15 @@
  * @typedef {Object} DetailsTrajet
  * @property {PointDetails} depart - Détails point départ
  * @property {PointDetails} arrivee - Détails point arrivée
- * @property {number} distance_estimee - Distance routière en mètres
- * @property {number} duree_estimee - Durée en secondes
+ * @property {number} distance_metres - Distance routière en mètres
+ * @property {number} duree_secondes - Durée en secondes
  * @property {string|null} heure - Tranche horaire
  * @property {number|null} meteo - Code météo
+ * @property {string|null} meteo_label - Label météo (ex: "Soleil", "Pluie forte")
  * @property {number|null} type_zone - Type zone
+ * @property {string|null} type_zone_label - Label type zone (ex: "Urbaine", "Mixte")
+ * @property {number|null} congestion_mapbox - Congestion Mapbox (0-100)
+ * @property {string|null} route_classe - Classe route dominante
  */
 
 /**
@@ -131,19 +135,25 @@
  */
 
 /**
+ * @typedef {Object} FeaturesUtilisees
+ * @property {number} distance_metres - Distance en mètres utilisée pour la prédiction
+ * @property {number} duree_secondes - Durée en secondes utilisée pour la prédiction
+ * @property {number|null} congestion - Congestion Mapbox (0-100) ou null si inconnue
+ * @property {number} sinuosite - Indice de sinuosité utilisé
+ * @property {number} nb_virages - Nombre de virages estimé
+ * @property {string} heure - Tranche horaire utilisée
+ * @property {number} meteo - Code météo utilisé
+ * @property {number} type_zone - Type de zone utilisé
+ *
  * @typedef {Object} EstimationsSupplementaires
- * @property {number} distance_based - Prix basé sur distance (CFA)
- * @property {number} standardise - Prix tarif officiel (CFA)
- * @property {number} zone_based - Prix moyenne zone (CFA)
  * @property {number|null} ml_prediction - Prix ML (CFA, null si modèle indisponible)
+ * @property {FeaturesUtilisees|null} features_utilisees - Features passées au modèle (transparence)
  */
 
 /**
  * @typedef {Object} DetailsEstimations
- * @property {string} distance_based - Explication méthode distance
- * @property {string} standardise - Explication méthode standardisée
- * @property {string} zone_based - Explication méthode zone
  * @property {string|null} ml_prediction - Explication ML (null si indisponible)
+ * @property {string|null} note - Note générale sur le fallback (inconnu)
  */
 
 /**

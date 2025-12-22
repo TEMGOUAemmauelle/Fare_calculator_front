@@ -23,6 +23,7 @@ export default function SearchBar({
   showCurrentLocation = false,
   label = null,
   value = null, // Ajout prop value pour mode controlé
+  externalLoading = false, // Ajout prop pour loading externe
 }) {
   const [query, setQuery] = useState(initialValue);
   const [suggestions, setSuggestions] = useState([]);
@@ -36,10 +37,15 @@ export default function SearchBar({
   const debounceTimer = useRef(null);
   const wrapperRef = useRef(null);
 
+  // Combiner loading interne et externe
+  const showLoading = loadingLocation || externalLoading;
+
   // Synchroniser query avec value externe (mode controlé)
   // MAIS éviter de re-synchroniser juste après une sélection
   useEffect(() => {
+    console.log('🔍 [SearchBar] useEffect value sync - value:', value, 'query:', query, 'justSelected:', justSelected);
     if (value !== null && value !== query && !justSelected) {
+      console.log('🔍 [SearchBar] Mise à jour query avec value:', value);
       setQuery(value);
     }
     // Reset flag après montage
@@ -179,7 +185,7 @@ export default function SearchBar({
       if (error.code === 1) {
         // Permission réellement refusée
         toast.error(
-          'Autorisation refusée. Cliquez sur l\'icône de cadenas 🔒 dans la barre d\'adresse, puis autorisez la géolocalisation.',
+          'Autorisation refusée,autorisez la géolocalisation.',
           {
             duration: 7000,
             icon: '🔒',
@@ -287,15 +293,15 @@ export default function SearchBar({
             whileHover={{ scale: 1.02 }}
             whileTap={{ scale: 0.98 }}
             onClick={handleCurrentLocation}
-            disabled={loadingLocation}
-            className="px-5 py-4 bg-[#f3cd08] text-[#231f0f] rounded-xl hover:bg-[#e0bc07] disabled:bg-gray-300 disabled:cursor-not-allowed flex items-center gap-2 whitespace-nowrap shadow-lg transition-all duration-200"
+            disabled={showLoading}
+            className="px-4 py-4 bg-[#f3cd08] text-[#231f0f] rounded-xl hover:bg-[#e0bc07] disabled:bg-gray-300 disabled:cursor-not-allowed flex items-center justify-center shadow-lg transition-all duration-200"
+            title="Utiliser ma position actuelle"
           >
-            {loadingLocation ? (
+            {showLoading ? (
               <Loader2 className="w-5 h-5 animate-spin" />
             ) : (
               <Navigation className="w-5 h-5" />
             )}
-            <span className="hidden sm:inline font-medium">Position</span>
           </motion.button>
         )}
       </div>

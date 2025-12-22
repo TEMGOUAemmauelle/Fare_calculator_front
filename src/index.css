@@ -46,6 +46,39 @@ html {
   backdrop-filter: blur(4px);
 }
 
+/* Slider personnalisé jaune */
+.slider-yellow::-webkit-slider-thumb {
+  appearance: none;
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #fbbf24 0%, #f59e0b 100%);
+  cursor: pointer;
+  box-shadow: 0 2px 8px rgba(251, 191, 36, 0.4);
+  transition: all 0.2s ease;
+}
+
+.slider-yellow::-webkit-slider-thumb:hover {
+  transform: scale(1.15);
+  box-shadow: 0 4px 12px rgba(251, 191, 36, 0.6);
+}
+
+.slider-yellow::-moz-range-thumb {
+  width: 24px;
+  height: 24px;
+  border: none;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #fbbf24 0%, #f59e0b 100%);
+  cursor: pointer;
+  box-shadow: 0 2px 8px rgba(251, 191, 36, 0.4);
+  transition: all 0.2s ease;
+}
+
+.slider-yellow::-moz-range-thumb:hover {
+  transform: scale(1.15);
+  box-shadow: 0 4px 12px rgba(251, 191, 36, 0.6);
+}
+
 
 @layer base {
   
