@@ -392,30 +392,28 @@ export default function AddTrajetPage() {
         />
       </div>
 
-      {/* Switch élégant en haut au centre */}
-      <div className="absolute top-6 left-1/2 -translate-x-1/2 z-20">
+      {/* Switch élégant en haut au centre - Premium Glass */}
+      <div className="absolute top-6 left-1/2 -translate-x-1/2 z-20 w-fit">
         <motion.div
           initial={{ opacity: 0, y: -20 }}
           animate={{ opacity: 1, y: 0 }}
-          className="bg-white/95 backdrop-blur-sm rounded-full p-1 shadow-2xl border border-gray-200"
+          className="flex items-center p-1.5 bg-white/80 backdrop-blur-xl border border-white/40 rounded-full shadow-[0_8px_30px_rgba(0,0,0,0.04)]"
         >
-          <div className="flex gap-1">
-            <button
-              onClick={() => navigate('/estimate')}
-              className="px-6 py-3 bg-transparent hover:bg-gray-100 text-gray-700 rounded-full font-bold text-sm flex items-center gap-2 transition-all"
-            >
-              <Calculator className="w-4 h-4" strokeWidth={2.5} />
-              <span>Estimer</span>
-            </button>
-            
-            <button
-              onClick={() => navigate('/add-trajet')}
-              className="px-6 py-3 bg-gradient-to-r from-yellow-400 to-yellow-500 text-[#231f0f] rounded-full font-bold text-sm flex items-center gap-2 shadow-lg"
-            >
-              <PlusCircle className="w-4 h-4" strokeWidth={3} />
-              <span>Ajouter</span>
-            </button>
-          </div>
+          <button
+            onClick={() => navigate('/estimate')}
+            className="px-6 py-2.5 bg-transparent hover:bg-black/5 text-gray-500 rounded-full font-bold text-xs uppercase tracking-wide flex items-center gap-2 transition-all active:scale-95"
+          >
+            <Calculator className="w-3.5 h-3.5" strokeWidth={2.5} />
+            <span>Estimer</span>
+          </button>
+          
+          <button
+            onClick={() => navigate('/add-trajet')}
+            className="px-6 py-2.5 bg-[#f3cd08] text-[#0a0a0a] rounded-full font-black text-xs uppercase tracking-wide flex items-center gap-2 shadow-sm transition-transform active:scale-95"
+          >
+            <PlusCircle className="w-3.5 h-3.5" strokeWidth={3} />
+            <span>Ajouter</span>
+          </button>
         </motion.div>
       </div>
 
@@ -441,23 +439,23 @@ export default function AddTrajetPage() {
             className="bg-white flex flex-col rounded-t-3xl h-auto max-h-[85vh] fixed bottom-0 left-0 right-0 z-50"
             aria-describedby="drawer-description-add"
           >
-            <div className="p-4 bg-white rounded-t-3xl flex-shrink-0">
-              <div className="mx-auto w-12 h-1.5 flex-shrink-0 rounded-full bg-gray-300 mb-8" />
+            <div className="p-5 bg-white rounded-t-[2.5rem] flex-shrink-0 shadow-[0_-10px_40px_-15px_rgba(0,0,0,0.1)]">
+              <div className="mx-auto w-12 h-1 bg-gray-200 rounded-full mb-8" />
               <div className="max-w-md mx-auto">
-                <div className="flex items-start justify-between mb-2">
+                <div className="flex items-center justify-between mb-8">
                   <div className="flex-1">
-                    <Drawer.Title className="font-black text-2xl text-gray-700">
-                      Ajouter un trajet
+                    <Drawer.Title className="font-black text-2xl text-[#0a0a0a] tracking-tight">
+                       AJOUTER <span className="text-gray-300">/</span> TRAJET
                     </Drawer.Title>
-                    <p id="drawer-description-add" className="text-sm text-gray-600 mt-1">
-                      Aidez la communauté en partageant vos données
+                    <p id="drawer-description-add" className="text-[10px] uppercase font-bold text-gray-400 mt-1 tracking-widest">
+                      Contribution communautaire
                     </p>
                   </div>
                   <button
                     onClick={() => navigate('/trajets')}
-                    className="px-3 py-1.5 bg-gray-200 hover:bg-gray-300 text-gray-800 rounded-lg text-xs font-semibold transition-colors flex-shrink-0"
+                    className="px-4 py-2 bg-gray-50 hover:bg-gray-100 text-[#0a0a0a] rounded-xl text-[10px] font-black uppercase tracking-wider transition-colors flex-shrink-0"
                   >
-                    Trajets commu
+                    Voir tout
                   </button>
                 </div>
               </div>
@@ -466,139 +464,114 @@ export default function AddTrajetPage() {
             <div className="p-4 bg-white overflow-y-auto flex-1">
               <div className="max-w-md mx-auto">
                 <form onSubmit={handleSubmit} className="space-y-5">
-          {/* Section Itinéraire */}
-          <div className="space-y-3">
-            <h2 className="text-base font-bold text-gray-900 flex items-center gap-2">
-              <MapPin className="w-4 h-4 text-blue-600" />
-              Itinéraire
-            </h2>
+            {/* Section Itinéraire - Journey Card */}
+            <div className="mb-6 p-4 bg-gray-50/80 rounded-3xl border border-gray-100">
+              <div className="flex items-start gap-4">
+                 {/* Timeline Visual */}
+                 <div className="flex flex-col items-center pt-3 flex-shrink-0 h-full gap-1">
+                   <div className="w-2.5 h-2.5 rounded-full bg-[#0a0a0a]" />
+                   <div className="w-0.5 h-10 bg-gray-200 rounded-full" />
+                   <div className="w-2.5 h-2.5 rounded-full bg-[#f3cd08] ring-4 ring-[#f3cd08]/20" />
+                 </div>
 
-            <div className="space-y-3">
-              <div>
-                <label className="block text-sm font-semibold text-gray-900 mb-1">
-                  Départ <span className="text-red-500">*</span>
-                </label>
-                <SearchBar
-                  placeholder="Saisir le lieu de départ"
-                  value={formData.depart_point}
-                  onSelect={handleDepartSelect}
-                  showCurrentLocation={true}
-                  externalLoading={isLocating}
-                />
-                {validationErrors.depart_point && (
-                  <p className="mt-1 text-xs text-red-600">{validationErrors.depart_point}</p>
-                )}
-              </div>
+                 <div className="flex-1 space-y-4">
+                    <div className="relative">
+                       <span className="absolute -top-2 left-0 text-[9px] font-bold text-gray-400 uppercase tracking-wider">De</span>
+                       <SearchBar
+                         placeholder="Lieu de départ..."
+                         value={formData.depart_point}
+                         onSelect={handleDepartSelect}
+                         showCurrentLocation={true}
+                         externalLoading={isLocating}
+                         className="bg-transparent border-none p-0 focus:ring-0 text-[#0a0a0a] font-bold placeholder:text-gray-300"
+                       />
+                       {validationErrors.depart_point && <p className="mt-1 text-[10px] font-bold text-red-500">{validationErrors.depart_point}</p>}
+                    </div>
 
-              <div>
-                <label className="block text-sm font-semibold text-gray-900 mb-1">
-                  Arrivée <span className="text-red-500">*</span>
-                </label>
-                <SearchBar
-                  placeholder="Saisir le lieu d'arrivée"
-                  value={formData.arrivee_point}
-                  onSelect={handleArriveeSelect}
-                />
-                {validationErrors.arrivee_point && (
-                  <p className="mt-1 text-xs text-red-600">{validationErrors.arrivee_point}</p>
-                )}
-              </div>
-            </div>
-          </div>
+                    <div className="h-px w-full bg-gray-200" />
 
-          {/* Section Prix */}
-          <div>
-            <h2 className="text-base font-bold text-gray-900 flex items-center gap-2 mb-2">
-              <DollarSign className="w-4 h-4 text-green-600" />
-              Prix payé
-            </h2>
-
-            <FormInput
-              label=""
-              name="prix_paye"
-              type="number"
-              value={formData.prix_paye}
-              onChange={(e) => handleInputChange('prix_paye', e.target.value)}
-              placeholder="Montant en FCFA (ex: 1500)"
-              min={0}
-              step={50}
-              required
-              error={validationErrors.prix_paye}
-              icon={DollarSign}
-              iconPosition="left"
-            />
-          </div>
-
-          {/* Section Conditions */}
-          <div className="space-y-3">
-            <h2 className="text-base font-bold text-gray-900">
-              Conditions du trajet
-            </h2>
-
-            {/* Météo */}
-            <div>
-              <label className="block text-sm font-semibold text-gray-900 mb-2">
-                Météo
-              </label>
-              <div className="grid grid-cols-2 gap-2">
-                <motion.button
-                  type="button"
-                  whileHover={{ scale: 1.02 }}
-                  whileTap={{ scale: 0.98 }}
-                  onClick={() => handleInputChange('meteo', 0)}
-                  className={`flex items-center justify-center gap-2 p-3 rounded-xl border-2 transition-all ${
-                    formData.meteo === 0
-                      ? 'border-yellow-500 bg-yellow-50 shadow-lg shadow-yellow-500/20'
-                      : 'border-gray-200 bg-white hover:border-gray-300'
-                  }`}
-                >
-                  <Sun className={`w-5 h-5 ${formData.meteo === 0 ? 'text-yellow-600' : 'text-gray-400'}`} />
-                  <span className={`font-bold text-sm ${formData.meteo === 0 ? 'text-yellow-900' : 'text-gray-600'}`}>
-                    Ensoleillé
-                  </span>
-                </motion.button>
-
-                <motion.button
-                  type="button"
-                  whileHover={{ scale: 1.02 }}
-                  whileTap={{ scale: 0.98 }}
-                  onClick={() => handleInputChange('meteo', 2)}
-                  className={`flex items-center justify-center gap-2 p-3 rounded-xl border-2 transition-all ${
-                    formData.meteo === 2
-                      ? 'border-blue-500 bg-blue-50 shadow-lg shadow-blue-500/20'
-                      : 'border-gray-200 bg-white hover:border-gray-300'
-                  }`}
-                >
-                  <CloudRain className={`w-5 h-5 ${formData.meteo === 2 ? 'text-blue-600' : 'text-gray-400'}`} />
-                  <span className={`font-bold text-sm ${formData.meteo === 2 ? 'text-blue-900' : 'text-gray-600'}`}>
-                    Pluvieux
-                  </span>
-                </motion.button>
+                    <div className="relative">
+                       <span className="absolute -top-2 left-0 text-[9px] font-bold text-gray-400 uppercase tracking-wider">À</span>
+                       <SearchBar
+                         placeholder="Lieu d'arrivée..."
+                         value={formData.arrivee_point}
+                         onSelect={handleArriveeSelect}
+                         className="bg-transparent border-none p-0 focus:ring-0 text-[#0a0a0a] font-bold placeholder:text-gray-300"
+                       />
+                       {validationErrors.arrivee_point && <p className="mt-1 text-[10px] font-bold text-red-500">{validationErrors.arrivee_point}</p>}
+                    </div>
+                 </div>
               </div>
             </div>
 
-            {/* Tranche horaire */}
-            <div>
-              <label className="block text-sm font-semibold text-gray-900 mb-2">
-                Tranche horaire
+            {/* Section Prix - Minimalist */}
+            <div className="mb-6">
+              <label className="block text-[10px] font-black text-gray-400 uppercase tracking-widest pl-1 mb-2">
+                Prix payé (FCFA)
               </label>
-              <div className="grid grid-cols-4 gap-1 p-1 bg-gray-100 rounded-xl">
-                {Object.entries(HEURE_TRANCHES).map(([key, { label }]) => (
-                  <motion.button
-                    key={key}
+              <div className="relative">
+                <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
+                  <span className="text-[#f3cd08] font-black text-lg">FCFA</span>
+                </div>
+                <input
+                  type="number"
+                  value={formData.prix_paye}
+                  onChange={(e) => handleInputChange('prix_paye', e.target.value)}
+                  placeholder="0"
+                  className="w-full pl-16 pr-4 py-4 bg-gray-50 border border-transparent focus:bg-white focus:border-[#f3cd08] rounded-2xl font-black text-xl text-[#0a0a0a] transition-all outline-none placeholder:text-gray-300"
+                />
+              </div>
+              {validationErrors.prix_paye && <p className="mt-1 text-[10px] font-bold text-red-500 pl-1">{validationErrors.prix_paye}</p>}
+            </div>
+
+            {/* Grid Options */}
+            <div className="grid grid-cols-2 gap-4 mb-8">
+              {/* Météo */}
+              <div className="space-y-2">
+                <label className="text-[10px] font-black text-gray-400 uppercase tracking-widest pl-1">Météo</label>
+                <div className="flex flex-col gap-2">
+                  <button
                     type="button"
-                    whileHover={{ scale: 1.02 }}
-                    whileTap={{ scale: 0.98 }}
-                    onClick={() => handleInputChange('heure_tranche', key)}
-                    className={`py-2 px-1 rounded-lg font-bold text-xs transition-all ${
-                      formData.heure_tranche === key
-                        ? 'bg-white text-gray-900 shadow-md'
-                        : 'text-gray-600 hover:text-gray-900'
+                    onClick={() => handleInputChange('meteo', 0)}
+                    className={`flex items-center gap-3 px-4 py-3 rounded-2xl transition-all border ${
+                      formData.meteo === 0 ? 'bg-[#0a0a0a] border-[#0a0a0a] text-white shadow-lg' : 'bg-white border-gray-100 text-gray-400'
                     }`}
                   >
-                    {label}
-                  </motion.button>
-                ))}
+                    <Sun className={`w-4 h-4 ${formData.meteo === 0 ? 'text-[#f3cd08]' : 'text-gray-300'}`} />
+                    <span className="text-xs font-bold">Soleil</span>
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => handleInputChange('meteo', 2)}
+                    className={`flex items-center gap-3 px-4 py-3 rounded-2xl transition-all border ${
+                      formData.meteo === 2 ? 'bg-[#0a0a0a] border-[#0a0a0a] text-white shadow-lg' : 'bg-white border-gray-100 text-gray-400'
+                    }`}
+                  >
+                    <CloudRain className={`w-4 h-4 ${formData.meteo === 2 ? 'text-[#3b82f6]' : 'text-gray-300'}`} />
+                    <span className="text-xs font-bold">Pluie</span>
+                  </button>
+                </div>
+              </div>
+
+              {/* Heure */}
+              <div className="space-y-2">
+                <label className="text-[10px] font-black text-gray-400 uppercase tracking-widest pl-1">Moment</label>
+                <div className="grid grid-cols-1 gap-2">
+                  {Object.entries(HEURE_TRANCHES).map(([key, { label }]) => (
+                    <button
+                      key={key}
+                      type="button"
+                      onClick={() => handleInputChange('heure_tranche', key)}
+                      className={`px-4 py-2.5 rounded-xl text-xs font-bold text-left transition-all border ${
+                        formData.heure_tranche === key
+                          ? 'bg-[#f3cd08] border-[#f3cd08] text-black shadow-md shadow-[#f3cd08]/20'
+                          : 'bg-white border-gray-100 text-gray-400 hover:bg-gray-50'
+                      }`}
+                    >
+                      {label}
+                    </button>
+                  ))}
+                </div>
               </div>
             </div>
 
@@ -642,7 +615,6 @@ export default function AddTrajetPage() {
                 </p>
               </div>
             </div>
-          </div>
 
           {/* Erreur */}
           {error && (
@@ -655,22 +627,24 @@ export default function AddTrajetPage() {
             />
           )}
 
-          {/* Bouton Submit */}
+          {/* Bouton Submit - Premium Black */}
           <motion.button
             type="submit"
-            whileHover={{ scale: 1.02 }}
             whileTap={{ scale: 0.98 }}
             disabled={isLoading}
-            className="w-full py-3 bg-gradient-to-r from-yellow-400 to-yellow-500 hover:from-yellow-500 hover:to-yellow-600 disabled:from-gray-300 disabled:to-gray-400 text-[#231f0f] disabled:text-gray-500 font-black text-base rounded-xl shadow-lg shadow-yellow-500/30 disabled:cursor-not-allowed transition-all flex items-center justify-center gap-2"
+            className="w-full bg-[#0a0a0a] hover:bg-black disabled:bg-gray-200 text-white disabled:text-gray-400 py-4 rounded-3xl font-black text-sm uppercase tracking-widest shadow-[0_10px_30px_rgba(0,0,0,0.2)] disabled:shadow-none transition-all flex items-center justify-center gap-3"
           >
             {isLoading ? (
               <>
-                <Loader2 className="w-5 h-5 animate-spin" />
-                Envoi en cours...
+                <div className="w-5 h-5 border-2 border-white/30 border-t-white rounded-full animate-spin" />
+                <span className="text-white/80">Envoi en cours...</span>
               </>
             ) : (
               <>
-                Soumettre le trajet
+                <span>Confirmer</span>
+                <div className="w-6 h-6 bg-[#f3cd08] rounded-full flex items-center justify-center text-black">
+                   <PlusCircle className="w-3.5 h-3.5 stroke-[3px]" />
+                </div>
               </>
             )}
           </motion.button>

@@ -215,13 +215,13 @@ const AllTrajetsPage = () => {
 
                       <div className="flex-1 space-y-4">
                         <div>
-                          <span className="text-[10px] font-black uppercase tracking-[0.2em] text-gray-300">Point A</span>
+                          <span className="text-[10px] font-black uppercase tracking-[0.2em] text-gray-300">Départ</span>
                           <h4 className="text-xl font-black text-gray-900 leading-none truncate md:max-w-[300px]">
                             {trajet.point_depart?.label || 'Secteur Inconnu'}
                           </h4>
                         </div>
                         <div>
-                          <span className="text-[10px] font-black uppercase tracking-[0.2em] text-gray-300">Point B</span>
+                          <span className="text-[10px] font-black uppercase tracking-[0.2em] text-gray-300">Arrivée</span>
                           <h4 className="text-xl font-black text-gray-900 leading-none truncate md:max-w-[300px]">
                             {trajet.point_arrivee?.label || 'Secteur Inconnu'}
                           </h4>

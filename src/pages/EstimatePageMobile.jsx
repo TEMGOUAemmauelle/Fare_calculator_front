@@ -383,30 +383,28 @@ export default function EstimatePageMobile() {
         />
       </div>
 
-      {/* Switch élégant en haut au centre */}
-      <div className="absolute top-6 left-1/2 -translate-x-1/2 z-20">
+      {/* Switch élégant en haut au centre - Premium Glass */}
+      <div className="absolute top-6 left-1/2 -translate-x-1/2 z-20 w-fit">
         <motion.div
           initial={{ opacity: 0, y: -20 }}
           animate={{ opacity: 1, y: 0 }}
-          className="bg-white/95 backdrop-blur-sm rounded-full p-1 shadow-2xl border border-gray-200"
+          className="flex items-center p-1.5 bg-white/80 backdrop-blur-xl border border-white/40 rounded-full shadow-[0_8px_30px_rgba(0,0,0,0.04)]"
         >
-          <div className="flex gap-1">
-            <button
-              onClick={() => navigate('/estimate')}
-              className="px-6 py-3 bg-gradient-to-r from-yellow-400 to-yellow-500 text-[#231f0f] rounded-full font-bold text-sm flex items-center gap-2 shadow-lg"
-            >
-              <Calculator className="w-4 h-4" strokeWidth={3} />
-              <span>Estimer</span>
-            </button>
-            
-            <button
-              onClick={() => navigate('/add-trajet')}
-              className="px-6 py-3 bg-transparent hover:bg-gray-100 text-gray-700 rounded-full font-bold text-sm flex items-center gap-2 transition-all"
-            >
-              <PlusCircle className="w-4 h-4" strokeWidth={2.5} />
-              <span>Ajouter</span>
-            </button>
-          </div>
+          <button
+            onClick={() => navigate('/estimate')}
+            className="px-6 py-2.5 bg-[#f3cd08] text-[#0a0a0a] rounded-full font-black text-xs uppercase tracking-wide flex items-center gap-2 shadow-sm transition-transform active:scale-95"
+          >
+            <Calculator className="w-3.5 h-3.5" strokeWidth={3} />
+            <span>Estimer</span>
+          </button>
+          
+          <button
+            onClick={() => navigate('/add-trajet')}
+            className="px-6 py-2.5 bg-transparent hover:bg-black/5 text-gray-500 rounded-full font-bold text-xs uppercase tracking-wide flex items-center gap-2 transition-all active:scale-95"
+          >
+            <PlusCircle className="w-3.5 h-3.5" strokeWidth={2.5} />
+            <span>Ajouter</span>
+          </button>
         </motion.div>
       </div>
 
@@ -451,12 +449,12 @@ export default function EstimatePageMobile() {
             className="bg-white flex flex-col rounded-t-3xl h-auto max-h-[85vh] fixed bottom-0 left-0 right-0 z-50"
             aria-describedby="drawer-description"
           >
-            <div className="p-4 bg-white rounded-t-3xl flex-shrink-0">
-              <div className="mx-auto w-12 h-1.5 flex-shrink-0 rounded-full bg-gray-300 mb-8" />
+            <div className="p-5 bg-white rounded-t-[2.5rem] flex-shrink-0 shadow-[0_-10px_40px_-15px_rgba(0,0,0,0.1)]">
+              <div className="mx-auto w-12 h-1 bg-gray-200 rounded-full mb-8" />
               <div className="max-w-md mx-auto">
-                <div className="flex items-center justify-between mb-6">
-                  <Drawer.Title className="font-black text-2xl text-gray-700">
-                    Estimer un trajet
+                <div className="flex items-center justify-between mb-8">
+                  <Drawer.Title className="font-black text-2xl text-[#0a0a0a] tracking-tight">
+                    ESTIMER
                   </Drawer.Title>
                   <button
                     onClick={() => navigate('/trajets')}
@@ -477,109 +475,117 @@ export default function EstimatePageMobile() {
               <div className="max-w-md mx-auto">
                 {!prediction ? (
                   <>
-                    {/* Inputs */}
-                    <div className="space-y-4 mb-6">
-                      <div className="flex items-start gap-3">
-                        <div className="flex flex-col items-center pt-4 flex-shrink-0">
-                          <div className="w-3 h-3 rounded-full bg-blue-500 ring-4 ring-blue-100" />
-                          <div className="w-0.5 h-12 bg-gray-300" />
-                          <div className="w-3 h-3 rounded-full bg-red-500 ring-4 ring-red-100" />
+                    {/* Inputs - Journey Card Style */}
+                    <div className="mb-8 p-4 bg-gray-50/80 rounded-3xl border border-gray-100">
+                      <div className="flex items-start gap-4">
+                        {/* Timeline Visual */}
+                        <div className="flex flex-col items-center pt-3 flex-shrink-0 h-full gap-1">
+                          <div className="w-2.5 h-2.5 rounded-full bg-[#0a0a0a]" />
+                          <div className="w-0.5 h-10 bg-gray-200 rounded-full" />
+                          <div className="w-2.5 h-2.5 rounded-full bg-[#f3cd08] ring-4 ring-[#f3cd08]/20" />
                         </div>
 
                         <div className="flex-1 space-y-4">
-                          <SearchBar
-                            placeholder="Départ"
-                            onSelect={handleDepartSelect}
-                            showCurrentLocation={true}
-                            value={departPlace?.label || ''}
-                            externalLoading={isLocating}
-                          />
+                          <div className="relative">
+                            <span className="absolute -top-2 left-0 text-[9px] font-bold text-gray-400 uppercase tracking-wider">De</span>
+                            <SearchBar
+                              placeholder="Position actuelle..."
+                              onSelect={handleDepartSelect}
+                              showCurrentLocation={true}
+                              value={departPlace?.label || ''}
+                              externalLoading={isLocating}
+                              className="bg-transparent border-none p-0 focus:ring-0 text-[#0a0a0a] font-bold placeholder:text-gray-300"
+                            />
+                          </div>
                           
-                          <SearchBar
-                            placeholder="Arrivée"
-                            onSelect={handleArriveeSelect}
-                            value={arriveePlace?.label || ''}
-                          />
+                          <div className="h-px w-full bg-gray-200" />
+
+                          <div className="relative">
+                             <span className="absolute -top-2 left-0 text-[9px] font-bold text-gray-400 uppercase tracking-wider">À</span>
+                             <SearchBar
+                              placeholder="Où allez-vous ?"
+                              onSelect={handleArriveeSelect}
+                              value={arriveePlace?.label || ''}
+                              className="bg-transparent border-none p-0 focus:ring-0 text-[#0a0a0a] font-bold placeholder:text-gray-300"
+                            />
+                          </div>
                         </div>
                       </div>
                     </div>
 
-                    {/* Météo */}
-                    <div className="mb-6">
-                      <label className="block text-sm font-bold text-[#231f0f]/70 mb-2">
-                        Météo
-                      </label>
-                      <div className="flex gap-2 p-1 bg-[#f5f5f0] rounded-xl">
-                        {WEATHER_OPTIONS.map((option) => {
-                          const Icon = option.icon;
-                          const isActive = meteo === option.value;
-                          
-                          return (
-                            <button
-                              key={option.value}
-                              onClick={() => setMeteo(option.value)}
-                              className={`flex-1 flex items-center justify-center gap-2 py-3 rounded-lg font-bold transition-all ${
-                                isActive
-                                  ? 'bg-white text-[#231f0f] shadow-md'
-                                  : 'text-[#8a8a60]'
-                              }`}
-                            >
-                              <Icon className={`w-5 h-5 ${isActive ? 'text-[#f3cd08]' : ''}`} />
-                              <span className="text-sm">{option.label}</span>
-                            </button>
-                          );
-                        })}
-                      </div>
+                    {/* Options Grid */}
+                    <div className="grid grid-cols-2 gap-4 mb-8">
+                       {/* Météo */}
+                       <div className="space-y-2">
+                         <label className="text-[10px] font-black text-gray-400 uppercase tracking-widest pl-1">
+                           Conditions
+                         </label>
+                         <div className="flex flex-col gap-2">
+                           {WEATHER_OPTIONS.map((option) => {
+                             const Icon = option.icon;
+                             const isActive = meteo === option.value;
+                             return (
+                               <button
+                                 key={option.value}
+                                 onClick={() => setMeteo(option.value)}
+                                 className={`flex items-center gap-3 px-4 py-3 rounded-2xl transition-all border ${
+                                   isActive
+                                     ? 'bg-[#0a0a0a] border-[#0a0a0a] text-white shadow-lg'
+                                     : 'bg-white border-gray-100 text-gray-400 hover:border-gray-200'
+                                 }`}
+                               >
+                                 <Icon className={`w-4 h-4 ${isActive ? 'text-[#f3cd08]' : 'text-gray-300'}`} />
+                                 <span className="text-xs font-bold">{option.label}</span>
+                               </button>
+                             );
+                           })}
+                         </div>
+                       </div>
+
+                       {/* Heure */}
+                       <div className="space-y-2">
+                         <label className="text-[10px] font-black text-gray-400 uppercase tracking-widest pl-1">
+                           Moment
+                         </label>
+                         <div className="grid grid-cols-1 gap-2">
+                           {TIME_SLOTS.map((slot) => {
+                             const isActive = heureTrajet === slot.value;
+                             return (
+                               <button
+                                 key={slot.value}
+                                 onClick={() => setHeureTrajet(slot.value)}
+                                 className={`px-4 py-2.5 rounded-xl text-xs font-bold text-left transition-all border ${
+                                   isActive
+                                     ? 'bg-[#f3cd08] border-[#f3cd08] text-black shadow-md shadow-[#f3cd08]/20'
+                                     : 'bg-white border-gray-100 text-gray-400 hover:bg-gray-50'
+                                 }`}
+                               >
+                                 {slot.label}
+                               </button>
+                             );
+                           })}
+                         </div>
+                       </div>
                     </div>
 
-                    {/* Heure */}
-                    <div className="mb-6">
-                      <label className="block text-sm font-bold text-[#231f0f]/70 mb-2">
-                        Tranche horaire
-                      </label>
-                      <div className="grid grid-cols-4 gap-2 p-1 bg-[#f5f5f0] rounded-xl">
-                        {TIME_SLOTS.map((slot) => {
-                          const isActive = heureTrajet === slot.value;
-                          
-                          return (
-                            <button
-                              key={slot.value}
-                              onClick={() => setHeureTrajet(slot.value)}
-                              className={`py-3 px-2 rounded-lg font-bold text-xs transition-all ${
-                                isActive
-                                  ? 'bg-white text-[#231f0f] shadow-md'
-                                  : 'text-[#8a8a60]'
-                              }`}
-                            >
-                              {slot.label}
-                            </button>
-                          );
-                        })}
-                      </div>
-                    </div>
-
-                    {/* Bouton */}
+                    {/* Bouton Principal - Refined */}
                     <motion.button
                       onClick={handleEstimate}
                       disabled={!departPlace || !arriveePlace || isLoading}
-                      className="w-full bg-[#f3cd08] hover:bg-[#e0bc07] disabled:bg-gray-300 text-[#231f0f] disabled:text-gray-500 py-4 rounded-full font-black text-lg shadow-xl disabled:cursor-not-allowed transition-all flex items-center justify-center gap-3"
+                      className="w-full bg-[#0a0a0a] hover:bg-black disabled:bg-gray-200 text-white disabled:text-gray-400 py-4 rounded-3xl font-black text-sm uppercase tracking-widest shadow-[0_10px_30px_rgba(0,0,0,0.2)] disabled:shadow-none transition-all flex items-center justify-center gap-3"
                       whileTap={{ scale: 0.98 }}
                     >
                       {isLoading ? (
                         <>
-                          <div className="w-10 h-10">
-                            <LottieAnimation 
-                              animationData={carDrivingAnimation}
-                              loop={true}
-                              autoplay={true}
-                            />
-                          </div>
-                          <span>Calcul...</span>
+                          <div className="w-5 h-5 border-2 border-white/30 border-t-white rounded-full animate-spin" />
+                          <span className="text-white/80">Calcul en cours...</span>
                         </>
                       ) : (
                         <>
-                          <TrendingUp className="w-6 h-6" />
-                          <span>Estimer le tarif</span>
+                          <span>Lancer l'estimation</span>
+                          <div className="w-6 h-6 bg-[#f3cd08] rounded-full flex items-center justify-center text-black">
+                             <TrendingUp className="w-3.5 h-3.5 stroke-[3px]" />
+                          </div>
                         </>
                       )}
                     </motion.button>
