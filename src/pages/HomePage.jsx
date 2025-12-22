@@ -8,7 +8,7 @@
 import { useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { useNavigate } from 'react-router-dom';
-import { ArrowRight, Shield, Zap, Clock } from 'lucide-react';
+import { ArrowRight, PlusCircle, Zap,Sparkle, Sparkles } from 'lucide-react';
 import LottieAnimation from '../components/LottieAnimation';
 import taxiAnimation from '../assets/lotties/yellow taxi.json';
 
@@ -45,110 +45,137 @@ export default function HomePage() {
   };
 
   return (
-    <div className="relative h-[100dvh] w-full overflow-hidden bg-black font-sans">
+    <div className="relative h-[100dvh] w-full overflow-hidden bg-[#0a0a0a] font-sans selection:bg-[#f3cd08]/30">
       
       {/* 1. BACKGROUND IMMERSIF */}
       <div className="absolute inset-0 z-0">
-        {/* Image de fond */}
         <img 
           src={bgImage} 
           alt="Yaoundé City" 
-          className="w-full h-full object-cover scale-105" // scale léger pour effet cinéma
+          className="w-full h-full object-cover scale-105 opacity-60 md:opacity-80 transition-opacity duration-700"
         />
         
-        {/* Overlay Sombre (Gradient du bas vers le haut) */}
-        {/* Cela permet au texte blanc/jaune de ressortir parfaitement */}
-        <div className="absolute inset-0 bg-gradient-to-t from-black via-black/60 to-black/10" />
+        {/* Gradients pour la profondeur */}
+        <div className="absolute inset-0 bg-linear-to-t from-[#0a0a0a] via-[#0a0a0a]/60 to-transparent" />
+        <div className="absolute inset-0 bg-linear-to-b from-[#0a0a0a]/40 via-transparent to-transparent" />
         
-        {/* Vignette subtile pour assombrir les bords */}
-        <div className="absolute inset-0 bg-radial-gradient from-transparent to-black/40" />
+        {/* Grain texture pour le côté premium */}
+        <div className="absolute inset-0 bg-noise opacity-[0.05] pointer-events-none" />
       </div>
 
-      {/* 2. TOP LEFT WIDGET (Lottie) */}
-      <motion.div 
-        initial={{ y: -50, opacity: 0 }}
-        animate={{ y: 0, opacity: 1 }}
-        transition={{ delay: 0.5, type: "spring" }}
-        className="absolute top-12 left-6 z-20"
-      >
-        <div className="flex items-center gap-3 bg-white/10 backdrop-blur-md border border-white/10 pr-4 pl-1 py-1 rounded-2xl shadow-2xl">
-          <div className="w-30 h-13 bg-white/10 rounded-xl flex items-center justify-center">
-             {/* Animation Lottie Taxi miniaturisée */}
-             <div className="w-30 h-15  ">
-                <LottieAnimation
-                  animationData={taxiAnimation}
-                  loop={true}
-                  autoplay={true}
-                />
-             </div>
-          </div>
-          <div className="flex flex-col">
-            <span className="text-[10px] text-gray-300 font-medium uppercase tracking-wider">Status</span>
-            <span className="text-xs font-bold text-[#f3cd08]">Taxis disponibles</span>
-          </div>
-        </div>
-      </motion.div>
-
-      {/* 3. CONTENT (Bottom Anchored) */}
-      <motion.div 
-        variants={containerVariants}
-        initial="hidden"
-        animate="visible"
-        className="absolute bottom-0 left-0 right-0 z-20 px-6 pb-10 flex flex-col justify-end h-full"
-      >
+      {/* 2. MAIN CONTENT WRAPPER */}
+      <div className="relative z-10 w-full h-full max-w-7xl mx-auto px-6 md:px-12 flex flex-col justify-between py-12 md:py-20 lg:flex-row lg:items-end">
         
-        {/* Header Text */}
-        <motion.div variants={itemVariants} className="mb-6">
-          <p className="text-gray-400 text-sm font-medium mb-1 tracking-wide">
-            Bienvenue sur Fare Calculator
-          </p>
-          <h1 className="text-5xl font-black text-white leading-[0.95] tracking-tighter">
-            Où voulez-vous <br />
-            <span className="text-[#f3cd08]">aller ?</span>
-          </h1>
-          
-          <div className="flex items-center gap-2 mt-4 text-gray-400 text-xs">
-            <div className="w-1.5 h-1.5 rounded-full bg-[#f3cd08] animate-pulse" />
-            <span className="uppercase tracking-widest">Yaoundé, Cameroun</span>
+        {/* TOP LEFT : Live Status Hub - Floating & 3D Effect for Originality */}
+        <motion.div 
+          initial={{ y: -40, opacity: 0 }}
+          animate={{ y: 0, opacity: 1 }}
+          transition={{ delay: 0.5, type: "spring", damping: 18, stiffness: 80 }}
+          className="self-start mt-8 ml-1"
+        >
+          {/* Glass Platform */}
+          <div className="relative group">
+            <div className="absolute -inset-4 bg-yellow-400/20 blur-2xl rounded-full opacity-0 group-hover:opacity-100 transition-opacity duration-700" />
+            <div className="relative flex items-center gap-4 bg-white/5 backdrop-blur-xl border border-white/10 pr-5 pl-1 py-1.5 rounded-full overflow-visible">
+              
+              {/* Le Taxi qui 'sort' du cadre (Pop-out effect) */}
+              <div className="relative w-14 h-10 shrink-0 z-10">
+                 <div className="absolute inset-0 scale-[2.5] -translate-y-2 -translate-x-1 filter drop-shadow-[0_10px_10px_rgba(0,0,0,0.5)]">
+                    <LottieAnimation
+                      animationData={taxiAnimation}
+                      loop={true}
+                      autoplay={true}
+                    />
+                 </div>
+              </div>
+
+              <div className="flex flex-col pr-2">
+                <span className="text-[9px] text-[#f3cd08] font-black uppercase tracking-[0.15em] leading-none mb-0.5">Tarifs de Taxi </span>
+                <span className="text-[10px] font-bold text-gray-400">Ne payez plus trop cher</span>
+              </div>
+            </div>
           </div>
         </motion.div>
 
-        {/* Action Bar (Bouton style Input) */}
-        <motion.div variants={itemVariants} className="mb-6">
-          <button 
-            onClick={handleStart}
-            className="group w-full flex items-center gap-3 p-1.5 bg-white/10 backdrop-blur-md border border-white/10 rounded-[2rem] transition-transform active:scale-95"
-          >
-            {/* Partie Gauche (Texte) */}
-            <div className="flex-1 px-6 h-14 flex flex-col justify-center text-left">
-              <span className="text-white font-bold text-lg">Commencer</span>
-              <span className="text-white/40 text-xs">Estimer un trajet maintenant</span>
-            </div>
+        {/* BOTTOM SECTION : Dual Action Command Center */}
+        <motion.div 
+          variants={containerVariants}
+          initial="hidden"
+          animate="visible"
+          className="w-full lg:max-w-xl pb-6"
+        >
+          {/* Headline Section */}
+          <motion.div variants={itemVariants} className="mb-10 pl-2">
+            <h1 className="text-5xl md:text-8xl font-black text-white leading-[0.85] tracking-tighter mb-6 drop-shadow-2xl">
+              FARE <br />
+              <span className="text-transparent bg-clip-text bg-linear-to-r from-[#f3cd08] to-[#f59e0b]">CALCULATOR.</span>
+            </h1>
+            
+            <p className="text-gray-400 text-sm md:text-xl font-medium max-w-[280px] md:max-w-md leading-relaxed border-l-2 border-[#f3cd08] pl-5 opacity-90">
+              Estimez vos coûts ou enrichissez la base de données.
+            </p>
+          </motion.div>
 
-            {/* Partie Droite (Icone Carrée Jaune) */}
-            <div className="w-14 h-14 bg-[#f3cd08] rounded-[1.5rem] flex items-center justify-center text-black shadow-[0_0_20px_rgba(243,205,8,0.3)] group-hover:scale-105 transition-transform">
-              <ArrowRight className="w-6 h-6 stroke-[3px]" />
+          {/* DUAL ACTION CONTROLLER - Refined Paddings */}
+          <motion.div variants={itemVariants} className="flex flex-col gap-4 mb-10">
+            {/* 1. Primary Action : ESTIMER */}
+            <button 
+              onClick={handleStart}
+              className="group relative w-full flex items-center justify-between p-2.5 bg-[#f3cd08] rounded-4xl hover:bg-[#ffda29] active:scale-[0.98] transition-all duration-300 shadow-[0_20px_40px_-10px_rgba(243,205,8,0.3)]"
+            >
+              <div className="flex flex-col items-start px-6 py-1">
+                <span className="text-[#0a0a0a] font-black text-lg md:text-xl uppercase tracking-wider leading-tight">Estimer</span>
+                <span className="text-[#0a0a0a]/50 text-[10px] font-bold uppercase tracking-tight">Calculateur de prix</span>
+              </div>
+              <div className="w-14 h-14 bg-[#0a0a0a] rounded-3xl flex items-center justify-center text-[#f3cd08] group-hover:-rotate-45 transition-transform duration-300">
+                <ArrowRight className="w-6 h-6 stroke-[3px]" />
+              </div>
+            </button>
+
+            {/* 2. Secondary Action & Info Row */}
+            <div className="grid grid-cols-[1fr_auto] gap-3">
+              <button 
+                onClick={() => navigate('/add-trajet')}
+                className="group flex items-center justify-between px-7 py-5 bg-white/5 backdrop-blur-md border border-white/10 rounded-4xl hover:bg-white/10 active:scale-[0.98] transition-all"
+              >
+                <div className="flex flex-col items-start">
+                  <span className="text-white font-bold text-sm uppercase tracking-wide">Contribuer</span>
+                  <span className="text-gray-500 text-[9px] font-bold uppercase tracking-tighter">Base de données</span>
+                </div>
+                <div className="w-9 h-9 rounded-full bg-white/5 flex items-center justify-center group-hover:bg-[#f3cd08] group-hover:text-black transition-all">
+                   <PlusCircle className="w-4 h-4 stroke-[2.5px]" />
+                </div>
+              </button>
+
+              {/* Status Chips - Balanced height */}
+              <div className="flex items-center justify-center px-6 bg-white/5 backdrop-blur-md border border-white/10 rounded-4xl">
+                 <div className="flex flex-col items-center">
+                    <Sparkles className="w-5 h-5 text-[#f3cd08] mb-1.5 drop-shadow-[0_0_8px_rgba(255,255,255,0.4)]" />
+                    <span className="text-[9px] font-black text-gray-400 uppercase tracking-widest">AI</span>
+                 </div>
+              </div>
             </div>
-          </button>
+          </motion.div>
+          
+          {/* Footer Version - Refined Visibility */}
+          <motion.div variants={itemVariants} className="flex items-center gap-5 text-white/40 px-3">
+             <span className="text-[10px] font-black uppercase tracking-[0.4em] whitespace-nowrap">Core v2.0</span>
+             <div className="h-px flex-1 bg-white/20 rounded-full" />
+             <span className="text-[10px] font-black uppercase tracking-[0.4em] whitespace-nowrap">YDE</span>
+          </motion.div>
         </motion.div>
 
-        {/* Bottom Chips (Filtres visuels) */}
-        <motion.div variants={itemVariants} className="flex gap-3 overflow-x-auto pb-2 scrollbar-hide">
-          <Badge icon={Zap} label="Rapide" />
-          <Badge icon={Shield} label="Fiable" />
-        </motion.div>
-
-      </motion.div>
+      </div>
     </div>
   );
 }
 
-// Composant Badge réutilisable
+// Composant Badge réutilisable - Ultra Minimalist
 function Badge({ icon: Icon, label }) {
   return (
-    <div className="flex items-center gap-2 px-5 py-3 bg-white/5 backdrop-blur-sm border border-white/10 rounded-2xl whitespace-nowrap">
+    <div className="flex items-center gap-2.5 px-6 py-4 bg-white/3 backdrop-blur-md border border-white/5 rounded-full transition-colors hover:bg-white/8">
       <Icon className="w-4 h-4 text-[#f3cd08]" />
-      <span className="text-sm font-medium text-gray-200">{label}</span>
+      <span className="text-[10px] font-black text-gray-400 uppercase tracking-[0.2em]">{label}</span>
     </div>
   );
 }
