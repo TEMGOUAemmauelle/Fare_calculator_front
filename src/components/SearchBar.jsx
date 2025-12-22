@@ -11,7 +11,7 @@
 import { useState, useEffect, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Search, MapPin, Loader2, Navigation, MapPinned } from 'lucide-react';
-import toast from 'react-hot-toast';
+import showToast from '../utils/customToast';
 import { useTranslation } from 'react-i18next';
 import { searchPlaces } from '../services/nominatimService';
 import { getCurrentPositionWithAddress } from '../services/geolocationService';
@@ -133,9 +133,7 @@ export default function SearchBar({
     setSuggestions([]);
     
     // Afficher toast pendant la recherche
-    const loadingToast = toast.loading(t('geolocation.detecting'), {
-      duration: 3000,
-    });
+    const loadingToast = showToast.loading(t('geolocation.detecting'));
     
     try {
       // Vérifier permission avant de déclencher
@@ -143,7 +141,7 @@ export default function SearchBar({
       console.log('[SearchBar] Statut permission géoloc:', status);
 
       if (status === 'denied') {
-        toast.error(t('geolocation.denied'), { duration: 7000 });
+        showToast.error(t('geolocation.denied'));
         setLoadingLocation(false);
         return;
       }
@@ -152,7 +150,7 @@ export default function SearchBar({
       console.log('📍 Position obtenue:', point);
       
       // Dismiss loading toast
-      toast.dismiss(loadingToast);
+      showToast.dismiss(loadingToast);
       
       const locationLabel = point.label || t('geolocation.my_position');
       setQuery(locationLabel);
@@ -169,9 +167,7 @@ export default function SearchBar({
       setIsOpen(false);
       setIsFocused(false);
       
-      toast.success(`📍 ${locationLabel}`, {
-        duration: 3000,
-      });
+      showToast.info(locationLabel, '📍');
     } catch (error) {
       console.error('❌ Erreur position complète:', {
         error,
@@ -181,43 +177,22 @@ export default function SearchBar({
       });
       
       // Dismiss loading toast
-      toast.dismiss(loadingToast);
+      showToast.dismiss(loadingToast);
       setQuery('');
       
       // Afficher message spécifique selon le CODE d'erreur (pas le message)
       if (error.code === 1) {
         // Permission réellement refusée
-        toast.error(
-          t('geolocation.denied'),
-          {
-            duration: 7000,
-            icon: '🔒',
-          }
-        );
+        showToast.error(t('geolocation.denied'));
       } else if (error.code === 2) {
         // Position indisponible (pas de GPS, pas de réseau)
-        toast.error(
-          t('geolocation.unavailable'),
-          {
-            duration: 5000,
-            icon: '📡',
-          }
-        );
+        showToast.error(t('geolocation.unavailable'));
       } else if (error.code === 3) {
         // Timeout
-        toast.error(
-          t('geolocation.timeout'),
-          {
-            duration: 4000,
-            icon: '⏱️',
-          }
-        );
+        showToast.error(t('geolocation.timeout'));
       } else {
         // Erreur inconnue
-        toast.error(t('geolocation.unknown_error'), {
-          duration: 4000,
-          icon: '📍',
-        });
+        showToast.error(t('geolocation.unknown_error'));
       }
     } finally {
       setLoadingLocation(false);

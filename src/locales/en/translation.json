@@ -146,11 +146,11 @@
     }
   },
   "geolocation": {
-    "prompt": "Enable geolocation for a better experience (tap the location icon or current position button).",
-    "denied": "Geolocation blocked. Open site settings (padlock icon) and enable location.",
+    "prompt": "Enable geolocation for a better experience.",
+    "denied": "Geolocation blocked.",
     "detecting": "Detecting your position...",
     "my_position": "My position",
-    "unavailable": "Position unavailable. Please check your internet connection.",
+    "unavailable": "Position unavailable.",
     "timeout": "Timed out. Please try again.",
     "unknown_error": "Location error",
     "unsupported": "Geolocation not supported by your device",

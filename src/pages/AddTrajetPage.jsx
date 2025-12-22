@@ -28,7 +28,7 @@ import {
   ThumbsDown,
   ThumbsUp,
 } from 'lucide-react';
-import toast from 'react-hot-toast';
+import showToast from '../utils/customToast';
 
 // Components
 import FormInput from '../components/FormInput';
@@ -115,10 +115,7 @@ export default function AddTrajetPage() {
           try {
             const status = await checkGeolocationPermission();
             if (status === 'denied') {
-                toast('Activez la localisation pour une saisie plus rapide', {
-                icon: '📍',
-                duration: 5000,
-                });
+                showToast.info('Activez la localisation pour une saisie plus rapide', '📍');
                 // On continue quand même
             }
           } catch (e) { /* ignore */ }
@@ -141,7 +138,7 @@ export default function AddTrajetPage() {
             setMapCenter([point.coords_longitude, point.coords_latitude]);
             setMapZoom(15);
             
-            toast.success(t('add.detecting_location') || 'Position actuelle détectée', { id: 'geoloc-success' });
+            showToast.info(t('add.detecting_location') || 'Position actuelle détectée', '📍');
           }
         } catch (e) {
           console.warn('Auto-geoloc failed:', e);
@@ -312,7 +309,7 @@ export default function AddTrajetPage() {
     e.preventDefault();
 
     if (!validateForm()) {
-      toast.error('Veuillez corriger les erreurs du formulaire');
+      showToast.error('Veuillez corriger les erreurs du formulaire');
       return;
     }
 
@@ -370,7 +367,7 @@ export default function AddTrajetPage() {
     } catch (err) {
       console.error('❌ Erreur ajout trajet:', err);
       setError(err.response?.data?.detail || t('error.unexpected'));
-      toast.error(t('error.default_title'));
+      showToast.error(t('error.default_title'));
     } finally {
       setIsLoading(false);
     }

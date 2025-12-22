@@ -29,7 +29,7 @@ import {
   Calculator,
   PlusCircle,
 } from 'lucide-react';
-import toast from 'react-hot-toast';
+import showToast from '../utils/customToast';
 
 // Components
 import MapView from '../components/MapView';
@@ -306,7 +306,7 @@ export default function EstimatePageDesktop() {
 
   const handleEstimate = async () => {
     if (!depart || !arrivee) {
-      toast.error(t('messages.error_same_points')); // Use same points error as placeholder for missing points
+      showToast.error(t('messages.error_same_points')); // Use same points error as placeholder for missing points
       return;
     }
 
@@ -345,17 +345,17 @@ export default function EstimatePageDesktop() {
         });
       }
       
-      toast.success(t('common.done'));
+      showToast.success(t('common.done'));
     } catch (err) {
       console.error('❌ Erreur estimation:', err);
       
       // Message spécifique pour erreur 401
       if (err.response?.status === 401) {
         setError(t('error.auth_title') + ": " + t('messages.error_api_key'));
-        toast.error(t('error.auth_title'));
+        showToast.error(t('error.auth_title'));
       } else {
         setError(err.response?.data?.detail || err.userMessage || t('error.unexpected'));
-        toast.error(t('error.default_title'));
+        showToast.error(t('error.default_title'));
       }
     } finally {
       setIsLoading(false);

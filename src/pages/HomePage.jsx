@@ -88,7 +88,7 @@ export default function HomePage() {
               
               {/* Le Taxi qui 'sort' du cadre (Pop-out effect) */}
               <div className="relative w-14 h-10 shrink-0 z-10">
-                 <div className="absolute inset-0 scale-[2.5] -translate-y-2 -translate-x-2 filter drop-shadow-[0_10px_10px_rgba(0,0,0,0.5)]">
+                 <div className="absolute inset-0 scale-[2.5] translate-y-1 -translate-x-2 filter drop-shadow-[0_10px_10px_rgba(0,0,0,0.5)]">
                     <LottieAnimation
                       animationData={taxiAnimation}
                       loop={true}

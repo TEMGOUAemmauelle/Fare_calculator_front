@@ -9,7 +9,8 @@
  */
 
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
-import { Toaster, toast } from 'react-hot-toast';
+import { Toaster } from 'react-hot-toast';
+import showToast from './utils/customToast';
 import geolocationService from './services/geolocationService';
 import { MESSAGES } from './config/constants';
 import { useTranslation } from 'react-i18next';
@@ -39,10 +40,10 @@ function App() {
         console.log('[App] Statut permission géoloc:', status);
         if (status === 'prompt') {
           // Inviter poliment l'utilisateur mais ne pas forcer le prompt automatique
-          toast(t('geolocation.prompt'), { icon: '📍', duration: 6000 });
+          showToast.info(t('geolocation.prompt'), '📍');
         } else if (status === 'denied') {
           // Permission bloquée : expliquer comment réactiver
-          toast.error(t('geolocation.denied'), { duration: 8000 });
+          showToast.error(t('geolocation.denied'), '🔒');
         }
       } catch (e) {
         console.warn('[App] Vérification permission géoloc échouée:', e);

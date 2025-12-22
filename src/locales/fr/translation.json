@@ -146,12 +146,12 @@
     }
   },
   "geolocation": {
-    "prompt": "Autorisez la géolocalisation pour une meilleure expérience (tapez sur l'icône de localisation ou sur le bouton ma position).",
-    "denied": "Géolocalisation bloquée. Ouvrez les paramètres du site (icône cadenas) et autorisez la localisation.",
+    "prompt": "Autorisez la géolocalisation pour une meilleure expérience",
+    "denied": "Géolocalisation bloquée.",
     "detecting": "Détection de votre position...",
     "my_position": "Ma position",
-    "unavailable": "Position indisponible. Vérifiez votre connexion internet.",
-    "timeout": "Délai dépassé. Réessayez.",
+    "unavailable": "Position indisponible.",
+    "timeout": "Délai dépassé.",
     "unknown_error": "Erreur de localisation",
     "unsupported": "Géolocalisation non supportée par votre appareil",
     "localized": "Position localisée"
