@@ -88,7 +88,7 @@ export default function CarouselAds() {
               className="w-full h-full object-cover opacity-50 transition-transform duration-1000 scale-100"
             />
             {/* Elegant overlay gradient matching the app's refined style */}
-            <div className="absolute inset-0 bg-gradient-to-t from-black/95 via-black/40 to-transparent" />
+            <div className="absolute inset-0 bg-linear-to-t from-black/95 via-black/40 to-transparent" />
           </div>
 
           {/* CONTENT */}

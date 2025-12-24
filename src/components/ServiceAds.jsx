@@ -70,7 +70,7 @@ function AdCard({ ad, idx }) {
            className={`w-full h-full object-cover transition-all duration-1000 ${isLoaded ? 'opacity-100 scale-100' : 'opacity-0 scale-110'}`}
          />
          {/* Elegant Overlay Gradient */}
-         <div className="absolute inset-0 bg-gradient-to-t from-black/95 via-black/40 to-transparent opacity-95" />
+         <div className="absolute inset-0 bg-linear-to-t from-black/95 via-black/40 to-transparent opacity-95" />
       </div>
 
       {/* Content */}

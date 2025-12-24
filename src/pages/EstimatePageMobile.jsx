@@ -22,6 +22,7 @@ import showToast from '../utils/customToast';
 import MapView from '../components/MapView';
 import SearchBarEnhanced from '../components/SearchBarEnhanced';
 import PriceCard from '../components/PriceCard';
+import PartnerPrompt from '../components/PartnerPrompt';
 
 // Services
 import { estimatePrice } from '../services/estimateService';
@@ -78,6 +79,7 @@ export default function EstimatePageMobile() {
   const [markers, setMarkers] = useState([]);
   const [routeData, setRouteData] = useState(null);
   const [routeStats, setRouteStats] = useState(null);
+  const [showPartnerPrompt, setShowPartnerPrompt] = useState(false);
 
   const arriveeInputRef = useRef(null);
   const departInputRef = useRef(null);
@@ -169,6 +171,8 @@ export default function EstimatePageMobile() {
               meteo, heure: heureTrajet
           });
           setPrediction(res);
+          // Afficher le prompt partenaire après 2.5s si c'est une première prédiction
+          setTimeout(() => setShowPartnerPrompt(true), 2500);
       } catch (e) { showToast.error("Erreur serveur"); }
       finally { setIsLoading(false); }
   };
@@ -254,7 +258,7 @@ export default function EstimatePageMobile() {
             animate={{ y: 0 }}
             exit={{ y: '100%' }}
             transition={{ type: 'spring', damping: 25, stiffness: 300 }}
-            className="fixed bottom-0 left-0 right-0 z-50 flex flex-col bg-white rounded-t-4xl shadow-[0_-10px_40px_rgba(0,0,0,0.1)] outline-none h-[55vh]"
+            className={`fixed bottom-0 left-0 right-0 z-50 flex flex-col bg-white rounded-t-4xl shadow-[0_-10px_40px_rgba(0,0,0,0.1)] outline-none transition-all duration-500 ${prediction ? 'h-[85vh]' : 'h-[55vh]'}`}
           >
             <div className="w-full flex justify-center pt-3 pb-2 shrink-0 cursor-pointer" onClick={() => setIsDrawerOpen(false)}>
                 <div className="w-10 h-1 bg-gray-200 rounded-full hover:bg-gray-300 transition-colors" />
@@ -367,6 +371,11 @@ export default function EstimatePageMobile() {
           </motion.div>
         )}
       </AnimatePresence>
+
+      <PartnerPrompt 
+        isVisible={showPartnerPrompt && !!prediction} 
+        onClose={() => setShowPartnerPrompt(false)} 
+      />
     </div>
   );
 }
