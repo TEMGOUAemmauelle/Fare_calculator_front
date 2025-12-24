@@ -51,7 +51,9 @@
     "searching": "Starting...",
     "locating": "Detecting your position...",
     "addr_calc": "Calculating address...",
-    "geoloc_needed": "Geolocation is required for a better experience."
+    "geoloc_needed": "Geolocation is required for a better experience.",
+    "hero_badge_title": "Community Driven",
+    "hero_badge_subtitle": "Premium Desktop Experience"
   },
   "estimate": {
     "title": "ESTIMATE",
@@ -293,7 +295,7 @@
     "title": "Partners",
     "services": "Services",
     "special_offer": "Special Offer",
-    "discover_partners": "Discover our partners",
+    "discover_partners": "Discover our other services",
     "optimize_trips": "Optimize your trips",
     "trust_partners": "Trusted partners for traveling with peace of mind",
     "see_offers": "Check offers",

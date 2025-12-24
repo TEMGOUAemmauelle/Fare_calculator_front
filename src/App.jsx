@@ -17,7 +17,7 @@ import { useTranslation } from 'react-i18next';
 import { useEffect } from 'react';
 
 // Pages
-import HomePage from './pages/HomePage';
+import HomePage from './pages/HomePageRouter';
 import EstimatePage from './pages/EstimatePageRouter';
 import AddTrajetPage from './pages/AddTrajetPage';
 import AllTrajetsPage from './pages/AllTrajetsPage';
