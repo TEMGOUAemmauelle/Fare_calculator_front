@@ -83,7 +83,7 @@ export default defineConfig({
             purpose: 'maskable'
           },
           {
-            src: '/taxi-logo-v2.png',
+            src: '/pwa-icon.svg',
             sizes: 'any',
             type: 'image/svg+xml',
             purpose: 'any'

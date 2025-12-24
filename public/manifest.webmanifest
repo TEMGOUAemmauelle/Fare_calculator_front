@@ -13,10 +13,10 @@
   "dir": "ltr",
   "icons": [
     {
-      "src": "/taxi-logo-v2.png",
+      "src": "/pwa-icon.svg",
       "sizes": "any",
       "type": "image/svg+xml",
-      "purpose": "any maskable"
+      "purpose": "any"
     },
     {
       "src": "/taxi-logo-v2.png",

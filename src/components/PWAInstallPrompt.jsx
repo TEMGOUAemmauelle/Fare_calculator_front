@@ -33,33 +33,48 @@ export default function PWAInstallPrompt() {
     const iOS = /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream;
     setIsIOS(iOS);
 
-    // Ne pas afficher si déjà installé
-    if (isInStandaloneMode) {
-      console.log('✅ PWA: Application déjà installée');
+    if (isInStandaloneMode) return;
+
+    // Vérifier si l'utilisateur a déjà ignoré le prompt récemment (24h)
+    const lastDismissed = localStorage.getItem('pwa-prompt-dismissed');
+    const now = Date.now();
+    if (lastDismissed && now - parseInt(lastDismissed) < 24 * 60 * 60 * 1000) {
+      console.log('🔇 PWA: Prompt ignoré récemment, masqué pour le moment');
       return;
     }
 
-    // Afficher le prompt custom à chaque visite (fallback si beforeinstallprompt non émis)
-    setShowPrompt(true);
-
-    // Écouter l'événement beforeinstallprompt (Android/Chrome)
-    const handleBeforeInstallPrompt = (e) => {
-      e.preventDefault();
-      console.log('💾 PWA installable détecté');
-      setDeferredPrompt(e);
-      setShowPrompt(true); // Afficher immédiatement
+    // Gestion de l'événement d'installation
+    const handlePromptCapture = (e) => {
+      // Si l'événement vient de l'event listener window (main.jsx)
+      const promptEvent = e.detail || e;
+      if (promptEvent && promptEvent.prompt) {
+        console.log('💾 PWA installable détecté');
+        setDeferredPrompt(promptEvent);
+        setShowPrompt(true);
+      }
     };
 
-    window.addEventListener('beforeinstallprompt', handleBeforeInstallPrompt);
-
-    // Pour iOS, afficher immédiatement si pas encore installé
-    if (iOS && !isInStandaloneMode) {
-      console.log('📱 PWA: iOS détecté - Affichage prompt');
-      setShowPrompt(true);
+    // Vérifier si l'événement a déjà été capturé par main.jsx
+    if (window.deferredPrompt) {
+      handlePromptCapture(window.deferredPrompt);
     }
 
+    // Écouter les futures occurrences (événement standard + notre custom event)
+    window.addEventListener('beforeinstallprompt', handlePromptCapture);
+    window.addEventListener('pwa-prompt-available', handlePromptCapture);
+
+    // Pour iOS ou comme fallback après un délai, on montre le prompt quand même
+    // si on n'a pas encore de deferredPrompt (pour proposer l'installation manuelle)
+    const fallbackTimer = setTimeout(() => {
+      if (!isInStandaloneMode) {
+        setShowPrompt(true);
+      }
+    }, 3000);
+
     return () => {
-      window.removeEventListener('beforeinstallprompt', handleBeforeInstallPrompt);
+      window.removeEventListener('beforeinstallprompt', handlePromptCapture);
+      window.removeEventListener('pwa-prompt-available', handlePromptCapture);
+      clearTimeout(fallbackTimer);
     };
   }, []);
 
@@ -90,6 +105,8 @@ export default function PWAInstallPrompt() {
 
   const handleDismiss = () => {
     console.log('❌ Installation PWA fermée');
+    // Mémoriser le refus pour 24h
+    localStorage.setItem('pwa-prompt-dismissed', Date.now().toString());
     setShowPrompt(false);
   };
 
