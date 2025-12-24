@@ -110,7 +110,8 @@
     "locate_error_alt": "Impossible de récupérer la position. Vérifiez vos réglages.",
     "form_incomplete": "Formulaire incomplet",
     "add_error": "Erreur d'ajout",
-    "reopen_modal_alt": "Modifier le trajet"
+    "reopen_modal_alt": "Modifier le trajet",
+    "cta_contribute_sub": "Ajouter"
   },
   "price_card": {
     "standard_estimation": "Estimation standard",
