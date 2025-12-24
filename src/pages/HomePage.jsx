@@ -1,189 +1,197 @@
+
 /**
- * @fileoverview HomePage - Redesign "Immersive Dark Mode"
+ * @fileoverview HomePage - Version Ultra-Polished
  * 
- * Inspiration : Advee Mobile UI Concept
- * Style : Dark, Moody, High Contrast Yellow
+ * - Gestion explicite de la géolocalisation au chargement
+ * - Splash screen informatif
+ * - Fallback élégant si refusé
  */
 
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { motion } from 'framer-motion';
-import { useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { useAppNavigate } from '../hooks/useAppNavigate';
-import { ArrowRight, PlusCircle, Zap,Sparkle, Sparkles } from 'lucide-react';
-import LottieAnimation from '../components/LottieAnimation';
+import { Search, MapPin, BarChart2, Globe, PlusCircle, ArrowRight } from 'lucide-react';
 import LanguageSwitcher from '../components/LanguageSwitcher';
-import taxiAnimation from '../assets/lotties/yellow taxi.json';
+import SplashScreen from '../components/SplashScreen';
+import ServiceAds from '../components/ServiceAds';
+import geolocationService from '../services/geolocationService';
+import { reverseSearch } from '../services/nominatimService';
 
-// Import de l'image locale (Vite gère les imports d'images ainsi)
-// Assure-toi que le chemin est exact par rapport à ce fichier
-import bgImage from '../assets/images/yaounde.png';
+const HERO_IMAGE = "https://media.istockphoto.com/id/519870714/fr/photo/en-taxi.jpg?s=612x612&w=0&k=20&c=r4tdiKcJZMDfpuOCJlVZQNFYegp2YNnVCTGn-tM4rOE=";
+
+const POPULAR_DESTINATIONS = [
+  { id: 1, name: "Aéroport de Nsimalen", address: "Centre, Mefou-et-Afamba", time: "35 min", coords: [11.5533, 3.7225] },
+  { id: 2, name: "Playce Carrefour", address: "Warda, Yaoundé", time: "15 min", coords: [11.5135, 3.8660] },
+  { id: 3, name: "Carrefour Bastos", address: "Nkol Eton, Yaoundé", time: "1 hr", coords: [11.5130, 3.8930] }
+];
 
 export default function HomePage() {
   const { t } = useTranslation();
   const navigate = useAppNavigate();
+  const [showSplash, setShowSplash] = useState(true);
+  const [splashStatus, setSplashStatus] = useState('loading');
+  const [splashMessage, setSplashMessage] = useState("Démarrage...");
+  const [userLocation, setUserLocation] = useState(null);
+  const [userAddress, setUserAddress] = useState("Localisation...");
 
-  // Animation variants pour l'apparition en cascade (Stagger)
-  const containerVariants = {
-    hidden: { opacity: 0 },
-    visible: {
-      opacity: 1,
-      transition: {
-        staggerChildren: 0.1,
-        delayChildren: 0.3,
-      },
-    },
+  const initGeolocation = async () => {
+    setSplashStatus('loading');
+    setSplashMessage(t('home.locating'));
+    try {
+        const pos = await geolocationService.getCurrentPosition();
+        setUserLocation(pos);
+        if (pos) {
+            setSplashMessage(t('home.addr_calc'));
+            const addr = await reverseSearch(pos.coords.latitude, pos.coords.longitude);
+            setUserAddress(addr);
+        } else {
+            setUserAddress("Yaoundé, Cameroun");
+        }
+        setShowSplash(false);
+    } catch (e) {
+        console.warn("Geolocation failure on HomePage", e);
+        setSplashStatus('error');
+        setSplashMessage(t('home.geoloc_needed'));
+    }
   };
 
-  const itemVariants = {
-    hidden: { y: 20, opacity: 0 },
-    visible: { 
-      y: 0, 
-      opacity: 1,
-      transition: { type: "spring", stiffness: 100, damping: 20 }
-    },
-  };
+  useEffect(() => {
+    initGeolocation();
+  }, []);
 
-  const handleStart = () => {
-    navigate('/estimate');
+  const handleStartSearch = (dest = null) => {
+    navigate('/estimate', { 
+      state: { 
+        focusDestination: !dest,
+        prefilledStart: userLocation ? { 
+            label: userAddress,
+            coords: [userLocation.coords.longitude, userLocation.coords.latitude]
+        } : null,
+        targetDestination: dest 
+      } 
+    });
   };
 
   return (
-    <div className="relative h-[100dvh] w-full overflow-hidden bg-[#0a0a0a] font-sans selection:bg-[#f3cd08]/30">
-      {/* LANGUAGE SWITCHER - Top Right */}
-      <div className="absolute top-6 right-6 z-50">
-        <LanguageSwitcher />
-      </div>
+    <>
+      <SplashScreen 
+        isVisible={showSplash} 
+        status={splashStatus} 
+        message={splashMessage} 
+        onRetry={initGeolocation}
+        onSkip={() => setShowSplash(false)}
+      />
 
-      {/* 1. BACKGROUND IMMERSIF */}
-      <div className="absolute inset-0 z-0">
-        <img 
-          src={bgImage} 
-          alt="Yaoundé City" 
-          className="w-full h-full object-cover scale-105 opacity-60 md:opacity-80 transition-opacity duration-700"
-        />
-        
-        {/* Gradients pour la profondeur */}
-        <div className="absolute inset-0 bg-linear-to-t from-[#0a0a0a] via-[#0a0a0a]/60 to-transparent" />
-        <div className="absolute inset-0 bg-linear-to-b from-[#0a0a0a]/40 via-transparent to-transparent" />
-        
-        {/* Grain texture pour le côté premium */}
-        <div className="absolute inset-0 bg-noise opacity-[0.05] pointer-events-none" />
-      </div>
+      <style>
+        {`
+          @keyframes blink {
+            50% { opacity: 0; }
+          }
+          .cursor-blink {
+            animation: blink 1s step-end infinite;
+          }
+        `}
+      </style>
 
-      {/* 2. MAIN CONTENT WRAPPER */}
-      <div className="relative z-10 w-full h-full max-w-7xl mx-auto px-6 md:px-12 flex flex-col justify-between py-12 md:py-20 lg:flex-row lg:items-end">
-        
-        {/* TOP LEFT : Live Status Hub - Floating & 3D Effect for Originality */}
-        <motion.div 
-          initial={{ y: -40, opacity: 0 }}
-          animate={{ y: 0, opacity: 1 }}
-          transition={{ delay: 0.5, type: "spring", damping: 18, stiffness: 80 }}
-          className="self-start mt-8 ml-9"
-        >
-          {/* Glass Platform */}
-          <div className="relative group">
-            <div className="absolute -inset-4 bg-yellow-400/20 blur-2xl rounded-full opacity-0 group-hover:opacity-100 transition-opacity duration-700" />
-            <div className="relative flex items-center gap-4 bg-white/5 backdrop-blur-xl border border-white/10 pr-5 pl-1 py-1.5 rounded-full overflow-visible">
-              
-              {/* Le Taxi qui 'sort' du cadre (Pop-out effect) */}
-              <div className="relative w-14 h-10 shrink-0 z-10">
-                 <div className="absolute inset-0 scale-[2.5] translate-y-1 -translate-x-2 filter drop-shadow-[0_10px_10px_rgba(0,0,0,0.5)]">
-                    <LottieAnimation
-                      animationData={taxiAnimation}
-                      loop={true}
-                      autoplay={true}
-                    />
-                 </div>
+      <div className="min-h-screen bg-white text-[#141414] font-sans antialiased">
+        <header className="px-6 pt-12 pb-6 flex items-center justify-between">
+           <div className="flex flex-col">
+              <h1 className="text-xl font-black tracking-tighter uppercase leading-none italic">
+                FARE<span className="text-[#f3cd08]">CALC</span>
+              </h1>
+              <div className="h-1 w-8 bg-[#f3cd08] mt-1 rounded-full" />
+           </div>
+           
+           <div className="flex items-center gap-3">
+              <button onClick={() => navigate('/stats')} className="p-2.5 bg-gray-50 rounded-2xl text-gray-400 hover:text-[#f3cd08] transition-colors"><BarChart2 className="w-5 h-5" /></button>
+              <button onClick={() => navigate('/trajets')} className="p-2.5 bg-gray-50 rounded-2xl text-gray-400 hover:text-[#f3cd08] transition-colors"><Globe className="w-5 h-5" /></button>
+              <div className="bg-gray-50 rounded-2xl">
+                 <LanguageSwitcher variant="dark" /> 
               </div>
+           </div>
+        </header>
 
-              <div className="flex flex-col pr-2">
-                <span className="text-[9px] text-[#f3cd08] font-black uppercase tracking-[0.15em] leading-none mb-0.5">{t('home.status')}</span>
-                <span className="text-[10px] font-bold text-gray-400">{t('home.status_subtitle')}</span>
-              </div>
-            </div>
-          </div>
-        </motion.div>
-
-        {/* BOTTOM SECTION : Dual Action Command Center */}
-        <motion.div 
-          variants={containerVariants}
-          initial="hidden"
-          animate="visible"
-          className="w-full lg:max-w-xl pb-6"
-        >
-          {/* Headline Section */}
-          <motion.div variants={itemVariants} className="mb-10 pl-2">
-            <h1 className="text-5xl md:text-8xl font-black text-white leading-[0.85] tracking-tighter mb-6 drop-shadow-2xl">
-              {t('home.headline_1')} <br />
-              <span className="text-transparent bg-clip-text bg-linear-to-r from-[#f3cd08] to-[#f59e0b]">{t('home.headline_2')}</span>
-            </h1>
-            
-            <p className="text-gray-400 text-sm md:text-xl font-medium max-w-[280px] md:max-w-md leading-relaxed border-l-2 border-[#f3cd08] pl-5 opacity-90">
-              {t('home.description')}
-            </p>
-          </motion.div>
-
-          {/* DUAL ACTION CONTROLLER - Refined Paddings */}
-          <motion.div variants={itemVariants} className="flex flex-col gap-4 mb-10">
-            {/* 1. Primary Action : ESTIMER */}
-            <button 
-              onClick={handleStart}
-              className="group relative w-full flex items-center justify-between p-2.5 bg-[#f3cd08] rounded-4xl hover:bg-[#ffda29] active:scale-[0.98] transition-all duration-300 shadow-[0_20px_40px_-10px_rgba(243,205,8,0.3)]"
-            >
-              <div className="flex flex-col items-start px-6 py-1">
-                <span className="text-[#0a0a0a] font-black text-lg md:text-xl uppercase tracking-wider leading-tight">{t('home.cta_estimate')}</span>
-                <span className="text-[#0a0a0a]/50 text-[10px] font-bold uppercase tracking-tight">{t('home.cta_estimate_sub')}</span>
-              </div>
-              <div className="w-14 h-14 bg-[#0a0a0a] rounded-3xl flex items-center justify-center text-[#f3cd08] group-hover:-rotate-45 transition-transform duration-300">
-                <ArrowRight className="w-6 h-6 stroke-[3px]" />
-              </div>
-            </button>
-
-            {/* 2. Secondary Action & Info Row */}
-            <div className="grid grid-cols-[1fr_auto] gap-3">
-              <button 
-                onClick={() => navigate('/add-trajet')}
-                className="group flex items-center justify-between px-7 py-5 bg-white/5 backdrop-blur-md border border-white/10 rounded-4xl hover:bg-white/10 active:scale-[0.98] transition-all"
-              >
-                <div className="flex flex-col items-start">
-                  <span className="text-white font-bold text-sm uppercase tracking-wide">{t('home.cta_contribute')}</span>
-                  <span className="text-gray-500 text-[9px] font-bold uppercase tracking-tighter">{t('home.cta_contribute_sub')}</span>
+        <main className="px-6 space-y-8 pb-32">
+            <div className="relative w-full h-44 rounded-4xl overflow-hidden group">
+                <img src={HERO_IMAGE} className="w-full h-full object-cover transform transition-transform duration-700 group-hover:scale-105" alt="Taxi" />
+                <div className="absolute inset-0 bg-linear-to-t from-black/80 via-black/20 to-transparent" />
+                <div className="absolute bottom-6 left-6 right-6">
+                    <motion.h2 
+                        initial={{ opacity: 0, y: 20 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        className="text-2xl font-black text-white leading-tight italic uppercase tracking-tighter"
+                    >
+                        {t('home.hero_title_1')} <span className="text-[#f3cd08]">{t('home.hero_title_2')}</span><br/>{t('home.hero_title_3')}
+                    </motion.h2>
                 </div>
-                <div className="w-9 h-9 rounded-full bg-white/5 flex items-center justify-center group-hover:bg-[#f3cd08] group-hover:text-black transition-all">
-                   <PlusCircle className="w-4 h-4 stroke-[2.5px]" />
-                </div>
-              </button>
-
-              {/* Status Chips - Balanced height */}
-              <div className="flex items-center justify-center px-6 bg-white/5 backdrop-blur-md border border-white/10 rounded-4xl">
-                 <div className="flex flex-col items-center">
-                    <Sparkles className="w-5 h-5 text-[#f3cd08] mb-1.5 drop-shadow-[0_0_8px_rgba(255,255,255,0.4)]" />
-                    <span className="text-[9px] font-black text-gray-400 uppercase tracking-widest">{t('home.ai_engine')}</span>
-                 </div>
-              </div>
             </div>
-          </motion.div>
-          
-          {/* Footer Version - Refined Visibility */}
-          <motion.div variants={itemVariants} className="flex items-center gap-5 text-white/40 px-3">
-             <span className="text-[10px] font-black uppercase tracking-[0.4em] whitespace-nowrap">{t('home.core_version')}</span>
-             <div className="h-px flex-1 bg-white/20 rounded-full" />
-             <span className="text-[10px] font-black uppercase tracking-[0.4em] whitespace-nowrap">YDE</span>
-          </motion.div>
-        </motion.div>
 
+            <div className="relative">
+                 <div 
+                    onClick={() => handleStartSearch()}
+                    className="relative group cursor-pointer bg-white"
+                 >
+                    <div className="absolute left-0 bottom-6 text-[#141414]">
+                        <div className="w-3 h-3 bg-black rounded-sm mb-1" />
+                        <div className="w-0.5 h-10 bg-gray-100 ml-[5px]" />
+                        <div className="w-3 h-3 bg-[#f3cd08] rounded-sm mt-1 ring-4 ring-yellow-50" />
+                    </div>
+
+                    <div className="pl-10 space-y-8">
+                        <div className="border-b border-gray-100 pb-3">
+                            <span className="text-[10px] font-bold text-gray-500 uppercase tracking-widest block mb-1">{t('home.current_position_label')}</span>
+                            <span className="text-sm font-bold text-gray-800 truncate block">
+                                {userAddress}
+                            </span>
+                        </div>
+                        
+                        <div className="flex items-center justify-between border-b-2 border-[#141414] pb-3 transition-colors">
+                            <div className="flex items-center gap-1">
+                                <span className="text-xl font-bold text-[#141414] opacity-40">{t('estimate.start_search')}</span>
+                                <div className="w-0.5 h-6 bg-[#f3cd08] cursor-blink" />
+                            </div>
+                            <ArrowRight className="w-5 h-5 text-[#f3cd08]" />
+                        </div>
+                    </div>
+                 </div>
+            </div>
+
+            <div className="space-y-4 pt-2">
+                <h3 className="text-[10px] font-black text-gray-400 uppercase tracking-widest pl-1">{t('home.shortcuts')}</h3>
+                <div className="flex flex-col gap-0 border-t border-gray-50">
+                  {POPULAR_DESTINATIONS.map((dest) => (
+                    <button 
+                      key={dest.id}
+                      onClick={() => handleStartSearch(dest)}
+                      className="flex items-center gap-4 py-5 border-b border-gray-50 hover:bg-gray-50 transition-all text-left group"
+                    >
+                      <div className="w-10 h-10 rounded-2xl bg-gray-100 flex items-center justify-center text-gray-600 group-hover:bg-[#f3cd08] group-hover:text-black transition-all">
+                        <MapPin className="w-5 h-5" />
+                      </div>
+                      <div className="flex flex-col flex-1 min-w-0">
+                        <span className="text-sm font-bold text-gray-900 truncate tracking-tight">{dest.name}</span>
+                        <span className="text-[10px] text-gray-500 font-bold uppercase truncate tracking-tight">{dest.address}</span>
+                      </div>
+                      <div className="text-[10px] font-bold text-gray-300 pr-2">{dest.time}</div>
+                    </button>
+                  ))}
+                </div>
+            </div>
+
+            <ServiceAds />
+        </main>
+
+        <div className="fixed bottom-8 right-6 z-40">
+          <button 
+            onClick={() => navigate('/add-trajet')}
+            className="flex items-center gap-3 px-6 py-4 bg-[#141414] text-white rounded-4xl font-bold text-[10px] uppercase tracking-widest shadow-2xl active:scale-95 transition-all outline outline-white"
+          >
+            <PlusCircle className="w-4 h-4 text-[#f3cd08]" />
+            <span>{t('home.cta_contribute')}</span>
+          </button>
+        </div>
       </div>
-    </div>
-  );
-}
-
-// Composant Badge réutilisable - Ultra Minimalist
-function Badge({ icon: Icon, label }) {
-  return (
-    <div className="flex items-center gap-2.5 px-6 py-4 bg-white/3 backdrop-blur-md border border-white/5 rounded-full transition-colors hover:bg-white/8">
-      <Icon className="w-4 h-4 text-[#f3cd08]" />
-      <span className="text-[10px] font-black text-gray-400 uppercase tracking-[0.2em]">{label}</span>
-    </div>
+    </>
   );
 }

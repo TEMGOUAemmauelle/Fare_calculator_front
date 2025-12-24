@@ -17,11 +17,12 @@ import { useTranslation } from 'react-i18next';
 import { useEffect } from 'react';
 
 // Pages
-import HomePage from './pages/HomePage';
+import HomePage from './pages/HomePageRouter';
 import EstimatePage from './pages/EstimatePageRouter';
 import AddTrajetPage from './pages/AddTrajetPage';
 import AllTrajetsPage from './pages/AllTrajetsPage';
 import StatsPage from './pages/StatsPage';
+import ServicesPage from './pages/ServicesPage';
 
 // Components
 import PWAInstallPrompt from './components/PWAInstallPrompt';
@@ -90,6 +91,7 @@ function App() {
           <Route path="add-trajet" element={<AddTrajetPage />} />
           <Route path="trajets" element={<AllTrajetsPage />} />
           <Route path="stats" element={<StatsPage />} />
+          <Route path="services" element={<ServicesPage />} />
         </Route>
         
         {/* Redirect unknown routes or root without lang to LanguageWrapper's logic */}

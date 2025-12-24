@@ -42,7 +42,18 @@
     "cta_contribute": "Contribute",
     "cta_contribute_sub": "Database",
     "core_version": "Core v2.0",
-    "ai_engine": "AI"
+    "ai_engine": "AI",
+    "hero_title_1": "Calculate your",
+    "hero_title_2": "fares",
+    "hero_title_3": "in one click.",
+    "current_position_label": "Your current position",
+    "shortcuts": "Shortcuts",
+    "searching": "Starting...",
+    "locating": "Detecting your position...",
+    "addr_calc": "Calculating address...",
+    "geoloc_needed": "Geolocation is required for a better experience.",
+    "hero_badge_title": "Community Driven",
+    "hero_badge_subtitle": "Premium Desktop Experience"
   },
   "estimate": {
     "title": "ESTIMATE",
@@ -59,7 +70,15 @@
     "result": "Result",
     "new_search": "New search",
     "community_trips": "Community trips",
-    "detecting_location": "Location detected"
+    "detecting_location": "Location detected",
+    "start_search": "Where are we going?",
+    "reopen_modal": "Edit estimation",
+    "title_section": "Price estimation",
+    "result_title": "Estimation Result",
+    "recalculate": "Recalculate",
+    "locate_success": "Position detected",
+    "locate_error": "Unable to locate you",
+    "server_error": "Server error"
   },
   "add": {
     "title": "ADD",
@@ -81,7 +100,17 @@
     "add_a_trip": "Add a trip",
     "quality_smooth": "Smooth trip, few obstacles",
     "quality_normal": "Normal trip with some difficulties",
-    "quality_hard_desc": "Hard trip (traffic, potholes...)"
+    "quality_hard_desc": "Hard trip (traffic, potholes...)",
+    "share_fare": "Share a",
+    "fare": "fare",
+    "price_paid_label": "Price paid (FCFA)",
+    "currency_label": "FCFA",
+    "quality_label": "Trip quality",
+    "locate_success_alt": "Position retrieved",
+    "locate_error_alt": "Unable to retrieve position. Check your settings.",
+    "form_incomplete": "Incomplete form",
+    "add_error": "Add error",
+    "reopen_modal_alt": "Edit trip"
   },
   "price_card": {
     "standard_estimation": "Standard estimation",
@@ -261,5 +290,22 @@
     "install_btn": "Install Now",
     "later": "Later",
     "manual_instruction": "To install the app, open your browser menu and select 'Add to Home Screen'."
+  },
+  "partners": {
+    "title": "Partners",
+    "services": "Services",
+    "special_offer": "Special Offer",
+    "discover_partners": "Discover our other services",
+    "optimize_trips": "Optimize your trips",
+    "trust_partners": "Trusted partners for traveling with peace of mind",
+    "see_offers": "Check offers",
+    "discover_service": "Discover the service",
+    "become_partner": "Become a Partner?",
+    "join_network": "Do you offer a transport service in Cameroon? Join our network.",
+    "contact_us": "Contact us",
+    "loading_offers": "Loading offers...",
+    "suggested_partners": "Suggested partners",
+    "see_more": "See more",
+    "partnership_services": "Partner Services"
   }
 }

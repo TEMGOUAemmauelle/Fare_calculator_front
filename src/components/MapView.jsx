@@ -36,17 +36,16 @@ const MAP_STYLES = {
   outdoors: 'mapbox://styles/mapbox/outdoors-v12',
 };
 
-// Couleurs pour l'itinéraire
+// Couleurs pour l'itinéraire - Bleu visible
 const ROUTE_COLORS = {
-  primary: '#3B82F6', // Blue
-  alternative: '#8B5CF6', // Purple
-  // unknown traffic will be shown with the primary blue for readability
-  unknown: '#3B82F6', // Blue (use primary when traffic data unavailable)
+  primary: '#3b82f6', // Bleu
+  alternative: '#6366f1', // Indigo
+  unknown: '#3b82f6', // Bleu
   congestion: {
-    low: '#10B981', // Green
-    moderate: '#F59E0B', // Amber
-    heavy: '#EF4444', // Red
-    severe: '#991B1B', // Dark red
+    low: '#22c55e', // Vert vif
+    moderate: '#f59e0b', // Orange
+    heavy: '#ef4444', // Rouge
+    severe: '#dc2626', // Rouge foncé
   },
 };
 
@@ -183,18 +182,21 @@ export default function MapView({
         .setLngLat(coordinates)
         .addTo(map.current);
 
-      // Popup si label
+      // Popup si label - Auto-open pour visibilité
       if (label) {
         const popup = new mapboxgl.Popup({ 
           offset: 25,
           closeButton: false,
           className: 'custom-popup',
+          closeOnClick: false,
         }).setHTML(`
           <div class="px-3 py-2">
             <p class="font-semibold text-sm text-gray-900">${label}</p>
           </div>
         `);
         marker.setPopup(popup);
+        // Auto-open popup
+        popup.addTo(map.current);
       }
 
       // Click handler
@@ -339,7 +341,7 @@ export default function MapView({
             'unknown', ROUTE_COLORS.unknown,            // Jaune (pas de données)
             ROUTE_COLORS.unknown // Défaut: jaune (si données manquantes)
           ],
-          'line-width': 6,
+          'line-width': 8,
           'line-opacity': 1,
         },
       });
