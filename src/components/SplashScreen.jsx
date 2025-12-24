@@ -26,25 +26,30 @@ export default function SplashScreen({ isVisible, status, message, onRetry, onSk
 
                   {/* LOADER OU MESSAGE */}
                   <div className="h-8 flex items-center justify-center">
-                     {status === 'loading' && (
-                        <div className="flex gap-1.5">
-                           <motion.div 
-                             animate={{ scale: [1, 1.2, 1], opacity: [0.5, 1, 0.5] }} 
-                             transition={{ repeat: Infinity, duration: 1 }}
-                             className="w-2 h-2 bg-[#f3cd08] rounded-full" 
-                           />
-                           <motion.div 
-                             animate={{ scale: [1, 1.2, 1], opacity: [0.5, 1, 0.5] }} 
-                             transition={{ repeat: Infinity, duration: 1, delay: 0.2 }}
-                             className="w-2 h-2 bg-[#141414] rounded-full" 
-                           />
-                           <motion.div 
-                             animate={{ scale: [1, 1.2, 1], opacity: [0.5, 1, 0.5] }} 
-                             transition={{ repeat: Infinity, duration: 1, delay: 0.4 }}
-                             className="w-2 h-2 bg-[#f3cd08] rounded-full" 
-                           />
-                        </div>
-                     )}
+                      {status === 'loading' && (
+                         <div className="flex flex-col items-center gap-4">
+                            <div className="flex gap-1.5">
+                               <motion.div 
+                                 animate={{ scale: [1, 1.2, 1], opacity: [0.5, 1, 0.5] }} 
+                                 transition={{ repeat: Infinity, duration: 1 }}
+                                 className="w-2 h-2 bg-[#f3cd08] rounded-full" 
+                               />
+                               <motion.div 
+                                 animate={{ scale: [1, 1.2, 1], opacity: [0.5, 1, 0.5] }} 
+                                 transition={{ repeat: Infinity, duration: 1, delay: 0.2 }}
+                                 className="w-2 h-2 bg-[#141414] rounded-full" 
+                               />
+                               <motion.div 
+                                 animate={{ scale: [1, 1.2, 1], opacity: [0.5, 1, 0.5] }} 
+                                 transition={{ repeat: Infinity, duration: 1, delay: 0.4 }}
+                                 className="w-2 h-2 bg-[#f3cd08] rounded-full" 
+                               />
+                            </div>
+                            <p className="text-[10px] font-black text-gray-400 uppercase tracking-[0.2em] animate-pulse">
+                               {message || "Préliminaires..."}
+                            </p>
+                         </div>
+                      )}
                      
                      {status === 'error' && (
                         <div className="flex flex-col items-center gap-3">

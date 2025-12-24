@@ -2,10 +2,9 @@
 /**
  * @fileoverview HomePage - Version Ultra-Polished
  * 
- * - Géocodage réel au chargement (Adresse affichée)
- * - Texte "Calculez vos tarifs" sur le Hero
- * - Curseur clignotant sur l'input simulé
- * - Typographie affinée (moins grasse)
+ * - Gestion explicite de la géolocalisation au chargement
+ * - Splash screen informatif
+ * - Fallback élégant si refusé
  */
 
 import { useEffect, useState } from 'react';
@@ -31,27 +30,34 @@ export default function HomePage() {
   const { t } = useTranslation();
   const navigate = useAppNavigate();
   const [showSplash, setShowSplash] = useState(true);
+  const [splashStatus, setSplashStatus] = useState('loading');
+  const [splashMessage, setSplashMessage] = useState("Démarrage...");
   const [userLocation, setUserLocation] = useState(null);
   const [userAddress, setUserAddress] = useState("Localisation...");
 
-  useEffect(() => {
-    const init = async () => {
-      await new Promise(r => setTimeout(r, 1200));
-      try {
+  const initGeolocation = async () => {
+    setSplashStatus('loading');
+    setSplashMessage("Détermination de votre position...");
+    try {
         const pos = await geolocationService.getCurrentPosition();
         setUserLocation(pos);
         if (pos) {
+            setSplashMessage("Calcul de l'adresse...");
             const addr = await reverseSearch(pos.coords.latitude, pos.coords.longitude);
             setUserAddress(addr);
         } else {
             setUserAddress("Yaoundé, Cameroun");
         }
-      } catch (e) {
-        setUserAddress("Localisation désactivée");
-      }
-      setShowSplash(false);
-    };
-    init();
+        setShowSplash(false);
+    } catch (e) {
+        console.warn("Geolocation failure on HomePage", e);
+        setSplashStatus('error');
+        setSplashMessage("La géolocalisation est nécessaire pour une meilleure expérience.");
+    }
+  };
+
+  useEffect(() => {
+    initGeolocation();
   }, []);
 
   const handleStartSearch = (dest = null) => {
@@ -69,7 +75,13 @@ export default function HomePage() {
 
   return (
     <>
-      <SplashScreen isVisible={showSplash} status="loading" message="Initialisation..." />
+      <SplashScreen 
+        isVisible={showSplash} 
+        status={splashStatus} 
+        message={splashMessage} 
+        onRetry={initGeolocation}
+        onSkip={() => setShowSplash(false)}
+      />
 
       <style>
         {`
@@ -83,7 +95,6 @@ export default function HomePage() {
       </style>
 
       <div className="min-h-screen bg-white text-[#141414] font-sans antialiased">
-        {/* HEADER */}
         <header className="px-6 pt-12 pb-6 flex items-center justify-between">
            <div className="flex flex-col">
               <h1 className="text-xl font-black tracking-tighter uppercase leading-none italic">
@@ -102,10 +113,9 @@ export default function HomePage() {
         </header>
 
         <main className="px-6 space-y-8 pb-32">
-            {/* HERO PANORAMIQUE AVEC TEXTE */}
-            <div className="relative w-full h-44 rounded-[2.5rem] overflow-hidden  group">
+            <div className="relative w-full h-44 rounded-4xl overflow-hidden group">
                 <img src={HERO_IMAGE} className="w-full h-full object-cover transform transition-transform duration-700 group-hover:scale-105" alt="Taxi" />
-                <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent" />
+                <div className="absolute inset-0 bg-linear-to-t from-black/80 via-black/20 to-transparent" />
                 <div className="absolute bottom-6 left-6 right-6">
                     <motion.h2 
                         initial={{ opacity: 0, y: 20 }}
@@ -117,7 +127,6 @@ export default function HomePage() {
                 </div>
             </div>
 
-            {/* INPUT "Où allons-nous ?" - STYLE SAISIE DIRECTE */}
             <div className="relative">
                  <div 
                     onClick={() => handleStartSearch()}
@@ -130,15 +139,13 @@ export default function HomePage() {
                     </div>
 
                     <div className="pl-10 space-y-8">
-                        {/* DEPART REEL */}
                         <div className="border-b border-gray-100 pb-3">
-                            <span className="text-[10px] font-bold text-gray-400 uppercase tracking-widest block mb-1">Votre position actuelle</span>
-                            <span className="text-sm font-bold text-gray-700 truncate block">
+                            <span className="text-[10px] font-bold text-gray-500 uppercase tracking-widest block mb-1">Votre position actuelle</span>
+                            <span className="text-sm font-bold text-gray-800 truncate block">
                                 {userAddress}
                             </span>
                         </div>
                         
-                        {/* ARRIVEE SIMULEE */}
                         <div className="flex items-center justify-between border-b-2 border-[#141414] pb-3 transition-colors">
                             <div className="flex items-center gap-1">
                                 <span className="text-xl font-bold text-[#141414] opacity-40">Où allons-nous ?</span>
@@ -150,9 +157,8 @@ export default function HomePage() {
                  </div>
             </div>
 
-            {/* DESTINATIONS POPULAIRES */}
             <div className="space-y-4 pt-2">
-                <h3 className="text-[10px] font-black text-gray-300 uppercase tracking-widest pl-1">Raccourcis</h3>
+                <h3 className="text-[10px] font-black text-gray-400 uppercase tracking-widest pl-1">Raccourcis</h3>
                 <div className="flex flex-col gap-0 border-t border-gray-50">
                   {POPULAR_DESTINATIONS.map((dest) => (
                     <button 
@@ -165,7 +171,7 @@ export default function HomePage() {
                       </div>
                       <div className="flex flex-col flex-1 min-w-0">
                         <span className="text-sm font-bold text-gray-900 truncate tracking-tight">{dest.name}</span>
-                        <span className="text-[10px] text-gray-400 font-bold uppercase truncate tracking-tight">{dest.address}</span>
+                        <span className="text-[10px] text-gray-500 font-bold uppercase truncate tracking-tight">{dest.address}</span>
                       </div>
                       <div className="text-[10px] font-bold text-gray-300 pr-2">{dest.time}</div>
                     </button>
@@ -176,11 +182,10 @@ export default function HomePage() {
             <ServiceAds />
         </main>
 
-        {/* CONTRIBUER */}
         <div className="fixed bottom-8 right-6 z-40">
           <button 
             onClick={() => navigate('/add-trajet')}
-            className="flex items-center gap-3 px-6 py-4 bg-[#141414] text-white rounded-[2rem] font-bold text-[10px] uppercase tracking-widest shadow-2xl active:scale-95 transition-all outline outline-4 outline-white"
+            className="flex items-center gap-3 px-6 py-4 bg-[#141414] text-white rounded-4xl font-bold text-[10px] uppercase tracking-widest shadow-2xl active:scale-95 transition-all outline outline-white"
           >
             <PlusCircle className="w-4 h-4 text-[#f3cd08]" />
             <span>Contribuer</span>
