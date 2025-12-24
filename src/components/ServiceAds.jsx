@@ -1,10 +1,33 @@
 
 import { motion } from 'framer-motion';
-import { useState } from 'react';
-import { ADS_DATA } from '../constants/ads';
+import { useState, useEffect } from 'react';
+import { getAds } from '../services/adService';
 import { Loader2 } from 'lucide-react';
 
 export default function ServiceAds() {
+  const [ads, setAds] = useState([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const fetchAds = async () => {
+      try {
+        const data = await getAds();
+        setAds(data);
+      } catch (err) {
+        console.error("Erreur ServiceAds:", err);
+      } finally {
+        setLoading(false);
+      }
+    };
+    fetchAds();
+  }, []);
+
+  if (loading) return (
+    <div className="flex items-center justify-center py-10">
+      <Loader2 className="w-5 h-5 animate-spin text-[#f3cd08]" />
+    </div>
+  );
+
   return (
     <div className="space-y-4">
       <div className="flex items-center justify-between px-1">
@@ -12,8 +35,8 @@ export default function ServiceAds() {
       </div>
       
       <div className="grid grid-cols-2 gap-4">
-        {ADS_DATA.map((ad, idx) => (
-          <AdCard key={ad.id} ad={ad} idx={idx} />
+        {ads.map((ad, idx) => (
+          <AdCard key={ad.id || idx} ad={ad} idx={idx} />
         ))}
       </div>
     </div>
@@ -25,7 +48,7 @@ function AdCard({ ad, idx }) {
 
   return (
     <motion.a
-      href={ad.link}
+      href={ad.app_link || '#'}
       target="_blank"
       rel="noopener noreferrer"
       whileTap={{ scale: 0.98 }}
@@ -33,26 +56,29 @@ function AdCard({ ad, idx }) {
     >
       {/* SKELETON */}
       {!isLoaded && (
-        <div className="absolute inset-0 flex items-center justify-center bg-gray-50 z-10 transition-opacity duration-500">
-           <Loader2 className="w-5 h-5 animate-spin text-gray-200" />
+        <div className="absolute inset-0 flex items-center justify-center bg-gray-50 z-10">
+           <Loader2 className="w-4 h-4 animate-spin text-gray-200" />
         </div>
       )}
 
       {/* Image Background */}
       <div className="absolute inset-0">
          <img 
-           src={ad.image} 
+           src={ad.image_url} 
            alt={ad.title}
            onLoad={() => setIsLoaded(true)}
            className={`w-full h-full object-cover transition-all duration-1000 ${isLoaded ? 'opacity-100 scale-100' : 'opacity-0 scale-110'}`}
          />
          {/* Elegant Overlay Gradient */}
-         <div className="absolute inset-0 bg-linear-to-t from-black/95 via-black/40 to-transparent opacity-95" />
+         <div className="absolute inset-0 bg-gradient-to-t from-black/95 via-black/40 to-transparent opacity-95" />
       </div>
 
       {/* Content */}
       <div className="absolute bottom-0 left-0 p-4 w-full">
-         <span className="inline-block px-2 py-0.5 rounded-full bg-[#f3cd08] text-[7px] font-black uppercase text-black mb-1.5 opacity-90 tracking-tighter">
+         <span 
+            className="inline-block px-2 py-0.5 rounded-full text-[7px] font-black uppercase text-black mb-1.5 opacity-90 tracking-tighter"
+            style={{ backgroundColor: ad.color || '#f3cd08' }}
+         >
             {ad.category}
          </span>
          <h4 className="text-white text-lg font-black uppercase tracking-tight leading-none mb-1 shadow-sm">

@@ -166,7 +166,7 @@ export default function HomePage() {
                       onClick={() => handleStartSearch(dest)}
                       className="flex items-center gap-4 py-5 border-b border-gray-50 hover:bg-gray-50 transition-all text-left group"
                     >
-                      <div className="w-10 h-10 rounded-2xl bg-gray-50 flex items-center justify-center text-gray-400 group-hover:bg-[#f3cd08] group-hover:text-black transition-all shadow-sm">
+                      <div className="w-10 h-10 rounded-2xl bg-gray-100 flex items-center justify-center text-gray-600 group-hover:bg-[#f3cd08] group-hover:text-black transition-all">
                         <MapPin className="w-5 h-5" />
                       </div>
                       <div className="flex flex-col flex-1 min-w-0">
