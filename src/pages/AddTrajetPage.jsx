@@ -192,7 +192,7 @@ export default function AddTrajetPage() {
               <motion.div 
                 initial={{ opacity: 0, x: -20 }}
                 animate={{ opacity: 1, x: 0 }}
-                className="absolute bottom-[62%] left-4 z-30"
+                className="absolute bottom-[67%] left-4 z-30"
               >
                   <div className="px-4 py-2 bg-white/95 backdrop-blur-sm rounded-2xl shadow-lg flex items-center gap-4">
                       <div className="flex items-center gap-1.5">
@@ -212,7 +212,7 @@ export default function AddTrajetPage() {
       {/* DRAWER - 60vh, scroll unifié */}
       <Drawer.Root open={true} modal={false} dismissible={false}>
         <Drawer.Portal>
-          <Drawer.Content className="fixed bottom-0 left-0 right-0 z-50 flex flex-col bg-white rounded-t-4xl shadow-[0_-10px_40px_rgba(0,0,0,0.1)] outline-none h-[60vh]">
+          <Drawer.Content className="fixed bottom-0 left-0 right-0 z-50 flex flex-col bg-white rounded-t-4xl shadow-[0_-10px_40px_rgba(0,0,0,0.1)] outline-none h-[65vh]">
             <div className="w-full flex justify-center pt-3 pb-2 shrink-0"><div className="w-10 h-1 bg-gray-200 rounded-full" /></div>
             
             {/* SCROLL UNIFIÉ - Tout le formulaire scrolle ensemble */}
@@ -274,7 +274,7 @@ export default function AddTrajetPage() {
                     {!isSearchMode && (
                         <>
                             <div className="flex items-center gap-3 p-3 rounded-2xl bg-[#f3cd08]/10 border border-[#f3cd08]/20">
-                                 <DollarSign className="w-4 h-4 text-[#f3cd08] shrink-0" />
+                                 {/* <DollarSign className="w-4 h-4 text-[#f3cd08] shrink-0" /> */}
                                  <div className="flex-1 min-w-0">
                                     <span className="text-[9px] font-bold text-amber-600 uppercase tracking-widest block">Prix payé</span>
                                     <div className="flex items-baseline gap-2">
