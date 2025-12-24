@@ -1,11 +1,13 @@
 
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 import { ArrowLeft, ExternalLink, ShieldCheck, Zap, Car, Compass, Globe, Loader2 } from 'lucide-react';
 import { getAds } from '../services/adService';
 import { motion, AnimatePresence } from 'framer-motion';
 
 export default function ServicesPage() {
+  const { t } = useTranslation();
   const navigate = useNavigate();
   const [services, setServices] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -44,7 +46,7 @@ export default function ServicesPage() {
             </button>
             <div className="flex flex-col">
               <h1 className="text-xl font-black uppercase tracking-tighter italic leading-none">
-                PARTENAIRES<span className="text-[#f3cd08]">SERVICES</span>
+                {t('partners.partnership_services').split(' ')[0]}<span className="text-[#f3cd08]">{t('partners.partnership_services').split(' ')[1]}</span>
               </h1>
               <div className="h-1 w-8 bg-[#f3cd08] mt-1 rounded-full" />
             </div>
@@ -57,17 +59,17 @@ export default function ServicesPage() {
       <main className="px-6 py-8">
         <div className="mb-8">
             <h2 className="text-3xl font-black italic uppercase tracking-tighter leading-none mb-3">
-                Découvrez nos <br/> <span className="text-[#f3cd08]">Partenaires</span>
+                {t('partners.discover_partners').split(' ').slice(0, 2).join(' ')} <br/> <span className="text-[#f3cd08]">{t('partners.discover_partners').split(' ').slice(2).join(' ')}</span>
             </h2>
             <p className="text-gray-400 text-xs font-bold uppercase tracking-widest leading-relaxed">
-                Des services de transport et de technologie sélectionnés avec soin pour votre confort au quotidien.
+                {t('partners.trust_partners')}
             </p>
         </div>
 
         {loading ? (
             <div className="flex flex-col items-center justify-center py-20 gap-4">
                 <Loader2 className="w-8 h-8 animate-spin text-[#f3cd08]" />
-                <p className="text-[10px] font-black text-gray-400 uppercase tracking-widest animate-pulse">Chargement des offres...</p>
+                <p className="text-[10px] font-black text-gray-400 uppercase tracking-widest animate-pulse">{t('partners.loading_offers')}</p>
             </div>
         ) : (
             <motion.div 
@@ -118,7 +120,7 @@ export default function ServicesPage() {
                             
                             <div className="flex items-center gap-4">
                                 <button className="flex-1 py-4 bg-[#f3cd08] text-black rounded-2xl font-black text-[10px] uppercase tracking-widest active:scale-95 transition-all">
-                                    Découvrir le service
+                                    {t('partners.discover_service')}
                                 </button>
                                 <button className="p-4 bg-white/5 text-white rounded-2xl active:scale-95 transition-all border border-white/5">
                                     <Globe className="w-5 h-5" />
@@ -134,12 +136,12 @@ export default function ServicesPage() {
         )}
 
         <div className="mt-12 p-8 border border-dashed border-gray-200 rounded-4xl text-center">
-            <h4 className="text-[10px] font-black text-gray-400 uppercase tracking-widest mb-2">Devenir Partenaire ?</h4>
+            <h4 className="text-[10px] font-black text-gray-400 uppercase tracking-widest mb-2">{t('partners.become_partner')}</h4>
             <p className="text-[9px] font-bold text-gray-300 uppercase leading-relaxed mb-4">
-                Vous proposez un service de transport au Cameroun ? Rejoignez notre réseau.
+                {t('partners.join_network')}
             </p>
             <button className="text-[9px] font-black text-[#f3cd08] uppercase tracking-widest underline decoration-2 underline-offset-4">
-                Contactez-nous
+                {t('partners.contact_us')}
             </button>
         </div>
       </main>

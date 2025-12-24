@@ -31,15 +31,15 @@ import geolocationService from '../services/geolocationService';
 import { reverseSearch } from '../services/nominatimService';
 
 const WEATHER_OPTIONS = [
-  { value: 0, label: 'Ensoleillé', icon: Sun },
-  { value: 2, label: 'Pluie', icon: CloudRain },
+  { value: 0, label_key: 'add.weather_sunny', icon: Sun },
+  { value: 2, label_key: 'add.weather_rainy', icon: CloudRain },
 ];
 
 const TIME_SLOTS = [
-  { value: 'matin', label: 'Matin' },
-  { value: 'apres-midi', label: 'Après-midi' },
-  { value: 'soir', label: 'Soir' },
-  { value: 'nuit', label: 'Nuit' },
+  { value: 'matin', label_key: 'constants.time.matin' },
+  { value: 'apres-midi', label_key: 'constants.time.apres-midi' },
+  { value: 'soir', label_key: 'constants.time.soir' },
+  { value: 'nuit', label_key: 'constants.time.nuit' },
 ];
 
 const SuggestionSkeleton = () => (
@@ -93,10 +93,10 @@ export default function EstimatePageMobile() {
             setDepartPlace({ label: addressLabel, longitude: pos.coords.longitude, latitude: pos.coords.latitude });
             setDepartQuery(addressLabel);
             setMapCenter([pos.coords.longitude, pos.coords.latitude]);
-            showToast.success("Ma position détectée");
+            showToast.success(t('estimate.locate_success'));
         }
     } catch (e) {
-        showToast.error("Impossible de vous localiser");
+        showToast.error(t('estimate.locate_error'));
     } finally {
         setIsLocating(false);
     }
@@ -105,7 +105,7 @@ export default function EstimatePageMobile() {
   useEffect(() => {
     if (location.state?.prefilledStart && location.state.prefilledStart.coords) {
         const coords = location.state.prefilledStart.coords;
-        const fallbackLabel = location.state.prefilledStart.label || "Ma position";
+        const fallbackLabel = location.state.prefilledStart.label || t('geolocation.my_position');
         setDepartPlace({ label: fallbackLabel, longitude: coords[0], latitude: coords[1] });
         setDepartQuery(fallbackLabel);
         setMapCenter(coords);
@@ -173,7 +173,7 @@ export default function EstimatePageMobile() {
           setPrediction(res);
           // Afficher le prompt partenaire après 2.5s si c'est une première prédiction
           setTimeout(() => setShowPartnerPrompt(true), 2500);
-      } catch (e) { showToast.error("Erreur serveur"); }
+      } catch (e) { showToast.error(t('estimate.server_error')); }
       finally { setIsLoading(false); }
   };
 
@@ -197,10 +197,10 @@ export default function EstimatePageMobile() {
           
           <div className="flex items-center p-0.5 bg-white/90 backdrop-blur-sm rounded-full shadow-md">
               <button className="px-4 py-1.5 bg-[#f3cd08] text-black rounded-full font-bold text-[9px] uppercase tracking-wide flex items-center gap-1">
-                  <Calculator className="w-3 h-3" /> Estimer
+                  <Calculator className="w-3 h-3" /> {t('nav.estimate')}
               </button>
               <button onClick={() => navigate('/add-trajet')} className="px-4 py-1.5 text-gray-500 font-bold text-[9px] uppercase tracking-wide flex items-center gap-1 hover:text-gray-700">
-                  <PlusCircle className="w-3 h-3" /> Contribuer
+                  <PlusCircle className="w-3 h-3" /> {t('add.cta_contribute_sub') || t('nav.add')}
               </button>
           </div>
 
@@ -245,7 +245,7 @@ export default function EstimatePageMobile() {
             className="fixed bottom-6 left-1/2 z-40 px-5 py-2.5 bg-[#141414] text-white rounded-full shadow-2xl flex items-center gap-2 font-bold text-xs active:scale-95 transition-all group"
           >
             <ChevronUp className="w-4 h-4 text-[#f3cd08] group-hover:animate-bounce" />
-            Modifier l'estimation
+            {t('estimate.reopen_modal')}
           </motion.button>
         )}
       </AnimatePresence>
@@ -267,18 +267,18 @@ export default function EstimatePageMobile() {
             <div className="flex-1 overflow-y-auto px-6 pb-6">
                 {!prediction ? (
                     <div className="space-y-4">
-                        <h2 className="text-lg font-bold tracking-tight text-[#141414] italic">Estimation du <span className="text-[#f3cd08]">prix</span></h2>
+                        <h2 className="text-lg font-bold tracking-tight text-[#141414] italic">{t('estimate.title_section').split(' ')[0]} {t('estimate.title_section').split(' ')[1]} <span className="text-[#f3cd08]">{t('estimate.title_section').split(' ')[2]}</span></h2>
 
                         {/* ITINÉRAIRE */}
                         <div className="space-y-2">
                             <div className={`flex items-center gap-3 p-3 rounded-2xl border transition-all ${activeSearchField === 'depart' ? 'border-[#f3cd08] bg-white shadow-lg' : 'border-transparent bg-gray-50'}`}>
                                 <Navigation className={`w-4 h-4 shrink-0 ${activeSearchField === 'depart' ? 'text-[#f3cd08]' : 'text-gray-500'}`} />
                                 <div className="flex-1 min-w-0">
-                                    <span className="text-[9px] font-bold text-gray-500 uppercase tracking-widest block">Départ</span>
+                                    <span className="text-[9px] font-bold text-gray-500 uppercase tracking-widest block">{t('add.placeholder_from').split(' ')[0]}</span>
                                     <SearchBarEnhanced
                                         inputRef={departInputRef} value={departQuery} onChange={setDepartQuery}
                                         onSuggestions={(s) => { setSuggestions(s); setActiveSearchField('depart'); }}
-                                        onLoading={setIsSearching} placeholder="Position de départ..."
+                                        onLoading={setIsSearching} placeholder={t('estimate.placeholder_from')}
                                         className="w-full text-sm font-semibold text-gray-800 border-none p-0 focus:ring-0 bg-transparent placeholder:text-gray-400 truncate"
                                     />
                                 </div>
@@ -293,11 +293,11 @@ export default function EstimatePageMobile() {
                             <div className={`flex items-center gap-3 p-3 rounded-2xl border transition-all ${activeSearchField === 'arrivee' ? 'border-[#f3cd08] bg-white shadow-lg' : 'border-gray-100 bg-white'}`}>
                                 <MapPin className={`w-4 h-4 shrink-0 ${activeSearchField === 'arrivee' ? 'text-[#f3cd08]' : 'text-gray-500'}`} />
                                 <div className="flex-1 min-w-0">
-                                    <span className="text-[9px] font-bold text-gray-500 uppercase tracking-widest block">Destination</span>
+                                    <span className="text-[9px] font-bold text-gray-500 uppercase tracking-widest block">{t('add.placeholder_to').split(' ')[0]}</span>
                                     <SearchBarEnhanced
                                         inputRef={arriveeInputRef} value={arriveeQuery} onChange={setArriveeQuery}
                                         onSuggestions={(s) => { setSuggestions(s); setActiveSearchField('arrivee'); }}
-                                        onLoading={setIsSearching} placeholder="Où allez-vous ?"
+                                        onLoading={setIsSearching} placeholder={t('estimate.placeholder_to')}
                                         className="w-full text-base font-bold text-[#141414] border-none p-0 focus:ring-0 bg-transparent placeholder:text-gray-300 truncate"
                                     />
                                 </div>
@@ -333,7 +333,7 @@ export default function EstimatePageMobile() {
                             <div className="space-y-6">
                                 <div className="grid grid-cols-2 gap-4">
                                     <div className="space-y-2">
-                                        <p className="text-[9px] font-bold text-gray-500 uppercase tracking-wide pl-1">Météo</p>
+                                        <p className="text-[9px] font-bold text-gray-500 uppercase tracking-wide pl-1">{t('add.weather')}</p>
                                         <div className="flex gap-2">
                                             {WEATHER_OPTIONS.map(opt => (
                                                 <button key={opt.value} onClick={() => setMeteo(opt.value)} className={`flex-1 p-3 rounded-xl border transition-all ${meteo === opt.value ? 'bg-[#141414] border-[#141414] text-white' : 'bg-gray-50 border-transparent text-gray-400'}`}>
@@ -343,16 +343,16 @@ export default function EstimatePageMobile() {
                                         </div>
                                     </div>
                                     <div className="space-y-2">
-                                        <p className="text-[9px] font-bold text-gray-500 uppercase tracking-wide pl-1">Période</p>
+                                        <p className="text-[9px] font-bold text-gray-500 uppercase tracking-wide pl-1">{t('estimate.moment')}</p>
                                         <select value={heureTrajet} onChange={(e) => setHeureTrajet(e.target.value)} className="w-full bg-gray-50 border-none rounded-xl text-[10px] font-bold p-3.5 outline-none uppercase text-gray-700">
-                                            {TIME_SLOTS.map(slot => <option key={slot.value} value={slot.label}>{slot.label}</option>)}
+                                            {TIME_SLOTS.map(slot => <option key={slot.value} value={t(slot.label_key)}>{t(slot.label_key)}</option>)}
                                         </select>
                                     </div>
                                 </div>
 
                                 {departPlace && arriveePlace && (
                                     <button onClick={handleEstimate} disabled={isLoading} className="w-full py-5 bg-[#141414] text-white rounded-4xl font-bold text-[11px] uppercase tracking-[0.2em] shadow-xl flex items-center justify-center gap-3 active:scale-[0.98] transition-all">
-                                        {isLoading ? <Loader2 className="w-5 h-5 animate-spin text-[#f3cd08]" /> : <>Estimer mon trajet <Calculator className="w-4 h-4 text-[#f3cd08]" /></>}
+                                        {isLoading ? <Loader2 className="w-5 h-5 animate-spin text-[#f3cd08]" /> : <>{t('estimate.launch')} <Calculator className="w-4 h-4 text-[#f3cd08]" /></>}
                                     </button>
                                 )}
                             </div>
@@ -361,8 +361,8 @@ export default function EstimatePageMobile() {
                 ) : (
                     <div className="py-4">
                          <div className="flex justify-between items-center mb-6">
-                            <h2 className="text-lg font-bold uppercase tracking-tight italic">Résultat de l'estimation</h2>
-                            <button onClick={() => setPrediction(null)} className="px-4 py-2 bg-gray-100 rounded-xl text-[9px] font-bold text-gray-600 uppercase hover:bg-[#f3cd08] hover:text-black transition-all">Recalculer</button>
+                            <h2 className="text-lg font-bold uppercase tracking-tight italic">{t('estimate.result_title')}</h2>
+                            <button onClick={() => setPrediction(null)} className="px-4 py-2 bg-gray-100 rounded-xl text-[9px] font-bold text-gray-600 uppercase hover:bg-[#f3cd08] hover:text-black transition-all">{t('estimate.recalculate')}</button>
                          </div>
                          <PriceCard prediction={prediction} onAddTrajet={() => navigate('/add-trajet')} />
                     </div>

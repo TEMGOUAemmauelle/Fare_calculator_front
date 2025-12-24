@@ -239,9 +239,9 @@ export default function PriceCard({ prediction, onAddTrajet }) {
          <div className="flex items-center justify-between mb-3 px-1">
             <div className="flex items-center gap-1.5">
                <Sparkles className="w-3 h-3 text-[#f3cd08]" />
-               <span className="text-[9px] font-black text-gray-400 uppercase tracking-widest">Partenaires suggérés</span>
+               <span className="text-[9px] font-black text-gray-400 uppercase tracking-widest">{t('partners.suggested_partners')}</span>
             </div>
-            <a href="/services" className="text-[8px] font-black text-[#f3cd08] uppercase tracking-widest">Voir plus</a>
+            <a href="/services" className="text-[8px] font-black text-[#f3cd08] uppercase tracking-widest">{t('partners.see_more')}</a>
          </div>
          <div className="rounded-3xl overflow-hidden scale-95 origin-center shadow-sm">
             <CarouselAds />

@@ -30,10 +30,10 @@ import geolocationService from '../services/geolocationService';
 import { reverseSearch } from '../services/nominatimService';
 
 const HEURE_SLOTS = [
-  { value: 'matin', label: 'Matin' },
-  { value: 'apres-midi', label: 'Après-midi' },
-  { value: 'soir', label: 'Soir' },
-  { value: 'nuit', label: 'Nuit' },
+  { value: 'matin', label_key: 'constants.time.matin' },
+  { value: 'apres-midi', label_key: 'constants.time.apres-midi' },
+  { value: 'soir', label_key: 'constants.time.soir' },
+  { value: 'nuit', label_key: 'constants.time.nuit' },
 ];
 
 export default function AddTrajetPage() {
@@ -75,10 +75,10 @@ export default function AddTrajetPage() {
             setFormData(prev => ({ ...prev, depart: loc }));
             setDepartQuery(address);
             setMapCenter([pos.coords.longitude, pos.coords.latitude]);
-            showToast.success("Position récupérée");
+            showToast.success(t('add.locate_success_alt'));
         }
     } catch (e) {
-        showToast.error("Impossible de récupérer la position. Vérifiez vos réglages.");
+        showToast.error(t('add.locate_error_alt'));
     } finally {
         setIsLocating(false);
     }
@@ -144,7 +144,7 @@ export default function AddTrajetPage() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (!formData.price || !formData.depart || !formData.arrivee) {
-        showToast.error("Formulaire incomplet");
+        showToast.error(t('add.form_incomplete'));
         return;
     }
     setIsLoading(true);
@@ -160,7 +160,7 @@ export default function AddTrajetPage() {
         await addTrajet(payload);
         setShowSuccessModal(true);
     } catch (err) {
-        showToast.error("Erreur d'ajout");
+        showToast.error(t('add.add_error'));
     } finally {
         setIsLoading(false);
     }
@@ -186,10 +186,10 @@ export default function AddTrajetPage() {
           
           <div className="flex items-center p-0.5 bg-white/90 backdrop-blur-sm rounded-full shadow-md">
               <button onClick={() => navigate('/estimate')} className="px-3 py-1.5 text-gray-500 font-bold text-[9px] uppercase tracking-wide flex items-center gap-1 hover:text-gray-700">
-                  <Calculator className="w-3 h-3" /> Estimer
+                  <Calculator className="w-3 h-3" /> {t('nav.estimate')}
               </button>
               <button className="px-3 py-1.5 bg-[#f3cd08] text-black rounded-full font-bold text-[9px] uppercase tracking-wide flex items-center gap-1">
-                  <PlusCircle className="w-3 h-3" /> Contribuer
+                  <PlusCircle className="w-3 h-3" /> {t('nav.add')}
               </button>
           </div>
 
@@ -230,7 +230,7 @@ export default function AddTrajetPage() {
             className="fixed bottom-6 left-1/2 z-40 px-5 py-2.5 bg-[#141414] text-white rounded-full shadow-2xl flex items-center gap-2 font-bold text-xs active:scale-95 transition-all hover:bg-black group"
           >
             <ChevronUp className="w-4 h-4 text-[#f3cd08] group-hover:animate-bounce" />
-            Modifier le trajet
+            {t('add.reopen_modal_alt')}
           </motion.button>
         )}
       </AnimatePresence>
@@ -251,18 +251,18 @@ export default function AddTrajetPage() {
             
             <div className="flex-1 overflow-y-auto px-6 pb-6">
                 <form onSubmit={handleSubmit} className="space-y-4">
-                    <h2 className="text-lg font-bold tracking-tight text-[#141414] italic">Partager un <span className="text-[#f3cd08]">tarif</span></h2>
+                    <h2 className="text-lg font-bold tracking-tight text-[#141414] italic">{t('add.share_fare')} <span className="text-[#f3cd08]">{t('add.fare')}</span></h2>
 
                     <div className="space-y-2">
                          {/* DEPART AVEC BOUTON GEOLOC */}
                          <div className={`flex items-center gap-3 p-3 rounded-2xl border transition-all ${activeSearchField === 'depart' ? 'border-[#f3cd08] bg-white shadow-lg' : 'border-transparent bg-gray-50'}`}>
                             <Navigation className={`w-4 h-4 shrink-0 ${activeSearchField === 'depart' ? 'text-[#f3cd08]' : 'text-gray-500'}`} />
                             <div className="flex-1 min-w-0">
-                                <span className="text-[9px] font-bold text-gray-500 uppercase tracking-widest block">Départ</span>
+                                <span className="text-[9px] font-bold text-gray-500 uppercase tracking-widest block">{t('add.placeholder_from').split(' ')[0]}</span>
                                 <SearchBarEnhanced
                                     value={departQuery} onChange={setDepartQuery}
                                     onSuggestions={(s) => { setSuggestions(s); setActiveSearchField('depart'); }}
-                                    onLoading={setIsSearching} placeholder="Position de départ..."
+                                    onLoading={setIsSearching} placeholder={t('add.placeholder_from')}
                                     className="w-full text-sm font-semibold text-gray-800 border-none p-0 focus:ring-0 bg-transparent placeholder:text-gray-400 truncate"
                                 />
                             </div>
@@ -277,11 +277,11 @@ export default function AddTrajetPage() {
                          <div className={`flex items-center gap-3 p-3 rounded-2xl border transition-all ${activeSearchField === 'arrivee' ? 'border-[#f3cd08] bg-white shadow-lg' : 'border-transparent bg-gray-50'}`}>
                             <MapPin className={`w-4 h-4 shrink-0 ${activeSearchField === 'arrivee' ? 'text-[#f3cd08]' : 'text-gray-500'}`} />
                             <div className="flex-1 min-w-0">
-                                <span className="text-[9px] font-bold text-gray-500 uppercase tracking-widest block">Destination</span>
+                                <span className="text-[9px] font-bold text-gray-500 uppercase tracking-widest block">{t('add.placeholder_to').split(' ')[0]}</span>
                                 <SearchBarEnhanced
                                     value={arriveeQuery} onChange={setArriveeQuery}
                                     onSuggestions={(s) => { setSuggestions(s); setActiveSearchField('arrivee'); }}
-                                    onLoading={setIsSearching} placeholder="Où allez-vous ?"
+                                    onLoading={setIsSearching} placeholder={t('add.placeholder_to')}
                                     className="w-full text-sm font-semibold text-gray-800 border-none p-0 focus:ring-0 bg-transparent placeholder:text-gray-400 truncate"
                                 />
                             </div>
@@ -292,7 +292,7 @@ export default function AddTrajetPage() {
                         {isSearchMode && (
                             <motion.div initial={{ opacity: 0, height: 0 }} animate={{ opacity: 1, height: 'auto' }} exit={{ opacity: 0, height: 0 }} className="space-y-1 overflow-hidden">
                                 {isSearching ? (
-                                    <div className="p-3 text-[10px] font-bold text-gray-400 animate-pulse">Recherche en cours...</div>
+                                    <div className="p-3 text-[10px] font-bold text-gray-400 animate-pulse">{t('common.searching')}</div>
                                 ) : (
                                     suggestions.map((s, i) => (
                                         <button key={i} type="button" onMouseDown={() => handleSelectSuggestion(s)} className="w-full p-3 rounded-xl flex items-center gap-4 text-left group hover:bg-gray-50 transition-all">
@@ -312,22 +312,22 @@ export default function AddTrajetPage() {
                         <>
                             <div className="flex items-center gap-4 p-4 rounded-3xl bg-[#f3cd08]/5 border border-[#f3cd08]/20">
                                  <div className="flex-1 min-w-0">
-                                    <span className="text-[9px] font-black text-amber-600 uppercase tracking-widest block mb-1">Prix payé (FCFA)</span>
+                                    <span className="text-[9px] font-black text-amber-600 uppercase tracking-widest block mb-1">{t('add.price_paid_label')}</span>
                                     <div className="flex items-baseline gap-2">
                                         <input 
                                             type="number" value={formData.price} onChange={(e) => setFormData({...formData, price: e.target.value})}
                                             placeholder="0" className="w-full text-xl font-black text-[#141414] border-none p-0 focus:ring-0 bg-transparent placeholder:text-gray-200"
                                         />
-                                        <span className="text-[10px] font-black text-gray-400 shrink-0 uppercase">Francs CFA</span>
+                                        <span className="text-[10px] font-black text-gray-400 shrink-0 uppercase">{t('add.currency_label')}</span>
                                     </div>
                                  </div>
                             </div>
 
                             <div className="grid grid-cols-2 gap-4">
                                 <div className="space-y-2">
-                                    <p className="text-[9px] font-black text-gray-500 uppercase tracking-widest pl-1">Conditions</p>
+                                    <p className="text-[9px] font-black text-gray-500 uppercase tracking-widest pl-1">{t('add.conditions')}</p>
                                     <div className="flex gap-2">
-                                        {[{v:0, i:Sun, l:'Soleil'}, {v:2, i:CloudRain, l:'Pluie'}].map(o => (
+                                        {[{v:0, i:Sun, l:t('add.weather_sunny')}, {v:2, i:CloudRain, l:t('add.weather_rainy')}].map(o => (
                                             <button key={o.v} type="button" onClick={() => setFormData({...formData, meteo: o.v})} className={`flex-1 p-3 rounded-2xl border-2 transition-all ${formData.meteo === o.v ? 'bg-[#141414] border-[#141414] text-white shadow-lg' : 'bg-gray-50 border-transparent text-gray-300'}`}>
                                                 <o.i className="w-4 h-4 mx-auto" />
                                             </button>
@@ -335,16 +335,16 @@ export default function AddTrajetPage() {
                                     </div>
                                 </div>
                                 <div className="space-y-2">
-                                    <p className="text-[9px] font-black text-gray-500 uppercase tracking-widest pl-1">Horaire</p>
+                                    <p className="text-[9px] font-black text-gray-500 uppercase tracking-widest pl-1">{t('add.time_slot')}</p>
                                     <select value={formData.heure} onChange={(e) => setFormData({...formData, heure: e.target.value})} className="w-full bg-gray-50 border border-transparent rounded-2xl text-[10px] font-black p-3.5 outline-none uppercase text-gray-600 focus:bg-white focus:border-[#f3cd08]/30">
-                                        {HEURE_SLOTS.map(s => <option key={s.value} value={s.value}>{s.label}</option>)}
+                                        {HEURE_SLOTS.map(s => <option key={s.value} value={s.value}>{t(s.label_key)}</option>)}
                                     </select>
                                 </div>
                             </div>
 
                             <div className="space-y-3 pt-2">
                                 <div className="flex justify-between items-center px-1">
-                                    <p className="text-[9px] font-black text-gray-500 uppercase tracking-widest">Qualité du trajet</p>
+                                    <p className="text-[9px] font-black text-gray-500 uppercase tracking-widest">{t('add.quality_label')}</p>
                                     <span className="text-sm font-black text-[#f3cd08]">{formData.qualite}/10</span>
                                 </div>
                                 <input 
@@ -356,7 +356,7 @@ export default function AddTrajetPage() {
                             </div>
 
                             <button type="submit" disabled={isLoading} className="w-full py-3 bg-[#141414] text-white rounded-4xl font-black text-[11px] uppercase tracking-[0.2em] shadow-xl flex items-center justify-center gap-3 active:scale-[0.98] transition-all mt-1">
-                                {isLoading ? <Loader2 className="w-5 h-5 animate-spin text-[#f3cd08]" /> : <>Confirmer<PlusCircle className="w-4 h-4 text-[#f3cd08]" /></>}
+                                {isLoading ? <Loader2 className="w-5 h-5 animate-spin text-[#f3cd08]" /> : <>{t('common.confirm')}<PlusCircle className="w-4 h-4 text-[#f3cd08]" /></>}
                             </button>
                         </>
                     )}

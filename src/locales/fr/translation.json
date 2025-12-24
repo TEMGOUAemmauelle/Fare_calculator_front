@@ -42,7 +42,16 @@
     "cta_contribute": "Contribuer",
     "cta_contribute_sub": "Base de données",
     "core_version": "Core v2.0",
-    "ai_engine": "AI"
+    "ai_engine": "AI",
+    "hero_title_1": "Calculez vos",
+    "hero_title_2": "tarifs",
+    "hero_title_3": "en un clic.",
+    "current_position_label": "Votre position actuelle",
+    "shortcuts": "Raccourcis",
+    "searching": "Démarrage...",
+    "locating": "Détermination de votre position...",
+    "addr_calc": "Calcul de l'adresse...",
+    "geoloc_needed": "La géolocalisation est nécessaire pour une meilleure expérience."
   },
   "estimate": {
     "title": "ESTIMER",
@@ -59,7 +68,15 @@
     "result": "Résultat",
     "new_search": "Nouvelle recherche",
     "community_trips": "Trajets commu",
-    "detecting_location": "Position détectée"
+    "detecting_location": "Position détectée",
+    "start_search": "Où allons-nous ?",
+    "reopen_modal": "Modifier l'estimation",
+    "title_section": "Estimation du prix",
+    "result_title": "Résultat de l'estimation",
+    "recalculate": "Recalculer",
+    "locate_success": "Ma position détectée",
+    "locate_error": "Impossible de vous localiser",
+    "server_error": "Erreur serveur"
   },
   "add": {
     "title": "AJOUTER",
@@ -81,7 +98,17 @@
     "add_a_trip": "Ajouter un trajet",
     "quality_smooth": "Trajet fluide, peu d'obstacles",
     "quality_normal": "Trajet normal avec quelques difficultés",
-    "quality_hard_desc": "Trajet difficile (embouteillages, nids de poule...)"
+    "quality_hard_desc": "Trajet difficile (embouteillages, nids de poule...)",
+    "share_fare": "Partager un",
+    "fare": "tarif",
+    "price_paid_label": "Prix payé (FCFA)",
+    "currency_label": "Francs CFA",
+    "quality_label": "Qualité du trajet",
+    "locate_success_alt": "Position récupérée",
+    "locate_error_alt": "Impossible de récupérer la position. Vérifiez vos réglages.",
+    "form_incomplete": "Formulaire incomplet",
+    "add_error": "Erreur d'ajout",
+    "reopen_modal_alt": "Modifier le trajet"
   },
   "price_card": {
     "standard_estimation": "Estimation standard",
@@ -261,5 +288,22 @@
     "install_btn": "Installer maintenant",
     "later": "Plus tard",
     "manual_instruction": "Pour installer l'application, ouvrez le menu de votre navigateur et sélectionnez 'Ajouter à l'écran d'accueil'."
+  },
+  "partners": {
+    "title": "Partenaires",
+    "services": "Services",
+    "special_offer": "Offre Spéciale",
+    "discover_partners": "Découvrez nos partenaires",
+    "optimize_trips": "Optimisez vos déplacements",
+    "trust_partners": "Partenaires de confiance pour voyager sereinement",
+    "see_offers": "Consulter les offres",
+    "discover_service": "Découvrir le service",
+    "become_partner": "Devenir Partenaire ?",
+    "join_network": "Vous proposez un service de transport au Cameroun ? Rejoignez notre réseau.",
+    "contact_us": "Contactez-nous",
+    "loading_offers": "Chargement des offres...",
+    "suggested_partners": "Partenaires suggérés",
+    "see_more": "Voir plus",
+    "partnership_services": "Services Partenaires"
   }
 }

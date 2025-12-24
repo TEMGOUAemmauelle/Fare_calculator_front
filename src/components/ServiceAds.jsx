@@ -1,10 +1,11 @@
-
+import { useTranslation } from 'react-i18next';
 import { motion } from 'framer-motion';
 import { useState, useEffect } from 'react';
 import { getAds } from '../services/adService';
 import { Loader2 } from 'lucide-react';
 
 export default function ServiceAds() {
+  const { t } = useTranslation();
   const [ads, setAds] = useState([]);
   const [loading, setLoading] = useState(true);
 
@@ -31,13 +32,13 @@ export default function ServiceAds() {
   return (
     <div className="space-y-4">
       <div className="flex items-center justify-between px-1">
-        <h3 className="text-[10px] font-black text-gray-400 uppercase tracking-widest pl-1">Services Partenaires</h3>
+        <h3 className="text-[10px] font-black text-gray-400 uppercase tracking-widest pl-1">{t('partners.partnership_services')}</h3>
         <a 
             href="/services" 
             onClick={(e) => { e.preventDefault(); window.location.href = '/services'; }}
             className="text-[9px] font-black text-[#f3cd08] uppercase tracking-widest hover:underline"
         >
-            Voir tout
+            {t('common.see_all')}
         </a>
       </div>
       

@@ -2,8 +2,10 @@
 import { motion, AnimatePresence } from 'framer-motion';
 import { X, ExternalLink, Sparkles } from 'lucide-react';
 import { useAppNavigate } from '../hooks/useAppNavigate';
+import { useTranslation } from 'react-i18next';
 
 export default function PartnerPrompt({ isVisible, onClose }) {
+  const { t } = useTranslation();
   const navigate = useAppNavigate();
 
   return (
@@ -24,7 +26,7 @@ export default function PartnerPrompt({ isVisible, onClose }) {
                  <div className="p-1.5 bg-[#f3cd08] rounded-lg">
                     <Sparkles className="w-3.5 h-3.5 text-black" />
                  </div>
-                 <span className="text-[10px] font-black text-[#f3cd08] uppercase tracking-[0.2em]">Offre Spéciale</span>
+                 <span className="text-[10px] font-black text-[#f3cd08] uppercase tracking-[0.2em]">{t('partners.special_offer')}</span>
               </div>
               <button onClick={onClose} className="p-1 text-gray-500 hover:text-white transition-colors">
                 <X className="w-4 h-4" />
@@ -32,10 +34,10 @@ export default function PartnerPrompt({ isVisible, onClose }) {
             </div>
 
             <h3 className="text-white text-base font-black italic uppercase tracking-tighter leading-tight mb-1">
-                Optimisez vos <span className="text-[#f3cd08]">déplacements</span>
+                {t('partners.optimize_trips').split(' ')[0]} {t('partners.optimize_trips').split(' ')[1]} <span className="text-[#f3cd08]">{t('partners.optimize_trips').split(' ').slice(2).join(' ')}</span>
             </h3>
             <p className="text-gray-400 text-[10px] font-bold uppercase tracking-wide opacity-80 mb-4 max-w-[90%]">
-                Découvrez nos partenaires de confiance pour voyager plus sereinement.
+                {t('partners.trust_partners')}
             </p>
 
             <button 
@@ -45,7 +47,7 @@ export default function PartnerPrompt({ isVisible, onClose }) {
                 }}
                 className="w-full py-3 bg-white text-black rounded-2xl font-black text-[9px] uppercase tracking-widest flex items-center justify-center gap-2 active:scale-95 transition-all"
             >
-                Consulter les offres <ExternalLink className="w-3 h-3" />
+                {t('partners.see_offers')} <ExternalLink className="w-3 h-3" />
             </button>
           </div>
         </motion.div>

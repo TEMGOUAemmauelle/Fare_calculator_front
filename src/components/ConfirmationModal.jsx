@@ -10,7 +10,7 @@
 
 import React, { useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { X } from 'lucide-react';
+import { X, Sparkles } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
 import LottieAnimation from './LottieAnimation';
 import CarouselAds from './CarouselAds';
@@ -98,74 +98,84 @@ export default function ConfirmationModal({
               )}
 
               {/* Content container */}
-              <div className="px-8 py-10 text-center">
-                {/* Lottie animation */}
+              <div className="text-center">
+
+                {/* ADS / PARTNERS (NEW) - Elegant Footer Integration */}
                 <motion.div
-                  initial={{ scale: 0 }}
-                  animate={{ scale: 1 }}
-                  transition={{ 
-                    delay: 0.2, 
-                    type: 'spring', 
-                    damping: 15,
-                    stiffness: 200 
-                  }}
-                  className="w-48 h-48 mx-auto mb-6"
-                >
-                  <LottieAnimation
-                    animationData={lottieAnimation}
-                    loop={false}
-                    autoplay={true}
-                  />
-                </motion.div>
-
-                {/* Title */}
-                <motion.h2
                   initial={{ opacity: 0, y: 20 }}
                   animate={{ opacity: 1, y: 0 }}
-                  transition={{ delay: 0.4 }}
-                  className="text-3xl font-black text-gray-900 mb-4"
-                >
-                  {modalTitle}
-                </motion.h2>
-
-                {/* Message */}
-                <motion.p
-                  initial={{ opacity: 0, y: 20 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ delay: 0.5 }}
-                  className="text-gray-700 text-base leading-relaxed mb-8 max-w-sm mx-auto"
-                >
-                  {modalMessage}
-                </motion.p>
-
-                {/* Action button */}
-                <motion.button
-                  initial={{ opacity: 0, y: 20 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ delay: 0.6 }}
-                  whileHover={{ scale: 1.02 }}
-                  whileTap={{ scale: 0.98 }}
-                  onClick={handleButtonClick}
-                  className="w-full py-4 bg-linear-to-r from-yellow-400 to-yellow-500 hover:from-yellow-500 hover:to-yellow-600 text-gray-900 font-bold text-lg rounded-2xl shadow-lg shadow-yellow-500/30 transition-all"
-                >
-                  {modalButtonText}
-                </motion.button>
-
-                {/* ADS / PARTNERS (NEW) */}
-                <motion.div
-                  initial={{ opacity: 0 }}
-                  animate={{ opacity: 1 }}
                   transition={{ delay: 0.8 }}
-                  className="mt-8 pt-8 border-t border-gray-50 text-left"
+                  className="bg-gray-50/50 p-6 border-t border-gray-100 text-left"
                 >
-                   <div className="flex items-center justify-between mb-4">
-                      <span className="text-[10px] font-black text-gray-400 uppercase tracking-widest">Offres Spéciales</span>
-                      <a href="/services" className="text-[9px] font-black text-[#f3cd08] uppercase tracking-widest">Tout voir</a>
+                   <div className="flex items-center justify-between mb-2">
+                      <div className="flex items-center gap-1.5">
+                         <Sparkles className="w-3 h-3 text-[#f3cd08]" />
+                         <span className="text-[9px] font-black text-gray-400 uppercase tracking-widest">{t('partners.special_offer')}</span>
+                      </div>
+                      <a href="/services" className="text-[8px] font-black text-[#f3cd08] uppercase tracking-widest hover:underline">
+                         {t('common.see_all')}
+                      </a>
                    </div>
-                   <div className="rounded-4xl overflow-hidden scale-95 origin-center shadow-sm">
+                   <div className="rounded-3xl overflow-hidden shadow-sm border border-white">
                       <CarouselAds />
                    </div>
                 </motion.div>
+                {/* Upper section with animation and message */}
+                <div className="px-8 pt-2 pb-6">
+                  {/* Lottie animation - Compacted */}
+                  <motion.div
+                    initial={{ scale: 0 }}
+                    animate={{ scale: 1 }}
+                    transition={{ 
+                      delay: 0.2, 
+                      type: 'spring', 
+                      damping: 15,
+                      stiffness: 200 
+                    }}
+                    className="w-32 h-32 mx-auto mb-4"
+                  >
+                    <LottieAnimation
+                      animationData={lottieAnimation}
+                      loop={false}
+                      autoplay={true}
+                    />
+                  </motion.div>
+
+                  {/* Title */}
+                  <motion.h2
+                    initial={{ opacity: 0, y: 10 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ delay: 0.4 }}
+                    className="text-2xl font-black text-gray-900 mb-2 uppercase tracking-tight italic"
+                  >
+                    {modalTitle}
+                  </motion.h2>
+
+                  {/* Message */}
+                  <motion.p
+                    initial={{ opacity: 0, y: 10 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ delay: 0.5 }}
+                    className="text-gray-500 text-xs font-bold uppercase tracking-wider leading-relaxed mb-6 max-w-xs mx-auto opacity-70"
+                  >
+                    {modalMessage}
+                  </motion.p>
+
+                  {/* Action button */}
+                  <motion.button
+                    initial={{ opacity: 0, y: 10 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ delay: 0.6 }}
+                    whileHover={{ scale: 1.02 }}
+                    whileTap={{ scale: 0.98 }}
+                    onClick={handleButtonClick}
+                    className="w-full py-4 bg-[#f3cd08] hover:bg-[#e2bd07] text-black font-black text-[10px] uppercase tracking-widest rounded-2xl shadow-lg shadow-yellow-500/20 transition-all"
+                  >
+                    {modalButtonText}
+                  </motion.button>
+                </div>
+
+                
               </div>
             </motion.div>
           </motion.div>

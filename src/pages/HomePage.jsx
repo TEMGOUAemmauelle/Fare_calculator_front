@@ -37,12 +37,12 @@ export default function HomePage() {
 
   const initGeolocation = async () => {
     setSplashStatus('loading');
-    setSplashMessage("Détermination de votre position...");
+    setSplashMessage(t('home.locating'));
     try {
         const pos = await geolocationService.getCurrentPosition();
         setUserLocation(pos);
         if (pos) {
-            setSplashMessage("Calcul de l'adresse...");
+            setSplashMessage(t('home.addr_calc'));
             const addr = await reverseSearch(pos.coords.latitude, pos.coords.longitude);
             setUserAddress(addr);
         } else {
@@ -52,7 +52,7 @@ export default function HomePage() {
     } catch (e) {
         console.warn("Geolocation failure on HomePage", e);
         setSplashStatus('error');
-        setSplashMessage("La géolocalisation est nécessaire pour une meilleure expérience.");
+        setSplashMessage(t('home.geoloc_needed'));
     }
   };
 
@@ -122,7 +122,7 @@ export default function HomePage() {
                         animate={{ opacity: 1, y: 0 }}
                         className="text-2xl font-black text-white leading-tight italic uppercase tracking-tighter"
                     >
-                        Calculez vos <span className="text-[#f3cd08]">tarifs</span><br/>en un clic.
+                        {t('home.hero_title_1')} <span className="text-[#f3cd08]">{t('home.hero_title_2')}</span><br/>{t('home.hero_title_3')}
                     </motion.h2>
                 </div>
             </div>
@@ -140,7 +140,7 @@ export default function HomePage() {
 
                     <div className="pl-10 space-y-8">
                         <div className="border-b border-gray-100 pb-3">
-                            <span className="text-[10px] font-bold text-gray-500 uppercase tracking-widest block mb-1">Votre position actuelle</span>
+                            <span className="text-[10px] font-bold text-gray-500 uppercase tracking-widest block mb-1">{t('home.current_position_label')}</span>
                             <span className="text-sm font-bold text-gray-800 truncate block">
                                 {userAddress}
                             </span>
@@ -148,7 +148,7 @@ export default function HomePage() {
                         
                         <div className="flex items-center justify-between border-b-2 border-[#141414] pb-3 transition-colors">
                             <div className="flex items-center gap-1">
-                                <span className="text-xl font-bold text-[#141414] opacity-40">Où allons-nous ?</span>
+                                <span className="text-xl font-bold text-[#141414] opacity-40">{t('estimate.start_search')}</span>
                                 <div className="w-0.5 h-6 bg-[#f3cd08] cursor-blink" />
                             </div>
                             <ArrowRight className="w-5 h-5 text-[#f3cd08]" />
@@ -158,7 +158,7 @@ export default function HomePage() {
             </div>
 
             <div className="space-y-4 pt-2">
-                <h3 className="text-[10px] font-black text-gray-400 uppercase tracking-widest pl-1">Raccourcis</h3>
+                <h3 className="text-[10px] font-black text-gray-400 uppercase tracking-widest pl-1">{t('home.shortcuts')}</h3>
                 <div className="flex flex-col gap-0 border-t border-gray-50">
                   {POPULAR_DESTINATIONS.map((dest) => (
                     <button 
@@ -188,7 +188,7 @@ export default function HomePage() {
             className="flex items-center gap-3 px-6 py-4 bg-[#141414] text-white rounded-4xl font-bold text-[10px] uppercase tracking-widest shadow-2xl active:scale-95 transition-all outline outline-white"
           >
             <PlusCircle className="w-4 h-4 text-[#f3cd08]" />
-            <span>Contribuer</span>
+            <span>{t('home.cta_contribute')}</span>
           </button>
         </div>
       </div>
