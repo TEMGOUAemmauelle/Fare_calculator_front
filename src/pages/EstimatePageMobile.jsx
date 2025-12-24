@@ -57,6 +57,7 @@ const SuggestionSkeleton = () => (
 );
 
 export default function EstimatePageMobile() {
+  const { t } = useTranslation();
   const navigate = useNavigate();
   const location = useLocation();
   

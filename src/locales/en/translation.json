@@ -110,7 +110,8 @@
     "locate_error_alt": "Unable to retrieve position. Check your settings.",
     "form_incomplete": "Incomplete form",
     "add_error": "Add error",
-    "reopen_modal_alt": "Edit trip"
+    "reopen_modal_alt": "Edit trip",
+    "cta_contribute_sub": "Add"
   },
   "price_card": {
     "standard_estimation": "Standard estimation",
