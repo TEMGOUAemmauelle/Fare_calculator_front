@@ -7,10 +7,12 @@ import { getAds } from '../services/adService';
 import { motion, AnimatePresence } from 'framer-motion';
 
 export default function ServicesPage() {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
   const navigate = useNavigate();
   const [services, setServices] = useState([]);
   const [loading, setLoading] = useState(true);
+
+  const isEn = i18n.language === 'en';
 
   useEffect(() => {
     const fetchServices = async () => {
@@ -90,7 +92,7 @@ export default function ServicesPage() {
                         <div className="relative h-48 w-full overflow-hidden">
                             <img 
                                 src={service.image_url} 
-                                alt={service.title}
+                                alt={isEn ? (service.title_en || service.title) : service.title}
                                 className="w-full h-full object-cover opacity-60 group-hover:scale-105 transition-transform duration-700"
                             />
                             <div className="absolute inset-0 bg-linear-to-t from-[#141414] via-[#141414]/20 to-transparent" />
@@ -108,14 +110,14 @@ export default function ServicesPage() {
                         <div className="p-8">
                             <div className="flex justify-between items-start mb-2">
                                 <h3 className="text-2xl font-black text-white italic uppercase tracking-tighter">
-                                    {service.title}
+                                    {isEn ? (service.title_en || service.title) : service.title}
                                 </h3>
                                 <div className="p-2 bg-white/5 rounded-xl">
                                     <ExternalLink className="w-4 h-4 text-[#f3cd08]" />
                                 </div>
                             </div>
                             <p className="text-gray-500 text-xs font-bold uppercase tracking-wide leading-relaxed mb-6">
-                                {service.description}
+                                {isEn ? (service.description_en || service.description) : service.description}
                             </p>
                             
                             <div className="flex items-center gap-4">
