@@ -25,8 +25,10 @@ import {
   Zap,
   Car,
   ShieldCheck,
-  AlertTriangle
+  AlertTriangle,
+  Sparkles
 } from 'lucide-react';
+import CarouselAds from './CarouselAds'; // Re-use the existing dynamic carousel
 
 export default function PriceCard({ prediction, onAddTrajet }) {
   const { t, i18n } = useTranslation();
@@ -230,16 +232,20 @@ export default function PriceCard({ prediction, onAddTrajet }) {
         </div>
         )}
 
-      {/* 6. MESSAGE CONSEIL (Footer) */}
-      <div className="bg-yellow-50/50 p-4 border-t border-yellow-100/50">
-        <div className="flex gap-3">
-            <div className="mt-0.5">
-                <Info className="w-4 h-4 text-yellow-600" />
+ 
+
+      {/* 7. PARTENAIRES SUGGESTION (Nouveau) */}
+      <div className="px-6 pb-6 pt-2">
+         <div className="flex items-center justify-between mb-3 px-1">
+            <div className="flex items-center gap-1.5">
+               <Sparkles className="w-3 h-3 text-[#f3cd08]" />
+               <span className="text-[9px] font-black text-gray-400 uppercase tracking-widest">Partenaires suggérés</span>
             </div>
-            <p className="text-xs text-yellow-800 leading-relaxed font-medium">
-                {prediction.message || t('price_card.indicative_price')}
-            </p>
-        </div>
+            <a href="/services" className="text-[8px] font-black text-[#f3cd08] uppercase tracking-widest">Voir plus</a>
+         </div>
+         <div className="rounded-3xl overflow-hidden scale-95 origin-center shadow-sm">
+            <CarouselAds />
+         </div>
       </div>
     </motion.div>
   );

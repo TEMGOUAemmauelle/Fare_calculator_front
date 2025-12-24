@@ -32,6 +32,13 @@ export default function ServiceAds() {
     <div className="space-y-4">
       <div className="flex items-center justify-between px-1">
         <h3 className="text-[10px] font-black text-gray-400 uppercase tracking-widest pl-1">Services Partenaires</h3>
+        <a 
+            href="/services" 
+            onClick={(e) => { e.preventDefault(); window.location.href = '/services'; }}
+            className="text-[9px] font-black text-[#f3cd08] uppercase tracking-widest hover:underline"
+        >
+            Voir tout
+        </a>
       </div>
       
       <div className="grid grid-cols-2 gap-4">

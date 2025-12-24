@@ -13,6 +13,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { X } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
 import LottieAnimation from './LottieAnimation';
+import CarouselAds from './CarouselAds';
 
 // Import des animations Lottie
 import makingMoneyAnimation from '../assets/lotties/Making Money.json';
@@ -149,6 +150,22 @@ export default function ConfirmationModal({
                 >
                   {modalButtonText}
                 </motion.button>
+
+                {/* ADS / PARTNERS (NEW) */}
+                <motion.div
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  transition={{ delay: 0.8 }}
+                  className="mt-8 pt-8 border-t border-gray-50 text-left"
+                >
+                   <div className="flex items-center justify-between mb-4">
+                      <span className="text-[10px] font-black text-gray-400 uppercase tracking-widest">Offres Spéciales</span>
+                      <a href="/services" className="text-[9px] font-black text-[#f3cd08] uppercase tracking-widest">Tout voir</a>
+                   </div>
+                   <div className="rounded-4xl overflow-hidden scale-95 origin-center shadow-sm">
+                      <CarouselAds />
+                   </div>
+                </motion.div>
               </div>
             </motion.div>
           </motion.div>
