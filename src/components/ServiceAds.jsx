@@ -52,7 +52,9 @@ export default function ServiceAds() {
 }
 
 function AdCard({ ad, idx }) {
+  const { i18n } = useTranslation();
   const [isLoaded, setIsLoaded] = useState(false);
+  const isEn = i18n.language === 'en';
 
   return (
     <motion.a
@@ -73,7 +75,7 @@ function AdCard({ ad, idx }) {
       <div className="absolute inset-0">
          <img 
            src={ad.image_url} 
-           alt={ad.title}
+           alt={isEn ? (ad.title_en || ad.title) : ad.title}
            onLoad={() => setIsLoaded(true)}
            className={`w-full h-full object-cover transition-all duration-1000 ${isLoaded ? 'opacity-100 scale-100' : 'opacity-0 scale-110'}`}
          />
@@ -90,10 +92,10 @@ function AdCard({ ad, idx }) {
             {ad.category}
          </span>
          <h4 className="text-white text-lg font-black uppercase tracking-tight leading-none mb-1 shadow-sm">
-             {ad.title}
+             {isEn ? (ad.title_en || ad.title) : ad.title}
          </h4>
          <p className="text-gray-400 text-[9px] font-bold uppercase tracking-wider opacity-80 truncate">
-             {ad.description}
+             {isEn ? (ad.description_en || ad.description) : ad.description}
          </p>
       </div>
       

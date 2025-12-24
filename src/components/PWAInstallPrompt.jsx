@@ -102,99 +102,94 @@ export default function PWAInstallPrompt() {
     <AnimatePresence>
       {showPrompt && (
         <>
-          {/* Overlay semi-transparent */}
+          {/* Transparent Backdrop */}
           <motion.div
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
-            className="fixed inset-0 bg-black/40 backdrop-blur-sm z-9998"
+            className="fixed inset-0 bg-black/5 bg-linear-to-b from-transparent to-black/20 backdrop-blur-[2px] z-9998"
             onClick={handleDismiss}
           />
 
-          {/* Prompt Card */}
+          {/* Pure Minimalist Prompt */}
           <motion.div
-            initial={{ opacity: 0, y: 100, scale: 0.9 }}
+            initial={{ opacity: 0, y: 50, scale: 0.95 }}
             animate={{ opacity: 1, y: 0, scale: 1 }}
-            exit={{ opacity: 0, y: 100, scale: 0.9 }}
-            transition={{ type: 'spring', damping: 25, stiffness: 300 }}
-            className="fixed bottom-4 left-4 right-4 md:left-auto md:right-8 md:bottom-8 md:w-[420px] z-9999"
+            exit={{ opacity: 0, y: 50, scale: 0.95 }}
+            transition={{ type: 'spring', damping: 25, stiffness: 400 }}
+            className="fixed bottom-6 left-4 right-4 md:left-auto md:right-8 md:bottom-8 md:w-[380px] z-9999"
           >
-            <div className="bg-white rounded-3xl shadow-2xl border border-gray-200 overflow-hidden">
-              {/* Header avec dégradé jaune */}
-              <div className="bg-linear-to-br from-yellow-400 via-yellow-500 to-amber-500 px-6 py-8 relative overflow-hidden">
-                {/* Pattern décoratif */}
-                <div className="absolute inset-0 opacity-20">
-                  <div className="absolute top-0 right-0 w-40 h-40 bg-white rounded-full -translate-y-1/2 translate-x-1/2" />
-                  <div className="absolute bottom-0 left-0 w-32 h-32 bg-white rounded-full translate-y-1/2 -translate-x-1/2" />
-                </div>
-
-                {/* Bouton fermer */}
-                <button
-                  onClick={handleDismiss}
-                  className="absolute top-4 right-4 p-2 rounded-full bg-white/20 hover:bg-white/30 transition-colors"
-                  aria-label={t('common.close') || 'Fermer'}
+            <div className="bg-white rounded-[2.5rem] shadow-2xl shadow-black/10 border border-gray-100/50 overflow-hidden flex flex-col items-center text-center">
+              
+              {/* Top Visual - Ultra Clean */}
+              <div className="pt-10 pb-6 w-full flex flex-col items-center">
+                <motion.div
+                  initial={{ rotate: -10, scale: 0.8 }}
+                  animate={{ rotate: 0, scale: 1 }}
+                  transition={{ delay: 0.2, type: 'spring', damping: 12 }}
+                  className="w-16 h-16 bg-[#f3cd08] rounded-3xl shadow-xl shadow-yellow-500/20 flex items-center justify-center mb-6"
                 >
-                  <X className="w-5 h-5 text-white" />
-                </button>
+                  <Smartphone className="w-8 h-8 text-black" />
+                </motion.div>
 
-                {/* Icône et titre - Minimalist */}
-                <div className="relative z-10 flex flex-col items-center text-center">
-                  <motion.div
-                    initial={{ scale: 0 }}
-                    animate={{ scale: 1 }}
-                    transition={{ delay: 0.2, type: 'spring', stiffness: 200 }}
-                    className="w-12 h-12 bg-white rounded-2xl shadow-lg flex items-center justify-center mb-3 text-[#f3cd08]"
-                  >
-                    <Smartphone className="w-6 h-6 fill-current" />
-                  </motion.div>
-
-                  <h3 className="text-xl font-black text-white uppercase tracking-wider mb-0.5">
-                    {t('pwa.install_title')}
-                  </h3>
-                </div>
+                <h3 className="text-xl font-black text-[#141414] uppercase tracking-tighter italic px-8">
+                  {t('pwa.install_title')}
+                </h3>
               </div>
 
-              {/* Contenu - Plus clean et direct */}
-              <div className="px-6 py-5 bg-white">
-                <p className="text-gray-600 text-sm mb-6 text-center leading-relaxed">
+              {/* Description */}
+              <div className="px-10 pb-8 space-y-6">
+                <p className="text-gray-400 text-[10px] font-bold uppercase tracking-widest leading-relaxed">
                   {t('pwa.install_description')}
                 </p>
 
-                {/* Boutons d'action */}
-                <div className="space-y-3">
+                {/* Main Action */}
+                <div className="space-y-4">
                   {isIOS && !deferredPrompt ? (
-                    // Instructions iOS simplifiées
-                    <div className="bg-gray-50 rounded-xl p-4 border border-gray-100">
-                      <p className="text-gray-900 font-bold text-xs mb-2 text-center">
+                    <div className="bg-gray-50/80 rounded-3xl p-5 border border-gray-100 flex flex-col items-center gap-3">
+                      <p className="text-[#141414] font-black text-[9px] uppercase tracking-widest leading-normal">
                         {t('pwa.ios_instruction')}
                       </p>
-                      <div className="flex justify-center items-center gap-2 text-xs text-gray-600">
-                        <span>{t('pwa.ios_share')}</span>
-                        <div className="px-2 py-0.5 bg-gray-200 rounded text-[10px]">⎙</div>
-                        <span>→</span>
-                        <span>{t('pwa.ios_add_home')}</span>
-                        <div className="px-2 py-0.5 bg-gray-200 rounded text-[10px]">+</div>
+                      <div className="flex items-center gap-3 text-[8px] font-black text-gray-400 uppercase tracking-tighter">
+                         <div className="p-1.5 bg-white rounded-lg shadow-sm">
+                            <X className="w-3 h-3 rotate-45 text-blue-500" /> {/* Symbolizing Share icon roughly or use real icon */}
+                         </div>
+                         <span>→</span>
+                         <div className="p-1.5 bg-white rounded-lg shadow-sm">
+                            <Download className="w-3 h-3 text-[#141414]" />
+                         </div>
                       </div>
                     </div>
                   ) : (
-                    // Bouton installation Android/Chrome - Premium
-                    <button
+                    <motion.button
+                      whileHover={{ scale: 1.02 }}
+                      whileTap={{ scale: 0.98 }}
                       onClick={handleInstallClick}
-                      className="w-full bg-[#0a0a0a] text-white font-bold py-3.5 px-6 rounded-2xl shadow-xl active:scale-[0.98] transition-all flex items-center justify-center gap-2"
+                      className="w-full bg-[#141414] text-white font-black py-5 px-8 rounded-3xl shadow-xl shadow-black/10 transition-all flex items-center justify-center gap-3 group"
                     >
-                      <Download className="w-4 h-4" />
-                      <span className="text-sm uppercase tracking-wide">{t('pwa.install_btn')}</span>
-                    </button>
+                      <Download className="w-4 h-4 text-[#f3cd08] group-hover:animate-bounce" />
+                      <span className="text-[10px] uppercase tracking-[0.2em]">{t('pwa.install_btn')}</span>
+                    </motion.button>
                   )}
 
                   <button
                     onClick={handleDismiss}
-                    className="w-full text-gray-400 hover:text-gray-900 font-semibold py-2 text-xs uppercase tracking-wider transition-colors"
+                    className="text-gray-300 hover:text-gray-900 font-black text-[9px] uppercase tracking-widest transition-colors py-2"
                   >
                     {t('pwa.later')}
                   </button>
                 </div>
               </div>
+
+              {/* Dismiss X button - Subtle */}
+              <button
+                onClick={handleDismiss}
+                className="absolute top-6 right-6 p-2 text-gray-200 hover:text-gray-900 transition-colors"
+                aria-label="Fermer"
+              >
+                <X className="w-5 h-5" />
+              </button>
+
             </div>
           </motion.div>
         </>

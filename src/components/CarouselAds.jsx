@@ -1,13 +1,16 @@
-
 import { useState, useEffect } from 'react';
 import { getAds } from '../services/adService';
 import { ExternalLink } from 'lucide-react';
+import { useTranslation } from 'react-i18next';
 
 export default function CarouselAds() {
+  const { i18n } = useTranslation();
   const [ads, setAds] = useState([]);
   const [currentIndex, setCurrentIndex] = useState(0);
   const [imagesLoaded, setImagesLoaded] = useState(false);
   const [loading, setLoading] = useState(true);
+
+  const isEn = i18n.language === 'en';
 
   // Charger les données depuis le backend
   useEffect(() => {
@@ -100,10 +103,10 @@ export default function CarouselAds() {
               {ad.category}
             </span>
             <h3 className="text-lg font-black italic uppercase tracking-tighter leading-none">
-              {ad.title}
+              {isEn ? (ad.title_en || ad.title) : ad.title}
             </h3>
             <p className="text-gray-400 text-[9px] font-bold uppercase tracking-wide opacity-90 truncate max-w-[80%]">
-              {ad.description}
+              {isEn ? (ad.description_en || ad.description) : ad.description}
             </p>
           </div>
 
