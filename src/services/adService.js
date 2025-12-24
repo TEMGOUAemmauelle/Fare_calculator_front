@@ -44,7 +44,7 @@ const STATIC_FALLBACK_ADS = [
 
 export const getAds = async () => {
   try {
-    const response = await apiClient.get('/publicites/');
+    const response = await apiClient.get('/partners/');
     const data = response.data;
     
     // Si l'API retourne une liste vide, on utilise le fallback statique

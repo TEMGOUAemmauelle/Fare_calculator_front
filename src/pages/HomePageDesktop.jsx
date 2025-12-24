@@ -5,7 +5,7 @@ import { useTranslation } from 'react-i18next';
 import { 
     Search, MapPin, BarChart2, Globe, PlusCircle, ArrowRight, 
     Navigation, Calculator, Sun, CloudRain, MapPinned, Loader2, 
-    Clock, Ruler, LocateFixed, ShieldCheck, Zap, Heart
+    Clock, Ruler, LocateFixed, ShieldCheck, Zap, Heart,Sparkles
 } from 'lucide-react';
 import { useAppNavigate } from '../hooks/useAppNavigate';
 
