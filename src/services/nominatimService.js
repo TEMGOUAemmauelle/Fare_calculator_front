@@ -1,3 +1,4 @@
+
 /**
  * @fileoverview Service Nominatim - Recherche POI OpenStreetMap
  * 
@@ -183,7 +184,7 @@ export const searchStructured = async (components = {}) => {
 };
 
 /**
- * Reverse geocoding (déjà dans geolocationService mais on l'exporte aussi)
+ * Reverse geocoding
  */
 export const reverseGeocode = async (lat, lon) => {
   try {
@@ -199,14 +200,10 @@ export const reverseGeocode = async (lat, lon) => {
     const url = `${NOMINATIM_BASE_URL}/reverse?${params}`;
 
     const response = await fetch(url, {
-      headers: {
-        'User-Agent': USER_AGENT,
-      },
+      headers: { 'User-Agent': USER_AGENT },
     });
 
-    if (!response.ok) {
-      throw new Error(`Nominatim error: ${response.status}`);
-    }
+    if (!response.ok) throw new Error(`Nominatim error: ${response.status}`);
 
     const data = await response.json();
     const address = data.address || {};
@@ -231,6 +228,38 @@ export const reverseGeocode = async (lat, lon) => {
 };
 
 /**
+ * Recherche inversée simplifiée : Coordonnées -> Chaîne formatée
+ * @param {number} lat 
+ * @param {number} lon 
+ * @returns {Promise<string>} "Rue, Ville" ou "Quartier, Ville"
+ */
+export const reverseSearch = async (lat, lon) => {
+  try {
+    const data = await reverseGeocode(lat, lon);
+    if (!data || !data.address) return "Position inconnue";
+
+    const { road, suburb, city, town, village, neighbourhood } = data.address;
+    let label = "";
+
+    // Priorité : Route > Quartier > Voisinage
+    if (road) label = road;
+    else if (suburb) label = suburb;
+    else if (neighbourhood) label = neighbourhood;
+
+    // Ajout Ville
+    const ville = city || town || village;
+    if (ville) {
+      if (label && label !== ville) label += `, ${ville}`;
+      else if (!label) label = ville;
+    }
+
+    return label || data.display_name.split(',')[0];
+  } catch (error) {
+    return "Votre position";
+  }
+};
+
+/**
  * Clear cache (utile pour debug)
  */
 export const clearCache = () => {
@@ -243,5 +272,6 @@ export default {
   searchByCategory,
   searchStructured,
   reverseGeocode,
+  reverseSearch,
   clearCache,
 };
