@@ -125,7 +125,7 @@ export default function EstimatePageMobile() {
             setArriveeQuery(d.name);
         }
     } else if (location.state?.focusDestination) {
-        setTimeout(() => arriveeInputRef.current?.focus(), 500);
+        setTimeout(() => arriveeInputRef.current?.focus(), 50);
     }
   }, [location.state]);
 
@@ -259,7 +259,7 @@ export default function EstimatePageMobile() {
             animate={{ y: 0 }}
             exit={{ y: '100%' }}
             transition={{ type: 'spring', damping: 25, stiffness: 300 }}
-            className={`fixed bottom-0 left-0 right-0 z-50 flex flex-col bg-white rounded-t-4xl shadow-[0_-10px_40px_rgba(0,0,0,0.1)] outline-none transition-all duration-500 ${prediction ? 'h-[85vh]' : 'h-[55vh]'}`}
+            className={`fixed bottom-0 left-0 right-0 z-50 flex flex-col bg-white rounded-t-4xl shadow-[0_-10px_40px_rgba(0,0,0,0.1)] outline-none transition-[height] duration-500 ${prediction ? 'h-[85vh]' : 'h-[55vh]'}`}
           >
             <div className="w-full flex justify-center pt-3 pb-2 shrink-0 cursor-pointer" onClick={() => setIsDrawerOpen(false)}>
                 <div className="w-10 h-1 bg-gray-200 rounded-full hover:bg-gray-300 transition-colors" />
@@ -346,7 +346,7 @@ export default function EstimatePageMobile() {
                                     <div className="space-y-2">
                                         <p className="text-[9px] font-bold text-gray-500 uppercase tracking-wide pl-1">{t('estimate.moment')}</p>
                                         <select value={heureTrajet} onChange={(e) => setHeureTrajet(e.target.value)} className="w-full bg-gray-50 border-none rounded-xl text-[10px] font-bold p-3.5 outline-none uppercase text-gray-700">
-                                            {TIME_SLOTS.map(slot => <option key={slot.value} value={t(slot.label_key)}>{t(slot.label_key)}</option>)}
+                                            {TIME_SLOTS.map(slot => <option key={slot.value} value={slot.value}>{t(slot.label_key)}</option>)}
                                         </select>
                                     </div>
                                 </div>
