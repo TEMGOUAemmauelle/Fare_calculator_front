@@ -148,8 +148,8 @@ export default function HomePage() {
                         
                         <div className="flex items-center justify-between border-b-2 border-[#141414] pb-3 transition-colors">
                             <div className="flex items-center gap-1">
-                                <span className="text-xl font-bold text-[#141414] opacity-40">{t('estimate.start_search')}</span>
                                 <div className="w-0.5 h-6 bg-[#f3cd08] cursor-blink" />
+                                <span className="text-xl font-bold text-[#141414] opacity-40">{t('estimate.start_search')}</span>
                             </div>
                             <ArrowRight className="w-5 h-5 text-[#f3cd08]" />
                         </div>
