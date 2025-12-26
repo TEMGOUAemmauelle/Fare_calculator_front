@@ -98,9 +98,9 @@ export default function HomePage() {
         <header className="px-6 pt-12 pb-6 flex items-center justify-between">
            <div className="flex flex-col">
               <h1 className="text-xl font-black tracking-tighter uppercase leading-none italic">
-                FARE<span className="text-[#f3cd08]">CALC</span>
+                FARE<span className="text-[#F97316]">CAL</span>
               </h1>
-              <div className="h-1 w-8 bg-[#f3cd08] mt-1 rounded-full" />
+              <div className="h-1 w-8 bg-[#F97316] mt-1 rounded-full" />
            </div>
            
            <div className="flex items-center gap-3">
