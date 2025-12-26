@@ -125,7 +125,7 @@ export default function EstimatePageMobile() {
             setArriveeQuery(d.name);
         }
     } else if (location.state?.focusDestination) {
-        setTimeout(() => arriveeInputRef.current?.focus(), 50);
+        setTimeout(() => arriveeInputRef.current?.focus(), 0);
     }
   }, [location.state]);
 

@@ -15,6 +15,7 @@ import SearchBarEnhanced from '../components/SearchBarEnhanced';
 import PriceCard from '../components/PriceCard';
 import CarouselAds from '../components/CarouselAds';
 import LanguageSwitcher from '../components/LanguageSwitcher';
+import ServiceAds from '../components/ServiceAds';
 import showToast from '../utils/customToast';
 
 // Services
@@ -272,34 +273,7 @@ export default function HomePageDesktop() {
       {/* ADS STRIP */}
       <section className="py-20 bg-gray-50/50 border-y border-gray-100">
         <div className="max-w-7xl mx-auto px-12">
-            <div className="flex flex-col items-center mb-12 text-center">
-                <span className="text-[10px] font-black text-[#f3cd08] uppercase tracking-[0.3em] mb-4">{t('partners.special_offer')}</span>
-                <h3 className="text-4xl font-black italic uppercase tracking-tighter">{t('partners.discover_partners')}</h3>
-            </div>
-            
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-                {backendAds.map((ad, i) => (
-                    <div key={ad.id || i} className="group relative bg-white rounded-4xl p-8 border border-white shadow-xl shadow-gray-200/50 hover:shadow-2xl transition-all hover:-translate-y-2 overflow-hidden flex flex-col">
-                        <div className="absolute top-0 right-0 w-32 h-32 bg-gray-50 rounded-full -mr-16 -mt-16 group-hover:scale-150 transition-transform duration-700" />
-                        <div className="relative z-10 flex flex-col h-full">
-                            <div className="w-14 h-14 bg-gray-50 rounded-2xl flex items-center justify-center mb-6 group-hover:bg-[#f3cd08] transition-colors shrink-0 overflow-hidden">
-                                {ad.image_url ? (
-                                    <img src={ad.image_url} alt="" className="w-full h-full object-cover" />
-                                ) : (
-                                    <Zap className="w-6 h-6 text-gray-400 group-hover:text-black" />
-                                )}
-                            </div>
-                            <h4 className="text-xl font-black italic uppercase tracking-tighter mb-4">{i18n.language === 'en' ? (ad.title_en || ad.title) : ad.title}</h4>
-                            <p className="text-gray-400 text-xs font-bold uppercase tracking-widest leading-relaxed mb-8 flex-1">
-                                {i18n.language === 'en' ? (ad.description_en || ad.description) : ad.description}
-                            </p>
-                            <a href={ad.app_link} target="_blank" rel="noopener noreferrer" className="flex items-center gap-2 text-[10px] font-black uppercase tracking-widest text-[#f3cd08] group-hover:underline">
-                                {t('partners.see_offers')} <ArrowRight className="w-3 h-3" />
-                            </a>
-                        </div>
-                    </div>
-                ))}
-            </div>
+            <ServiceAds ads={backendAds} />
         </div>
       </section>
 
