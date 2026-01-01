@@ -23,6 +23,8 @@ import AddTrajetPage from './pages/AddTrajetPage';
 import AllTrajetsPage from './pages/AllTrajetsPage';
 import StatsPage from './pages/StatsPage';
 import ServicesPage from './pages/ServicesPage';
+import MarketplacePage from './pages/MarketplacePageRouter';
+import PricingPage from './pages/PricingPageRouter';
 
 // Components
 import PWAInstallPrompt from './components/PWAInstallPrompt';
@@ -92,6 +94,8 @@ function App() {
           <Route path="trajets" element={<AllTrajetsPage />} />
           <Route path="stats" element={<StatsPage />} />
           <Route path="services" element={<ServicesPage />} />
+          <Route path="marketplace" element={<MarketplacePage />} />
+          <Route path="pricing" element={<PricingPage />} />
         </Route>
         
         {/* Redirect unknown routes or root without lang to LanguageWrapper's logic */}

@@ -6,7 +6,7 @@ import { useTranslation } from 'react-i18next';
 import { useAppNavigate } from '../hooks/useAppNavigate';
 import LanguageSwitcher from '../components/LanguageSwitcher';
 import { 
-  MapPin, Navigation, DollarSign, Sun, CloudRain, Loader2, Calculator, PlusCircle, ArrowLeft, ThumbsDown, ThumbsUp, Ruler, Clock, MapPinned, ChevronUp, LocateFixed
+  MapPin, Navigation, DollarSign, Sun, CloudRain, Loader2, Calculator, PlusCircle, ArrowLeft, ThumbsDown, ThumbsUp, Ruler, Clock, MapPinned, ChevronUp, LocateFixed, Store
 } from 'lucide-react';
 import showToast from '../utils/customToast';
 
@@ -14,6 +14,7 @@ import showToast from '../utils/customToast';
 import MapView from '../components/MapView';
 import SearchBarEnhanced from '../components/SearchBarEnhanced';
 import { TrajetAddedModal } from '../components/ConfirmationModal';
+import ContributionSuccessModal from '../components/ContributionSuccessModal';
 
 // Services
 import { addTrajet } from '../services';
@@ -56,6 +57,7 @@ export default function AddTrajetPageMobile() {
   const [markers, setMarkers] = useState([]);
   const [routeData, setRouteData] = useState(null);
   const [routeStats, setRouteStats] = useState(null);
+  const [lastContribution, setLastContribution] = useState(null);
 
   const performGeolocation = async () => {
     setIsLocating(true);
@@ -150,6 +152,12 @@ export default function AddTrajetPageMobile() {
             qualite_trajet: formData.qualite
         };
         await addTrajet(payload);
+        // Stocker les données pour le modal enrichi
+        setLastContribution({
+            depart: formData.depart,
+            arrivee: formData.arrivee,
+            prix: formData.price
+        });
         setShowSuccessModal(true);
     } catch (err) {
         showToast.error(t('add.add_error'));
@@ -184,7 +192,9 @@ export default function AddTrajetPageMobile() {
               </button>
           </div>
 
-          <LanguageSwitcher variant="dark" />
+          <div className="flex gap-2">
+              <button onClick={() => navigate('/marketplace')} className="p-2.5 bg-white rounded-xl text-gray-400 hover:text-[#f3cd08] shadow-md transition-colors"><Store className="w-4 h-4" /></button>
+          </div>
       </div>
 
       <AnimatePresence>
@@ -354,6 +364,16 @@ export default function AddTrajetPageMobile() {
       </AnimatePresence>
 
       <TrajetAddedModal isOpen={showSuccessModal} onClose={() => { setShowSuccessModal(false); navigate('/estimate'); }} />
+      
+      {/* Modal enrichi avec marketplace */}
+      <ContributionSuccessModal 
+        isOpen={showSuccessModal && !!lastContribution}
+        onClose={() => { 
+          setShowSuccessModal(false); 
+          setLastContribution(null);
+        }}
+        contributionData={lastContribution}
+      />
     </div>
   );
 }

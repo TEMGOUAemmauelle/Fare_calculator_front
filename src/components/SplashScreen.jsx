@@ -19,7 +19,7 @@ export default function SplashScreen({ isVisible, status, message, onRetry, onSk
                     className="flex flex-col items-center"
                   >
                      <h1 className="text-3xl font-black tracking-tighter uppercase italic text-[#141414]">
-                        FARE<span className="text-[#f3cd08]">CALC</span>
+                        FARE<span className="text-[#f3cd08]">CAL</span>
                      </h1>
                      <div className="w-12 h-1 bg-[#141414] mt-2 rounded-full" />
                   </motion.div>

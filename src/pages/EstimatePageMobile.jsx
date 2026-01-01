@@ -5,6 +5,7 @@
  * - Modal rétractable avec clic carte
  * - Bouton Géolocalisation dans le champ Départ
  * - Labels gray-500 pour visibilité
+ * - Vérification géographique Cameroun
  */
 
 import { useState, useEffect, useRef } from 'react';
@@ -14,7 +15,7 @@ import { Drawer } from 'vaul';
 import { motion, AnimatePresence } from 'framer-motion';
 import { 
     Navigation, MapPin, Calculator, ArrowLeft, 
-    Sun, CloudRain, MapPinned, Loader2, Globe, BarChart2, PlusCircle, Clock, Ruler, ChevronUp, LocateFixed
+    Sun, CloudRain, MapPinned, Loader2, Globe, BarChart2, PlusCircle, Clock, Ruler, ChevronUp, LocateFixed, Store
 } from 'lucide-react';
 import showToast from '../utils/customToast';
 
@@ -23,12 +24,17 @@ import MapView from '../components/MapView';
 import SearchBarEnhanced from '../components/SearchBarEnhanced';
 import PriceCard from '../components/PriceCard';
 import PartnerPrompt from '../components/PartnerPrompt';
+import OutOfBoundsModal from '../components/OutOfBoundsModal';
+import QuickPriceModal from '../components/QuickPriceModal';
 
 // Services
 import { estimatePrice } from '../services/estimateService';
 import { getDirections } from '../services/mapboxService';
 import geolocationService from '../services/geolocationService';
 import { reverseSearch } from '../services/nominatimService';
+
+// Utils
+import { validateTrajetInCameroon, detectCountry } from '../utils/cameroonGeoUtils';
 
 const WEATHER_OPTIONS = [
   { value: 0, label_key: 'add.weather_sunny', icon: Sun },
@@ -81,6 +87,9 @@ export default function EstimatePageMobile() {
   const [routeData, setRouteData] = useState(null);
   const [routeStats, setRouteStats] = useState(null);
   const [showPartnerPrompt, setShowPartnerPrompt] = useState(false);
+  const [showOutOfBoundsModal, setShowOutOfBoundsModal] = useState(false);
+  const [outOfBoundsInfo, setOutOfBoundsInfo] = useState({ invalidPoint: 'depart', detectedCountry: '' });
+  const [showQuickPriceModal, setShowQuickPriceModal] = useState(false);
 
   const arriveeInputRef = useRef(null);
   const departInputRef = useRef(null);
@@ -164,11 +173,34 @@ export default function EstimatePageMobile() {
 
   const handleEstimate = async () => {
       if (!departPlace || !arriveePlace) return;
+      
+      // Vérification géographique Cameroun
+      const departPoint = { lat: departPlace.latitude, lon: departPlace.longitude };
+      const arriveePoint = { lat: arriveePlace.latitude, lon: arriveePlace.longitude };
+      const validation = validateTrajetInCameroon(departPoint, arriveePoint);
+      
+      if (!validation.isValid) {
+          // Déterminer le pays détecté pour un meilleur message
+          let detectedCountry = '';
+          if (validation.invalidPoint === 'depart' || validation.invalidPoint === 'both') {
+              detectedCountry = detectCountry(departPlace.latitude, departPlace.longitude);
+          } else {
+              detectedCountry = detectCountry(arriveePlace.latitude, arriveePlace.longitude);
+          }
+          
+          setOutOfBoundsInfo({
+              invalidPoint: validation.invalidPoint,
+              detectedCountry: detectedCountry
+          });
+          setShowOutOfBoundsModal(true);
+          return;
+      }
+      
       setIsLoading(true);
       try {
           const res = await estimatePrice({
-              depart: { lat: departPlace.latitude, lon: departPlace.longitude },
-              arrivee: { lat: arriveePlace.latitude, lon: arriveePlace.longitude },
+              depart: departPoint,
+              arrivee: arriveePoint,
               meteo, heure: heureTrajet
           });
           setPrediction(res);
@@ -206,6 +238,7 @@ export default function EstimatePageMobile() {
           </div>
 
           <div className="flex gap-2">
+             <button onClick={() => navigate('/marketplace')} className="p-2.5 bg-white rounded-xl text-gray-400 hover:text-[#f3cd08] shadow-md transition-colors"><Store className="w-4 h-4" /></button>
              <button onClick={() => navigate('/stats')} className="p-2.5 bg-white rounded-xl text-gray-400 hover:text-[#3b82f6] shadow-md transition-colors"><BarChart2 className="w-4 h-4" /></button>
              <button onClick={() => navigate('/trajets')} className="p-2.5 bg-white rounded-xl text-gray-400 hover:text-[#3b82f6] shadow-md transition-colors"><Globe className="w-4 h-4" /></button>
           </div>
@@ -366,6 +399,20 @@ export default function EstimatePageMobile() {
                             <button onClick={() => setPrediction(null)} className="px-4 py-2 bg-gray-100 rounded-xl text-[9px] font-bold text-gray-600 uppercase hover:bg-[#f3cd08] hover:text-black transition-all">{t('estimate.recalculate')}</button>
                          </div>
                          <PriceCard prediction={prediction} onAddTrajet={() => navigate('/add-trajet')} />
+                         
+                         {/* Bouton contribution rapide si trajet inconnu */}
+                         {prediction?.statut === 'inconnu' && (
+                           <motion.button
+                             initial={{ opacity: 0, y: 10 }}
+                             animate={{ opacity: 1, y: 0 }}
+                             transition={{ delay: 0.5 }}
+                             onClick={() => setShowQuickPriceModal(true)}
+                             className="w-full mt-4 py-4 bg-gradient-to-r from-[#f3cd08] to-[#fbbf24] text-black rounded-2xl font-black text-[11px] uppercase tracking-wider flex items-center justify-center gap-3 shadow-lg shadow-yellow-500/20 active:scale-[0.98] transition-transform"
+                           >
+                             <PlusCircle className="w-4 h-4" />
+                             {t('quick_price.cta_know_price') || 'Vous connaissez le vrai prix ?'}
+                           </motion.button>
+                         )}
                     </div>
                 )}
             </div>
@@ -376,6 +423,29 @@ export default function EstimatePageMobile() {
       <PartnerPrompt 
         isVisible={showPartnerPrompt && !!prediction} 
         onClose={() => setShowPartnerPrompt(false)} 
+      />
+      
+      <OutOfBoundsModal 
+        isOpen={showOutOfBoundsModal}
+        onClose={() => setShowOutOfBoundsModal(false)}
+        invalidPoint={outOfBoundsInfo.invalidPoint}
+        detectedCountry={outOfBoundsInfo.detectedCountry}
+      />
+      
+      {/* Quick Price Modal pour contribution rapide */}
+      <QuickPriceModal
+        isOpen={showQuickPriceModal}
+        onClose={() => setShowQuickPriceModal(false)}
+        trajetData={{
+          depart: departPlace ? { lat: departPlace.latitude, lon: departPlace.longitude, label: departPlace.label } : null,
+          arrivee: arriveePlace ? { lat: arriveePlace.latitude, lon: arriveePlace.longitude, label: arriveePlace.label } : null,
+          meteo,
+          heure: heureTrajet,
+        }}
+        onSuccess={() => {
+          // Optionnel : refaire une estimation pour voir le nouveau prix
+          setPrediction(null);
+        }}
       />
     </div>
   );

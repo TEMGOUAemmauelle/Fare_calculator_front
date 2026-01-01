@@ -7,6 +7,7 @@
  * - Focus rings jaune (#f3cd08)
  * - Carte Mapbox visible
  * - Sidebar fixe responsive
+ * - Vérification géographique Cameroun
  */
 
 import { useState, useEffect } from 'react';
@@ -15,6 +16,7 @@ import { useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { useAppNavigate } from '../hooks/useAppNavigate';
 import LanguageSwitcher from '../components/LanguageSwitcher';
+import OutOfBoundsModal from '../components/OutOfBoundsModal';
 import { 
   MapPin, 
   Navigation, 
@@ -49,6 +51,9 @@ import {
   addEstimateToHistory,
   getCurrentWeather,
 } from '../services';
+
+// Utils
+import { validateTrajetInCameroon, detectCountry } from '../utils/cameroonGeoUtils';
 
 // Constants
 import { METEO_OPTIONS, HEURE_OPTIONS } from '../config/constants';
@@ -85,6 +90,8 @@ export default function EstimatePageDesktop() {
   const [showResults, setShowResults] = useState(false);
   const [recentSearches, setRecentSearches] = useState([]);
   const [shortcuts, setShortcuts] = useState({ home: null, work: null });
+  const [showOutOfBoundsModal, setShowOutOfBoundsModal] = useState(false);
+  const [outOfBoundsInfo, setOutOfBoundsInfo] = useState({ invalidPoint: 'depart', detectedCountry: '' });
 
   // Initialisation
   useEffect(() => {
@@ -310,20 +317,35 @@ export default function EstimatePageDesktop() {
       return;
     }
 
+    // Vérification géographique Cameroun
+    const departPoint = { lat: depart.coordinates[1], lon: depart.coordinates[0] };
+    const arriveePoint = { lat: arrivee.coordinates[1], lon: arrivee.coordinates[0] };
+    const validation = validateTrajetInCameroon(departPoint, arriveePoint);
+    
+    if (!validation.isValid) {
+      let detectedCountry = '';
+      if (validation.invalidPoint === 'depart' || validation.invalidPoint === 'both') {
+        detectedCountry = detectCountry(depart.coordinates[1], depart.coordinates[0]);
+      } else {
+        detectedCountry = detectCountry(arrivee.coordinates[1], arrivee.coordinates[0]);
+      }
+      
+      setOutOfBoundsInfo({
+        invalidPoint: validation.invalidPoint,
+        detectedCountry: detectedCountry
+      });
+      setShowOutOfBoundsModal(true);
+      return;
+    }
+
     setIsLoading(true);
     setError(null);
     setPrediction(null);
 
     try {
       const requestData = {
-        depart: {
-          lat: depart.coordinates[1],
-          lon: depart.coordinates[0],
-        },
-        arrivee: {
-          lat: arrivee.coordinates[1],
-          lon: arrivee.coordinates[0],
-        },
+        depart: departPoint,
+        arrivee: arriveePoint,
         meteo: meteo,
         heure: heure,
       };
@@ -631,6 +653,13 @@ export default function EstimatePageDesktop() {
           )}
         </div>
       </div>
+      
+      <OutOfBoundsModal 
+        isOpen={showOutOfBoundsModal}
+        onClose={() => setShowOutOfBoundsModal(false)}
+        invalidPoint={outOfBoundsInfo.invalidPoint}
+        detectedCountry={outOfBoundsInfo.detectedCountry}
+      />
     </div>
   );
 }

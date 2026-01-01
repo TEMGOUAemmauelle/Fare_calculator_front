@@ -4,7 +4,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { useLocation } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { useAppNavigate } from '../hooks/useAppNavigate';
-import LanguageSwitcher from '../components/LanguageSwitcher';
+import NavbarDesktop from '../components/NavbarDesktop';
 import { 
   MapPin, Navigation, Sun, CloudRain, Loader2, Calculator, PlusCircle, ArrowLeft, ThumbsDown, ThumbsUp, Ruler, Clock, MapPinned, LocateFixed, Zap, Sparkles, Heart
 } from 'lucide-react';
@@ -164,31 +164,7 @@ export default function AddTrajetPageDesktop() {
   return (
     <div className="min-h-screen bg-white text-[#141414] font-sans selection:bg-[#f3cd08]/30 overflow-x-hidden">
       {/* NAVBAR */}
-      <nav className="fixed top-0 left-0 right-0 z-50 bg-white/80 backdrop-blur-2xl border-b border-gray-100 px-12 h-20 flex items-center justify-between">
-        <div className="flex items-center gap-12">
-            <div className="flex flex-col">
-                <h1 className="text-2xl font-black tracking-tighter uppercase leading-none italic cursor-pointer" onClick={() => navigate('/')}>
-                    FARE<span className="text-[#f3cd08]">CALC</span>
-                </h1>
-                <div className="h-1 w-8 bg-[#f3cd08] mt-1 rounded-full" />
-            </div>
-            <div className="hidden lg:flex items-center gap-8">
-                <button onClick={() => navigate('/trajets')} className="text-[10px] font-black uppercase tracking-widest text-gray-400 hover:text-black transition-colors">{t('all_trajets.title')}</button>
-                <button onClick={() => navigate('/stats')} className="text-[10px] font-black uppercase tracking-widest text-gray-400 hover:text-black transition-colors">{t('stats.dashboard')}</button>
-                <button onClick={() => navigate('/services')} className="text-[10px] font-black uppercase tracking-widest text-gray-400 hover:text-black transition-colors">{t('partners.title')}</button>
-            </div>
-        </div>
-        <div className="flex items-center gap-6">
-            <LanguageSwitcher variant="dark" />
-            <button 
-                onClick={() => navigate('/')}
-                className="px-6 py-3 bg-gray-50 text-gray-700 rounded-2xl font-black text-[10px] uppercase tracking-widest hover:bg-gray-100 transition-all flex items-center gap-3"
-            >
-                <ArrowLeft className="w-4 h-4" />
-                {t('common.back')}
-            </button>
-        </div>
-      </nav>
+      <NavbarDesktop activeRoute="/add-trajet" />
 
       <main className="pt-32 pb-20 px-12 max-w-7xl mx-auto">
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 items-start">
