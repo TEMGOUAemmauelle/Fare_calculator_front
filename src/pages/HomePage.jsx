@@ -5,16 +5,20 @@
  * - Gestion explicite de la géolocalisation au chargement
  * - Splash screen informatif
  * - Fallback élégant si refusé
+ * - CityIndicator pour afficher la ville détectée
  */
 
 import { useEffect, useState } from 'react';
 import { motion } from 'framer-motion';
 import { useTranslation } from 'react-i18next';
 import { useAppNavigate } from '../hooks/useAppNavigate';
-import { Search, MapPin, BarChart2, Globe, PlusCircle, ArrowRight } from 'lucide-react';
+import { Search, MapPin, BarChart2, Globe, PlusCircle, ArrowRight, Store } from 'lucide-react';
 import LanguageSwitcher from '../components/LanguageSwitcher';
 import SplashScreen from '../components/SplashScreen';
 import ServiceAds from '../components/ServiceAds';
+import CityIndicator from '../components/CityIndicator';
+import MarketplaceSection from '../components/MarketplaceSection';
+import Footer from '../components/Footer';
 import geolocationService from '../services/geolocationService';
 import { reverseSearch } from '../services/nominatimService';
 
@@ -22,7 +26,6 @@ const HERO_IMAGE = "https://media.istockphoto.com/id/519870714/fr/photo/en-taxi.
 
 const POPULAR_DESTINATIONS = [
   { id: 1, name: "Aéroport de Nsimalen", address: "Centre, Mefou-et-Afamba", time: "35 min", coords: [11.5533, 3.7225] },
-  { id: 2, name: "Playce Carrefour", address: "Warda, Yaoundé", time: "15 min", coords: [11.5135, 3.8660] },
   { id: 3, name: "Carrefour Bastos", address: "Nkol Eton, Yaoundé", time: "1 hr", coords: [11.5130, 3.8930] }
 ];
 
@@ -98,12 +101,14 @@ export default function HomePage() {
         <header className="px-6 pt-12 pb-6 flex items-center justify-between">
            <div className="flex flex-col">
               <h1 className="text-xl font-black tracking-tighter uppercase leading-none italic">
-                FARE<span className="text-[#f3cd08]">CALC</span>
+                FARE<span className="text-[#f9d716]">CAL</span>
               </h1>
-              <div className="h-1 w-8 bg-[#f3cd08] mt-1 rounded-full" />
+              <div className="h-1 w-8 bg-[#f9d716] mt-1 rounded-full" />
+              <CityIndicator address={userAddress} variant="minimal" className="mt-2" />
            </div>
            
            <div className="flex items-center gap-3">
+              <button onClick={() => navigate('/marketplace')} className="p-2.5 bg-gray-50 rounded-2xl text-gray-400 hover:text-[#f3cd08] transition-colors"><Store className="w-5 h-5" /></button>
               <button onClick={() => navigate('/stats')} className="p-2.5 bg-gray-50 rounded-2xl text-gray-400 hover:text-[#f3cd08] transition-colors"><BarChart2 className="w-5 h-5" /></button>
               <button onClick={() => navigate('/trajets')} className="p-2.5 bg-gray-50 rounded-2xl text-gray-400 hover:text-[#f3cd08] transition-colors"><Globe className="w-5 h-5" /></button>
               <div className="bg-gray-50 rounded-2xl">
@@ -112,7 +117,7 @@ export default function HomePage() {
            </div>
         </header>
 
-        <main className="px-6 space-y-8 pb-32">
+        <main className="px-6 space-y-4 pb-32">
             <div className="relative w-full h-44 rounded-4xl overflow-hidden group">
                 <img src={HERO_IMAGE} className="w-full h-full object-cover transform transition-transform duration-700 group-hover:scale-105" alt="Taxi" />
                 <div className="absolute inset-0 bg-linear-to-t from-black/80 via-black/20 to-transparent" />
@@ -157,14 +162,14 @@ export default function HomePage() {
                  </div>
             </div>
 
-            <div className="space-y-4 pt-2">
+            <div className="space-y-2 pt-2">
                 <h3 className="text-[10px] font-black text-gray-400 uppercase tracking-widest pl-1">{t('home.shortcuts')}</h3>
                 <div className="flex flex-col gap-0 border-t border-gray-50">
                   {POPULAR_DESTINATIONS.map((dest) => (
                     <button 
                       key={dest.id}
                       onClick={() => handleStartSearch(dest)}
-                      className="flex items-center gap-4 py-5 border-b border-gray-50 hover:bg-gray-50 transition-all text-left group"
+                      className="flex items-center gap-4 py-2 border-b border-gray-50 hover:bg-gray-50 transition-all text-left group"
                     >
                       <div className="w-10 h-10 rounded-2xl bg-gray-100 flex items-center justify-center text-gray-600 group-hover:bg-[#f3cd08] group-hover:text-black transition-all">
                         <MapPin className="w-5 h-5" />
@@ -179,8 +184,17 @@ export default function HomePage() {
                 </div>
             </div>
 
+            {/* Section Marketplace - après les services partenaires */}
+            <MarketplaceSection maxItems={4} variant="compact" />
+
+            {/* Section Services partenaires */}
             <ServiceAds />
+            
+            
         </main>
+
+        {/* Footer */}
+        <Footer variant="compact" />
 
         <div className="fixed bottom-8 right-6 z-40">
           <button 

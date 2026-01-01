@@ -4,7 +4,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { useLocation } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { useAppNavigate } from '../hooks/useAppNavigate';
-import LanguageSwitcher from '../components/LanguageSwitcher';
+import NavbarDesktop from '../components/NavbarDesktop';
 import { 
   MapPin, Navigation, Sun, CloudRain, Loader2, Calculator, PlusCircle, ArrowLeft, ThumbsDown, ThumbsUp, Ruler, Clock, MapPinned, LocateFixed, Zap, Sparkles, Heart
 } from 'lucide-react';
@@ -13,7 +13,7 @@ import showToast from '../utils/customToast';
 // Components
 import MapView from '../components/MapView';
 import SearchBarEnhanced from '../components/SearchBarEnhanced';
-import { TrajetAddedModal } from '../components/ConfirmationModal';
+import ContributionSuccessModal from '../components/ContributionSuccessModal';
 
 // Services
 import { addTrajet } from '../services';
@@ -50,6 +50,7 @@ export default function AddTrajetPageDesktop() {
   const [isLoading, setIsLoading] = useState(false);
   const [isLocating, setIsLocating] = useState(false);
   const [showSuccessModal, setShowSuccessModal] = useState(false);
+  const [lastContribution, setLastContribution] = useState(null);
   
   const [mapCenter, setMapCenter] = useState([11.5021, 3.8480]);
   const [markers, setMarkers] = useState([]);
@@ -153,6 +154,15 @@ export default function AddTrajetPageDesktop() {
             qualite_trajet: formData.qualite
         };
         await addTrajet(payload);
+        
+        // Sauvegarder les données de contribution pour le modal
+        setLastContribution({
+          depart: formData.depart,
+          arrivee: formData.arrivee,
+          prix: parseFloat(formData.price),
+          distance: routeStats?.distance,
+        });
+        
         setShowSuccessModal(true);
     } catch (err) {
         showToast.error(t('add.add_error'));
@@ -164,31 +174,7 @@ export default function AddTrajetPageDesktop() {
   return (
     <div className="min-h-screen bg-white text-[#141414] font-sans selection:bg-[#f3cd08]/30 overflow-x-hidden">
       {/* NAVBAR */}
-      <nav className="fixed top-0 left-0 right-0 z-50 bg-white/80 backdrop-blur-2xl border-b border-gray-100 px-12 h-20 flex items-center justify-between">
-        <div className="flex items-center gap-12">
-            <div className="flex flex-col">
-                <h1 className="text-2xl font-black tracking-tighter uppercase leading-none italic cursor-pointer" onClick={() => navigate('/')}>
-                    FARE<span className="text-[#f3cd08]">CALC</span>
-                </h1>
-                <div className="h-1 w-8 bg-[#f3cd08] mt-1 rounded-full" />
-            </div>
-            <div className="hidden lg:flex items-center gap-8">
-                <button onClick={() => navigate('/trajets')} className="text-[10px] font-black uppercase tracking-widest text-gray-400 hover:text-black transition-colors">{t('all_trajets.title')}</button>
-                <button onClick={() => navigate('/stats')} className="text-[10px] font-black uppercase tracking-widest text-gray-400 hover:text-black transition-colors">{t('stats.dashboard')}</button>
-                <button onClick={() => navigate('/services')} className="text-[10px] font-black uppercase tracking-widest text-gray-400 hover:text-black transition-colors">{t('partners.title')}</button>
-            </div>
-        </div>
-        <div className="flex items-center gap-6">
-            <LanguageSwitcher variant="dark" />
-            <button 
-                onClick={() => navigate('/')}
-                className="px-6 py-3 bg-gray-50 text-gray-700 rounded-2xl font-black text-[10px] uppercase tracking-widest hover:bg-gray-100 transition-all flex items-center gap-3"
-            >
-                <ArrowLeft className="w-4 h-4" />
-                {t('common.back')}
-            </button>
-        </div>
-      </nav>
+      <NavbarDesktop activeRoute="/add-trajet" />
 
       <main className="pt-32 pb-20 px-12 max-w-7xl mx-auto">
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 items-start">
@@ -380,13 +366,13 @@ export default function AddTrajetPageDesktop() {
                             <div className="w-12 h-12 bg-white/10 rounded-2xl flex items-center justify-center">
                                 <Sparkles className="w-6 h-6 text-[#f3cd08]" />
                             </div>
-                            <h4 className="text-2xl font-black uppercase italic tracking-tighter leading-none">Votre contribution <br/> est précieuse.</h4>
-                            <p className="text-gray-400 text-[10px] font-bold uppercase tracking-widest max-w-xs">Chaque trajet partagé permet d'affiner notre algorithme pour le bénéfice de tous.</p>
+                            <h4 className="text-2xl font-black uppercase italic tracking-tighter leading-none">{t('add.contribution_title')}</h4>
+                            <p className="text-gray-400 text-[10px] font-bold uppercase tracking-widest max-w-xs">{t('add.contribution_description')}</p>
                         </div>
                         <div className="hidden xl:block">
                              <div className="text-center">
                                 <span className="text-5xl font-black italic text-[#f3cd08] tabular-nums">850+</span>
-                                <p className="text-[10px] font-black uppercase tracking-widest text-gray-500 mt-2">Contributeurs actifs</p>
+                                <p className="text-[10px] font-black uppercase tracking-widest text-gray-500 mt-2">{t('add.active_contributors')}</p>
                              </div>
                         </div>
                     </div>
@@ -395,7 +381,14 @@ export default function AddTrajetPageDesktop() {
         </div>
       </main>
 
-      <TrajetAddedModal isOpen={showSuccessModal} onClose={() => { setShowSuccessModal(false); navigate('/estimate'); }} />
+      {/* Modal de succès enrichi avec marketplace */}
+      <ContributionSuccessModal 
+        isOpen={showSuccessModal}
+        onClose={() => { 
+          setShowSuccessModal(false);
+        }}
+        contributionData={lastContribution}
+      />
     </div>
   );
 }

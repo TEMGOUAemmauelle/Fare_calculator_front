@@ -1,7 +1,9 @@
 
 import { motion, AnimatePresence } from 'framer-motion';
+import { useTranslation } from 'react-i18next';
 
 export default function SplashScreen({ isVisible, status, message, onRetry, onSkip }) {
+  const { t } = useTranslation();
   return (
     <AnimatePresence>
       {isVisible && (
@@ -19,7 +21,7 @@ export default function SplashScreen({ isVisible, status, message, onRetry, onSk
                     className="flex flex-col items-center"
                   >
                      <h1 className="text-3xl font-black tracking-tighter uppercase italic text-[#141414]">
-                        FARE<span className="text-[#f3cd08]">CALC</span>
+                        FARE<span className="text-[#f3cd08]">CAL</span>
                      </h1>
                      <div className="w-12 h-1 bg-[#141414] mt-2 rounded-full" />
                   </motion.div>
@@ -46,7 +48,7 @@ export default function SplashScreen({ isVisible, status, message, onRetry, onSk
                                />
                             </div>
                             <p className="text-[10px] font-black text-gray-400 uppercase tracking-[0.2em] animate-pulse">
-                               {message || "Préliminaires..."}
+                               {message || t('splash.preliminaries')}
                             </p>
                          </div>
                       )}
@@ -55,12 +57,11 @@ export default function SplashScreen({ isVisible, status, message, onRetry, onSk
                         <div className="flex flex-col items-center gap-3">
                            <p className="text-xs font-bold text-red-500 bg-red-50 px-3 py-1 rounded-full">{message}</p>
                            <div className="flex gap-2">
-                              {onRetry && (
                                   <button onClick={onRetry} className="text-[10px] font-black underline text-[#141414]">
-                                      RÉESSAYER
+                                      {t('splash.retry')}
                                   </button>
-                              )}
-                              <button onClick={onSkip} className="text-[10px] font-black text-gray-400">PASSER</button>
+                             
+                              <button onClick={onSkip} className="text-[10px] font-black text-gray-400">{t('splash.skip')}</button>
                            </div>
                         </div>
                      )}
@@ -69,8 +70,9 @@ export default function SplashScreen({ isVisible, status, message, onRetry, onSk
             
             {/* Pied de page discret */}
             <div className="absolute bottom-8 text-gray-300 text-[9px] font-bold tracking-widest uppercase">
-                v2.0 • Ultra
+                {t('splash.version')}
             </div>
+            
         </motion.div>
       )}
     </AnimatePresence>

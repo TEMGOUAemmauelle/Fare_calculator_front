@@ -14,7 +14,13 @@ import MapView from '../components/MapView';
 import SearchBarEnhanced from '../components/SearchBarEnhanced';
 import PriceCard from '../components/PriceCard';
 import CarouselAds from '../components/CarouselAds';
-import LanguageSwitcher from '../components/LanguageSwitcher';
+import ServiceAds from '../components/ServiceAds';
+import CityIndicator from '../components/CityIndicator';
+import MarketplaceSection from '../components/MarketplaceSection';
+import Footer from '../components/Footer';
+import QuickPriceModal from '../components/QuickPriceModal';
+import EstimateSuccessModal from '../components/EstimateSuccessModal';
+import NavbarDesktop from '../components/NavbarDesktop';
 import showToast from '../utils/customToast';
 
 // Services
@@ -25,6 +31,49 @@ import { reverseSearch } from '../services/nominatimService';
 import { getAds } from '../services/adService';
 
 const HERO_IMAGE = "https://image.arrivalguides.com/x/09/589f0996b9fbebbbc00a573694086f3a.jpg";
+
+// Skeleton pour l'image Hero
+const HeroImageWithSkeleton = ({ src, alt }) => {
+  const [isLoaded, setIsLoaded] = useState(false);
+  const [hasError, setHasError] = useState(false);
+  
+  return (
+    <div className="relative w-full h-[450px] xl:h-[650px]">
+      {/* Skeleton */}
+      {!isLoaded && !hasError && (
+        <div className="absolute inset-0 bg-gradient-to-br from-gray-100 via-gray-200 to-gray-100 animate-pulse">
+          <div className="absolute inset-0 flex items-center justify-center">
+            <div className="text-center">
+              <div className="w-16 h-16 mx-auto mb-4 bg-gray-300 rounded-2xl animate-pulse" />
+              <div className="h-4 w-32 mx-auto bg-gray-300 rounded animate-pulse" />
+            </div>
+          </div>
+          {/* Shimmer effect */}
+          <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent skeleton-shimmer" />
+        </div>
+      )}
+      
+      {/* Image */}
+      <img 
+        src={src} 
+        alt={alt}
+        className={`w-full h-full object-cover transition-opacity duration-500 ${isLoaded ? 'opacity-100' : 'opacity-0'}`}
+        onLoad={() => setIsLoaded(true)}
+        onError={() => setHasError(true)}
+      />
+      
+      {/* Fallback en cas d'erreur */}
+      {hasError && (
+        <div className="absolute inset-0 bg-gradient-to-br from-[#f3cd08]/20 to-[#141414]/20 flex items-center justify-center">
+          <div className="text-center text-gray-400">
+            <MapPin className="w-12 h-12 mx-auto mb-2" />
+            <p className="text-sm font-bold uppercase">{t('home.city_name')}</p>
+          </div>
+        </div>
+      )}
+    </div>
+  );
+};
 
 const WEATHER_OPTIONS = [
   { value: 0, label_key: 'add.weather_sunny', icon: Sun },
@@ -63,6 +112,8 @@ export default function HomePageDesktop() {
   const [routeData, setRouteData] = useState(null);
   const [routeStats, setRouteStats] = useState(null);
   const [backendAds, setBackendAds] = useState([]);
+  const [showQuickPriceModal, setShowQuickPriceModal] = useState(false);
+  const [showMarketplaceModal, setShowMarketplaceModal] = useState(false);
 
   const arriveeInputRef = useRef(null);
   const departInputRef = useRef(null);
@@ -145,6 +196,8 @@ export default function HomePageDesktop() {
               meteo, heure: heureTrajet
           });
           setPrediction(res);
+          // Afficher le modal marketplace après une estimation réussie
+          setTimeout(() => setShowMarketplaceModal(true), 500);
       } catch (e) { showToast.error(t('estimate.server_error')); }
       finally { setIsLoading(false); }
   };
@@ -153,35 +206,10 @@ export default function HomePageDesktop() {
     <div className="min-h-screen bg-white text-[#141414] font-sans selection:bg-[#f3cd08]/30 overflow-x-hidden">
       
       {/* NAVBAR DESKTOP */}
-      <nav className="fixed top-0 left-0 right-0 z-50 bg-white/80 backdrop-blur-2xl border-b border-gray-100 px-12 h-20 flex items-center justify-between">
-        <div className="flex items-center gap-12">
-            <div className="flex flex-col">
-                <h1 className="text-2xl font-black tracking-tighter uppercase leading-none italic cursor-pointer" onClick={() => window.scrollTo({top: 0, behavior: 'smooth'})}>
-                    FARE<span className="text-[#f3cd08]">CALC</span>
-                </h1>
-                <div className="h-1 w-8 bg-[#f3cd08] mt-1 rounded-full" />
-            </div>
-
-            <div className="hidden lg:flex items-center gap-8">
-                <button onClick={() => navigate('/trajets')} className="text-[10px] font-black uppercase tracking-widest text-gray-400 hover:text-black transition-colors">{t('all_trajets.title')}</button>
-                <button onClick={() => navigate('/stats')} className="text-[10px] font-black uppercase tracking-widest text-gray-400 hover:text-black transition-colors">{t('stats.dashboard')}</button>
-                <button onClick={() => navigate('/services')} className="text-[10px] font-black uppercase tracking-widest text-gray-400 hover:text-black transition-colors">{t('partners.title')}</button>
-            </div>
-        </div>
-
-        <div className="flex items-center gap-6">
-            <div className="bg-gray-50 rounded-2xl p-1">
-                <LanguageSwitcher variant="dark" />
-            </div>
-            <button 
-                onClick={() => navigate('/add-trajet')}
-                className="px-6 py-3 bg-[#141414] text-white rounded-2xl font-black text-[10px] uppercase tracking-widest shadow-xl shadow-black/10 hover:scale-105 active:scale-95 transition-all flex items-center gap-3"
-            >
-                <PlusCircle className="w-4 h-4 text-[#f3cd08]" />
-                {t('home.cta_contribute')}
-            </button>
-        </div>
-      </nav>
+      <NavbarDesktop 
+        currentAddress={departQuery || t('home.city_name')} 
+        showCityIndicator={true} 
+      />
 
       {/* HERO SECTION */}
       <section className="relative pt-33 pb-12 px-12 min-h-[90vh] flex flex-col justify-center overflow-hidden">
@@ -244,7 +272,7 @@ export default function HomePageDesktop() {
             >
                 <div className="absolute -inset-4 bg-gray-100 rounded-[4rem] -rotate-3 border-2 border-dashed border-gray-200" />
                 <div className="relative rounded-[3.5rem] overflow-hidden shadow-[0_50px_100px_-20px_rgba(0,0,0,0.3)] border-8 border-white">
-                    <img src={HERO_IMAGE} className="w-full h-[450px] xl:h-[650px] object-cover" alt="Taxi Cameroon" />
+                    <HeroImageWithSkeleton src={HERO_IMAGE} alt="Taxi Cameroon" />
                     <div className="absolute inset-0 bg-linear-to-t from-[#141414]/90 via-transparent to-transparent" />
                     
                     <div className="absolute bottom-12 left-12 right-12 p-8 bg-white/10 backdrop-blur-xl rounded-4xl border border-white/20">
@@ -269,37 +297,17 @@ export default function HomePageDesktop() {
         </div>
       </section>
 
-      {/* ADS STRIP */}
+      {/* ADS STRIP - Services partenaires */}
       <section className="py-20 bg-gray-50/50 border-y border-gray-100">
         <div className="max-w-7xl mx-auto px-12">
-            <div className="flex flex-col items-center mb-12 text-center">
-                <span className="text-[10px] font-black text-[#f3cd08] uppercase tracking-[0.3em] mb-4">{t('partners.special_offer')}</span>
-                <h3 className="text-4xl font-black italic uppercase tracking-tighter">{t('partners.discover_partners')}</h3>
-            </div>
-            
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-                {backendAds.map((ad, i) => (
-                    <div key={ad.id || i} className="group relative bg-white rounded-4xl p-8 border border-white shadow-xl shadow-gray-200/50 hover:shadow-2xl transition-all hover:-translate-y-2 overflow-hidden flex flex-col">
-                        <div className="absolute top-0 right-0 w-32 h-32 bg-gray-50 rounded-full -mr-16 -mt-16 group-hover:scale-150 transition-transform duration-700" />
-                        <div className="relative z-10 flex flex-col h-full">
-                            <div className="w-14 h-14 bg-gray-50 rounded-2xl flex items-center justify-center mb-6 group-hover:bg-[#f3cd08] transition-colors shrink-0 overflow-hidden">
-                                {ad.image_url ? (
-                                    <img src={ad.image_url} alt="" className="w-full h-full object-cover" />
-                                ) : (
-                                    <Zap className="w-6 h-6 text-gray-400 group-hover:text-black" />
-                                )}
-                            </div>
-                            <h4 className="text-xl font-black italic uppercase tracking-tighter mb-4">{i18n.language === 'en' ? (ad.title_en || ad.title) : ad.title}</h4>
-                            <p className="text-gray-400 text-xs font-bold uppercase tracking-widest leading-relaxed mb-8 flex-1">
-                                {i18n.language === 'en' ? (ad.description_en || ad.description) : ad.description}
-                            </p>
-                            <a href={ad.app_link} target="_blank" rel="noopener noreferrer" className="flex items-center gap-2 text-[10px] font-black uppercase tracking-widest text-[#f3cd08] group-hover:underline">
-                                {t('partners.see_offers')} <ArrowRight className="w-3 h-3" />
-                            </a>
-                        </div>
-                    </div>
-                ))}
-            </div>
+            <ServiceAds ads={backendAds} />
+        </div>
+      </section>
+
+      {/* MARKETPLACE SECTION - Juste après ServiceAds */}
+      <section className="py-20 px-12 bg-white border-b border-gray-100">
+        <div className="max-w-7xl mx-auto">
+          <MarketplaceSection maxItems={4} showTitle={true} variant="default" />
         </div>
       </section>
 
@@ -318,8 +326,8 @@ export default function HomePageDesktop() {
                      <div className="px-6 py-4 bg-gray-50 rounded-3xl border border-gray-100 flex items-center gap-4">
                         <div className="p-2 bg-white rounded-xl shadow-sm"><Calculator className="w-5 h-5 text-[#f3cd08]" /></div>
                         <div>
-                            <p className="text-[10px] font-black uppercase tracking-widest text-gray-400 leading-none mb-1">Dernière mise à jour</p>
-                            <p className="text-xs font-black uppercase italic">Aujourd'hui à 14:30</p>
+                            <p className="text-[10px] font-black uppercase tracking-widest text-gray-400 leading-none mb-1">{t('home.last_update')}</p>
+                            <p className="text-xs font-black uppercase italic">{t('home.last_update_time')}</p>
                         </div>
                      </div>
                 </div>
@@ -335,10 +343,24 @@ export default function HomePageDesktop() {
                                     <button onClick={() => setPrediction(null)} className="px-5 py-2.5 bg-gray-50 rounded-xl text-[9px] font-black text-gray-400 uppercase hover:bg-black hover:text-white transition-all">{t('estimate.recalculate')}</button>
                                 </div>
                                 <PriceCard prediction={prediction} onAddTrajet={() => navigate('/add-trajet')} />
+                                
+                                {/* Bouton contribution rapide si trajet inconnu */}
+                                {prediction?.statut === 'inconnu' && (
+                                  <motion.button
+                                    initial={{ opacity: 0, y: 10 }}
+                                    animate={{ opacity: 1, y: 0 }}
+                                    transition={{ delay: 0.5 }}
+                                    onClick={() => setShowQuickPriceModal(true)}
+                                    className="w-full py-5 bg-gradient-to-r from-[#f3cd08] to-[#fbbf24] text-black rounded-2xl font-black text-[11px] uppercase tracking-wider flex items-center justify-center gap-3 shadow-lg shadow-yellow-500/20 hover:scale-[1.02] active:scale-[0.98] transition-transform"
+                                  >
+                                    <PlusCircle className="w-5 h-5" />
+                                    {t('quick_price.cta_know_price') || 'Vous connaissez le vrai prix ?'}
+                                  </motion.button>
+                                )}
                             </motion.div>
                         ) : (
-                            <div className="space-y-8">
-                                <div className="space-y-6">
+                            <div className="space-y-8 relative">
+                                <div className="space-y-6 relative">
                                     <div className={`group relative p-6 rounded-3xl border-2 transition-all ${activeSearchField === 'depart' ? 'border-[#f3cd08] bg-white ring-8 ring-yellow-50' : 'border-gray-50 bg-gray-50/50 hover:bg-white hover:border-gray-100'}`}>
                                         <div className="flex items-center gap-4 mb-2">
                                             <div className={`p-2 rounded-xl transition-colors ${activeSearchField === 'depart' ? 'bg-[#f3cd08] text-black' : 'bg-white text-gray-400'}`}>
@@ -385,6 +407,30 @@ export default function HomePageDesktop() {
                                             {isSearching && <Loader2 className="w-5 h-5 text-[#f3cd08] animate-spin shrink-0" />}
                                         </div>
                                     </div>
+                                    
+                                    {/* SUGGESTIONS - directement sous les champs */}
+                                    <AnimatePresence>
+                                        {activeSearchField && suggestions.length > 0 && (
+                                            <motion.div 
+                                                initial={{ opacity: 0, y: -10 }} 
+                                                animate={{ opacity: 1, y: 0 }} 
+                                                exit={{ opacity: 0, y: -10 }} 
+                                                className="w-full bg-white rounded-3xl shadow-2xl border border-gray-100 overflow-hidden max-h-[280px] overflow-y-auto"
+                                            >
+                                                <div className="p-2 space-y-1">
+                                                    {suggestions.map((s, i) => (
+                                                        <button key={i} onMouseDown={() => handleSelectSuggestion(s)} className="w-full p-4 rounded-2xl flex items-center gap-4 text-left group hover:bg-gray-50 transition-all">
+                                                            <div className="w-10 h-10 bg-gray-50 rounded-xl flex items-center justify-center text-gray-400 group-hover:bg-[#f3cd08] group-hover:text-black shrink-0 transition-all"><MapPinned className="w-5 h-5"/></div>
+                                                            <div className="flex flex-col min-w-0">
+                                                                <span className="text-sm font-black text-gray-900 truncate tracking-tight uppercase italic">{s.name}</span>
+                                                                <span className="text-[9px] text-gray-400 font-bold uppercase truncate tracking-widest">{s.place_formatted}</span>
+                                                            </div>
+                                                        </button>
+                                                    ))}
+                                                </div>
+                                            </motion.div>
+                                        )}
+                                    </AnimatePresence>
                                 </div>
 
                                 <div className="grid grid-cols-2 gap-6">
@@ -410,24 +456,6 @@ export default function HomePageDesktop() {
                                     </div>
                                 </div>
 
-                                <AnimatePresence>
-                                    {activeSearchField && suggestions.length > 0 && (
-                                        <motion.div initial={{ opacity: 0, y: -10 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -10 }} className="absolute z-20 w-[400px] mt-2 bg-white rounded-3xl shadow-2xl border border-gray-100 overflow-hidden">
-                                            <div className="p-2 space-y-1">
-                                                {suggestions.map((s, i) => (
-                                                    <button key={i} onMouseDown={() => handleSelectSuggestion(s)} className="w-full p-4 rounded-2xl flex items-center gap-4 text-left group hover:bg-gray-50 transition-all">
-                                                        <div className="w-10 h-10 bg-gray-50 rounded-xl flex items-center justify-center text-gray-400 group-hover:bg-[#f3cd08] group-hover:text-black shrink-0 transition-all"><MapPinned className="w-5 h-5"/></div>
-                                                        <div className="flex flex-col min-w-0">
-                                                            <span className="text-sm font-black text-gray-900 truncate tracking-tight uppercase italic">{s.name}</span>
-                                                            <span className="text-[9px] text-gray-400 font-bold uppercase truncate tracking-widest">{s.place_formatted}</span>
-                                                        </div>
-                                                    </button>
-                                                ))}
-                                            </div>
-                                        </motion.div>
-                                    )}
-                                </AnimatePresence>
-
                                 <button 
                                     onClick={handleEstimate} 
                                     className="w-full py-6 bg-[#f3cd08] text-black rounded-4xl font-black text-[12px] uppercase tracking-[0.3em] shadow-xl shadow-yellow-500/20 flex items-center justify-center gap-4 hover:scale-[1.02] active:scale-[0.98] transition-all group mt-4"
@@ -445,7 +473,7 @@ export default function HomePageDesktop() {
                                 <Heart className="w-8 h-8 text-[#f3cd08]" />
                             </div>
                             <h4 className="text-3xl font-black uppercase italic tracking-tighter leading-none">{t('add.share_fare')} <br/> <span className="text-[#f3cd08]">{t('add.fare')}</span></h4>
-                            <p className="text-gray-400 text-sm font-bold uppercase tracking-wider leading-relaxed">Aidez-nous à rendre les estimations encore plus précises en partageant vos derniers trajets.</p>
+                            <p className="text-gray-400 text-sm font-bold uppercase tracking-wider leading-relaxed">{t('home.contribute_description')}</p>
                             <button onClick={() => navigate('/add-trajet')} className="w-fit px-8 py-4 bg-white text-black rounded-2xl font-black text-[10px] uppercase tracking-widest hover:bg-[#f3cd08] transition-colors">{t('home.cta_contribute')}</button>
                         </div>
                     </div>
@@ -461,7 +489,7 @@ export default function HomePageDesktop() {
                                     <div className="flex items-center gap-4">
                                         <div className="p-3 bg-blue-50 rounded-2xl"><Ruler className="w-6 h-6 text-blue-500" /></div>
                                         <div>
-                                            <p className="text-[10px] font-black uppercase tracking-widest text-gray-400 leading-none mb-1">Distance Totale</p>
+                                            <p className="text-[10px] font-black uppercase tracking-widest text-gray-400 leading-none mb-1">{t('estimate.total_distance')}</p>
                                             <p className="text-2xl font-black italic">{routeStats.distance} km</p>
                                         </div>
                                     </div>
@@ -469,7 +497,7 @@ export default function HomePageDesktop() {
                                     <div className="flex items-center gap-4">
                                         <div className="p-3 bg-indigo-50 rounded-2xl"><Clock className="w-6 h-6 text-indigo-500" /></div>
                                         <div>
-                                            <p className="text-[10px] font-black uppercase tracking-widest text-gray-400 leading-none mb-1">Durée Estimée</p>
+                                            <p className="text-[10px] font-black uppercase tracking-widest text-gray-400 leading-none mb-1">{t('estimate.estimated_duration')}</p>
                                             <p className="text-2xl font-black italic">{routeStats.duration} min</p>
                                         </div>
                                     </div>
@@ -492,11 +520,11 @@ export default function HomePageDesktop() {
                                              <Sparkles className="w-6 h-6" />
                                          </div>
                                          <div>
-                                             <h4 className="text-xl font-black italic uppercase tracking-tighter">Résultat Optimal</h4>
-                                             <p className="text-gray-400 text-[10px] font-bold uppercase tracking-widest">Estimation IA complète</p>
+                                             <h4 className="text-xl font-black italic uppercase tracking-tighter">{t('estimate.optimal_result')}</h4>
+                                             <p className="text-gray-400 text-[10px] font-bold uppercase tracking-widest">{t('estimate.ai_estimation')}</p>
                                          </div>
                                      </div>
-                                     <button onClick={() => setPrediction(null)} className="px-4 py-2 bg-white/5 hover:bg-white/10 rounded-xl text-[9px] font-black uppercase tracking-widest transition-all">Nouveau Calcul</button>
+                                     <button onClick={() => setPrediction(null)} className="px-4 py-2 bg-white/5 hover:bg-white/10 rounded-xl text-[9px] font-black uppercase tracking-widest transition-all">{t('estimate.new_calculation')}</button>
                                 </div>
                                 <PriceCard prediction={prediction} onAddTrajet={() => navigate('/add-trajet')} variant="desktop" />
                              </motion.div>
@@ -507,33 +535,31 @@ export default function HomePageDesktop() {
         </div>
       </section>
 
-      <footer className="py-20 bg-[#141414] text-white">
-        <div className="max-w-7xl mx-auto px-12 grid grid-cols-1 md:grid-cols-4 gap-20">
-            <div className="md:col-span-2 space-y-8">
-                <h1 className="text-4xl font-black tracking-tighter uppercase leading-none italic">FARE<span className="text-[#f3cd08]">CALC.</span></h1>
-                <p className="text-gray-400 text-sm font-medium leading-relaxed max-w-sm">L'outil ultime pour estimer et partager les tarifs de taxi au Cameroun.</p>
-                <div className="flex gap-4">
-                    {[1, 2, 3].map(i => <div key={i} className="w-10 h-10 bg-white/5 rounded-xl border border-white/5 hover:bg-[#f3cd08] hover:text-black transition-all cursor-pointer flex items-center justify-center text-gray-400"><Globe className="w-5 h-5"/></div>)}
-                </div>
-            </div>
-            <div className="space-y-6">
-                <h5 className="text-[10px] font-black uppercase tracking-[0.3em] text-gray-500">Produit</h5>
-                <ul className="space-y-4">
-                    <li><button onClick={() => navigate('/estimate')} className="text-sm font-bold text-gray-400 hover:text-white transition-colors">Calculateur</button></li>
-                    <li><button onClick={() => navigate('/stats')} className="text-sm font-bold text-gray-400 hover:text-white transition-colors">Statistiques</button></li>
-                </ul>
-            </div>
-            <div className="space-y-6">
-                <h5 className="text-[10px] font-black uppercase tracking-[0.3em] text-gray-500">Légal</h5>
-                <ul className="space-y-4">
-                    <li><button className="text-sm font-bold text-gray-400 hover:text-white transition-colors">Confidentialité</button></li>
-                </ul>
-            </div>
-        </div>
-        <div className="max-w-7xl mx-auto px-12 pt-20 mt-20 border-t border-white/5 flex flex-col md:flex-row justify-between items-center gap-8">
-            <p className="text-[10px] font-black uppercase tracking-widest text-gray-600">© 2025 Fare Calc. Made with ❤️ in Cameroon.</p>
-        </div>
-      </footer>
+      {/* FOOTER */}
+      <Footer variant="default" />
+      
+      {/* Quick Price Modal pour contribution rapide */}
+      <QuickPriceModal
+        isOpen={showQuickPriceModal}
+        onClose={() => setShowQuickPriceModal(false)}
+        trajetData={{
+          depart: departPlace ? { lat: departPlace.latitude, lon: departPlace.longitude, label: departPlace.label } : null,
+          arrivee: arriveePlace ? { lat: arriveePlace.latitude, lon: arriveePlace.longitude, label: arriveePlace.label } : null,
+          meteo,
+          heure: heureTrajet,
+        }}
+        onSuccess={() => {
+          // Optionnel : refaire une estimation pour voir le nouveau prix
+          setPrediction(null);
+        }}
+      />
+
+      {/* Modal marketplace après estimation réussie */}
+      <EstimateSuccessModal
+        isOpen={showMarketplaceModal && !!prediction}
+        onClose={() => setShowMarketplaceModal(false)}
+        estimateData={prediction}
+      />
     </div>
   );
 }

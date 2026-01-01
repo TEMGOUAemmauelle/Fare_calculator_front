@@ -101,7 +101,7 @@ export default function PriceCard({ prediction, onAddTrajet }) {
             <span className="text-6xl font-black text-gray-900 tracking-tight">
               {prediction.prix_moyen?.toLocaleString(i18n.language === 'fr' ? 'fr-FR' : 'en-US')}
             </span>
-            <span className="text-xl font-bold text-gray-400">FCFA</span>
+            <span className="text-xl font-bold text-gray-400">{t('price_card.currency')}</span>
           </div>
           
           {/* Fourchette Min-Max propre */}
@@ -136,10 +136,10 @@ export default function PriceCard({ prediction, onAddTrajet }) {
             <div className="flex-1 min-w-0">
                <div className="text-[10px] font-bold text-gray-400 uppercase tracking-wide">{t('price_card.depart')}</div>
                <div className="text-sm font-bold text-gray-900 truncate">
-                  {prediction.details_trajet?.depart?.label || 'Départ'}
+                  {prediction.details_trajet?.depart?.label || t('price_card.default_depart')}
                </div>
                <div className="text-xs text-gray-500 truncate">
-                  {prediction.details_trajet?.depart?.quartier || prediction.details_trajet?.depart?.ville || 'Yaoundé'}
+                  {prediction.details_trajet?.depart?.quartier || prediction.details_trajet?.depart?.ville || t('price_card.default_city')}
                </div>
             </div>
           </div>
@@ -150,10 +150,10 @@ export default function PriceCard({ prediction, onAddTrajet }) {
              <div className="flex-1 min-w-0">
                <div className="text-[10px] font-bold text-gray-400 uppercase tracking-wide">{t('price_card.arrival')}</div>
                <div className="text-sm font-bold text-gray-900 truncate">
-                  {prediction.details_trajet?.arrivee?.label || 'Arrivée'}
+                  {prediction.details_trajet?.arrivee?.label || t('price_card.default_arrival')}
                </div>
                <div className="text-xs text-gray-500 truncate">
-                  {prediction.details_trajet?.arrivee?.quartier || prediction.details_trajet?.arrivee?.ville || 'Destination'}
+                  {prediction.details_trajet?.arrivee?.quartier || prediction.details_trajet?.arrivee?.ville || t('price_card.default_destination')}
                </div>
             </div>
           </div>

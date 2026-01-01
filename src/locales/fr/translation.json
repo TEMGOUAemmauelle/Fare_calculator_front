@@ -53,7 +53,11 @@
     "addr_calc": "Calcul de l'adresse...",
     "geoloc_needed": "La géolocalisation est nécessaire pour une meilleure expérience.",
     "hero_badge_title": "Communautaire",
-    "hero_badge_subtitle": "Version Desktop Premium"
+    "hero_badge_subtitle": "Version Desktop Premium",
+    "last_update": "Dernière mise à jour",
+    "last_update_time": "Aujourd'hui à 14:30",
+    "contribute_description": "Aidez-nous à rendre les estimations encore plus précises en partageant vos derniers trajets.",
+    "city_name": "Yaoundé, Cameroun"
   },
   "estimate": {
     "title": "ESTIMER",
@@ -78,7 +82,12 @@
     "recalculate": "Recalculer",
     "locate_success": "Ma position détectée",
     "locate_error": "Impossible de vous localiser",
-    "server_error": "Erreur serveur"
+    "server_error": "Erreur serveur",
+    "total_distance": "Distance Totale",
+    "estimated_duration": "Durée Estimée",
+    "optimal_result": "Résultat Optimal",
+    "ai_estimation": "Estimation IA complète",
+    "new_calculation": "Nouveau Calcul"
   },
   "add": {
     "title": "AJOUTER",
@@ -111,7 +120,10 @@
     "form_incomplete": "Formulaire incomplet",
     "add_error": "Erreur d'ajout",
     "reopen_modal_alt": "Modifier le trajet",
-    "cta_contribute_sub": "Ajouter"
+    "cta_contribute_sub": "Ajouter",
+    "contribution_title": "Votre contribution est précieuse.",
+    "contribution_description": "Chaque trajet partagé permet d'affiner notre algorithme pour le bénéfice de tous.",
+    "active_contributors": "Contributeurs actifs"
   },
   "price_card": {
     "standard_estimation": "Estimation standard",
@@ -127,7 +139,12 @@
     "calculation_details": "Détail des calculs (fallback)",
     "ml_prediction": "Prédiction ML",
     "not_available": "Non disponible",
-    "indicative_price": "Prix indicatif basé sur les données disponibles."
+    "indicative_price": "Prix indicatif basé sur les données disponibles.",
+    "currency": "FCFA",
+    "default_depart": "Départ",
+    "default_arrival": "Arrivée",
+    "default_city": "Yaoundé",
+    "default_destination": "Destination"
   },
   "predict": {
     "estimate_a_trip": "Estimer un trajet"
@@ -172,8 +189,22 @@
       "feared": "Les plus redoutés",
       "costly": "Les plus coûteux",
       "longest": "Les plus longs",
-      "top_destinations": "Top Destinations"
-    }
+      "top_destinations": "Top Destinations",
+      "long_distances": "Longues Distances",
+      "ranking_destinations": "Classement Destinations"
+    },
+    "filter_by_period": "Filtrer par Période",
+    "loading_data": "Chargement des données...",
+    "trending": "Tendances",
+    "destination_of_month": "Destination du mois",
+    "destination_description": "Cette destination a été la plus fréquentée pour cette période avec un flux constant de passagers.",
+    "visits_recorded": "Visites enregistrées",
+    "total_trips": "Total Trajets",
+    "period_label": "Période",
+    "tension_zones": "Zones de Tension",
+    "premium_trips": "Trajets Premium",
+    "long_trips": "Trajets Longs",
+    "top_destinations": "Top Destinations"
   },
   "geolocation": {
     "prompt": "Autorisez la géolocalisation pour une meilleure expérience",
@@ -296,7 +327,7 @@
     "title": "Partenaires",
     "services": "Services",
     "special_offer": "Offre Spéciale",
-    "discover_partners": "Découvrez nos autres services",
+    "discover_partners": "Découvrez nos Services Partenaires",
     "optimize_trips": "Optimisez vos déplacements",
     "trust_partners": "Partenaires de confiance pour voyager sereinement",
     "see_offers": "Consulter les offres",
@@ -308,5 +339,114 @@
     "suggested_partners": "Partenaires suggérés",
     "see_more": "Voir plus",
     "partnership_services": "Services Partenaires"
+  },
+  "marketplace": {
+    "title": "Marketplace",
+    "subtitle": "Services Partenaires",
+    "description": "Découvrez les services qui transforment le quotidien au Cameroun. Mobilité, livraison et technologie.",
+    "search_placeholder": "Rechercher un service...",
+    "no_services": "Aucun service trouvé",
+    "categories": {
+      "all": "Tous",
+      "transport": "Transport",
+      "delivery": "Livraison",
+      "tech": "Tech",
+      "finance": "Finance"
+    },
+    "premium_ecosystem": "Premium Ecosystem"
+  },
+  "footer": {
+    "tagline": "Estimateur de tarifs taxi",
+    "made_with_love": "Made with",
+    "in_cameroon": "in Cameroon",
+    "copyright": "© {year} FareCAL Tous droits réservés.",
+    "description": "La référence pour estimer vos tarifs de taxi au Cameroun. Données communautaires, estimations fiables.",
+    "location": "Yaoundé, Cameroun",
+    "navigation": "Navigation",
+    "contact": "Contact",
+    "follow_us": "Suivez-nous",
+    "join_community": "Rejoignez notre communauté et contribuez à améliorer les estimations."
+  },
+  "pricing": {
+    "partnerships": "Partenariats",
+    "boost_growth": "Boostez votre Croissance",
+    "join_ecosystem": "Rejoignez l'écosystème FareCal et profitez d'une visibilité unique au Cameroun.",
+    "included_in_each_plan": "Inclus dans chaque plan",
+    "increased_visibility": "Visibilité accrue",
+    "boosted_clientele": "Clientèle boostée",
+    "dedicated_support": "Support dédié"
+  },
+  "services": {
+    "the_ecosystem": "The Ecosystem.",
+    "verified": "Verified",
+    "join_the_network": "Rejoignez le Réseau.",
+    "position_brand": "Positionnez votre marque au sein de l'écosystème le plus innovant.",
+    "apply_now": "Postuler"
+  },
+  "splash": {
+    "preliminaries": "Préliminaires...",
+    "retry": "RÉESSAYER",
+    "skip": "PASSER",
+    "version": "v2.0 • Ultra"
+  },
+  "quick_price": {
+    "error_min_price": "Le prix doit être au moins 50 FCFA",
+    "success": "Merci pour votre contribution !",
+    "error": "Erreur lors de l'ajout du prix"
+  },
+  "trajets": {
+    "title": "Trajets Partagés",
+    "subtitle": "Consultez l'historique des trajets partagés par la communauté en temps réel.",
+    "real_time_feed": "Real-time Feed",
+    "search_placeholder": "Filtrer par destination...",
+    "filter_all_hours": "Toutes les heures",
+    "filter_morning": "Matin",
+    "filter_afternoon": "Après-midi",
+    "filter_evening": "Soir",
+    "filter_night": "Nuit",
+    "filter_weather": "Météo",
+    "filter_sunny": "Ensoleillé",
+    "filter_rainy": "Pluvieux",
+    "price_paid": "Prix Payé",
+    "currency": "CFA",
+    "departure": "Départ",
+    "arrival": "Arrivée",
+    "unknown_location": "Lieu inconnu",
+    "distance": "Distance",
+    "duration": "Durée",
+    "weather": "Météo",
+    "time": "Heure",
+    "loading_error": "Erreur de chargement",
+    "no_trajets": "Aucun trajet trouvé",
+    "no_matching_trajets": "Aucun trajet ne correspond à votre recherche",
+    "reset_filters": "Réinitialiser les filtres",
+    "copyright": "© 2025 Fare Calc Community Ledger.",
+    "total_contributions": "Total Contributions:",
+    "active_nodes": "Active Nodes:"
+  },
+  "estimate_success_modal": {
+    "title": "Votre trajet est prêt !",
+    "subtitle": "Estimation terminée",
+    "estimated_fare": "Tarif estimé",
+    "currency": "FCFA",
+    "distance": "Distance",
+    "duration": "Durée",
+    "got_it": "C'est compris !",
+    "services_for_you": "Services pour vous",
+    "services_disclaimer": "Ces services sont proposés par nos partenaires"
+  },
+    "contribution_success_modal": {
+    "thank_you": "Merci !",
+    "help_community": "Vous aidez la communauté",
+    "contribution_saved": "Contribution enregistrée",
+    "trip_added": "Trajet ajouté",
+    "currency": "FCFA",
+    "add_another": "Ajouter un autre",
+    "estimate": "Estimer",
+    "continue": "Continuer",
+    "explore_services": "Découvrez nos services partenaires",
+    "discover_also": "Découvrez aussi",
+    "view_all": "Voir tout",
+    "services_disclaimer": "Ces services sont proposés par nos partenaires"
   }
 }
