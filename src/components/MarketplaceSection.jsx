@@ -150,7 +150,7 @@ const MarketplaceSection = ({ maxItems = 6, showTitle = true, variant = 'default
         )}
         <div 
           ref={scrollRef}
-          className="flex gap-3 overflow-x-auto pb-2 -mx-4 px-4 scrollbar-hide"
+          className="flex gap-2 overflow-x-auto pb-2 scrollbar-hide"
           style={{ 
             WebkitOverflowScrolling: 'touch',
             scrollBehavior: 'auto' // Important: pas de smooth pour éviter les conflits
@@ -159,7 +159,7 @@ const MarketplaceSection = ({ maxItems = 6, showTitle = true, variant = 'default
           {loopedServices.map((service, index) => (
             <div
               key={`item-${index}`}
-              className="flex-shrink-0 w-40"
+              className="flex-shrink-0 w-36"
             >
               <MarketplaceCard service={service} variant="compact" />
             </div>
