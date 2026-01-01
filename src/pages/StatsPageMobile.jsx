@@ -101,7 +101,7 @@ export default function StatsPageMobile() {
     <div className="min-h-screen bg-white flex items-center justify-center p-10">
       <div className="flex flex-col items-center gap-4">
         <Loader2 className="w-8 h-8 animate-spin text-[#f3cd08]" />
-        <p className="text-[10px] font-black text-gray-400 uppercase tracking-widest animate-pulse">Chargement des données...</p>
+        <p className="text-[10px] font-black text-gray-400 uppercase tracking-widest animate-pulse">{t('stats.loading_data')}</p>
       </div>
     </div>
   );
@@ -148,19 +148,19 @@ export default function StatsPageMobile() {
              <div className="relative z-10">
                 <div className="flex items-center gap-2 mb-4">
                    <div className="px-2.5 py-1 bg-[#f3cd08] text-black text-[8px] font-black uppercase tracking-widest rounded-full">
-                      Tendances
+                      {t('stats.trending')}
                    </div>
-                   <span className="text-[10px] font-bold text-gray-400 uppercase tracking-widest">Destination du mois</span>
+                   <span className="text-[10px] font-bold text-gray-400 uppercase tracking-widest">{t('stats.destination_of_month')}</span>
                 </div>
                 <h2 className="text-3xl font-black text-white italic uppercase tracking-tighter leading-none mb-3">
                    {stats.lieu_du_mois.point_arrivee__label}
                 </h2>
                 <p className="text-gray-500 text-[11px] font-bold uppercase tracking-wide leading-relaxed mb-6 max-w-[80%]">
-                   Cette destination a été la plus fréquentée pour cette période avec un flux constant de passagers.
+                   {t('stats.destination_description')}
                 </p>
                 <div className="flex items-baseline gap-2">
                    <span className="text-3xl font-black text-[#f3cd08] italic tracking-tighter">{stats.lieu_du_mois.count}</span>
-                   <span className="text-[10px] font-black text-white uppercase tracking-widest opacity-60">Visites enregistrées</span>
+                   <span className="text-[10px] font-black text-white uppercase tracking-widest opacity-60">{t('stats.visits_recorded')}</span>
                 </div>
              </div>
           </motion.div>
@@ -170,14 +170,14 @@ export default function StatsPageMobile() {
           <motion.div variants={itemVariants} className="bg-gray-50 p-5 rounded-3xl border border-transparent hover:border-gray-100 transition-all">
             <div className="flex items-center gap-2 mb-2 text-gray-400">
               <BarChart3 className="w-3.5 h-3.5" />
-              <span className="text-[9px] font-black uppercase tracking-widest">Total Trajets</span>
+              <span className="text-[9px] font-black uppercase tracking-widest">{t('stats.total_trips')}</span>
             </div>
             <div className="text-3xl font-black italic tracking-tighter">{stats.total_trajets}</div>
           </motion.div>
           <motion.div variants={itemVariants} className="bg-gray-50 p-5 rounded-3xl border border-transparent hover:border-gray-100 transition-all">
             <div className="flex items-center gap-2 mb-2 text-gray-400">
               <Clock className="w-3.5 h-3.5" />
-              <span className="text-[9px] font-black uppercase tracking-widest">Période</span>
+              <span className="text-[9px] font-black uppercase tracking-widest">{t('stats.period_label')}</span>
             </div>
             <div className="text-base font-black italic uppercase tracking-tighter text-[#141414]">
               {t(`stats.filters.${period}`)}
@@ -186,7 +186,7 @@ export default function StatsPageMobile() {
         </div>
 
         <HorizontalCard 
-          title="Zones de Tension" 
+          title={t('stats.tension_zones')} 
           icon={AlertTriangle} 
           color="red" 
           data={stats.trajets_difficiles} 
@@ -194,7 +194,7 @@ export default function StatsPageMobile() {
         />
 
         <HorizontalCard 
-          title="Trajets Premium" 
+          title={t('stats.premium_trips')} 
           icon={DollarSign} 
           color="green" 
           data={stats.trajets_chers} 
@@ -202,7 +202,7 @@ export default function StatsPageMobile() {
         />
 
         <HorizontalCard 
-          title="Longues Distances" 
+          title={t('stats.sections.long_distances')} 
           icon={Clock} 
           color="blue" 
           data={stats.trajets_longs} 
@@ -212,7 +212,7 @@ export default function StatsPageMobile() {
         <div className="space-y-4">
           <h2 className="text-[10px] font-black text-gray-400 uppercase tracking-widest italic flex items-center gap-2 pl-1">
             <MapPin className="w-3.5 h-3.5" />
-            Classement Destinations
+            {t('stats.sections.ranking_destinations')}
           </h2>
           <div className="bg-white border border-gray-100 rounded-4xl overflow-hidden shadow-sm">
             {stats.lieux_populaires.arrivee.map((lieu, index) => (
@@ -260,7 +260,7 @@ export default function StatsPageMobile() {
             >
               <div className="w-12 h-1 bg-gray-100 rounded-full mx-auto mb-8" onClick={() => setShowFilterModal(false)} />
               <div className="flex justify-between items-center mb-8">
-                <h3 className="text-xl font-black italic uppercase tracking-tighter text-[#141414]">Filtrer par <span className="text-[#f3cd08]">Période</span></h3>
+                <h3 className="text-xl font-black italic uppercase tracking-tighter text-[#141414]">{t('stats.filter_by_period')}</h3>
                 <button onClick={() => setShowFilterModal(false)} className="p-2 bg-gray-50 rounded-xl"><X className="w-5 h-5 text-gray-400" /></button>
               </div>
               <div className="space-y-3">

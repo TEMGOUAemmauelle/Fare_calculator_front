@@ -13,10 +13,12 @@ import {
   Heart, ChevronRight
 } from 'lucide-react';
 import { useAppNavigate } from '../hooks/useAppNavigate';
+import { useTranslation } from 'react-i18next';
 import { getContactInfo } from '../services/contactService';
 
 const Footer = ({ variant = 'default' }) => {
   const navigate = useAppNavigate();
+  const { t } = useTranslation();
   const [contact, setContact] = useState(null);
 
   useEffect(() => {
@@ -34,11 +36,10 @@ const Footer = ({ variant = 'default' }) => {
   const currentYear = new Date().getFullYear();
 
   const QUICK_LINKS = [
-    { label: 'Estimer un trajet', path: '/estimate' },
-    { label: 'Contribuer', path: '/add-trajet' },
-    { label: 'Marketplace', path: '/marketplace' },
-    { label: 'Tarifs', path: '/pricing' },
-    { label: 'Statistiques', path: '/stats' },
+    { label_key: 'nav.estimate', path: '/estimate' },
+    { label_key: 'nav.add', path: '/add-trajet' },
+    { label_key: 'partners.title', path: '/marketplace' },
+    { label_key: 'nav.stats', path: '/stats' },
   ];
 
   // Liens sociaux dynamiques depuis le backend
@@ -67,7 +68,7 @@ const Footer = ({ variant = 'default' }) => {
             FARE<span className="text-[#f3cd08]">CAL</span>
           </h2>
           <p className="text-xs text-gray-500 mt-1">
-            Estimateur de tarifs taxi
+            {t('footer.tagline')}
           </p>
         </div>
 
@@ -109,9 +110,9 @@ const Footer = ({ variant = 'default' }) => {
         {/* Copyright */}
         <div className="text-center text-xs text-gray-500">
           <p className="flex items-center justify-center gap-1">
-            Made with <Heart className="w-3 h-3 text-red-500" fill="currentColor" /> in Cameroon
+            {t('footer.made_with_love')} <Heart className="w-3 h-3 text-red-500" fill="currentColor" /> {t('footer.in_cameroon')}
           </p>
-          <p className="mt-1">© {currentYear} FareCAL Tous droits réservés.</p>
+          <p className="mt-1">{t('footer.copyright', { year: currentYear })}</p>
         </div>
       </footer>
     );
@@ -132,19 +133,18 @@ const Footer = ({ variant = 'default' }) => {
               <div className="h-1 w-8 bg-[#f3cd08] mt-2 rounded-full" />
             </div>
             <p className="text-gray-400 text-sm leading-relaxed mb-6">
-              La référence pour estimer vos tarifs de taxi au Cameroun. 
-              Données communautaires, estimations fiables.
+              {t('footer.description')}
             </p>
             <div className="flex items-center gap-2 text-sm text-gray-500">
               <MapPin className="w-4 h-4 text-[#f3cd08]" />
-              <span>Yaoundé, Cameroun</span>
+              <span>{t('footer.location')}</span>
             </div>
           </div>
 
           {/* Quick Links */}
           <div>
             <h3 className="text-sm font-black uppercase tracking-widest mb-6">
-              Navigation
+            {t('footer.navigation')}
             </h3>
             <ul className="space-y-3">
               {QUICK_LINKS.map((link, index) => (
@@ -154,7 +154,7 @@ const Footer = ({ variant = 'default' }) => {
                     className="text-gray-400 hover:text-white transition-colors flex items-center gap-2 group"
                   >
                     <ChevronRight className="w-4 h-4 text-[#f3cd08] opacity-0 group-hover:opacity-100 transition-opacity" />
-                    <span>{link.label}</span>
+                    <span>{t(link.label_key)}</span>
                   </button>
                 </li>
               ))}
@@ -164,7 +164,7 @@ const Footer = ({ variant = 'default' }) => {
           {/* Contact */}
           <div>
             <h3 className="text-sm font-black uppercase tracking-widest mb-6">
-              Contact
+              {t('footer.contact')}
             </h3>
             <div className="space-y-4">
               {contact?.email && (
@@ -208,7 +208,7 @@ const Footer = ({ variant = 'default' }) => {
           {/* Newsletter / Social */}
           <div>
             <h3 className="text-sm font-black uppercase tracking-widest mb-6">
-              Suivez-nous
+              {t('footer.follow_us')}
             </h3>
             <div className="flex gap-3 mb-6">
               {SOCIAL_LINKS.map((social, index) => (
@@ -225,7 +225,7 @@ const Footer = ({ variant = 'default' }) => {
               ))}
             </div>
             <p className="text-sm text-gray-500">
-              Rejoignez notre communauté et contribuez à améliorer les estimations.
+              {t('footer.join_community')}
             </p>
           </div>
         </div>
@@ -235,10 +235,10 @@ const Footer = ({ variant = 'default' }) => {
       <div className="border-t border-white/10">
         <div className="max-w-7xl mx-auto px-12 py-6 flex flex-col md:flex-row items-center justify-between gap-4">
           <p className="text-sm text-gray-500">
-            © {currentYear} FareCAL Tous droits réservés.
+            {t('footer.copyright', { year: currentYear })}
           </p>
           <p className="text-sm text-gray-500 flex items-center gap-1">
-            Made with <Heart className="w-4 h-4 text-red-500" fill="currentColor" /> in Cameroon
+            {t('footer.made_with_love')} <Heart className="w-4 h-4 text-red-500" fill="currentColor" /> {t('footer.in_cameroon')}
           </p>
         </div>
       </div>

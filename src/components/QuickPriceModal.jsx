@@ -41,7 +41,7 @@ export default function QuickPriceModal({ isOpen, onClose, trajetData, onSuccess
     e.preventDefault();
     
     if (!price || parseInt(price) < 50) {
-      showToast.error(t('quick_price.error_min_price') || 'Le prix doit être au moins 50 FCFA');
+      showToast.error(t('quick_price.error_min_price'));
       return;
     }
 
@@ -67,7 +67,7 @@ export default function QuickPriceModal({ isOpen, onClose, trajetData, onSuccess
 
       await addTrajet(payload);
       setIsSuccess(true);
-      showToast.success(t('quick_price.success') || 'Merci pour votre contribution !');
+      showToast.success(t('quick_price.success'));
       
       // Afficher le succès pendant 2s puis fermer
       setTimeout(() => {
@@ -78,7 +78,7 @@ export default function QuickPriceModal({ isOpen, onClose, trajetData, onSuccess
       }, 2000);
     } catch (error) {
       console.error('Error adding quick price:', error);
-      showToast.error(t('quick_price.error') || 'Erreur lors de l\'ajout du prix');
+      showToast.error(t('quick_price.error'));
     } finally {
       setIsSubmitting(false);
     }

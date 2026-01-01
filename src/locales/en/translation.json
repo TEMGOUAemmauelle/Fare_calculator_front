@@ -53,7 +53,11 @@
     "addr_calc": "Calculating address...",
     "geoloc_needed": "Geolocation is required for a better experience.",
     "hero_badge_title": "Community Driven",
-    "hero_badge_subtitle": "Premium Desktop Experience"
+    "hero_badge_subtitle": "Premium Desktop Experience",
+    "last_update": "Last update",
+    "last_update_time": "Today at 14:30",
+    "contribute_description": "Help us make estimates even more accurate by sharing your recent trips.",
+    "city_name": "Yaoundé, Cameroon"
   },
   "estimate": {
     "title": "ESTIMATE",
@@ -78,7 +82,12 @@
     "recalculate": "Recalculate",
     "locate_success": "Position detected",
     "locate_error": "Unable to locate you",
-    "server_error": "Server error"
+    "server_error": "Server error",
+    "total_distance": "Total Distance",
+    "estimated_duration": "Estimated Duration",
+    "optimal_result": "Optimal Result",
+    "ai_estimation": "Complete AI Estimation",
+    "new_calculation": "New Calculation"
   },
   "add": {
     "title": "ADD",
@@ -127,7 +136,12 @@
     "calculation_details": "Calculation details (fallback)",
     "ml_prediction": "ML Prediction",
     "not_available": "Not available",
-    "indicative_price": "Indicative price based on available data."
+    "indicative_price": "Indicative price based on available data.",
+    "currency": "FCFA",
+    "default_depart": "Departure",
+    "default_arrival": "Arrival",
+    "default_city": "Yaoundé",
+    "default_destination": "Destination"
   },
   "predict": {
     "estimate_a_trip": "Estimate a trip"
@@ -172,8 +186,22 @@
       "feared": "Most Dreaded",
       "costly": "Most Costly",
       "longest": "Longest Trips",
-      "top_destinations": "Top Destinations"
-    }
+      "top_destinations": "Top Destinations",
+      "long_distances": "Long Distances",
+      "ranking_destinations": "Ranking Destinations"
+    },
+    "filter_by_period": "Filter by Period",
+    "loading_data": "Loading data...",
+    "trending": "Trending",
+    "destination_of_month": "Destination of the month",
+    "destination_description": "This destination has been the most frequented for this period with a constant flow of passengers.",
+    "visits_recorded": "Recorded visits",
+    "total_trips": "Total Trips",
+    "period_label": "Period",
+    "tension_zones": "Tension Zones",
+    "premium_trips": "Premium Trips",
+    "long_trips": "Long Trips",
+    "top_destinations": "Top Destinations"
   },
   "geolocation": {
     "prompt": "Enable geolocation for a better experience.",
@@ -308,5 +336,100 @@
     "suggested_partners": "Suggested partners",
     "see_more": "See more",
     "partnership_services": "Partner Services"
+  },
+  "marketplace": {
+    "title": "Marketplace",
+    "subtitle": "Partner Services",
+    "description": "Discover the best partner services in Cameroon.",
+    "search_placeholder": "Search for a service...",
+    "no_services": "No services found",
+    "categories": {
+      "all": "All",
+      "transport": "Transport",
+      "delivery": "Delivery",
+      "tech": "Tech",
+      "finance": "Finance"
+    },
+    "premium_ecosystem": "Premium Ecosystem"
+  },
+  "footer": {
+    "tagline": "Taxi fare estimator",
+    "made_with_love": "Made with",
+    "in_cameroon": "in Cameroon",
+    "copyright": "© {year} FareCAL All rights reserved.",
+    "description": "The reference for estimating your taxi fares in Cameroon. Community data, reliable estimates.",
+    "location": "Yaoundé, Cameroon",
+    "navigation": "Navigation",
+    "contact": "Contact",
+    "follow_us": "Follow us",
+    "join_community": "Join our community and help improve estimates."
+  },
+  "pricing": {
+    "partnerships": "Partnerships",
+    "boost_growth": "Boost your Growth",
+    "join_ecosystem": "Join the FareCal ecosystem and enjoy unique visibility in Cameroon.",
+    "included_in_each_plan": "Included in each plan",
+    "increased_visibility": "Increased visibility",
+    "boosted_clientele": "Boosted clientele",
+    "dedicated_support": "Dedicated support"
+  },
+  "services": {
+    "the_ecosystem": "The Ecosystem.",
+    "verified": "Verified",
+    "join_the_network": "Join the Network.",
+    "position_brand": "Position your brand within Cameroon's most innovative transport ecosystem.",
+    "apply_now": "Apply Now"
+  },
+  "splash": {
+    "preliminaries": "Preliminaries...",
+    "retry": "RETRY",
+    "skip": "SKIP",
+    "version": "v2.0 • Ultra"
+  },
+  "quick_price": {
+    "error_min_price": "The price must be at least 50 FCFA",
+    "success": "Thank you for your contribution!",
+    "error": "Error adding the price"
+  },
+  "trajets": {
+    "title": "Shared Trips",
+    "subtitle": "View the history of trips shared by the community in real time.",
+    "real_time_feed": "Real-time Feed",
+    "search_placeholder": "Filter by destination...",
+    "filter_all_hours": "All hours",
+    "filter_morning": "Morning",
+    "filter_afternoon": "Afternoon",
+    "filter_evening": "Evening",
+    "filter_night": "Night",
+    "filter_weather": "Weather",
+    "filter_sunny": "Sunny",
+    "filter_rainy": "Rainy",
+    "price_paid": "Price Paid",
+    "currency": "CFA",
+    "departure": "Departure",
+    "arrival": "Arrival",
+    "unknown_location": "Unknown location",
+    "distance": "Distance",
+    "duration": "Duration",
+    "weather": "Weather",
+    "time": "Time",
+    "loading_error": "Loading error",
+    "no_trajets": "No trips found",
+    "no_matching_trajets": "No trips match your search",
+    "reset_filters": "Reset filters",
+    "copyright": "© 2025 Fare Calc Community Ledger.",
+    "total_contributions": "Total Contributions:",
+    "active_nodes": "Active Nodes:"
+  },
+  "estimate_success_modal": {
+    "title": "Your trip is ready!",
+    "subtitle": "Estimation completed",
+    "estimated_fare": "Estimated fare",
+    "currency": "FCFA",
+    "distance": "Distance",
+    "duration": "Duration",
+    "got_it": "Got it!",
+    "services_for_you": "Services for you",
+    "services_disclaimer": "These services are offered by our partners"
   }
 }

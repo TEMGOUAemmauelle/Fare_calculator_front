@@ -67,7 +67,7 @@ const HeroImageWithSkeleton = ({ src, alt }) => {
         <div className="absolute inset-0 bg-gradient-to-br from-[#f3cd08]/20 to-[#141414]/20 flex items-center justify-center">
           <div className="text-center text-gray-400">
             <MapPin className="w-12 h-12 mx-auto mb-2" />
-            <p className="text-sm font-bold uppercase">Yaoundé, Cameroun</p>
+            <p className="text-sm font-bold uppercase">{t('home.city_name')}</p>
           </div>
         </div>
       )}
@@ -207,7 +207,7 @@ export default function HomePageDesktop() {
       
       {/* NAVBAR DESKTOP */}
       <NavbarDesktop 
-        currentAddress={departQuery || "Yaoundé, Cameroun"} 
+        currentAddress={departQuery || t('home.city_name')} 
         showCityIndicator={true} 
       />
 
@@ -326,8 +326,8 @@ export default function HomePageDesktop() {
                      <div className="px-6 py-4 bg-gray-50 rounded-3xl border border-gray-100 flex items-center gap-4">
                         <div className="p-2 bg-white rounded-xl shadow-sm"><Calculator className="w-5 h-5 text-[#f3cd08]" /></div>
                         <div>
-                            <p className="text-[10px] font-black uppercase tracking-widest text-gray-400 leading-none mb-1">Dernière mise à jour</p>
-                            <p className="text-xs font-black uppercase italic">Aujourd'hui à 14:30</p>
+                            <p className="text-[10px] font-black uppercase tracking-widest text-gray-400 leading-none mb-1">{t('home.last_update')}</p>
+                            <p className="text-xs font-black uppercase italic">{t('home.last_update_time')}</p>
                         </div>
                      </div>
                 </div>
@@ -473,7 +473,7 @@ export default function HomePageDesktop() {
                                 <Heart className="w-8 h-8 text-[#f3cd08]" />
                             </div>
                             <h4 className="text-3xl font-black uppercase italic tracking-tighter leading-none">{t('add.share_fare')} <br/> <span className="text-[#f3cd08]">{t('add.fare')}</span></h4>
-                            <p className="text-gray-400 text-sm font-bold uppercase tracking-wider leading-relaxed">Aidez-nous à rendre les estimations encore plus précises en partageant vos derniers trajets.</p>
+                            <p className="text-gray-400 text-sm font-bold uppercase tracking-wider leading-relaxed">{t('home.contribute_description')}</p>
                             <button onClick={() => navigate('/add-trajet')} className="w-fit px-8 py-4 bg-white text-black rounded-2xl font-black text-[10px] uppercase tracking-widest hover:bg-[#f3cd08] transition-colors">{t('home.cta_contribute')}</button>
                         </div>
                     </div>
@@ -489,7 +489,7 @@ export default function HomePageDesktop() {
                                     <div className="flex items-center gap-4">
                                         <div className="p-3 bg-blue-50 rounded-2xl"><Ruler className="w-6 h-6 text-blue-500" /></div>
                                         <div>
-                                            <p className="text-[10px] font-black uppercase tracking-widest text-gray-400 leading-none mb-1">Distance Totale</p>
+                                            <p className="text-[10px] font-black uppercase tracking-widest text-gray-400 leading-none mb-1">{t('estimate.total_distance')}</p>
                                             <p className="text-2xl font-black italic">{routeStats.distance} km</p>
                                         </div>
                                     </div>
@@ -497,7 +497,7 @@ export default function HomePageDesktop() {
                                     <div className="flex items-center gap-4">
                                         <div className="p-3 bg-indigo-50 rounded-2xl"><Clock className="w-6 h-6 text-indigo-500" /></div>
                                         <div>
-                                            <p className="text-[10px] font-black uppercase tracking-widest text-gray-400 leading-none mb-1">Durée Estimée</p>
+                                            <p className="text-[10px] font-black uppercase tracking-widest text-gray-400 leading-none mb-1">{t('estimate.estimated_duration')}</p>
                                             <p className="text-2xl font-black italic">{routeStats.duration} min</p>
                                         </div>
                                     </div>
@@ -520,11 +520,11 @@ export default function HomePageDesktop() {
                                              <Sparkles className="w-6 h-6" />
                                          </div>
                                          <div>
-                                             <h4 className="text-xl font-black italic uppercase tracking-tighter">Résultat Optimal</h4>
-                                             <p className="text-gray-400 text-[10px] font-bold uppercase tracking-widest">Estimation IA complète</p>
+                                             <h4 className="text-xl font-black italic uppercase tracking-tighter">{t('estimate.optimal_result')}</h4>
+                                             <p className="text-gray-400 text-[10px] font-bold uppercase tracking-widest">{t('estimate.ai_estimation')}</p>
                                          </div>
                                      </div>
-                                     <button onClick={() => setPrediction(null)} className="px-4 py-2 bg-white/5 hover:bg-white/10 rounded-xl text-[9px] font-black uppercase tracking-widest transition-all">Nouveau Calcul</button>
+                                     <button onClick={() => setPrediction(null)} className="px-4 py-2 bg-white/5 hover:bg-white/10 rounded-xl text-[9px] font-black uppercase tracking-widest transition-all">{t('estimate.new_calculation')}</button>
                                 </div>
                                 <PriceCard prediction={prediction} onAddTrajet={() => navigate('/add-trajet')} variant="desktop" />
                              </motion.div>

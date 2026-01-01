@@ -48,13 +48,13 @@ export default function ServicesPageMobile() {
             </button>
             <div className="px-3 py-1.5 bg-[#f3cd08]/10 border border-[#f3cd08]/20 rounded-full flex items-center gap-2">
                 <ShieldCheck className="w-3 h-3 text-[#f3cd08]" />
-                <span className="text-[9px] font-bold uppercase tracking-widest text-[#f3cd08]">Verified</span>
+                <span className="text-[9px] font-bold uppercase tracking-widest text-[#f3cd08]">{t('services.verified')}</span>
             </div>
          </div>
          
          <div>
             <h1 className="text-4xl font-black uppercase tracking-tighter text-white leading-[0.9] mb-2">
-                The <span className="text-[#f3cd08]">Ecosystem.</span>
+                {t('services.the_ecosystem')}
             </h1>
             <p className="text-gray-400 text-xs font-medium leading-relaxed max-w-[80%]">
                 {t('partners.trust_partners')}
@@ -135,12 +135,10 @@ export default function ServicesPageMobile() {
                 </div>
                 
                 <h3 className="text-2xl font-black text-white uppercase tracking-tighter leading-none mb-2">
-                    {isEn ? 'Join the' : 'Rejoignez le'} <span className="text-[#f3cd08]">{isEn ? 'Network.' : 'Réseau.'}</span>
+                    {isEn ? 'Join the' : 'Rejoignez le'} <span className="text-[#f3cd08]">{t('services.join_the_network')}</span>
                 </h3>
                 <p className="text-gray-400 text-[10px] font-medium leading-relaxed mb-6">
-                    {isEn 
-                        ? "Position your brand within Cameroon's most innovative transport ecosystem."
-                        : "Positionnez votre marque au sein de l'écosystème le plus innovant."}
+                    {t('services.position_brand')}
                 </p>
 
                 <button 
@@ -149,7 +147,7 @@ export default function ServicesPageMobile() {
                 >
                     {isEn ? 'Apply Now' : 'Postuler'}
                 </button>
-            </div>
+            </div>t('services.apply_now')
         </div>
       </main>
     </div>

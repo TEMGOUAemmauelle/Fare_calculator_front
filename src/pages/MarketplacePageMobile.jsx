@@ -9,19 +9,21 @@ import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { ArrowLeft, Store, Search, Filter, Sparkles, Grid, List } from 'lucide-react';
 import { useAppNavigate } from '../hooks/useAppNavigate';
+import { useTranslation } from 'react-i18next';
 import MarketplaceCard from '../components/MarketplaceCard';
 import { getMarketplaceServices } from '../services/marketplaceService';
 
 const CATEGORIES = [
-  { id: 'all', label: 'Tous' },
-  { id: 'transport', label: 'Transport' },
-  { id: 'delivery', label: 'Livraison' },
-  { id: 'tech', label: 'Tech' },
-  { id: 'finance', label: 'Finance' },
+  { id: 'all', label_key: 'marketplace.categories.all' },
+  { id: 'transport', label_key: 'marketplace.categories.transport' },
+  { id: 'delivery', label_key: 'marketplace.categories.delivery' },
+  { id: 'tech', label_key: 'marketplace.categories.tech' },
+  { id: 'finance', label_key: 'marketplace.categories.finance' },
 ];
 
 export default function MarketplacePageMobile() {
   const navigate = useAppNavigate();
+  const { t } = useTranslation();
   const [services, setServices] = useState([]);
   const [filteredServices, setFilteredServices] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -76,7 +78,7 @@ export default function MarketplacePageMobile() {
             </button>
             <div className="flex items-center gap-2 px-4 py-2 bg-[#f3cd08] rounded-full">
               <Sparkles className="w-3 h-3 text-black" />
-              <span className="text-[9px] font-black uppercase tracking-widest text-black">Premium Ecosystem</span>
+              <span className="text-[9px] font-black uppercase tracking-widest text-black">{t('marketplace.premium_ecosystem')}</span>
             </div>
           </div>
 
@@ -84,7 +86,7 @@ export default function MarketplacePageMobile() {
             Market<span className="text-[#f3cd08]">place</span>
           </h1>
           <p className="text-gray-400 text-xs font-medium max-w-[240px] leading-relaxed">
-            Découvrez les meilleurs services partenaires au Cameroun.
+            {t('marketplace.description')}
           </p>
         </div>
       </div>
@@ -99,7 +101,7 @@ export default function MarketplacePageMobile() {
             type="text"
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
-            placeholder="Rechercher un service..."
+            placeholder={t('marketplace.search_placeholder')}
             className="flex-1 bg-transparent border-none text-sm font-bold outline-none placeholder:text-gray-300"
           />
         </div>
@@ -118,7 +120,7 @@ export default function MarketplacePageMobile() {
                   : 'bg-white text-gray-400 border border-gray-100'
               }`}
             >
-              {cat.label}
+              {t(CATEGORIES.find(c => c.id === cat.id)?.label_key || cat.label)}
             </button>
           ))}
         </div>
@@ -135,7 +137,7 @@ export default function MarketplacePageMobile() {
         ) : filteredServices.length === 0 ? (
           <div className="text-center py-20 bg-white rounded-[2.5rem] border border-gray-100">
             <Store className="w-12 h-12 text-gray-100 mx-auto mb-4" />
-            <h3 className="text-lg font-black uppercase tracking-tighter italic text-gray-400">Aucun service trouvé</h3>
+            <h3 className="text-lg font-black uppercase tracking-tighter italic text-gray-400">{t('marketplace.no_services')}</h3>
           </div>
         ) : (
           <div className="grid grid-cols-2 gap-4">

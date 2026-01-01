@@ -134,10 +134,10 @@ const EstimateSuccessModal = ({
                         </div>
                         <div>
                           <h2 className="text-xl font-black text-white">
-                            {isEn ? 'Your trip is ready!' : 'Votre trajet est prêt !'}
+                            {t('estimate_success_modal.title')}
                           </h2>
                           <p className="text-xs text-gray-400 font-medium">
-                            {isEn ? 'Estimation completed' : 'Estimation terminée'}
+                            {t('estimate_success_modal.subtitle')}
                           </p>
                         </div>
                       </div>
@@ -146,23 +146,23 @@ const EstimateSuccessModal = ({
                         <div className="space-y-6">
                           <div className="p-6 bg-white/5 rounded-2xl border border-white/10">
                             <p className="text-xs text-gray-400 uppercase tracking-widest font-bold mb-2">
-                              {isEn ? 'Estimated fare' : 'Tarif estimé'}
+                              {t('estimate_success_modal.estimated_fare')}
                             </p>
                             <p className="text-4xl font-black text-white">
                               {estimateData.prix_estime || estimateData.prix_moyen || '---'}
-                              <span className="text-lg font-bold text-[#f3cd08] ml-2">FCFA</span>
+                              <span className="text-lg font-bold text-[#f3cd08] ml-2">{t('estimate_success_modal.currency')}</span>
                             </p>
                           </div>
 
                           {estimateData.distance && (
                             <div className="flex gap-4">
                               <div className="flex-1 p-4 bg-white/5 rounded-xl border border-white/10">
-                                <p className="text-[10px] text-gray-500 uppercase tracking-wide mb-1">Distance</p>
+                                <p className="text-[10px] text-gray-500 uppercase tracking-wide mb-1">{t('estimate_success_modal.distance')}</p>
                                 <p className="text-lg font-bold text-white">{estimateData.distance} km</p>
                               </div>
                               {estimateData.duree && (
                                 <div className="flex-1 p-4 bg-white/5 rounded-xl border border-white/10">
-                                  <p className="text-[10px] text-gray-500 uppercase tracking-wide mb-1">Durée</p>
+                                  <p className="text-[10px] text-gray-500 uppercase tracking-wide mb-1">{t('estimate_success_modal.duration')}</p>
                                   <p className="text-lg font-bold text-white">{estimateData.duree} min</p>
                                 </div>
                               )}
@@ -176,7 +176,7 @@ const EstimateSuccessModal = ({
                       onClick={onClose}
                       className="w-full py-4 bg-[#f3cd08] text-black rounded-2xl font-black text-sm uppercase tracking-wider flex items-center justify-center gap-2 hover:bg-[#e5c007] transition-colors"
                     >
-                      {isEn ? 'Got it!' : "C'est compris !"}
+                      {t('estimate_success_modal.got_it')}
                       <ArrowRight className="w-4 h-4" />
                     </button>
                   </div>
@@ -194,7 +194,7 @@ const EstimateSuccessModal = ({
                       <div className="flex items-center gap-3">
                         <Store className="w-5 h-5 text-[#f3cd08]" />
                         <h3 className="text-lg font-black text-gray-900 uppercase tracking-wide">
-                          {isEn ? 'Services for you' : 'Services pour vous'}
+                          {t('estimate_success_modal.services_for_you')}
                         </h3>
                       </div>
                       <button
@@ -432,14 +432,12 @@ const EstimateSuccessModal = ({
                       onClick={onClose}
                       className="w-full py-4 bg-[#141414] text-white rounded-2xl font-black text-xs uppercase tracking-widest flex items-center justify-center gap-2 active:scale-95 transition-all"
                     >
-                      {isEn ? 'Got it!' : "C'est compris !"}
+                      {t('estimate_success_modal.got_it')}
                       <ArrowRight className="w-4 h-4" />
                     </button>
                     
                     <p className="text-center text-[10px] text-gray-400 mt-3">
-                      {isEn 
-                        ? 'These services are offered by our partners' 
-                        : 'Ces services sont proposés par nos partenaires'}
+                      {t('estimate_success_modal.services_disclaimer')}
                     </p>
                   </div>
                 </>
