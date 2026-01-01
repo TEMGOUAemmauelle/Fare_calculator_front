@@ -366,13 +366,13 @@ export default function AddTrajetPageDesktop() {
                             <div className="w-12 h-12 bg-white/10 rounded-2xl flex items-center justify-center">
                                 <Sparkles className="w-6 h-6 text-[#f3cd08]" />
                             </div>
-                            <h4 className="text-2xl font-black uppercase italic tracking-tighter leading-none">Votre contribution <br/> est précieuse.</h4>
-                            <p className="text-gray-400 text-[10px] font-bold uppercase tracking-widest max-w-xs">Chaque trajet partagé permet d'affiner notre algorithme pour le bénéfice de tous.</p>
+                            <h4 className="text-2xl font-black uppercase italic tracking-tighter leading-none">{t('add.contribution_title')}</h4>
+                            <p className="text-gray-400 text-[10px] font-bold uppercase tracking-widest max-w-xs">{t('add.contribution_description')}</p>
                         </div>
                         <div className="hidden xl:block">
                              <div className="text-center">
                                 <span className="text-5xl font-black italic text-[#f3cd08] tabular-nums">850+</span>
-                                <p className="text-[10px] font-black uppercase tracking-widest text-gray-500 mt-2">Contributeurs actifs</p>
+                                <p className="text-[10px] font-black uppercase tracking-widest text-gray-500 mt-2">{t('add.active_contributors')}</p>
                              </div>
                         </div>
                     </div>

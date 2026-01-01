@@ -137,11 +137,11 @@ const ContributionSuccessModal = ({
                         </div>
                         <div>
                           <h2 className="text-xl font-black text-white">
-                            {isEn ? 'Thank you!' : 'Merci !'}
+                            {t('contribution_success_modal.thank_you')}
                           </h2>
                           <p className="text-xs text-gray-400 font-medium flex items-center gap-1">
                             <Heart className="w-3 h-3 text-red-400" fill="currentColor" />
-                            {isEn ? 'You help the community' : 'Vous aidez la communauté'}
+                            {t('contribution_success_modal.help_community')}
                           </p>
                         </div>
                       </div>
@@ -150,7 +150,7 @@ const ContributionSuccessModal = ({
                         <div className="space-y-6">
                           <div className="p-6 bg-white/5 rounded-2xl border border-white/10">
                             <p className="text-xs text-gray-400 uppercase tracking-widest font-bold mb-3">
-                              {isEn ? 'Trip added' : 'Trajet ajouté'}
+                              {t('contribution_success_modal.trip_added')}
                             </p>
                             <p className="text-lg font-bold text-white mb-4 leading-tight">
                               {contributionData.depart?.label?.split(',')[0]} 
@@ -159,7 +159,7 @@ const ContributionSuccessModal = ({
                             </p>
                             <p className="text-4xl font-black text-white">
                               {contributionData.prix}
-                              <span className="text-lg font-bold text-[#f3cd08] ml-2">FCFA</span>
+                              <span className="text-lg font-bold text-[#f3cd08] ml-2">{t('contribution_success_modal.currency')}</span>
                             </p>
                           </div>
 
@@ -171,7 +171,7 @@ const ContributionSuccessModal = ({
                             >
                               <PlusCircle className="w-4 h-4 text-[#f3cd08]" />
                               <span className="text-xs font-bold text-white">
-                                {isEn ? 'Add another' : 'Ajouter un autre'}
+                                {t('contribution_success_modal.add_another')}
                               </span>
                             </button>
                             
@@ -181,7 +181,7 @@ const ContributionSuccessModal = ({
                             >
                               <Calculator className="w-4 h-4 text-[#f3cd08]" />
                               <span className="text-xs font-bold text-white">
-                                {isEn ? 'Estimate' : 'Estimer'}
+                                {t('contribution_success_modal.estimate')}
                               </span>
                             </button>
                           </div>
@@ -193,7 +193,7 @@ const ContributionSuccessModal = ({
                       onClick={onClose}
                       className="w-full py-4 bg-[#f3cd08] text-black rounded-2xl font-black text-sm uppercase tracking-wider flex items-center justify-center gap-2 hover:bg-[#e5c007] transition-colors"
                     >
-                      {isEn ? 'Continue' : 'Continuer'}
+                      {t('contribution_success_modal.continue')}
                       <ArrowRight className="w-4 h-4" />
                     </button>
                   </div>
@@ -211,7 +211,7 @@ const ContributionSuccessModal = ({
                       <div className="flex items-center gap-3">
                         <Store className="w-5 h-5 text-[#f3cd08]" />
                         <h3 className="text-lg font-black text-gray-900 uppercase tracking-wide">
-                          {isEn ? 'Discover also' : 'Découvrez aussi'}
+                          {t('contribution_success_modal.discover_also')}
                         </h3>
                       </div>
                       <button
@@ -392,7 +392,7 @@ const ContributionSuccessModal = ({
                       <div className="flex items-center gap-2">
                         <Store className="w-4 h-4 text-[#f3cd08]" />
                         <h3 className="text-sm font-black text-gray-900 uppercase tracking-wide">
-                          {isEn ? 'Discover also' : 'Découvrez aussi'}
+                          {t('contribution_success_modal.discover_also')}
                         </h3>
                       </div>
                       <button
@@ -478,14 +478,12 @@ const ContributionSuccessModal = ({
                       onClick={onClose}
                       className="w-full py-4 bg-[#141414] text-white rounded-2xl font-black text-xs uppercase tracking-widest flex items-center justify-center gap-2 active:scale-95 transition-all"
                     >
-                      {isEn ? 'Continue' : 'Continuer'}
+                      {t('contribution_success_modal.continue')}
                       <ArrowRight className="w-4 h-4 text-[#f3cd08]" />
                     </button>
                     
                     <p className="text-center text-[10px] text-gray-400 mt-3">
-                      {isEn 
-                        ? 'These services are offered by our partners' 
-                        : 'Ces services sont proposés par nos partenaires'}
+                      {t('contribution_success_modal.services_disclaimer')}
                     </p>
                   </div>
                 </>

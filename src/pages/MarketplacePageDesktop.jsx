@@ -110,7 +110,7 @@ export default function MarketplacePageDesktop() {
                 <span className="text-[#f3cd08]">Marketplace</span>
               </h1>
               <p className="text-xl text-gray-400 max-w-md font-medium leading-relaxed">
-                Découvrez les services qui transforment le quotidien au Cameroun. Mobilité, livraison et technologie.
+                {t('marketplace.description')}
               </p>
             </motion.div>
 

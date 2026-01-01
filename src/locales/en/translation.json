@@ -120,7 +120,10 @@
     "form_incomplete": "Incomplete form",
     "add_error": "Add error",
     "reopen_modal_alt": "Edit trip",
-    "cta_contribute_sub": "Add"
+    "cta_contribute_sub": "Add",
+    "contribution_title": "Your contribution is precious.",
+    "contribution_description": "Each shared trip helps refine our algorithm for everyone's benefit.",
+    "active_contributors": "Active contributors"
   },
   "price_card": {
     "standard_estimation": "Standard estimation",
@@ -340,7 +343,7 @@
   "marketplace": {
     "title": "Marketplace",
     "subtitle": "Partner Services",
-    "description": "Discover the best partner services in Cameroon.",
+    "description": "Discover services that transform daily life in Cameroon. Mobility, delivery and technology.",
     "search_placeholder": "Search for a service...",
     "no_services": "No services found",
     "categories": {
@@ -430,6 +433,20 @@
     "duration": "Duration",
     "got_it": "Got it!",
     "services_for_you": "Services for you",
+    "services_disclaimer": "These services are offered by our partners"
+  } ,
+   "contribution_success_modal": {
+    "thank_you": "Thank you!",
+    "help_community": "You help the community",
+    "contribution_saved": "Contribution saved",
+    "trip_added": "Trip added",
+    "currency": "FCFA",
+    "add_another": "Add another",
+    "estimate": "Estimate",
+    "continue": "Continue",
+    "explore_services": "Explore our partner services",
+    "discover_also": "Discover also",
+    "view_all": "View all",
     "services_disclaimer": "These services are offered by our partners"
   }
 }
