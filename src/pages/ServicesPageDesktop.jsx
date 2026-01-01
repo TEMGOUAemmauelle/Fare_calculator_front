@@ -3,11 +3,10 @@ import { useState, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useAppNavigate } from '../hooks/useAppNavigate';
 import { 
-    ArrowLeft, ExternalLink, ShieldCheck, Globe, Loader2, 
-    Zap, Sparkles, Heart, Rocket, Users, BadgeCheck
+    ArrowUpRight, Loader2, Users, Rocket, Sparkles, ShieldCheck
 } from 'lucide-react';
 import { getAds } from '../services/adService';
-import { motion, AnimatePresence } from 'framer-motion';
+import { motion } from 'framer-motion';
 import NavbarDesktop from '../components/NavbarDesktop';
 
 export default function ServicesPageDesktop() {
@@ -32,162 +31,238 @@ export default function ServicesPageDesktop() {
     fetchServices();
   }, []);
 
-  const containerVariants = {
-    hidden: { opacity: 0 },
-    visible: { opacity: 1, transition: { staggerChildren: 0.1 } }
+  // Determine layout mode based on count
+  const getLayoutMode = (count) => {
+    if (count === 1) return 'single';
+    if (count === 2) return 'split';
+    if (count === 3) return 'trio';
+    return 'grid'; // 4+
   };
 
-  const itemVariants = {
-    hidden: { y: 30, opacity: 0 },
-    visible: { y: 0, opacity: 1, transition: { type: 'spring', damping: 20 } }
-  };
+  const layoutMode = getLayoutMode(services.length);
 
   return (
-    <div className="min-h-screen bg-white text-[#141414] font-sans selection:bg-[#f3cd08]/30 overflow-x-hidden">
-      {/* NAVBAR */}
+    <div className="min-h-screen bg-[#f8f8f8] text-[#141414] font-sans selection:bg-[#f3cd08]/30 overflow-x-hidden">
       <NavbarDesktop activeRoute="/services" />
 
-      <main className="pt-40 pb-32 px-12 max-w-7xl mx-auto">
-        <header className="mb-20 text-center max-w-3xl mx-auto">
+      <main className="pt-32 pb-20 px-8 max-w-[1600px] mx-auto">
+        {/* HEADER */}
+        <header className="mb-24 flex flex-col md:flex-row items-end justify-between gap-10 border-b border-gray-200 pb-10">
+            <div className="max-w-2xl">
+                <motion.div 
+                    initial={{ opacity: 0, y: 20 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    className="inline-flex items-center gap-2 px-3 py-1 bg-[#141414] text-white rounded-sm mb-6"
+                >
+                    <ShieldCheck className="w-3 h-3 text-[#f3cd08]" />
+                    <span className="text-[10px] font-bold uppercase tracking-widest">Official Partners</span>
+                </motion.div>
+                <motion.h1 
+                    initial={{ opacity: 0, y: 30 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ delay: 0.1 }}
+                    className="text-7xl font-black uppercase tracking-tighter leading-[0.9]"
+                >
+                    The <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#141414] to-gray-500">Ecosystem</span>
+                </motion.h1>
+            </div>
             <motion.div 
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                className="inline-flex items-center gap-3 px-4 py-2 bg-yellow-50 rounded-full border border-yellow-100 mb-6"
-            >
-                <BadgeCheck className="w-4 h-4 text-[#f3cd08]" />
-                <span className="text-[10px] font-black uppercase tracking-widest text-[#d4af37]">Verified Network</span>
-            </motion.div>
-            <motion.h2 
-                initial={{ opacity: 0, y: 30 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: 0.1 }}
-                className="text-6xl font-black italic uppercase tracking-tighter leading-none mb-8"
-            >
-                {t('partners.discover_partners').split(' ').slice(0, 2).join(' ')} <br/> 
-                <span className="text-[#f3cd08]">{t('partners.discover_partners').split(' ').slice(2).join(' ')}</span>
-            </motion.h2>
-            <motion.p 
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
                 transition={{ delay: 0.2 }}
-                className="text-gray-400 text-lg font-medium leading-relaxed"
+                className="max-w-md text-right"
             >
-                {t('partners.trust_partners')}
-            </motion.p>
+                <p className="text-gray-500 text-sm font-medium leading-relaxed">
+                    {t('partners.trust_partners')}
+                </p>
+            </motion.div>
         </header>
 
         {loading ? (
-            <div className="flex flex-col items-center justify-center py-32 gap-6">
-                <Loader2 className="w-12 h-12 animate-spin text-[#f3cd08]" />
-                <p className="text-xs font-black text-gray-400 uppercase tracking-[0.3em] animate-pulse">{t('partners.loading_offers')}</p>
+            <div className="h-[60vh] flex flex-col items-center justify-center gap-6">
+                <Loader2 className="w-10 h-10 animate-spin text-[#141414]" />
+                <p className="text-xs font-bold text-gray-400 uppercase tracking-widest">{t('partners.loading_offers')}</p>
             </div>
         ) : (
-            <motion.div 
-                variants={containerVariants}
-                initial="hidden"
-                animate="visible"
-                className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10"
-            >
-                {services.map((service, idx) => (
-                    <motion.a
-                        key={service.id || idx}
-                        variants={itemVariants}
-                        href={service.app_link || '#'}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="group relative flex flex-col bg-white rounded-[3rem] border border-gray-100 shadow-xl shadow-gray-200/50 hover:shadow-2xl hover:-translate-y-2 transition-all overflow-hidden h-[550px]"
-                    >
-                        <div className="relative h-64 w-full overflow-hidden shrink-0">
-                            <img 
-                                src={service.image_url} 
-                                alt={isEn ? (service.title_en || service.title) : service.title}
-                                className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-1000"
-                            />
-                            <div className="absolute inset-0 bg-linear-to-t from-[#141414]/80 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
-                            
-                            <div className="absolute top-6 left-6">
-                                <span 
-                                    className="px-4 py-1.5 rounded-full text-[9px] font-black uppercase tracking-widest text-black shadow-lg"
-                                    style={{ backgroundColor: service.color || '#f3cd08' }}
-                                >
-                                    {service.category}
-                                </span>
-                            </div>
+            <div className="min-h-[60vh]">
+                {/* SINGLE MODE */}
+                {layoutMode === 'single' && (
+                    <div className="w-full h-[70vh]">
+                        <PartnerCard service={services[0]} isEn={isEn} variant="hero" />
+                    </div>
+                )}
 
-                            <div className="absolute bottom-6 right-6 opacity-0 group-hover:opacity-100 translate-y-4 group-hover:translate-y-0 transition-all">
-                                <div className="p-3 bg-white rounded-2xl shadow-xl">
-                                    <ExternalLink className="w-5 h-5 text-black" />
-                                </div>
-                            </div>
-                        </div>
+                {/* SPLIT MODE */}
+                {layoutMode === 'split' && (
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4 h-[70vh]">
+                        {services.map((service, idx) => (
+                            <PartnerCard key={service.id || idx} service={service} isEn={isEn} variant="tall" />
+                        ))}
+                    </div>
+                )}
 
-                        <div className="p-10 flex flex-col flex-1">
-                            <h3 className="text-3xl font-black text-[#141414] italic uppercase tracking-tighter mb-4">
-                                {isEn ? (service.title_en || service.title) : service.title}
-                            </h3>
-                            <p className="text-gray-400 text-sm font-bold uppercase tracking-wide leading-relaxed mb-10 flex-1 line-clamp-3">
-                                {isEn ? (service.description_en || service.description) : service.description}
-                            </p>
-                            
-                            <div className="flex items-center gap-4">
-                                <button className="flex-1 py-5 bg-[#141414] text-white rounded-2xl font-black text-[10px] uppercase tracking-widest group-hover:bg-[#f3cd08] group-hover:text-black transition-colors">
-                                    {t('partners.discover_service')}
-                                </button>
-                                <div className="p-5 bg-gray-50 text-gray-400 rounded-2xl group-hover:bg-[#141414] group-hover:text-white transition-all">
-                                    <Globe className="w-5 h-5" />
-                                </div>
-                            </div>
+                {/* TRIO MODE */}
+                {layoutMode === 'trio' && (
+                    <div className="grid grid-cols-1 md:grid-cols-3 gap-4 h-[60vh]">
+                        {services.map((service, idx) => (
+                            <PartnerCard key={service.id || idx} service={service} isEn={isEn} variant="tall" />
+                        ))}
+                    </div>
+                )}
+
+                {/* GRID MODE (4+) */}
+                {layoutMode === 'grid' && (
+                    <div className="grid grid-cols-12 gap-4 auto-rows-[400px]">
+                        {/* Featured Item (First one spans 8 cols) */}
+                        <div className="col-span-12 lg:col-span-8 row-span-1">
+                            <PartnerCard service={services[0]} isEn={isEn} variant="featured" />
                         </div>
-                        
-                        <div className="absolute -bottom-20 -right-20 w-40 h-40 rounded-full blur-[80px] opacity-0 group-hover:opacity-20 transition-opacity" style={{ backgroundColor: service.color || '#f3cd08' }} />
-                    </motion.a>
-                ))}
-            </motion.div>
+                        {/* Second Item (Spans 4 cols) */}
+                        <div className="col-span-12 lg:col-span-4 row-span-1">
+                            <PartnerCard service={services[1]} isEn={isEn} variant="standard" />
+                        </div>
+                        {/* Rest of items */}
+                        {services.slice(2).map((service, idx) => (
+                            <div key={service.id || idx + 2} className="col-span-12 md:col-span-6 lg:col-span-4 row-span-1">
+                                <PartnerCard service={service} isEn={isEn} variant="standard" />
+                            </div>
+                        ))}
+                    </div>
+                )}
+
+                {services.length === 0 && (
+                    <div className="w-full h-[50vh] flex flex-col items-center justify-center border border-dashed border-gray-300 rounded-sm bg-gray-50">
+                        <p className="text-gray-400 font-medium">No partners yet.</p>
+                    </div>
+                )}
+            </div>
         )}
 
-        {/* CTA SECTION */}
-        <section className="mt-32 p-16 bg-[#141414] rounded-[4rem] text-white relative overflow-hidden group">
-            <div className="absolute top-0 right-0 w-96 h-96 bg-[#f3cd08] rounded-full blur-[150px] opacity-10 group-hover:opacity-20 transition-opacity" />
-            <div className="relative z-10 grid grid-cols-1 lg:grid-cols-2 gap-20 items-center">
-                <div className="space-y-8">
-                    <div className="w-16 h-16 bg-white/10 rounded-2xl flex items-center justify-center">
-                        <Users className="w-8 h-8 text-[#f3cd08]" />
+        {/* BECOME A PARTNER SECTION */}
+        <section className="mt-32 border-t border-gray-200 pt-20">
+            <div className="bg-[#141414] text-white rounded-sm p-16 relative overflow-hidden">
+                <div className="absolute top-0 right-0 w-[500px] h-[500px] bg-[#f3cd08] rounded-full blur-[150px] opacity-10" />
+                
+                <div className="relative z-10 flex flex-col lg:flex-row items-start justify-between gap-20">
+                    <div className="space-y-8 max-w-2xl">
+                        <h3 className="text-5xl font-black uppercase tracking-tighter leading-none">
+                            {isEn ? 'Join the' : 'Rejoignez le'} <span className="text-[#f3cd08]">{isEn ? 'Network.' : 'Réseau.'}</span>
+                        </h3>
+                        <p className="text-gray-400 text-lg font-medium leading-relaxed max-w-xl">
+                            {isEn 
+                                ? "Position your brand within Cameroon's most innovative transport ecosystem. Reach qualified users directly."
+                                : "Positionnez votre marque au sein de l'écosystème de transport le plus innovant du Cameroun. Touchez des utilisateurs qualifiés directement."}
+                        </p>
+                        <div className="flex gap-4 pt-4">
+                            <button 
+                                onClick={() => navigate('/pricing')}
+                                className="px-8 py-4 bg-white text-black rounded-sm font-bold text-xs uppercase tracking-widest hover:bg-[#f3cd08] transition-colors inline-block"
+                            >
+                                {isEn ? 'Apply Now' : 'Postuler'}
+                            </button>
+                            <a 
+                                href="#"
+                                onClick={(e) => {
+                                    e.preventDefault();
+                                    alert(isEn ? 'Media Kit coming soon!' : 'Media Kit bientôt disponible !');
+                                }}
+                                className="px-8 py-4 border border-white/20 text-white rounded-sm font-bold text-xs uppercase tracking-widest hover:bg-white/10 transition-colors inline-block"
+                            >
+                                {isEn ? 'Download Media Kit' : 'Télécharger Media Kit'}
+                            </a>
+                        </div>
                     </div>
-                    <h3 className="text-5xl font-black italic uppercase tracking-tighter leading-none">
-                        Devenez un <br/> <span className="text-[#f3cd08]">Partenaire.</span>
-                    </h3>
-                    <p className="text-gray-400 text-lg font-medium leading-relaxed">
-                        Rejoignez le premier réseau de transport communautaire au Cameroun et touchez des milliers d'utilisateurs qualifiés.
-                    </p>
-                    <button className="px-10 py-5 bg-white text-black rounded-2xl font-black text-xs uppercase tracking-widest hover:bg-[#f3cd08] transition-colors">
-                        Rejoindre le Réseau
-                    </button>
-                </div>
-                <div className="grid grid-cols-2 gap-8">
-                    <div className="p-8 bg-white/5 rounded-[2.5rem] border border-white/5 space-y-4">
-                        <Rocket className="w-8 h-8 text-[#f3cd08]" />
-                        <h4 className="text-xl font-black uppercase italic tracking-tighter">Visibilité</h4>
-                        <p className="text-gray-500 text-[10px] font-bold uppercase leading-relaxed tracking-widest">Exposition premium sur Web & Mobile.</p>
-                    </div>
-                    <div className="p-8 bg-white/5 rounded-[2.5rem] border border-white/5 space-y-4">
-                        <Sparkles className="w-8 h-8 text-[#f3cd08]" />
-                        <h4 className="text-xl font-black uppercase italic tracking-tighter">Conversion</h4>
-                        <p className="text-gray-500 text-[10px] font-bold uppercase leading-relaxed tracking-widest">Lead ultra-qualifiés et locaux.</p>
+
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 w-full lg:w-auto">
+                        <div className="p-6 bg-white/5 border border-white/10 rounded-sm backdrop-blur-sm">
+                            <Users className="w-6 h-6 text-[#f3cd08] mb-4" />
+                            <h4 className="text-lg font-bold uppercase tracking-tight mb-2">{isEn ? 'Targeted Reach' : 'Portée Ciblée'}</h4>
+                            <p className="text-gray-500 text-xs leading-relaxed">{isEn ? 'Access thousands of daily commuters in major cities.' : 'Accédez à des milliers de navetteurs quotidiens dans les grandes villes.'}</p>
+                        </div>
+                        <div className="p-6 bg-white/5 border border-white/10 rounded-sm backdrop-blur-sm">
+                            <Sparkles className="w-6 h-6 text-[#f3cd08] mb-4" />
+                            <h4 className="text-lg font-bold uppercase tracking-tight mb-2">{isEn ? 'Premium Brand' : 'Marque Premium'}</h4>
+                            <p className="text-gray-500 text-xs leading-relaxed">{isEn ? 'Associate with innovation and reliability.' : 'Associez-vous à l\'innovation et à la fiabilité.'}</p>
+                        </div>
                     </div>
                 </div>
             </div>
         </section>
       </main>
 
-      <footer className="py-20 bg-[#141414] text-white border-t border-white/5">
-        <div className="max-w-7xl mx-auto px-12 pt-10 flex flex-col md:flex-row justify-between items-center gap-8">
-            <p className="text-[10px] font-black uppercase tracking-widest text-gray-600">© 2025 Fare CAL Designed for Excellence.</p>
-            <div className="flex gap-10">
-                <button className="text-[10px] font-black uppercase tracking-widest text-gray-600 hover:text-white transition-colors">Contact</button>
-                <button className="text-[10px] font-black uppercase tracking-widest text-gray-600 hover:text-white transition-colors">Legal</button>
+      <footer className="py-12 border-t border-gray-200 bg-white">
+        <div className="max-w-[1600px] mx-auto px-8 flex justify-between items-center">
+            <p className="text-[10px] font-bold uppercase tracking-widest text-gray-400">© 2025 Fare Calculator</p>
+            <div className="flex gap-8">
+                <a href="#" className="text-[10px] font-bold uppercase tracking-widest text-gray-400 hover:text-[#141414]">Privacy</a>
+                <a href="#" className="text-[10px] font-bold uppercase tracking-widest text-gray-400 hover:text-[#141414]">Terms</a>
             </div>
         </div>
       </footer>
     </div>
   );
+}
+
+function PartnerCard({ service, isEn, variant = 'standard' }) {
+    const isHero = variant === 'hero';
+    const isFeatured = variant === 'featured';
+    
+    return (
+        <motion.a
+            href={service.app_link || '#'}
+            target="_blank"
+            rel="noopener noreferrer"
+            initial={{ opacity: 0, scale: 0.95 }}
+            whileInView={{ opacity: 1, scale: 1 }}
+            viewport={{ once: true }}
+            className={`group relative block w-full h-full overflow-hidden bg-white border border-gray-200 rounded-sm hover:border-[#f3cd08] transition-colors duration-500 ${isHero ? 'shadow-2xl' : 'shadow-sm'}`}
+        >
+            {/* Image Background */}
+            <div className="absolute inset-0">
+                <img 
+                    src={service.image_url} 
+                    alt={isEn ? (service.title_en || service.title) : service.title}
+                    className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105 grayscale group-hover:grayscale-0"
+                />
+                <div className="absolute inset-0 bg-[#141414]/40 group-hover:bg-[#141414]/20 transition-colors duration-500" />
+                <div className="absolute inset-0 bg-gradient-to-t from-[#141414] via-[#141414]/50 to-transparent opacity-90" />
+            </div>
+
+            {/* Content */}
+            <div className="relative h-full flex flex-col justify-end p-8 md:p-12">
+                <div className="transform translate-y-4 group-hover:translate-y-0 transition-transform duration-500">
+                    <div className="flex items-center gap-3 mb-4">
+                        <span 
+                            className="px-3 py-1 rounded-sm text-[9px] font-black uppercase tracking-widest text-[#141414]"
+                            style={{ backgroundColor: service.color || '#f3cd08' }}
+                        >
+                            {service.category}
+                        </span>
+                        {isHero && (
+                            <span className="px-3 py-1 bg-white/20 backdrop-blur-md text-white rounded-sm text-[9px] font-bold uppercase tracking-widest">
+                                Featured Partner
+                            </span>
+                        )}
+                    </div>
+
+                    <h3 className={`font-black text-white uppercase tracking-tighter mb-4 ${isHero ? 'text-6xl md:text-8xl' : isFeatured ? 'text-4xl md:text-6xl' : 'text-3xl'}`}>
+                        {isEn ? (service.title_en || service.title) : service.title}
+                    </h3>
+
+                    <div className={`overflow-hidden transition-all duration-500 ${isHero ? 'max-h-40' : 'max-h-0 group-hover:max-h-40'}`}>
+                        <p className="text-gray-300 text-sm md:text-base font-medium leading-relaxed max-w-2xl mb-8">
+                            {isEn ? (service.description_en || service.description) : service.description}
+                        </p>
+                        
+                        <div className="flex items-center gap-2 text-white group/btn">
+                            <span className="text-xs font-bold uppercase tracking-widest group-hover/btn:text-[#f3cd08] transition-colors">
+                                {isEn ? 'Visit Website' : 'Visiter le site'}
+                            </span>
+                            <ArrowUpRight className="w-4 h-4 group-hover/btn:text-[#f3cd08] group-hover/btn:translate-x-1 group-hover/btn:-translate-y-1 transition-all" />
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </motion.a>
+    );
 }

@@ -19,6 +19,7 @@ import CityIndicator from '../components/CityIndicator';
 import MarketplaceSection from '../components/MarketplaceSection';
 import Footer from '../components/Footer';
 import QuickPriceModal from '../components/QuickPriceModal';
+import EstimateSuccessModal from '../components/EstimateSuccessModal';
 import NavbarDesktop from '../components/NavbarDesktop';
 import showToast from '../utils/customToast';
 
@@ -112,6 +113,7 @@ export default function HomePageDesktop() {
   const [routeStats, setRouteStats] = useState(null);
   const [backendAds, setBackendAds] = useState([]);
   const [showQuickPriceModal, setShowQuickPriceModal] = useState(false);
+  const [showMarketplaceModal, setShowMarketplaceModal] = useState(false);
 
   const arriveeInputRef = useRef(null);
   const departInputRef = useRef(null);
@@ -194,6 +196,8 @@ export default function HomePageDesktop() {
               meteo, heure: heureTrajet
           });
           setPrediction(res);
+          // Afficher le modal marketplace après une estimation réussie
+          setTimeout(() => setShowMarketplaceModal(true), 500);
       } catch (e) { showToast.error(t('estimate.server_error')); }
       finally { setIsLoading(false); }
   };
@@ -548,6 +552,13 @@ export default function HomePageDesktop() {
           // Optionnel : refaire une estimation pour voir le nouveau prix
           setPrediction(null);
         }}
+      />
+
+      {/* Modal marketplace après estimation réussie */}
+      <EstimateSuccessModal
+        isOpen={showMarketplaceModal && !!prediction}
+        onClose={() => setShowMarketplaceModal(false)}
+        estimateData={prediction}
       />
     </div>
   );

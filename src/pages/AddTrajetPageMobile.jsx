@@ -13,7 +13,6 @@ import showToast from '../utils/customToast';
 // Components
 import MapView from '../components/MapView';
 import SearchBarEnhanced from '../components/SearchBarEnhanced';
-import { TrajetAddedModal } from '../components/ConfirmationModal';
 import ContributionSuccessModal from '../components/ContributionSuccessModal';
 
 // Services
@@ -363,11 +362,9 @@ export default function AddTrajetPageMobile() {
         )}
       </AnimatePresence>
 
-      <TrajetAddedModal isOpen={showSuccessModal} onClose={() => { setShowSuccessModal(false); navigate('/estimate'); }} />
-      
-      {/* Modal enrichi avec marketplace */}
+      {/* Modal de succès enrichi avec marketplace */}
       <ContributionSuccessModal 
-        isOpen={showSuccessModal && !!lastContribution}
+        isOpen={showSuccessModal}
         onClose={() => { 
           setShowSuccessModal(false); 
           setLastContribution(null);

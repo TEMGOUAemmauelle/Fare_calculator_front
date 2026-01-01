@@ -24,5 +24,6 @@ export { default as PricingCard } from './PricingCard';
 export { default as SubscriptionForm } from './SubscriptionForm';
 export { default as Footer } from './Footer';
 export { default as ContributionSuccessModal } from './ContributionSuccessModal';
+export { default as EstimateSuccessModal } from './EstimateSuccessModal';
 export { default as QuickPriceModal } from './QuickPriceModal';
 export { default as NavbarDesktop } from './NavbarDesktop';

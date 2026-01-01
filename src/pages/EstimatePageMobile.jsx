@@ -23,7 +23,7 @@ import showToast from '../utils/customToast';
 import MapView from '../components/MapView';
 import SearchBarEnhanced from '../components/SearchBarEnhanced';
 import PriceCard from '../components/PriceCard';
-import PartnerPrompt from '../components/PartnerPrompt';
+import EstimateSuccessModal from '../components/EstimateSuccessModal';
 import OutOfBoundsModal from '../components/OutOfBoundsModal';
 import QuickPriceModal from '../components/QuickPriceModal';
 
@@ -86,7 +86,7 @@ export default function EstimatePageMobile() {
   const [markers, setMarkers] = useState([]);
   const [routeData, setRouteData] = useState(null);
   const [routeStats, setRouteStats] = useState(null);
-  const [showPartnerPrompt, setShowPartnerPrompt] = useState(false);
+  const [showMarketplaceModal, setShowMarketplaceModal] = useState(false);
   const [showOutOfBoundsModal, setShowOutOfBoundsModal] = useState(false);
   const [outOfBoundsInfo, setOutOfBoundsInfo] = useState({ invalidPoint: 'depart', detectedCountry: '' });
   const [showQuickPriceModal, setShowQuickPriceModal] = useState(false);
@@ -204,8 +204,8 @@ export default function EstimatePageMobile() {
               meteo, heure: heureTrajet
           });
           setPrediction(res);
-          // Afficher le prompt partenaire après 2.5s si c'est une première prédiction
-          setTimeout(() => setShowPartnerPrompt(true), 2500);
+          // Afficher le modal marketplace après 2.5s si c'est une première prédiction
+          setTimeout(() => setShowMarketplaceModal(true), 2500);
       } catch (e) { showToast.error(t('estimate.server_error')); }
       finally { setIsLoading(false); }
   };
@@ -420,9 +420,10 @@ export default function EstimatePageMobile() {
         )}
       </AnimatePresence>
 
-      <PartnerPrompt 
-        isVisible={showPartnerPrompt && !!prediction} 
-        onClose={() => setShowPartnerPrompt(false)} 
+      <EstimateSuccessModal 
+        isOpen={showMarketplaceModal && !!prediction} 
+        onClose={() => setShowMarketplaceModal(false)}
+        estimateData={prediction}
       />
       
       <OutOfBoundsModal 

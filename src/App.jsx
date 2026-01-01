@@ -8,7 +8,7 @@
  * - Gestion erreurs globale
  */
 
-import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
+import { BrowserRouter, Routes, Route, Navigate, useLocation } from 'react-router-dom';
 import { Toaster } from 'react-hot-toast';
 import showToast from './utils/customToast';
 import geolocationService from './services/geolocationService';
@@ -31,6 +31,22 @@ import PWAInstallPrompt from './components/PWAInstallPrompt';
 import LanguageWrapper from './components/LanguageWrapper';
 
 import './App.css';
+
+// Component to redirect routes without language prefix
+function RedirectToLang() {
+  const { i18n } = useTranslation();
+  const location = useLocation();
+  
+  const supportedLangs = ['fr', 'en'];
+  const detectedLang = i18n.language ? i18n.language.split('-')[0] : 'fr';
+  const finalLang = supportedLangs.includes(detectedLang) ? detectedLang : 'fr';
+  
+  // Get current path and redirect with language prefix
+  const currentPath = location.pathname;
+  const newPath = `/${finalLang}${currentPath === '/' ? '' : currentPath}`;
+  
+  return <Navigate to={newPath} replace />;
+}
 
 function App() {
   const { t } = useTranslation();
@@ -98,8 +114,17 @@ function App() {
           <Route path="pricing" element={<PricingPage />} />
         </Route>
         
-        {/* Redirect unknown routes or root without lang to LanguageWrapper's logic */}
-        <Route path="*" element={<LanguageWrapper />} />
+        {/* Explicit redirects for routes without language prefix */}
+        <Route path="/services" element={<RedirectToLang />} />
+        <Route path="/estimate" element={<RedirectToLang />} />
+        <Route path="/marketplace" element={<RedirectToLang />} />
+        <Route path="/pricing" element={<RedirectToLang />} />
+        <Route path="/add-trajet" element={<RedirectToLang />} />
+        <Route path="/trajets" element={<RedirectToLang />} />
+        <Route path="/stats" element={<RedirectToLang />} />
+        
+        {/* Catch-all redirect */}
+        <Route path="*" element={<RedirectToLang />} />
       </Routes>
 
       {/* PWA Install Prompt */}

@@ -18,6 +18,7 @@ import { useAppNavigate } from '../hooks/useAppNavigate';
 import LanguageSwitcher from '../components/LanguageSwitcher';
 import NavbarDesktop from '../components/NavbarDesktop';
 import OutOfBoundsModal from '../components/OutOfBoundsModal';
+import EstimateSuccessModal from '../components/EstimateSuccessModal';
 import { 
   MapPin, 
   Navigation, 
@@ -93,6 +94,7 @@ export default function EstimatePageDesktop() {
   const [shortcuts, setShortcuts] = useState({ home: null, work: null });
   const [showOutOfBoundsModal, setShowOutOfBoundsModal] = useState(false);
   const [outOfBoundsInfo, setOutOfBoundsInfo] = useState({ invalidPoint: 'depart', detectedCountry: '' });
+  const [showMarketplaceModal, setShowMarketplaceModal] = useState(false);
 
   // Initialisation
   useEffect(() => {
@@ -354,6 +356,9 @@ export default function EstimatePageDesktop() {
       const response = await estimatePrice(requestData);
       setPrediction(response);
       setShowResults(true);
+      
+      // Afficher le modal marketplace après 2.5s
+      setTimeout(() => setShowMarketplaceModal(true), 2500);
       
       addEstimateToHistory({
         depart,
@@ -635,6 +640,12 @@ export default function EstimatePageDesktop() {
         onClose={() => setShowOutOfBoundsModal(false)}
         invalidPoint={outOfBoundsInfo.invalidPoint}
         detectedCountry={outOfBoundsInfo.detectedCountry}
+      />
+      
+      <EstimateSuccessModal 
+        isOpen={showMarketplaceModal && !!prediction} 
+        onClose={() => setShowMarketplaceModal(false)}
+        estimateData={prediction}
       />
     </div>
   );

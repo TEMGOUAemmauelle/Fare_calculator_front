@@ -13,7 +13,7 @@ import showToast from '../utils/customToast';
 // Components
 import MapView from '../components/MapView';
 import SearchBarEnhanced from '../components/SearchBarEnhanced';
-import { TrajetAddedModal } from '../components/ConfirmationModal';
+import ContributionSuccessModal from '../components/ContributionSuccessModal';
 
 // Services
 import { addTrajet } from '../services';
@@ -50,6 +50,7 @@ export default function AddTrajetPageDesktop() {
   const [isLoading, setIsLoading] = useState(false);
   const [isLocating, setIsLocating] = useState(false);
   const [showSuccessModal, setShowSuccessModal] = useState(false);
+  const [lastContribution, setLastContribution] = useState(null);
   
   const [mapCenter, setMapCenter] = useState([11.5021, 3.8480]);
   const [markers, setMarkers] = useState([]);
@@ -153,6 +154,15 @@ export default function AddTrajetPageDesktop() {
             qualite_trajet: formData.qualite
         };
         await addTrajet(payload);
+        
+        // Sauvegarder les données de contribution pour le modal
+        setLastContribution({
+          depart: formData.depart,
+          arrivee: formData.arrivee,
+          prix: parseFloat(formData.price),
+          distance: routeStats?.distance,
+        });
+        
         setShowSuccessModal(true);
     } catch (err) {
         showToast.error(t('add.add_error'));
@@ -371,7 +381,14 @@ export default function AddTrajetPageDesktop() {
         </div>
       </main>
 
-      <TrajetAddedModal isOpen={showSuccessModal} onClose={() => { setShowSuccessModal(false); navigate('/estimate'); }} />
+      {/* Modal de succès enrichi avec marketplace */}
+      <ContributionSuccessModal 
+        isOpen={showSuccessModal}
+        onClose={() => { 
+          setShowSuccessModal(false);
+        }}
+        contributionData={lastContribution}
+      />
     </div>
   );
 }

@@ -9,7 +9,7 @@ import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { 
   Mail, Phone, MessageCircle, MapPin, 
-  ExternalLink, Github, Twitter, Linkedin,
+  ExternalLink, Instagram, Twitter, Facebook,
   Heart, ChevronRight
 } from 'lucide-react';
 import { useAppNavigate } from '../hooks/useAppNavigate';
@@ -41,11 +41,21 @@ const Footer = ({ variant = 'default' }) => {
     { label: 'Statistiques', path: '/stats' },
   ];
 
-  const SOCIAL_LINKS = [
-    { icon: Twitter, label: 'Twitter', url: '#' },
-    { icon: Linkedin, label: 'LinkedIn', url: '#' },
-    { icon: Github, label: 'GitHub', url: '#' },
-  ];
+  // Liens sociaux dynamiques depuis le backend
+  const getSocialLinks = () => {
+    const links = [];
+    if (contact?.twitter_url) {
+      links.push({ icon: Twitter, label: 'Twitter', url: contact.twitter_url });
+    }
+    if (contact?.facebook_url) {
+      links.push({ icon: Facebook, label: 'Facebook', url: contact.facebook_url });
+    }
+    if (contact?.instagram_url) {
+      links.push({ icon: Instagram, label: 'Instagram', url: contact.instagram_url });
+    }
+    return links;
+  };
+  const SOCIAL_LINKS = getSocialLinks();
 
   // Version compacte pour mobile
   if (variant === 'compact') {

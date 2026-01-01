@@ -32,7 +32,26 @@ export const createSouscription = async (data) => {
     return response.data;
   } catch (error) {
     console.error('❌ [PricingService] Erreur souscription:', error);
-    throw error;
+    
+    // Extraire le message d'erreur de l'API si disponible
+    let userMessage = "Une erreur est survenue lors de l'envoi de la demande.";
+    
+    if (error.response?.data) {
+      const apiErrors = error.response.data;
+      // Si c'est un objet d'erreurs de validation
+      if (typeof apiErrors === 'object' && !Array.isArray(apiErrors)) {
+        const errorMessages = Object.entries(apiErrors)
+          .map(([field, messages]) => `${field}: ${Array.isArray(messages) ? messages.join(', ') : messages}`)
+          .join(' | ');
+        userMessage = errorMessages || userMessage;
+      } else if (typeof apiErrors === 'string') {
+        userMessage = apiErrors;
+      }
+    }
+    
+    const enhancedError = new Error(error.message);
+    enhancedError.userMessage = userMessage;
+    throw enhancedError;
   }
 };
 

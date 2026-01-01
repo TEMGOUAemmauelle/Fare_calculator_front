@@ -92,7 +92,10 @@ const PricingCard = ({
             </div>
             <div>
               <h3 className="font-black italic uppercase tracking-tighter text-lg">{offre.nom}</h3>
-              <p className="text-[10px] font-bold text-gray-400 uppercase tracking-widest">{offre.duree_jours} jours</p>
+              <p className="text-[10px] font-bold text-gray-400 uppercase tracking-widest">
+                <span className="text-gray-900 mr-1">{offre.duree_jours}</span>
+                JOURS
+              </p>
             </div>
           </div>
         </div>
@@ -106,10 +109,10 @@ const PricingCard = ({
           whileTap={{ scale: 0.98 }}
           onClick={() => onSubscribe?.(offre)}
           disabled={isLoading}
-          className={`w-full py-4 rounded-2xl font-black text-[10px] uppercase tracking-[0.2em] transition-all ${
+          className={`w-full py-4 rounded-2xl font-black text-[10px] uppercase tracking-[0.2em] transition-all border ${
             isFeatured
-              ? 'bg-[#f3cd08] text-black shadow-lg shadow-[#f3cd08]/20'
-              : 'bg-gray-50 text-gray-900 hover:bg-gray-100'
+              ? 'bg-[#f3cd08] text-black border-[#f3cd08] shadow-lg shadow-[#f3cd08]/20'
+              : 'bg-white text-gray-900 border-gray-200 hover:bg-gray-50'
           }`}
         >
           {isLoading ? '...' : 'Souscrire'}
