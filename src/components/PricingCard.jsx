@@ -1,8 +1,7 @@
 /**
  * @fileoverview PricingCard - Carte d'offre d'abonnement
  * 
- * Composant élégant pour afficher une offre d'abonnement
- * avec animation et design moderne.
+ * Composant minimaliste et professionnel pour afficher une offre d'abonnement.
  */
 
 import React from 'react';
@@ -12,20 +11,20 @@ import { Check, Sparkles, Zap, Crown, ArrowRight } from 'lucide-react';
 const TIER_CONFIG = {
   starter: {
     icon: Zap,
-    gradient: 'from-blue-500 to-cyan-500',
-    shadow: 'shadow-blue-500/20',
+    color: 'text-gray-400',
+    bg: 'bg-gray-50',
     badge: null
   },
   business: {
     icon: Sparkles,
-    gradient: 'from-[#f3cd08] to-amber-500',
-    shadow: 'shadow-amber-500/20',
+    color: 'text-[#f3cd08]',
+    bg: 'bg-[#f3cd08]/10',
     badge: 'Populaire'
   },
   premium: {
     icon: Crown,
-    gradient: 'from-purple-500 to-pink-500',
-    shadow: 'shadow-purple-500/20',
+    color: 'text-gray-900',
+    bg: 'bg-gray-100',
     badge: 'Premium'
   }
 };
@@ -51,7 +50,7 @@ const PricingCard = ({
     return new Intl.NumberFormat('fr-FR').format(prix);
   };
 
-  // Parser les fonctionnalités (supposées séparées par des virgules ou en JSON)
+  // Parser les fonctionnalités
   const parseFeatures = (features) => {
     if (!features) return [];
     if (Array.isArray(features)) return features;
@@ -72,139 +71,111 @@ const PricingCard = ({
         initial={{ opacity: 0, y: 20 }}
         whileInView={{ opacity: 1, y: 0 }}
         viewport={{ once: true }}
-        className={`relative p-5 rounded-2xl border-2 ${
+        className={`relative p-6 rounded-[2.5rem] border ${
           isFeatured 
-            ? 'border-[#f3cd08] bg-gradient-to-br from-[#f3cd08]/5 to-transparent' 
+            ? 'border-[#f3cd08] bg-white shadow-xl shadow-[#f3cd08]/5' 
             : 'border-gray-100 bg-white'
         }`}
       >
         {config.badge && (
-          <div className="absolute -top-3 left-4">
-            <span className={`px-3 py-1 bg-gradient-to-r ${config.gradient} text-white text-[9px] font-black uppercase tracking-wide rounded-full`}>
+          <div className="absolute -top-3 left-8">
+            <span className={`px-3 py-1 ${isFeatured ? 'bg-[#f3cd08] text-black' : 'bg-gray-900 text-white'} text-[8px] font-black uppercase tracking-[0.2em] rounded-full`}>
               {config.badge}
             </span>
           </div>
         )}
         
-        <div className="flex items-center gap-3 mb-3">
-          <div className={`w-10 h-10 rounded-xl bg-gradient-to-br ${config.gradient} flex items-center justify-center`}>
-            <TierIcon className="w-5 h-5 text-white" />
-          </div>
-          <div>
-            <h3 className="font-bold text-gray-900">{offre.nom}</h3>
-            <p className="text-xs text-gray-500">{offre.duree_jours} jours</p>
+        <div className="flex items-center justify-between mb-6">
+          <div className="flex items-center gap-4">
+            <div className={`w-12 h-12 rounded-2xl ${config.bg} flex items-center justify-center`}>
+              <TierIcon className={`w-6 h-6 ${config.color}`} />
+            </div>
+            <div>
+              <h3 className="font-black italic uppercase tracking-tighter text-lg">{offre.nom}</h3>
+              <p className="text-[10px] font-bold text-gray-400 uppercase tracking-widest">{offre.duree_jours} jours</p>
+            </div>
           </div>
         </div>
         
-        <div className="mb-4">
-          <span className="text-2xl font-black">{formatPrice(offre.prix)}</span>
-          {offre.prix > 0 && <span className="text-gray-400 text-sm ml-1">FCFA</span>}
+        <div className="mb-6 flex items-baseline gap-1">
+          <span className="text-3xl font-black tracking-tighter italic">{formatPrice(offre.prix)}</span>
+          {offre.prix > 0 && <span className="text-gray-400 text-[10px] font-black uppercase tracking-widest">FCFA</span>}
         </div>
         
         <motion.button
-          whileTap={{ scale: 0.95 }}
+          whileTap={{ scale: 0.98 }}
           onClick={() => onSubscribe?.(offre)}
           disabled={isLoading}
-          className={`w-full py-3 rounded-xl font-bold text-sm transition-all ${
+          className={`w-full py-4 rounded-2xl font-black text-[10px] uppercase tracking-[0.2em] transition-all ${
             isFeatured
-              ? 'bg-[#141414] text-white'
-              : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
+              ? 'bg-[#f3cd08] text-black shadow-lg shadow-[#f3cd08]/20'
+              : 'bg-gray-50 text-gray-900 hover:bg-gray-100'
           }`}
         >
-          {isLoading ? 'Chargement...' : 'Souscrire'}
+          {isLoading ? '...' : 'Souscrire'}
         </motion.button>
       </motion.div>
     );
   }
 
-  // Variante default / featured
+  // Variante default / featured (Desktop)
   return (
     <motion.div
       initial={{ opacity: 0, y: 30 }}
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true }}
-      whileHover={{ y: -8 }}
-      className={`relative p-8 rounded-3xl transition-all ${
+      className={`relative p-10 rounded-[3rem] transition-all border ${
         isFeatured 
-          ? `border-2 border-[#f3cd08] bg-gradient-to-br from-[#f3cd08]/5 via-white to-white shadow-2xl ${config.shadow}` 
-          : 'border-2 border-gray-100 bg-white hover:border-gray-200 hover:shadow-xl'
+          ? 'border-[#f3cd08] bg-white shadow-2xl shadow-[#f3cd08]/10' 
+          : 'border-gray-100 bg-white hover:border-gray-200'
       }`}
     >
-      {/* Badge */}
       {config.badge && (
         <div className="absolute -top-4 left-1/2 -translate-x-1/2">
-          <motion.span
-            initial={{ scale: 0 }}
-            animate={{ scale: 1 }}
-            transition={{ delay: 0.3, type: 'spring' }}
-            className={`px-4 py-1.5 bg-gradient-to-r ${config.gradient} text-white text-[10px] font-black uppercase tracking-widest rounded-full shadow-lg`}
-          >
+          <span className={`px-4 py-1.5 ${isFeatured ? 'bg-[#f3cd08] text-black' : 'bg-gray-900 text-white'} text-[9px] font-black uppercase tracking-[0.3em] rounded-full shadow-lg`}>
             {config.badge}
-          </motion.span>
+          </span>
         </div>
       )}
 
-      {/* Header */}
-      <div className="text-center mb-8">
-        <div className={`w-16 h-16 rounded-2xl bg-gradient-to-br ${config.gradient} flex items-center justify-center mx-auto mb-4 shadow-lg ${config.shadow}`}>
-          <TierIcon className="w-8 h-8 text-white" />
+      <div className="text-center mb-10">
+        <div className={`w-20 h-20 rounded-[2rem] ${config.bg} flex items-center justify-center mx-auto mb-6`}>
+          <TierIcon className={`w-10 h-10 ${config.color}`} />
         </div>
-        <h3 className="text-2xl font-black text-gray-900 mb-2">{offre.nom}</h3>
-        <p className="text-sm text-gray-500">{offre.description}</p>
+        <h3 className="text-2xl font-black italic uppercase tracking-tighter mb-2">{offre.nom}</h3>
+        <p className="text-[10px] font-bold text-gray-400 uppercase tracking-[0.2em]">{offre.duree_jours} jours d'accès</p>
       </div>
 
-      {/* Prix */}
-      <div className="text-center mb-8">
+      <div className="text-center mb-10">
         <div className="flex items-baseline justify-center gap-1">
-          <span className="text-5xl font-black">{formatPrice(offre.prix)}</span>
-          {offre.prix > 0 && (
-            <span className="text-gray-400 text-lg font-medium">FCFA</span>
-          )}
+          <span className="text-5xl font-black tracking-tighter italic">{formatPrice(offre.prix)}</span>
+          {offre.prix > 0 && <span className="text-gray-400 text-xs font-black uppercase tracking-widest">FCFA</span>}
         </div>
-        <p className="text-sm text-gray-400 mt-2">
-          pour {offre.duree_jours} jours
-        </p>
       </div>
 
-      {/* Features */}
-      <div className="space-y-4 mb-8">
-        {features.map((feature, index) => (
-          <motion.div
-            key={index}
-            initial={{ opacity: 0, x: -10 }}
-            whileInView={{ opacity: 1, x: 0 }}
-            viewport={{ once: true }}
-            transition={{ delay: index * 0.1 }}
-            className="flex items-center gap-3"
-          >
-            <div className={`w-5 h-5 rounded-full bg-gradient-to-br ${config.gradient} flex items-center justify-center flex-shrink-0`}>
-              <Check className="w-3 h-3 text-white" strokeWidth={3} />
+      <div className="space-y-4 mb-10">
+        {features.map((feature, idx) => (
+          <div key={idx} className="flex items-center gap-3">
+            <div className={`w-5 h-5 rounded-full ${isFeatured ? 'bg-[#f3cd08]/20' : 'bg-gray-50'} flex items-center justify-center flex-shrink-0`}>
+              <Check className={`w-3 h-3 ${isFeatured ? 'text-[#f3cd08]' : 'text-gray-400'}`} />
             </div>
-            <span className="text-gray-600 text-sm">{feature}</span>
-          </motion.div>
+            <span className="text-sm font-medium text-gray-600">{feature}</span>
+          </div>
         ))}
       </div>
 
-      {/* CTA */}
       <motion.button
-        whileHover={{ scale: 1.02 }}
+        whileHover={{ y: -2 }}
         whileTap={{ scale: 0.98 }}
         onClick={() => onSubscribe?.(offre)}
         disabled={isLoading}
-        className={`w-full py-4 rounded-2xl font-bold text-sm flex items-center justify-center gap-2 transition-all ${
+        className={`w-full py-5 rounded-[1.5rem] font-black text-[11px] uppercase tracking-[0.2em] transition-all ${
           isFeatured
-            ? `bg-gradient-to-r ${config.gradient} text-white shadow-lg hover:shadow-xl ${config.shadow}`
-            : 'bg-[#141414] text-white hover:bg-gray-800'
+            ? 'bg-[#f3cd08] text-black shadow-xl shadow-[#f3cd08]/20'
+            : 'bg-gray-900 text-white hover:bg-black'
         }`}
       >
-        {isLoading ? (
-          <span>Chargement...</span>
-        ) : (
-          <>
-            <span>Commencer maintenant</span>
-            <ArrowRight className="w-4 h-4" />
-          </>
-        )}
+        {isLoading ? 'Traitement...' : 'Choisir ce plan'}
       </motion.button>
     </motion.div>
   );

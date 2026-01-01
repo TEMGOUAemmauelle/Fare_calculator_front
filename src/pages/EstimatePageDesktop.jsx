@@ -16,6 +16,7 @@ import { useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { useAppNavigate } from '../hooks/useAppNavigate';
 import LanguageSwitcher from '../components/LanguageSwitcher';
+import NavbarDesktop from '../components/NavbarDesktop';
 import OutOfBoundsModal from '../components/OutOfBoundsModal';
 import { 
   MapPin, 
@@ -385,66 +386,41 @@ export default function EstimatePageDesktop() {
   };
 
   return (
-    <div className="flex h-screen overflow-hidden bg-[#f8f8f5]">
-      {/* Carte - Gauche */}
-      <div className="flex-1 relative">
-        <MapView
-          center={depart?.coordinates || [11.5021, 3.8480]}
-          zoom={12}
-          markers={markers}
-          route={route}
-          showControls={true}
-          showGeolocate={true}
-          className="absolute inset-0"
-          height="100vh"
-        />
-        
-        {/* Central switch en haut - Premium Glass */}
-        <div className="absolute top-6 left-1/2 -translate-x-1/2 z-20">
-          <motion.div
-            initial={{ opacity: 0, y: -20 }}
-            animate={{ opacity: 1, y: 0 }}
-            className="bg-white/80 backdrop-blur-xl rounded-full p-1.5 shadow-[0_8px_30px_rgba(0,0,0,0.08)] border border-white/40"
-          >
-            <div className="flex gap-1">
-
-              <button
-                onClick={() => navigate('/estimate')}
-                className="px-6 py-3 bg-linear-to-r from-yellow-400 to-yellow-500 text-[#231f0f] rounded-full font-bold text-sm flex items-center gap-2 shadow-lg"
-              >
-                <Calculator className="w-4 h-4" strokeWidth={3} />
-                <span>{t('nav.estimate')}</span>
-              </button>
-              
-              <button
-                onClick={() => navigate('/add-trajet')}
-                className="px-6 py-3 bg-transparent hover:bg-gray-100 text-gray-700 rounded-full font-bold text-sm flex items-center gap-2 transition-all"
-              >
-                <PlusCircle className="w-4 h-4" strokeWidth={2.5} />
-                <span>{t('nav.add')}</span>
-              </button>
-            </div>
-          </motion.div>
+    <div className="h-screen flex flex-col bg-[#f8f8f5]">
+      <NavbarDesktop activeRoute="/estimate" />
+      
+      <div className="flex-1 flex overflow-hidden pt-20">
+        {/* Carte - Gauche */}
+        <div className="flex-1 relative">
+          <MapView
+            center={depart?.coordinates || [11.5021, 3.8480]}
+            zoom={12}
+            markers={markers}
+            route={route}
+            showControls={true}
+            showGeolocate={true}
+            className="absolute inset-0"
+            height="100%"
+          />
         </div>
-      </div>
 
-      {/* Sidebar - Droite */}
-      <div className="w-[480px] bg-white shadow-2xl overflow-y-auto">
-        <div className="p-6">
-          {!showResults ? (
-            <>
-              {/* Header */}
-              <div className="mb-8">
-                <div className="flex items-center justify-between mb-2">
-                  <h2 className="text-3xl font-black text-gray-700">
-                    {t('predict.estimate_a_trip')}
-                  </h2>
-                  <LanguageSwitcher variant="dark" />
+        {/* Sidebar - Droite */}
+        <div className="w-[480px] bg-white shadow-2xl overflow-y-auto z-10">
+          <div className="p-8">
+            {!showResults ? (
+              <>
+                {/* Header */}
+                <div className="mb-10">
+                  <div className="flex items-center gap-3 mb-2">
+                    <div className="w-1 h-6 bg-[#f3cd08] rounded-full" />
+                    <h2 className="text-3xl font-black italic uppercase tracking-tighter leading-none">
+                      {t('predict.estimate_a_trip')}
+                    </h2>
+                  </div>
+                  <p className="text-sm text-gray-400 font-medium">
+                    {t('estimate.subtitle')}
+                  </p>
                 </div>
-                <p className="text-sm text-gray-600">
-                  {t('estimate.subtitle')}
-                </p>
-              </div>
 
               {/* Inputs */}
               <div className="flex flex-col gap-4 mb-6">

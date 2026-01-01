@@ -67,55 +67,51 @@ export default function MarketplacePageMobile() {
   }, [services, selectedCategory, searchQuery]);
 
   return (
-    <div className="min-h-screen bg-gray-50">
-      {/* Header fixe */}
-      <div className="fixed top-0 left-0 right-0 z-50 bg-white border-b border-gray-100">
-        <div className="px-4 pt-12 pb-4">
-          <div className="flex items-center justify-between mb-4">
-            <button 
-              onClick={() => navigate(-1)} 
-              className="p-2.5 bg-gray-50 rounded-xl active:scale-95 transition-transform"
-            >
-              <ArrowLeft className="w-5 h-5 text-gray-700" />
-            </button>
-            
-            <div className="flex items-center gap-2">
-              <Store className="w-5 h-5 text-[#f3cd08]" />
-              <h1 className="text-lg font-black uppercase tracking-tight italic">
-                Marketplace
+    <div className="min-h-screen bg-white">
+      {/* Header fixe - Design plus épuré */}
+      <div className="fixed top-0 left-0 right-0 z-50 bg-white/90 backdrop-blur-xl border-b border-gray-50">
+        <div className="px-6 pt-14 pb-6">
+          <div className="flex items-center justify-between mb-6">
+            <div className="flex flex-col">
+              <div className="flex items-center gap-2 mb-1">
+                <div className="w-1 h-4 bg-[#f3cd08] rounded-full" />
+                <span className="text-[10px] font-black text-gray-400 uppercase tracking-[0.2em]">Ecosystème</span>
+              </div>
+              <h1 className="text-3xl font-black uppercase tracking-tighter italic leading-none">
+                Market<span className="text-[#f3cd08]">place</span>
               </h1>
             </div>
             
             <button 
-              onClick={() => setViewMode(viewMode === 'grid' ? 'list' : 'grid')}
-              className="p-2.5 bg-gray-50 rounded-xl text-gray-400"
+              onClick={() => navigate(-1)} 
+              className="p-3 bg-gray-50 rounded-2xl active:scale-90 transition-all"
             >
-              {viewMode === 'grid' ? <List className="w-5 h-5" /> : <Grid className="w-5 h-5" />}
+              <ArrowLeft className="w-5 h-5 text-gray-900" />
             </button>
           </div>
 
-          {/* Barre de recherche */}
-          <div className="relative mb-4">
-            <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" />
+          {/* Barre de recherche - Plus pro */}
+          <div className="relative mb-6">
+            <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-300" />
             <input
               type="text"
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
               placeholder="Rechercher un service..."
-              className="w-full pl-10 pr-4 py-3 bg-gray-50 rounded-xl text-sm font-medium outline-none focus:ring-2 focus:ring-[#f3cd08] transition-all"
+              className="w-full pl-12 pr-4 py-4 bg-gray-50 border-none rounded-2xl text-sm font-bold outline-none ring-2 ring-transparent focus:ring-[#f3cd08]/20 transition-all"
             />
           </div>
 
-          {/* Filtres par catégorie */}
-          <div className="flex gap-2 overflow-x-auto pb-2 -mx-4 px-4 scrollbar-hide">
+          {/* Filtres par catégorie - Plus fins */}
+          <div className="flex gap-2 overflow-x-auto pb-1 -mx-6 px-6 scrollbar-hide">
             {CATEGORIES.map((cat) => (
               <button
                 key={cat.id}
                 onClick={() => setSelectedCategory(cat.id)}
-                className={`px-4 py-2 rounded-full text-xs font-bold uppercase tracking-wide whitespace-nowrap transition-all ${
+                className={`px-5 py-2.5 rounded-xl text-[10px] font-black uppercase tracking-widest whitespace-nowrap transition-all ${
                   selectedCategory === cat.id
-                    ? 'bg-[#141414] text-white'
-                    : 'bg-gray-100 text-gray-500 hover:bg-gray-200'
+                    ? 'bg-[#141414] text-[#f3cd08] shadow-lg shadow-black/10'
+                    : 'bg-gray-50 text-gray-400'
                 }`}
               >
                 {cat.label}
@@ -125,28 +121,28 @@ export default function MarketplacePageMobile() {
         </div>
       </div>
 
-      {/* Contenu */}
-      <div className="pt-52 pb-8 px-4">
+      {/* Contenu - Espacement ajusté */}
+      <div className="pt-64 pb-12 px-6">
         {loading ? (
           <div className="grid grid-cols-2 gap-4">
             {[...Array(6)].map((_, i) => (
-              <div key={i} className="h-40 bg-white rounded-2xl animate-pulse" />
+              <div key={i} className="h-44 bg-gray-50 rounded-[2rem] animate-pulse" />
             ))}
           </div>
         ) : filteredServices.length === 0 ? (
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
-            className="text-center py-16"
+            className="text-center py-20 bg-gray-50 rounded-[3rem] border border-dashed border-gray-200"
           >
-            <div className="w-20 h-20 bg-gray-100 rounded-full flex items-center justify-center mx-auto mb-4">
-              <Search className="w-8 h-8 text-gray-300" />
+            <div className="w-16 h-16 bg-white rounded-2xl flex items-center justify-center mx-auto mb-4 shadow-sm">
+              <Search className="w-6 h-6 text-gray-200" />
             </div>
-            <h3 className="text-lg font-bold text-gray-600 mb-2">
-              Aucun service trouvé
+            <h3 className="text-lg font-black uppercase tracking-tighter italic mb-1">
+              Aucun résultat
             </h3>
-            <p className="text-sm text-gray-400">
-              Essayez avec d'autres critères de recherche
+            <p className="text-xs text-gray-400 font-medium">
+              Essayez d'autres mots-clés
             </p>
           </motion.div>
         ) : (
@@ -156,10 +152,7 @@ export default function MarketplacePageMobile() {
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
-              className={viewMode === 'grid' 
-                ? 'grid grid-cols-2 gap-4' 
-                : 'flex flex-col gap-3'
-              }
+              className="grid grid-cols-2 gap-4"
             >
               {filteredServices.map((service, index) => (
                 <motion.div
@@ -170,7 +163,7 @@ export default function MarketplacePageMobile() {
                 >
                   <MarketplaceCard 
                     service={service} 
-                    variant={viewMode === 'grid' ? 'compact' : 'default'}
+                    variant="compact"
                   />
                 </motion.div>
               ))}
@@ -184,10 +177,10 @@ export default function MarketplacePageMobile() {
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             transition={{ delay: 0.3 }}
-            className="mt-8 text-center"
+            className="mt-10 text-center"
           >
-            <p className="text-xs text-gray-400">
-              {filteredServices.length} service{filteredServices.length > 1 ? 's' : ''} disponible{filteredServices.length > 1 ? 's' : ''}
+            <p className="text-[10px] font-black text-gray-300 uppercase tracking-[0.2em]">
+              {filteredServices.length} service{filteredServices.length > 1 ? 's' : ''} trouvé{filteredServices.length > 1 ? 's' : ''}
             </p>
           </motion.div>
         )}

@@ -7,16 +7,16 @@
 
 import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { ArrowLeft, CreditCard, Check, Sparkles, Shield, Zap, Users } from 'lucide-react';
+import { ArrowLeft, CreditCard, Check, Sparkles, Shield, Zap, Users, Eye, TrendingUp, Headphones } from 'lucide-react';
 import { useAppNavigate } from '../hooks/useAppNavigate';
 import PricingCard from '../components/PricingCard';
 import SubscriptionForm from '../components/SubscriptionForm';
 import { getOffresAbonnement, createSouscription } from '../services/pricingService';
 
 const FEATURES_LIST = [
-  { icon: Shield, text: "Accès API sécurisé" },
-  { icon: Zap, text: "Estimations illimitées" },
-  { icon: Users, text: "Support dédié" },
+  { icon: Eye, text: "Visibilité accrue" },
+  { icon: TrendingUp, text: "Clientèle boostée" },
+  { icon: Headphones, text: "Support dédié" },
 ];
 
 export default function PricingPageMobile() {
@@ -56,62 +56,58 @@ export default function PricingPageMobile() {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-gray-50 to-white">
-      {/* Header */}
-      <div className="sticky top-0 z-50 bg-white/80 backdrop-blur-xl border-b border-gray-100">
-        <div className="px-4 pt-12 pb-4 flex items-center justify-between">
-          <button 
-            onClick={() => navigate(-1)} 
-            className="p-2.5 bg-gray-50 rounded-xl active:scale-95 transition-transform"
-          >
-            <ArrowLeft className="w-5 h-5 text-gray-700" />
-          </button>
-          
-          <div className="flex items-center gap-2">
-            <CreditCard className="w-5 h-5 text-[#f3cd08]" />
-            <h1 className="text-lg font-black uppercase tracking-tight italic">
-              Pricing
+    <div className="min-h-screen bg-white">
+      {/* Header - Plus épuré */}
+      <div className="sticky top-0 z-50 bg-white/90 backdrop-blur-xl border-b border-gray-50">
+        <div className="px-6 pt-14 pb-6 flex items-center justify-between">
+          <div className="flex flex-col">
+            <div className="flex items-center gap-2 mb-1">
+              <div className="w-1 h-4 bg-[#f3cd08] rounded-full" />
+              <span className="text-[10px] font-black text-gray-400 uppercase tracking-[0.2em]">Partenariats</span>
+            </div>
+            <h1 className="text-3xl font-black uppercase tracking-tighter italic leading-none">
+              Pri<span className="text-[#f3cd08]">cing</span>
             </h1>
           </div>
           
-          <div className="w-10" /> {/* Spacer */}
+          <button 
+            onClick={() => navigate(-1)} 
+            className="p-3 bg-gray-50 rounded-2xl active:scale-90 transition-all"
+          >
+            <ArrowLeft className="w-5 h-5 text-gray-900" />
+          </button>
         </div>
       </div>
 
       {/* Hero */}
-      <div className="px-6 py-8 text-center">
+      <div className="px-8 py-12 text-center">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
         >
-          <div className="inline-flex items-center gap-2 px-4 py-2 bg-[#f3cd08]/10 rounded-full mb-4">
-            <Sparkles className="w-4 h-4 text-[#f3cd08]" />
-            <span className="text-xs font-bold text-[#f3cd08] uppercase tracking-wide">
-              Devenez partenaire
-            </span>
-          </div>
-          <h2 className="text-3xl font-black italic uppercase tracking-tighter mb-3">
-            Choisissez votre <span className="text-[#f3cd08]">plan</span>
+          <h2 className="text-4xl font-black italic uppercase tracking-tighter leading-none mb-4">
+            Boostez votre <br/>
+            <span className="text-[#f3cd08]">Croissance</span>
           </h2>
-          <p className="text-sm text-gray-500 max-w-xs mx-auto">
-            Accédez à notre API et intégrez les estimations de taxi dans votre application
+          <p className="text-sm text-gray-400 font-medium max-w-xs mx-auto leading-relaxed">
+            Rejoignez l'écosystème FareCal et profitez d'une visibilité unique au Cameroun.
           </p>
         </motion.div>
       </div>
 
       {/* Offres */}
-      <div className="px-4 pb-8">
+      <div className="px-6 pb-12">
         {loading ? (
-          <div className="space-y-4">
+          <div className="space-y-6">
             {[1, 2, 3].map((i) => (
-              <div key={i} className="h-48 bg-white rounded-2xl animate-pulse" />
+              <div key={i} className="h-56 bg-gray-50 rounded-[2.5rem] animate-pulse" />
             ))}
           </div>
         ) : (
           <motion.div
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
-            className="space-y-4"
+            className="space-y-6"
           >
             {offres.map((offre, index) => (
               <motion.div
@@ -131,40 +127,40 @@ export default function PricingPageMobile() {
         )}
       </div>
 
-      {/* Features */}
-      <div className="px-6 py-8 bg-white border-t border-gray-100">
-        <h3 className="text-xs font-black text-gray-400 uppercase tracking-widest mb-6 text-center">
-          Inclus dans tous les plans
+      {/* Features - Design minimaliste */}
+      <div className="px-8 py-16 bg-gray-50/50 border-t border-gray-50">
+        <h3 className="text-[10px] font-black text-gray-300 uppercase tracking-[0.3em] mb-10 text-center">
+          Inclus dans chaque plan
         </h3>
-        <div className="space-y-4">
+        <div className="grid grid-cols-1 gap-8">
           {FEATURES_LIST.map((feature, index) => (
             <motion.div
               key={index}
-              initial={{ opacity: 0, x: -20 }}
-              whileInView={{ opacity: 1, x: 0 }}
+              initial={{ opacity: 0, y: 10 }}
+              whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ delay: index * 0.1 }}
-              className="flex items-center gap-4 p-4 bg-gray-50 rounded-xl"
+              className="flex flex-col items-center text-center space-y-4"
             >
-              <div className="w-10 h-10 bg-[#f3cd08]/10 rounded-xl flex items-center justify-center">
-                <feature.icon className="w-5 h-5 text-[#f3cd08]" />
+              <div className="w-16 h-16 bg-white rounded-2xl flex items-center justify-center shadow-sm">
+                <feature.icon className="w-6 h-6 text-[#f3cd08]" />
               </div>
-              <span className="font-medium text-gray-700">{feature.text}</span>
+              <span className="text-sm font-black italic uppercase tracking-tighter">{feature.text}</span>
             </motion.div>
           ))}
         </div>
       </div>
 
-      {/* FAQ teaser */}
-      <div className="px-6 py-8 text-center">
-        <p className="text-sm text-gray-500 mb-4">
-          Des questions sur nos offres ?
+      {/* CTA */}
+      <div className="px-8 py-16 text-center bg-white">
+        <p className="text-sm text-gray-400 font-medium mb-6">
+          Besoin d'une solution sur mesure ?
         </p>
         <button 
-          onClick={() => navigate('/contact')}
-          className="text-[#f3cd08] font-bold text-sm"
+          onClick={() => setShowForm(true)}
+          className="px-8 py-4 bg-[#141414] text-[#f3cd08] rounded-2xl font-black text-[10px] uppercase tracking-widest shadow-xl shadow-black/10"
         >
-          Contactez-nous →
+          Nous contacter
         </button>
       </div>
 

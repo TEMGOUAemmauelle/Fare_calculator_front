@@ -5,17 +5,21 @@
  * avec un design élégant et moderne.
  */
 
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef, useCallback } from 'react';
 import { motion } from 'framer-motion';
 import { Store, ArrowRight, Sparkles } from 'lucide-react';
 import { useAppNavigate } from '../hooks/useAppNavigate';
 import MarketplaceCard from './MarketplaceCard';
 import { getMarketplaceServices } from '../services/marketplaceService';
 
-const MarketplaceSection = ({ maxItems = 4, showTitle = true, variant = 'default' }) => {
+const MarketplaceSection = ({ maxItems = 6, showTitle = true, variant = 'default' }) => {
   const navigate = useAppNavigate();
   const [services, setServices] = useState([]);
   const [loading, setLoading] = useState(true);
+  const scrollRef = useRef(null);
+  const animationRef = useRef(null);
+  const isUserScrolling = useRef(false);
+  const userScrollTimeout = useRef(null);
 
   useEffect(() => {
     const fetchServices = async () => {
@@ -30,6 +34,78 @@ const MarketplaceSection = ({ maxItems = 4, showTitle = true, variant = 'default
     };
     fetchServices();
   }, [maxItems]);
+
+  // Auto-scroll fluide avec CSS animation pour la variante compacte
+  const startAutoScroll = useCallback(() => {
+    if (!scrollRef.current || variant !== 'compact' || services.length === 0) return;
+    
+    const scrollContainer = scrollRef.current;
+    const scrollSpeed = 0.5; // pixels par frame
+    
+    const animate = () => {
+      if (!scrollContainer || isUserScrolling.current) {
+        animationRef.current = requestAnimationFrame(animate);
+        return;
+      }
+      
+      // Calcul du seuil de reset (moitié du contenu car on duplique)
+      const halfWidth = scrollContainer.scrollWidth / 2;
+      
+      // Avancer le scroll
+      scrollContainer.scrollLeft += scrollSpeed;
+      
+      // Reset silencieux quand on atteint la moitié (seamless loop)
+      if (scrollContainer.scrollLeft >= halfWidth) {
+        scrollContainer.scrollLeft = 0;
+      }
+      
+      animationRef.current = requestAnimationFrame(animate);
+    };
+    
+    animationRef.current = requestAnimationFrame(animate);
+  }, [variant, services.length]);
+
+  // Gestion de l'interaction utilisateur
+  const handleUserInteraction = useCallback(() => {
+    isUserScrolling.current = true;
+    
+    // Clear le timeout précédent
+    if (userScrollTimeout.current) {
+      clearTimeout(userScrollTimeout.current);
+    }
+    
+    // Reprendre l'auto-scroll après 3 secondes d'inactivité
+    userScrollTimeout.current = setTimeout(() => {
+      isUserScrolling.current = false;
+    }, 3000);
+  }, []);
+
+  useEffect(() => {
+    if (variant === 'compact' && services.length > 0) {
+      startAutoScroll();
+      
+      const scrollContainer = scrollRef.current;
+      if (scrollContainer) {
+        scrollContainer.addEventListener('touchstart', handleUserInteraction, { passive: true });
+        scrollContainer.addEventListener('mousedown', handleUserInteraction);
+        scrollContainer.addEventListener('wheel', handleUserInteraction, { passive: true });
+      }
+      
+      return () => {
+        if (animationRef.current) {
+          cancelAnimationFrame(animationRef.current);
+        }
+        if (userScrollTimeout.current) {
+          clearTimeout(userScrollTimeout.current);
+        }
+        if (scrollContainer) {
+          scrollContainer.removeEventListener('touchstart', handleUserInteraction);
+          scrollContainer.removeEventListener('mousedown', handleUserInteraction);
+          scrollContainer.removeEventListener('wheel', handleUserInteraction);
+        }
+      };
+    }
+  }, [variant, services, startAutoScroll, handleUserInteraction]);
 
   if (loading) {
     return (
@@ -48,38 +124,45 @@ const MarketplaceSection = ({ maxItems = 4, showTitle = true, variant = 'default
 
   if (!services.length) return null;
 
-  // Variante compacte pour mobile
+  // Variante compacte pour mobile (Homepage)
   if (variant === 'compact') {
+    // Tripler les services pour un défilement vraiment fluide
+    const loopedServices = [...services, ...services, ...services];
+    
     return (
-      <div className="space-y-4">
+      <div className="space-y-3 py-2">
         {showTitle && (
-          <div className="flex items-center justify-between">
+          <div className="flex items-center justify-between px-1">
             <div className="flex items-center gap-2">
-              <Store className="w-4 h-4 text-[#f3cd08]" />
-              <h3 className="text-[10px] font-black text-gray-400 uppercase tracking-widest">
+              <div className="w-1 h-4 bg-[#f3cd08] rounded-full" />
+              <h3 className="text-[10px] font-black text-[#141414] uppercase tracking-widest">
                 Notre Marketplace
               </h3>
             </div>
             <button 
               onClick={() => navigate('/marketplace')}
-              className="text-[10px] font-bold text-[#f3cd08] flex items-center gap-1 hover:gap-2 transition-all"
+              className="text-[9px] font-black text-gray-400 uppercase tracking-widest flex items-center gap-1 hover:text-[#f3cd08] transition-all"
             >
               Voir tout
               <ArrowRight className="w-3 h-3" />
             </button>
           </div>
         )}
-        <div className="flex gap-3 overflow-x-auto pb-2 -mx-2 px-2 scrollbar-hide">
-          {services.map((service, index) => (
-            <motion.div
-              key={service.id || index}
-              initial={{ opacity: 0, x: 20 }}
-              animate={{ opacity: 1, x: 0 }}
-              transition={{ delay: index * 0.1 }}
-              className="flex-shrink-0 w-48"
+        <div 
+          ref={scrollRef}
+          className="flex gap-3 overflow-x-auto pb-2 -mx-4 px-4 scrollbar-hide"
+          style={{ 
+            WebkitOverflowScrolling: 'touch',
+            scrollBehavior: 'auto' // Important: pas de smooth pour éviter les conflits
+          }}
+        >
+          {loopedServices.map((service, index) => (
+            <div
+              key={`item-${index}`}
+              className="flex-shrink-0 w-40"
             >
               <MarketplaceCard service={service} variant="compact" />
-            </motion.div>
+            </div>
           ))}
         </div>
       </div>

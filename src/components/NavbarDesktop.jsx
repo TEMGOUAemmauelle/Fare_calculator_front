@@ -35,6 +35,7 @@ export default function NavbarDesktop({ currentAddress, showCityIndicator = true
   };
 
   const navItems = [
+    { path: '/estimate', label: t('nav.estimate') || 'Estimer' },
     { path: '/trajets', label: t('all_trajets.title') || 'Trajets' },
     { path: '/stats', label: t('stats.dashboard') || 'Statistiques' },
     { path: '/marketplace', label: 'Marketplace' },

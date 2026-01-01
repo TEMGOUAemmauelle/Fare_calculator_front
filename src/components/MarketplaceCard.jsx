@@ -51,8 +51,8 @@ const MarketplaceCard = ({ service, variant = 'default' }) => {
         whileTap={{ scale: 0.98 }}
         className="block bg-white rounded-2xl border border-gray-100 hover:border-[#f3cd08] hover:shadow-lg transition-all group overflow-hidden h-full"
       >
-        {/* Image */}
-        <div className="w-full h-24 bg-gray-100 relative">
+        {/* Image - Hauteur réduite pour un look plus fin */}
+        <div className="w-full h-20 bg-gray-100 relative">
           {imageUrl && !imageError ? (
             <img 
               src={imageUrl} 
@@ -62,17 +62,17 @@ const MarketplaceCard = ({ service, variant = 'default' }) => {
             />
           ) : (
             <div className="w-full h-full bg-gradient-to-br from-gray-100 to-gray-200 flex items-center justify-center">
-              <ImageOff className="w-8 h-8 text-gray-300" />
+              <ImageOff className="w-6 h-6 text-gray-300" />
             </div>
           )}
-          <div className="absolute inset-0 bg-gradient-to-t from-black/30 to-transparent" />
+          <div className="absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-transparent" />
         </div>
         
-        <div className="p-3">
-          <h4 className="font-bold text-gray-900 truncate group-hover:text-[#f3cd08] transition-colors text-sm">
+        <div className="p-2.5">
+          <h4 className="font-bold text-gray-900 truncate group-hover:text-[#f3cd08] transition-colors text-[11px] leading-tight">
             {service.nom}
           </h4>
-          <p className="text-[10px] text-gray-500 truncate mt-1">
+          <p className="text-[9px] text-gray-400 truncate mt-0.5">
             {service.description}
           </p>
         </div>
