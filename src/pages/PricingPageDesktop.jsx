@@ -19,19 +19,19 @@ import SubscriptionForm from '../components/SubscriptionForm';
 import { getOffresAbonnement, createSouscription } from '../services/pricingService';
 
 const ALL_FEATURES = [
-  { icon: Eye, title: "Visibilité accrue", desc: "Mise en avant de votre service auprès de notre communauté active." },
-  { icon: TrendingUp, title: "Clientèle boostée", desc: "Attirez de nouveaux clients grâce à notre plateforme de recommandation." },
-  { icon: Headphones, title: "Support dédié", desc: "Une assistance technique et commerciale à votre écoute." },
+  { icon: Eye, title: "pricing.increased_visibility", desc: "pricing.increased_visibility_desc" },
+  { icon: TrendingUp, title: "pricing.boosted_clientele", desc: "pricing.boosted_clientele_desc" },
+  { icon: Headphones, title: "pricing.dedicated_support", desc: "pricing.dedicated_support_desc" },
 ];
 
 const FAQ_ITEMS = [
   { 
-    q: "Comment fonctionne l'API ?", 
-    a: "Notre API REST vous permet d'obtenir des estimations de prix de taxi en envoyant simplement les coordonnées de départ et d'arrivée." 
+    q: "pricing.faq_api_question", 
+    a: "pricing.faq_api_answer"
   },
   { 
-    q: "Puis-je tester avant de souscrire ?", 
-    a: "Oui ! L'offre Starter est gratuite et vous permet de tester l'API avec un nombre limité de requêtes." 
+    q: "pricing.faq_test_question", 
+    a: "pricing.faq_test_answer"
   },
  
 ];
@@ -155,8 +155,8 @@ export default function PricingPageDesktop() {
                   <feature.icon className="w-8 h-8 text-[#f3cd08]" />
                 </div>
                 <div className="space-y-3">
-                  <h3 className="text-xl font-black italic uppercase tracking-tighter">{feature.title}</h3>
-                  <p className="text-gray-400 font-medium leading-relaxed">{feature.desc}</p>
+                  <h3 className="text-xl font-black italic uppercase tracking-tighter">{t(feature.title)}</h3>
+                  <p className="text-gray-400 font-medium leading-relaxed">{t(feature.desc)}</p>
                 </div>
               </motion.div>
             ))}
@@ -243,7 +243,7 @@ export default function PricingPageDesktop() {
                   onClick={() => setOpenFaq(openFaq === index ? null : index)}
                   className="w-full px-6 py-5 flex items-center justify-between text-left"
                 >
-                  <span className="font-bold">{item.q}</span>
+                  <span className="font-bold">{t(item.q)}</span>
                   <ChevronRight className={`w-5 h-5 text-gray-400 transition-transform ${openFaq === index ? 'rotate-90' : ''}`} />
                 </button>
                 {openFaq === index && (
@@ -252,7 +252,7 @@ export default function PricingPageDesktop() {
                     animate={{ height: 'auto', opacity: 1 }}
                     className="px-6 pb-5"
                   >
-                    <p className="text-gray-500">{item.a}</p>
+                    <p className="text-gray-500">{t(item.a)}</p>
                   </motion.div>
                 )}
               </motion.div>

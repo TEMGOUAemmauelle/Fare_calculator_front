@@ -25,7 +25,6 @@ const ContributionSuccessModal = ({
   const [services, setServices] = useState([]);
   const [loading, setLoading] = useState(true);
   const [isMobile, setIsMobile] = useState(false);
-  const isEn = i18n.language === 'en';
 
   // Détecter si on est sur mobile
   useEffect(() => {
@@ -218,7 +217,7 @@ const ContributionSuccessModal = ({
                         onClick={handleViewAll}
                         className="text-sm font-bold text-[#f3cd08] flex items-center gap-1 hover:underline"
                       >
-                        {isEn ? 'View all' : 'Voir tout'}
+                        {t('contribution_success_modal.view_all')}
                         <ChevronRight className="w-4 h-4" />
                       </button>
                     </div>
@@ -266,11 +265,11 @@ const ContributionSuccessModal = ({
                               )}
                               
                               <h4 className="text-sm font-bold text-gray-900 mb-2 line-clamp-1">
-                                {isEn && service.nom_en ? service.nom_en : service.nom}
+                                {service.nom}
                               </h4>
                               
                               <p className="text-xs text-gray-500 line-clamp-2 leading-relaxed">
-                                {isEn && service.description_en ? service.description_en : service.description}
+                                {service.description}
                               </p>
                               
                               {service.lien_redirection && (
@@ -285,15 +284,13 @@ const ContributionSuccessModal = ({
                     ) : (
                       <div className="text-center py-12">
                         <p className="text-gray-400 text-sm">
-                          {isEn ? 'No services available' : 'Aucun service disponible'}
+                          {t('contribution_success_modal.no_services_available')}
                         </p>
                       </div>
                     )}
 
                     <p className="text-center text-xs text-gray-400 mt-6">
-                      {isEn 
-                        ? 'These services are offered by our partners' 
-                        : 'Ces services sont proposés par nos partenaires'}
+                      {t('contribution_success_modal.services_disclaimer')}
                     </p>
                   </div>
                 </div>
@@ -309,11 +306,11 @@ const ContributionSuccessModal = ({
                         </div>
                         <div>
                           <h2 className="text-lg font-black text-gray-900">
-                            {isEn ? 'Thank you!' : 'Merci !'}
+                            {t('contribution_success_modal.thank_you')}
                           </h2>
                           <p className="text-xs text-gray-500 font-medium flex items-center gap-1">
                             <Heart className="w-3 h-3 text-red-400" fill="currentColor" />
-                            {isEn ? 'You help the community' : 'Vous aidez la communauté'}
+                            {t('contribution_success_modal.help_community')}
                           </p>
                         </div>
                       </div>
@@ -340,7 +337,7 @@ const ContributionSuccessModal = ({
                             </div>
                             <div>
                               <p className="text-[10px] text-gray-400 uppercase tracking-wide font-bold">
-                                {isEn ? 'Trip added' : 'Trajet ajouté'}
+                                {t('contribution_success_modal.trip_added')}
                               </p>
                               <p className="text-sm font-bold text-white truncate max-w-[180px]">
                                 {contributionData.depart?.label?.split(',')[0]} → {contributionData.arrivee?.label?.split(',')[0]}
@@ -367,7 +364,7 @@ const ContributionSuccessModal = ({
                       >
                         <PlusCircle className="w-4 h-4 text-[#f3cd08]" />
                         <span className="text-xs font-bold text-gray-700">
-                          {isEn ? 'Add another' : 'Ajouter un autre'}
+                          {t('contribution_success_modal.add_another')}
                         </span>
                       </motion.button>
                       
@@ -380,7 +377,7 @@ const ContributionSuccessModal = ({
                       >
                         <Calculator className="w-4 h-4 text-gray-500" />
                         <span className="text-xs font-bold text-gray-700">
-                          {isEn ? 'Estimate trip' : 'Estimer un trajet'}
+                          {t('contribution_success_modal.estimate_trip')}
                         </span>
                       </motion.button>
                     </div>
@@ -399,7 +396,7 @@ const ContributionSuccessModal = ({
                         onClick={handleViewAll}
                         className="text-xs font-bold text-[#f3cd08] flex items-center gap-1 hover:underline"
                       >
-                        {isEn ? 'View all' : 'Voir tout'}
+                        {t('contribution_success_modal.view_all')}
                         <ChevronRight className="w-3 h-3" />
                       </button>
                     </div>
@@ -447,11 +444,11 @@ const ContributionSuccessModal = ({
                               )}
                               
                               <h4 className="text-sm font-bold text-gray-900 mb-1 line-clamp-1">
-                                {isEn && service.nom_en ? service.nom_en : service.nom}
+                                {service.nom}
                               </h4>
                               
                               <p className="text-[10px] text-gray-500 line-clamp-2 leading-relaxed">
-                                {isEn && service.description_en ? service.description_en : service.description}
+                                {service.description}
                               </p>
                               
                               {service.lien_redirection && (
@@ -466,7 +463,7 @@ const ContributionSuccessModal = ({
                     ) : (
                       <div className="text-center py-8">
                         <p className="text-gray-400 text-sm">
-                          {isEn ? 'No services available' : 'Aucun service disponible'}
+                          {t('contribution_success_modal.no_services_available')}
                         </p>
                       </div>
                     )}

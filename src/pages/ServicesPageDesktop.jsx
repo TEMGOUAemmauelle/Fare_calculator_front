@@ -15,8 +15,6 @@ export default function ServicesPageDesktop() {
   const [services, setServices] = useState([]);
   const [loading, setLoading] = useState(true);
 
-  const isEn = i18n.language === 'en';
-
   useEffect(() => {
     const fetchServices = async () => {
       try {
@@ -88,7 +86,7 @@ export default function ServicesPageDesktop() {
                 {/* SINGLE MODE */}
                 {layoutMode === 'single' && (
                     <div className="w-full h-[70vh]">
-                        <PartnerCard service={services[0]} isEn={isEn} variant="hero" />
+                        <PartnerCard service={services[0]} t={t} variant="hero" />
                     </div>
                 )}
 
@@ -96,7 +94,7 @@ export default function ServicesPageDesktop() {
                 {layoutMode === 'split' && (
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-4 h-[70vh]">
                         {services.map((service, idx) => (
-                            <PartnerCard key={service.id || idx} service={service} isEn={isEn} variant="tall" />
+                            <PartnerCard key={service.id || idx} service={service} t={t} variant="tall" />
                         ))}
                     </div>
                 )}
@@ -105,7 +103,7 @@ export default function ServicesPageDesktop() {
                 {layoutMode === 'trio' && (
                     <div className="grid grid-cols-1 md:grid-cols-3 gap-4 h-[60vh]">
                         {services.map((service, idx) => (
-                            <PartnerCard key={service.id || idx} service={service} isEn={isEn} variant="tall" />
+                            <PartnerCard key={service.id || idx} service={service} t={t} variant="tall" />
                         ))}
                     </div>
                 )}
@@ -115,16 +113,16 @@ export default function ServicesPageDesktop() {
                     <div className="grid grid-cols-12 gap-4 auto-rows-[400px]">
                         {/* Featured Item (First one spans 8 cols) */}
                         <div className="col-span-12 lg:col-span-8 row-span-1">
-                            <PartnerCard service={services[0]} isEn={isEn} variant="featured" />
+                            <PartnerCard service={services[0]} t={t} variant="featured" />
                         </div>
                         {/* Second Item (Spans 4 cols) */}
                         <div className="col-span-12 lg:col-span-4 row-span-1">
-                            <PartnerCard service={services[1]} isEn={isEn} variant="standard" />
+                            <PartnerCard service={services[1]} t={t} variant="standard" />
                         </div>
                         {/* Rest of items */}
                         {services.slice(2).map((service, idx) => (
                             <div key={service.id || idx + 2} className="col-span-12 md:col-span-6 lg:col-span-4 row-span-1">
-                                <PartnerCard service={service} isEn={isEn} variant="standard" />
+                                <PartnerCard service={service} t={t} variant="standard" />
                             </div>
                         ))}
                     </div>
@@ -132,7 +130,7 @@ export default function ServicesPageDesktop() {
 
                 {services.length === 0 && (
                     <div className="w-full h-[50vh] flex flex-col items-center justify-center border border-dashed border-gray-300 rounded-sm bg-gray-50">
-                        <p className="text-gray-400 font-medium">No partners yet.</p>
+                        <p className="text-gray-400 font-medium">{t('services.no_partners_yet')}</p>
                     </div>
                 )}
             </div>
@@ -146,29 +144,27 @@ export default function ServicesPageDesktop() {
                 <div className="relative z-10 flex flex-col lg:flex-row items-start justify-between gap-20">
                     <div className="space-y-8 max-w-2xl">
                         <h3 className="text-5xl font-black uppercase tracking-tighter leading-none">
-                            {isEn ? 'Join the' : 'Rejoignez le'} <span className="text-[#f3cd08]">{isEn ? 'Network.' : 'Réseau.'}</span>
+                            {t('services.join_the')} <span className="text-[#f3cd08]">{t('services.join_the_network')}</span>
                         </h3>
                         <p className="text-gray-400 text-lg font-medium leading-relaxed max-w-xl">
-                            {isEn 
-                                ? "Position your brand within Cameroon's most innovative transport ecosystem. Reach qualified users directly."
-                                : "Positionnez votre marque au sein de l'écosystème de transport le plus innovant du Cameroun. Touchez des utilisateurs qualifiés directement."}
+                            {t('services.position_brand_desc')}
                         </p>
                         <div className="flex gap-4 pt-4">
                             <button 
                                 onClick={() => navigate('/pricing')}
                                 className="px-8 py-4 bg-white text-black rounded-sm font-bold text-xs uppercase tracking-widest hover:bg-[#f3cd08] transition-colors inline-block"
                             >
-                                {isEn ? 'Apply Now' : 'Postuler'}
+                                {t('services.apply_now')}
                             </button>
                             <a 
                                 href="#"
                                 onClick={(e) => {
                                     e.preventDefault();
-                                    alert(isEn ? 'Media Kit coming soon!' : 'Media Kit bientôt disponible !');
+                                    alert(t('services.media_kit_coming_soon'));
                                 }}
                                 className="px-8 py-4 border border-white/20 text-white rounded-sm font-bold text-xs uppercase tracking-widest hover:bg-white/10 transition-colors inline-block"
                             >
-                                {isEn ? 'Download Media Kit' : 'Télécharger Media Kit'}
+                                {t('services.download_media_kit')}
                             </a>
                         </div>
                     </div>
@@ -176,13 +172,13 @@ export default function ServicesPageDesktop() {
                     <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 w-full lg:w-auto">
                         <div className="p-6 bg-white/5 border border-white/10 rounded-sm backdrop-blur-sm">
                             <Users className="w-6 h-6 text-[#f3cd08] mb-4" />
-                            <h4 className="text-lg font-bold uppercase tracking-tight mb-2">{isEn ? 'Targeted Reach' : 'Portée Ciblée'}</h4>
-                            <p className="text-gray-500 text-xs leading-relaxed">{isEn ? 'Access thousands of daily commuters in major cities.' : 'Accédez à des milliers de navetteurs quotidiens dans les grandes villes.'}</p>
+                            <h4 className="text-lg font-bold uppercase tracking-tight mb-2">{t('services.targeted_reach')}</h4>
+                            <p className="text-gray-500 text-xs leading-relaxed">{t('services.targeted_reach_desc')}</p>
                         </div>
                         <div className="p-6 bg-white/5 border border-white/10 rounded-sm backdrop-blur-sm">
                             <Sparkles className="w-6 h-6 text-[#f3cd08] mb-4" />
-                            <h4 className="text-lg font-bold uppercase tracking-tight mb-2">{isEn ? 'Premium Brand' : 'Marque Premium'}</h4>
-                            <p className="text-gray-500 text-xs leading-relaxed">{isEn ? 'Associate with innovation and reliability.' : 'Associez-vous à l\'innovation et à la fiabilité.'}</p>
+                            <h4 className="text-lg font-bold uppercase tracking-tight mb-2">{t('services.premium_brand')}</h4>
+                            <p className="text-gray-500 text-xs leading-relaxed">{t('services.premium_brand_desc')}</p>
                         </div>
                     </div>
                 </div>
@@ -203,7 +199,7 @@ export default function ServicesPageDesktop() {
   );
 }
 
-function PartnerCard({ service, isEn, variant = 'standard' }) {
+function PartnerCard({ service, t, variant = 'standard' }) {
     const isHero = variant === 'hero';
     const isFeatured = variant === 'featured';
     
@@ -221,7 +217,7 @@ function PartnerCard({ service, isEn, variant = 'standard' }) {
             <div className="absolute inset-0">
                 <img 
                     src={service.image_url} 
-                    alt={isEn ? (service.title_en || service.title) : service.title}
+                    alt={service.title}
                     className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105 grayscale group-hover:grayscale-0"
                 />
                 <div className="absolute inset-0 bg-[#141414]/40 group-hover:bg-[#141414]/20 transition-colors duration-500" />
@@ -240,23 +236,23 @@ function PartnerCard({ service, isEn, variant = 'standard' }) {
                         </span>
                         {isHero && (
                             <span className="px-3 py-1 bg-white/20 backdrop-blur-md text-white rounded-sm text-[9px] font-bold uppercase tracking-widest">
-                                Featured Partner
+                                {t('services.featured_partner')}
                             </span>
                         )}
                     </div>
 
                     <h3 className={`font-black text-white uppercase tracking-tighter mb-4 ${isHero ? 'text-6xl md:text-8xl' : isFeatured ? 'text-4xl md:text-6xl' : 'text-3xl'}`}>
-                        {isEn ? (service.title_en || service.title) : service.title}
+                        {service.title}
                     </h3>
 
                     <div className={`overflow-hidden transition-all duration-500 ${isHero ? 'max-h-40' : 'max-h-0 group-hover:max-h-40'}`}>
                         <p className="text-gray-300 text-sm md:text-base font-medium leading-relaxed max-w-2xl mb-8">
-                            {isEn ? (service.description_en || service.description) : service.description}
+                            {service.description}
                         </p>
                         
                         <div className="flex items-center gap-2 text-white group/btn">
                             <span className="text-xs font-bold uppercase tracking-widest group-hover/btn:text-[#f3cd08] transition-colors">
-                                {isEn ? 'Visit Website' : 'Visiter le site'}
+                                {t('services.visit_website')}
                             </span>
                             <ArrowUpRight className="w-4 h-4 group-hover/btn:text-[#f3cd08] group-hover/btn:translate-x-1 group-hover/btn:-translate-y-1 transition-all" />
                         </div>

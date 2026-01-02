@@ -373,15 +373,33 @@
     "join_ecosystem": "Join the FareCal ecosystem and enjoy unique visibility in Cameroon.",
     "included_in_each_plan": "Included in each plan",
     "increased_visibility": "Increased visibility",
+    "increased_visibility_desc": "Highlight your service to our active community.",
     "boosted_clientele": "Boosted clientele",
-    "dedicated_support": "Dedicated support"
+    "boosted_clientele_desc": "Attract new customers through our recommendation platform.",
+    "dedicated_support": "Dedicated support",
+    "dedicated_support_desc": "Technical and commercial assistance at your service.",
+    "faq_api_question": "How does the API work?",
+    "faq_api_answer": "Our REST API allows you to get taxi price estimates by simply sending the departure and arrival coordinates.",
+    "faq_test_question": "Can I test before subscribing?",
+    "faq_test_answer": "Yes! The Starter plan is free and allows you to test the API with a limited number of requests."
   },
   "services": {
     "the_ecosystem": "The Ecosystem.",
     "verified": "Verified",
-    "join_the_network": "Join the Network.",
+    "join_the": "Join the",
+    "join_the_network": "Network.",
     "position_brand": "Position your brand within Cameroon's most innovative transport ecosystem.",
-    "apply_now": "Apply Now"
+    "position_brand_desc": "Position your brand within Cameroon's most innovative transport ecosystem. Reach qualified users directly.",
+    "targeted_reach": "Targeted Reach",
+    "targeted_reach_desc": "Access thousands of daily commuters in major cities.",
+    "premium_brand": "Premium Brand",
+    "premium_brand_desc": "Associate with innovation and reliability.",
+    "visit_website": "Visit Website",
+    "featured_partner": "Featured Partner",
+    "no_partners_yet": "No partners yet.",
+    "apply_now": "Apply Now",
+    "media_kit_coming_soon": "Media Kit coming soon!",
+    "download_media_kit": "Download Media Kit"
   },
   "splash": {
     "preliminaries": "Preliminaries...",
@@ -432,8 +450,9 @@
     "distance": "Distance",
     "duration": "Duration",
     "got_it": "Got it!",
-    "services_for_you": "Services for you",
-    "services_disclaimer": "These services are offered by our partners"
+    "services_for_you": "Services for you",    "discover_services": "Discover services to simplify your journey",    "services_disclaimer": "These services are offered by our partners",
+    "view_all": "View all",
+    "no_services_available": "No services available"
   } ,
    "contribution_success_modal": {
     "thank_you": "Thank you!",
@@ -447,6 +466,8 @@
     "explore_services": "Explore our partner services",
     "discover_also": "Discover also",
     "view_all": "View all",
-    "services_disclaimer": "These services are offered by our partners"
+    "services_disclaimer": "These services are offered by our partners",
+    "no_services_available": "No services available",
+    "estimate_trip": "Estimate trip"
   }
 }

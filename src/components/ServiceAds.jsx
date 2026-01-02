@@ -117,8 +117,7 @@ export default function ServiceAds({ ads: propAds }) {
 
 function DesktopCarousel({ ads }) {
   const [currentIndex, setCurrentIndex] = useState(0);
-  const { i18n } = useTranslation();
-  const isEn = i18n.language === 'en';
+  const { t, i18n } = useTranslation();
   const timeoutRef = useRef(null);
 
   const resetTimeout = () => {
@@ -188,11 +187,11 @@ function DesktopCarousel({ ads }) {
                  </motion.span>
                  
                  <h2 className="text-7xl font-black text-white leading-[0.9] uppercase tracking-tighter italic drop-shadow-xl text-shadow-lg">
-                    {isEn ? (currentAd.title_en || currentAd.title) : currentAd.title}
+                    {currentAd.title}
                  </h2>
                  
                  <p className="text-gray-200 text-2xl font-medium leading-relaxed max-w-xl border-l-4 border-[#f9d716] pl-6 py-2">
-                    {isEn ? (currentAd.description_en || currentAd.description) : currentAd.description}
+                    {currentAd.description}
                  </p>
 
                  <div className="pt-4">
@@ -204,7 +203,7 @@ function DesktopCarousel({ ads }) {
                         whileTap={{ scale: 0.95 }}
                         className="inline-flex items-center gap-4 px-10 py-5 bg-white text-black rounded-full font-black uppercase tracking-widest text-sm hover:bg-[#f9d716] transition-all duration-300 shadow-xl"
                     >
-                        {isEn ? "Discover Now" : "Découvrir"} <ExternalLink className="w-5 h-5" />
+                        {t('partners.discover_service')} <ExternalLink className="w-5 h-5" />
                     </motion.a>
                  </div>
             </motion.div>
@@ -237,9 +236,8 @@ function DesktopCarousel({ ads }) {
 }
 
 function MobileAdCard({ ad, idx }) {
-  const { i18n } = useTranslation();
+  const { t, i18n } = useTranslation();
   const [isLoaded, setIsLoaded] = useState(false);
-  const isEn = i18n.language === 'en';
 
   return (
     <motion.a
@@ -257,7 +255,7 @@ function MobileAdCard({ ad, idx }) {
       <div className="absolute inset-0">
          <img 
            src={ad.image_url} 
-           alt={isEn ? (ad.title_en || ad.title) : ad.title}
+           alt={ad.title}
            onLoad={() => setIsLoaded(true)}
            className={`w-full h-full object-cover transition-all duration-1000 ${isLoaded ? 'opacity-100 scale-100' : 'opacity-0 scale-110'}`}
          />
@@ -271,10 +269,10 @@ function MobileAdCard({ ad, idx }) {
             {ad.category}
          </span>
          <h4 className="text-white text-lg font-black uppercase tracking-tight leading-none mb-1 shadow-sm">
-             {isEn ? (ad.title_en || ad.title) : ad.title}
+             {ad.title}
          </h4>
          <p className="text-gray-400 text-[9px] font-bold uppercase tracking-wider opacity-80 truncate">
-             {isEn ? (ad.description_en || ad.description) : ad.description}
+             {ad.description}
          </p>
       </div>
       <div className="absolute top-4 right-4 w-1.5 h-1.5 bg-white rounded-full opacity-30 group-hover:bg-[#f9d716] group-hover:opacity-100 transition-all scale-75 group-hover:scale-100" />
