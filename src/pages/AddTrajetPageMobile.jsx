@@ -68,10 +68,12 @@ export default function AddTrajetPageMobile() {
             setFormData(prev => ({ ...prev, depart: loc }));
             setDepartQuery(address);
             setMapCenter([pos.coords.longitude, pos.coords.latitude]);
-            showToast.success(t('add.locate_success_alt'));
+            // Désactivé: ne plus afficher le toast de localisation réussie
+            // showToast.success(t('add.locate_success_alt'));
         }
     } catch (e) {
-        showToast.error(t('add.locate_error_alt'));
+        // Désactivé: ne plus afficher le toast d'échec de localisation
+        // showToast.error(t('add.locate_error_alt'));
     } finally {
         setIsLocating(false);
     }

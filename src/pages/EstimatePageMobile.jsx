@@ -103,10 +103,12 @@ export default function EstimatePageMobile() {
             setDepartPlace({ label: addressLabel, longitude: pos.coords.longitude, latitude: pos.coords.latitude });
             setDepartQuery(addressLabel);
             setMapCenter([pos.coords.longitude, pos.coords.latitude]);
-            showToast.success(t('estimate.locate_success'));
+            // Désactivé: ne plus afficher le toast de localisation réussie
+            // showToast.success(t('estimate.locate_success'));
         }
     } catch (e) {
-        showToast.error(t('estimate.locate_error'));
+        // Désactivé: ne plus afficher le toast d'échec de localisation
+        // showToast.error(t('estimate.locate_error'));
     } finally {
         setIsLocating(false);
     }
