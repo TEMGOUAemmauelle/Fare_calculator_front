@@ -373,15 +373,33 @@
     "join_ecosystem": "Rejoignez l'écosystème FareCal et profitez d'une visibilité unique au Cameroun.",
     "included_in_each_plan": "Inclus dans chaque plan",
     "increased_visibility": "Visibilité accrue",
+    "increased_visibility_desc": "Mise en avant de votre service auprès de notre communauté active.",
     "boosted_clientele": "Clientèle boostée",
-    "dedicated_support": "Support dédié"
+    "boosted_clientele_desc": "Attirez de nouveaux clients grâce à notre plateforme de recommandation.",
+    "dedicated_support": "Support dédié",
+    "dedicated_support_desc": "Une assistance technique et commerciale à votre écoute.",
+    "faq_api_question": "Comment fonctionne l'API ?",
+    "faq_api_answer": "Notre API REST vous permet d'obtenir des estimations de prix de taxi en envoyant simplement les coordonnées de départ et d'arrivée.",
+    "faq_test_question": "Puis-je tester avant de souscrire ?",
+    "faq_test_answer": "Oui ! L'offre Starter est gratuite et vous permet de tester l'API avec un nombre limité de requêtes."
   },
   "services": {
     "the_ecosystem": "The Ecosystem.",
     "verified": "Verified",
-    "join_the_network": "Rejoignez le Réseau.",
+    "join_the": "Rejoignez le",
+    "join_the_network": "Réseau.",
     "position_brand": "Positionnez votre marque au sein de l'écosystème le plus innovant.",
-    "apply_now": "Postuler"
+    "position_brand_desc": "Positionnez votre marque au sein de l'écosystème de transport le plus innovant du Cameroun. Touchez des utilisateurs qualifiés directement.",
+    "targeted_reach": "Portée Ciblée",
+    "targeted_reach_desc": "Accédez à des milliers de navetteurs quotidiens dans les grandes villes.",
+    "premium_brand": "Marque Premium",
+    "premium_brand_desc": "Associez-vous à l'innovation et à la fiabilité.",
+    "visit_website": "Visiter le site",
+    "featured_partner": "Partenaire vedette",
+    "no_partners_yet": "Aucun partenaire pour le moment.",
+    "apply_now": "Postuler",
+    "media_kit_coming_soon": "Media Kit bientôt disponible !",
+    "download_media_kit": "Télécharger Media Kit"
   },
   "splash": {
     "preliminaries": "Préliminaires...",
@@ -433,7 +451,10 @@
     "duration": "Durée",
     "got_it": "C'est compris !",
     "services_for_you": "Services pour vous",
-    "services_disclaimer": "Ces services sont proposés par nos partenaires"
+    "discover_services": "Découvrez des services pour faciliter votre trajet",
+    "services_disclaimer": "Ces services sont proposés par nos partenaires",
+    "view_all": "Voir tout",
+    "no_services_available": "Aucun service disponible"
   },
     "contribution_success_modal": {
     "thank_you": "Merci !",
@@ -447,6 +468,8 @@
     "explore_services": "Découvrez nos services partenaires",
     "discover_also": "Découvrez aussi",
     "view_all": "Voir tout",
-    "services_disclaimer": "Ces services sont proposés par nos partenaires"
+    "services_disclaimer": "Ces services sont proposés par nos partenaires",
+    "no_services_available": "Aucun service disponible",
+    "estimate_trip": "Estimer un trajet"
   }
 }

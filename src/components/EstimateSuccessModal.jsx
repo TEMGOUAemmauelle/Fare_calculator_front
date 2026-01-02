@@ -64,8 +64,6 @@ const EstimateSuccessModal = ({
     navigate('/marketplace');
   };
 
-  const isEn = i18n.language === 'en';
-
   // Animation variants selon le device
   const modalVariants = {
     mobile: {
@@ -201,7 +199,7 @@ const EstimateSuccessModal = ({
                         onClick={handleViewAll}
                         className="text-sm font-bold text-[#f3cd08] flex items-center gap-1 hover:underline"
                       >
-                        {isEn ? 'View all' : 'Voir tout'}
+                        {t('estimate_success_modal.view_all')}
                         <ChevronRight className="w-4 h-4" />
                       </button>
                     </div>
@@ -249,11 +247,11 @@ const EstimateSuccessModal = ({
                               )}
                               
                               <h4 className="text-sm font-bold text-gray-900 mb-2 line-clamp-1">
-                                {isEn && service.nom_en ? service.nom_en : service.nom}
+                                {service.nom}
                               </h4>
                               
                               <p className="text-xs text-gray-500 line-clamp-2 leading-relaxed">
-                                {isEn && service.description_en ? service.description_en : service.description}
+                                {service.description}
                               </p>
                               
                               {service.lien_redirection && (
@@ -268,15 +266,13 @@ const EstimateSuccessModal = ({
                     ) : (
                       <div className="text-center py-12">
                         <p className="text-gray-400 text-sm">
-                          {isEn ? 'No services available' : 'Aucun service disponible'}
+                          {t('estimate_success_modal.no_services_available')}
                         </p>
                       </div>
                     )}
 
                     <p className="text-center text-xs text-gray-400 mt-6">
-                      {isEn 
-                        ? 'These services are offered by our partners' 
-                        : 'Ces services sont proposés par nos partenaires'}
+                      {t('estimate_success_modal.services_disclaimer')}
                     </p>
                   </div>
                 </div>
@@ -292,10 +288,10 @@ const EstimateSuccessModal = ({
                         </div>
                         <div>
                           <h2 className="text-lg font-black text-gray-900">
-                            {isEn ? 'Your trip is ready!' : 'Votre trajet est prêt !'}
+                            {t('estimate_success_modal.title')}
                           </h2>
                           <p className="text-xs text-gray-500 font-medium">
-                            {isEn ? 'Discover services to simplify your journey' : 'Découvrez des services pour faciliter votre trajet'}
+                            {t('estimate_success_modal.discover_services')}
                           </p>
                         </div>
                       </div>
@@ -322,7 +318,7 @@ const EstimateSuccessModal = ({
                             </div>
                             <div>
                               <p className="text-[10px] text-gray-400 uppercase tracking-wide font-bold">
-                                {isEn ? 'Estimated fare' : 'Tarif estimé'}
+                                {t('estimate_success_modal.estimated_fare')}
                               </p>
                               <p className="text-xl font-black text-white">
                                 {estimateData.prix_estime || estimateData.prix_moyen || '---'} <span className="text-sm font-bold text-[#f3cd08]">FCFA</span>
@@ -331,7 +327,7 @@ const EstimateSuccessModal = ({
                           </div>
                           {estimateData.distance && (
                             <div className="text-right">
-                              <p className="text-xs text-gray-400">{isEn ? 'Distance' : 'Distance'}</p>
+                              <p className="text-xs text-gray-400">{t('estimate_success_modal.distance')}</p>
                               <p className="text-sm font-bold text-white">{estimateData.distance} km</p>
                             </div>
                           )}
@@ -346,14 +342,14 @@ const EstimateSuccessModal = ({
                       <div className="flex items-center gap-2">
                         <Store className="w-4 h-4 text-[#f3cd08]" />
                         <h3 className="text-sm font-black text-gray-900 uppercase tracking-wide">
-                          {isEn ? 'Services for you' : 'Services pour vous'}
+                          {t('estimate_success_modal.services_for_you')}
                         </h3>
                       </div>
                       <button
                         onClick={handleViewAll}
                         className="text-xs font-bold text-[#f3cd08] flex items-center gap-1 hover:underline"
                       >
-                        {isEn ? 'View all' : 'Voir tout'}
+                        {t('estimate_success_modal.view_all')}
                         <ChevronRight className="w-3 h-3" />
                       </button>
                     </div>
@@ -401,11 +397,11 @@ const EstimateSuccessModal = ({
                               )}
                               
                               <h4 className="text-sm font-bold text-gray-900 mb-1 line-clamp-1">
-                                {isEn && service.nom_en ? service.nom_en : service.nom}
+                                {service.nom}
                               </h4>
                               
                               <p className="text-[10px] text-gray-500 line-clamp-2 leading-relaxed">
-                                {isEn && service.description_en ? service.description_en : service.description}
+                                {service.description}
                               </p>
                               
                               {service.lien_redirection && (
@@ -420,7 +416,7 @@ const EstimateSuccessModal = ({
                     ) : (
                       <div className="text-center py-8">
                         <p className="text-gray-400 text-sm">
-                          {isEn ? 'No services available' : 'Aucun service disponible'}
+                          {t('estimate_success_modal.no_services_available')}
                         </p>
                       </div>
                     )}

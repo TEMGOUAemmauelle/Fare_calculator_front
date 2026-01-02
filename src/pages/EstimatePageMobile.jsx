@@ -94,7 +94,7 @@ export default function EstimatePageMobile() {
   const arriveeInputRef = useRef(null);
   const departInputRef = useRef(null);
 
-  const performGeolocation = async () => {
+  const performGeolocation = async (isManual = false) => {
     setIsLocating(true);
     try {
         const pos = await geolocationService.getCurrentPosition();
@@ -103,10 +103,14 @@ export default function EstimatePageMobile() {
             setDepartPlace({ label: addressLabel, longitude: pos.coords.longitude, latitude: pos.coords.latitude });
             setDepartQuery(addressLabel);
             setMapCenter([pos.coords.longitude, pos.coords.latitude]);
-            showToast.success(t('estimate.locate_success'));
+            // Désactivé: ne plus afficher le toast de localisation réussie
+            // showToast.success(t('estimate.locate_success'));
         }
     } catch (e) {
-        showToast.error(t('estimate.locate_error'));
+        // Afficher le toast d'échec seulement si c'est une action manuelle
+        if (isManual) {
+            showToast.error(t('estimate.locate_error'));
+        }
     } finally {
         setIsLocating(false);
     }
@@ -317,7 +321,7 @@ export default function EstimatePageMobile() {
                                     />
                                 </div>
                                 <button 
-                                    type="button" onClick={performGeolocation} disabled={isLocating}
+                                    type="button" onClick={() => performGeolocation(true)} disabled={isLocating}
                                     className="p-2 bg-white rounded-lg shadow-sm border border-gray-100 text-[#3b82f6] active:scale-90 transition-transform disabled:opacity-50"
                                 >
                                     {isLocating ? <Loader2 className="w-4 h-4 animate-spin" /> : <LocateFixed className="w-4 h-4" />}

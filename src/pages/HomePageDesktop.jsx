@@ -126,7 +126,7 @@ export default function HomePageDesktop() {
     }, 800);
   };
 
-  const performGeolocation = async () => {
+  const performGeolocation = async (isManual = false) => {
     setIsLocating(true);
     try {
         const pos = await geolocationService.getCurrentPosition();
@@ -135,10 +135,14 @@ export default function HomePageDesktop() {
             setDepartPlace({ label: addressLabel, longitude: pos.coords.longitude, latitude: pos.coords.latitude });
             setDepartQuery(addressLabel);
             setMapCenter([pos.coords.longitude, pos.coords.latitude]);
-            showToast.success(t('estimate.locate_success'));
+            // Désactivé: ne plus afficher le toast de localisation réussie
+            // showToast.success(t('estimate.locate_success'));
         }
     } catch (e) {
-        showToast.error(t('estimate.locate_error'));
+        // Afficher le toast d'échec seulement si c'est une action manuelle
+        if (isManual) {
+            showToast.error(t('estimate.locate_error'));
+        }
     } finally {
         setIsLocating(false);
     }
@@ -376,7 +380,7 @@ export default function HomePageDesktop() {
                                                 className="w-full text-xl font-black text-[#141414] border-none p-0 focus:ring-0 bg-transparent placeholder:text-gray-200 truncate italic"
                                             />
                                             <button 
-                                                type="button" onClick={performGeolocation} disabled={isLocating}
+                                                type="button" onClick={() => performGeolocation(true)} disabled={isLocating}
                                                 className="p-3 bg-white rounded-2xl shadow-md border border-gray-50 text-[#3b82f6] hover:scale-110 active:scale-95 transition-all disabled:opacity-50"
                                             >
                                                 {isLocating ? <Loader2 className="w-5 h-5 animate-spin" /> : <LocateFixed className="w-5 h-5" />}

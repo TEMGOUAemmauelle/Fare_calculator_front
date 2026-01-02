@@ -12,8 +12,6 @@ export default function ServicesPageMobile() {
   const [services, setServices] = useState([]);
   const [loading, setLoading] = useState(true);
 
-  const isEn = i18n.language === 'en';
-
   useEffect(() => {
     const fetchServices = async () => {
       try {
@@ -87,7 +85,7 @@ export default function ServicesPageMobile() {
                         <div className="relative h-40 w-full overflow-hidden">
                             <img 
                                 src={service.image_url} 
-                                alt={isEn ? (service.title_en || service.title) : service.title}
+                                alt={service.title}
                                 className="w-full h-full object-cover"
                             />
                             <div className="absolute inset-0 bg-gradient-to-t from-[#141414] via-[#141414]/40 to-transparent opacity-90" />
@@ -108,10 +106,10 @@ export default function ServicesPageMobile() {
                             </div>
 
                             <h3 className="text-xl font-black text-[#141414] uppercase tracking-tighter mb-2">
-                                {isEn ? (service.title_en || service.title) : service.title}
+                                {service.title}
                             </h3>
                             <p className="text-gray-500 text-[10px] font-medium leading-relaxed line-clamp-2 mb-4">
-                                {isEn ? (service.description_en || service.description) : service.description}
+                                {service.description}
                             </p>
                             
                             <div className="flex items-center gap-2 text-[#141414]">
@@ -135,7 +133,7 @@ export default function ServicesPageMobile() {
                 </div>
                 
                 <h3 className="text-2xl font-black text-white uppercase tracking-tighter leading-none mb-2">
-                    {isEn ? 'Join the' : 'Rejoignez le'} <span className="text-[#f3cd08]">{t('services.join_the_network')}</span>
+                    {t('services.join_the')} <span className="text-[#f3cd08]">{t('services.join_the_network')}</span>
                 </h3>
                 <p className="text-gray-400 text-[10px] font-medium leading-relaxed mb-6">
                     {t('services.position_brand')}
@@ -145,9 +143,9 @@ export default function ServicesPageMobile() {
                     onClick={() => navigate('/pricing')}
                     className="w-full py-3 bg-white text-black rounded-sm font-bold text-[10px] uppercase tracking-widest active:scale-95 transition-all"
                 >
-                    {isEn ? 'Apply Now' : 'Postuler'}
+                    {t('services.apply_now')}
                 </button>
-            </div>t('services.apply_now')
+            </div>
         </div>
       </main>
     </div>
