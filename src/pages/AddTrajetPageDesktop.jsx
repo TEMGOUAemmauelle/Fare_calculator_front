@@ -60,7 +60,7 @@ export default function AddTrajetPageDesktop() {
   const departInputRef = useRef(null);
   const arriveeInputRef = useRef(null);
 
-  const performGeolocation = async () => {
+  const performGeolocation = async (isManual = false) => {
     setIsLocating(true);
     try {
         const pos = await geolocationService.getCurrentPosition();
@@ -74,8 +74,10 @@ export default function AddTrajetPageDesktop() {
             // showToast.success(t('add.locate_success_alt'));
         }
     } catch (e) {
-        // Désactivé: ne plus afficher le toast d'échec de localisation
-        // showToast.error(t('add.locate_error_alt'));
+        // Afficher le toast d'échec seulement si c'est une action manuelle
+        if (isManual) {
+            showToast.error(t('add.locate_error_alt'));
+        }
     } finally {
         setIsLocating(false);
     }
@@ -214,7 +216,7 @@ export default function AddTrajetPageDesktop() {
                                     className="w-full text-xl font-black text-[#141414] border-none p-0 focus:ring-0 bg-transparent placeholder:text-gray-200 italic"
                                 />
                                 <button 
-                                    type="button" onClick={performGeolocation} disabled={isLocating}
+                                    type="button" onClick={() => performGeolocation(true)} disabled={isLocating}
                                     className="p-3 bg-white rounded-2xl shadow-md border border-gray-50 text-[#3b82f6] hover:scale-110 active:scale-95 transition-all disabled:opacity-50"
                                 >
                                     {isLocating ? <Loader2 className="w-5 h-5 animate-spin" /> : <LocateFixed className="w-5 h-5" />}

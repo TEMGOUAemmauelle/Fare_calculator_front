@@ -58,7 +58,7 @@ export default function AddTrajetPageMobile() {
   const [routeStats, setRouteStats] = useState(null);
   const [lastContribution, setLastContribution] = useState(null);
 
-  const performGeolocation = async () => {
+  const performGeolocation = async (isManual = false) => {
     setIsLocating(true);
     try {
         const pos = await geolocationService.getCurrentPosition();
@@ -72,8 +72,10 @@ export default function AddTrajetPageMobile() {
             // showToast.success(t('add.locate_success_alt'));
         }
     } catch (e) {
-        // Désactivé: ne plus afficher le toast d'échec de localisation
-        // showToast.error(t('add.locate_error_alt'));
+        // Afficher le toast d'échec seulement si c'est une action manuelle
+        if (isManual) {
+            showToast.error(t('add.locate_error_alt'));
+        }
     } finally {
         setIsLocating(false);
     }
@@ -265,7 +267,7 @@ export default function AddTrajetPageMobile() {
                                 />
                             </div>
                             <button 
-                                type="button" onClick={performGeolocation} disabled={isLocating}
+                                type="button" onClick={() => performGeolocation(true)} disabled={isLocating}
                                 className="p-2 bg-white rounded-lg shadow-sm border border-gray-100 text-[#3b82f6] active:scale-90 transition-transform disabled:opacity-50"
                             >
                                 {isLocating ? <Loader2 className="w-4 h-4 animate-spin" /> : <LocateFixed className="w-4 h-4" />}
