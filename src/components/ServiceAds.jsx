@@ -1,41 +1,41 @@
 import { useTranslation } from 'react-i18next';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useState, useEffect, useRef } from 'react';
-import { getAds } from '../services/adService';
+import { getMarketplaceServices } from '../services/marketplaceService';
 import { Loader2, ChevronRight, ChevronLeft, ExternalLink } from 'lucide-react';
 
 const MOCK_ADS = [
   {
     id: 1,
-    title: "Yango Pro",
-    title_en: "Yango Pro",
-    description: "Rejoignez la flotte Yango et gagnez plus.",
-    description_en: "Join Yango fleet and earn more.",
+    title: "Tech Service",
+    title_en: "Tech Service",
+    description: "Service technologique de mobilité.",
+    description_en: "Mobility tech service.",
     image_url: "https://images.unsplash.com/photo-1449965408869-eaa3f722e40d?q=80&w=2070&auto=format&fit=crop",
-    category: "Driver",
-    color: "#e63946",
-    app_link: "https://yango.com"
+    category: "Tech",
+    color: "#6366f1",
+    app_link: "#"
   },
   {
     id: 2,
-    title: "Eco Ride Cameroun",
-    title_en: "Eco Ride Cameroon",
-    description: "Le covoiturage écologique et économique.",
-    description_en: "Ecological and economical carpooling.",
+    title: "Livraison Express",
+    title_en: "Express Delivery",
+    description: "Livraison rapide dans toute la ville.",
+    description_en: "Fast delivery across the city.",
     image_url: "https://images.unsplash.com/photo-1494976388531-d1058494cdd8?q=80&w=2070&auto=format&fit=crop",
-    category: "Transport",
-    color: "#2a9d8f",
+    category: "Delivery",
+    color: "#22c55e",
     app_link: "#"
   },
   {
     id: 3,
-    title: "Assurance Zen",
-    title_en: "Zen Insurance",
-    description: "Assurez votre véhicule instantanément.",
-    description_en: "Insure your vehicle instantly.",
+    title: "Finance Mobile",
+    title_en: "Mobile Finance",
+    description: "Services financiers pour conducteurs.",
+    description_en: "Financial services for drivers.",
     image_url: "https://images.unsplash.com/photo-1454165804606-c3d57bc86b40?q=80&w=2070&auto=format&fit=crop",
-    category: "Service",
-    color: "#457b9d",
+    category: "Finance",
+    color: "#f59e0b",
     app_link: "#"
   }
 ];
@@ -62,11 +62,22 @@ export default function ServiceAds({ ads: propAds }) {
 
     const fetchAds = async () => {
       try {
-        const data = await getAds();
-        if (data && data.length > 0) {
-            setAds(data);
+        // Fetching marketplace services for this section
+        const data = await getMarketplaceServices();
+        // Normalize data to match the ad card structure
+        const normalized = (data || []).map(service => ({
+          id: service.id,
+          title: service.nom,
+          description: service.description,
+          image_url: service.logo_url || service.image_url,
+          category: service.categorie,
+          color: '#f3cd08',
+          app_link: service.url || service.lien_redirection
+        }));
+        if (normalized.length > 0) {
+            setAds(normalized);
         } else {
-            console.warn("Backend ads empty, using MOCK data for design review");
+            console.warn("Backend marketplace empty, using MOCK data for design review");
             setAds(MOCK_ADS);
         }
       } catch (err) {
@@ -91,11 +102,11 @@ export default function ServiceAds({ ads: propAds }) {
     <div className="space-y-4 lg:space-y-8 lg:py-8 w-full">
       <div className="flex items-center justify-between px-1 mb-4 lg:mb-8">
         <h3 className="text-[10px] lg:text-3xl font-black text-gray-400 lg:text-[#141414] uppercase tracking-widest lg:tracking-tighter lg:italic pl-1">
-          {isDesktop ? t('partners.discover_partners') : t('partners.partnership_services')}
+          {isDesktop ? t('partners.discover_marketplace') : t('partners.marketplace_services')}
         </h3>
         <a 
-            href="/services" 
-            onClick={(e) => { e.preventDefault(); window.location.href = '/services'; }}
+            href="/marketplace" 
+            onClick={(e) => { e.preventDefault(); window.location.href = '/marketplace'; }}
             className="text-[9px] lg:text-xs font-black text-[#f9d716] lg:text-gray-400 lg:hover:text-[#141414] uppercase tracking-widest hover:underline flex items-center gap-1 transition-colors"
         >
             {t('common.see_all')} <ChevronRight className="w-3 h-3" />

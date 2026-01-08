@@ -328,6 +328,7 @@
     "services": "Services",
     "special_offer": "Special Offer",
     "discover_partners": "Discover our Partner Services",
+    "discover_marketplace": "Discover our Marketplace",
     "optimize_trips": "Optimize your trips",
     "trust_partners": "Trusted partners for traveling with peace of mind",
     "see_offers": "Check offers",
@@ -338,7 +339,8 @@
     "loading_offers": "Loading offers...",
     "suggested_partners": "Suggested partners",
     "see_more": "See more",
-    "partnership_services": "Partner Services"
+    "partnership_services": "Partner Services",
+    "marketplace_services": "Marketplace"
   },
   "marketplace": {
     "title": "Marketplace",

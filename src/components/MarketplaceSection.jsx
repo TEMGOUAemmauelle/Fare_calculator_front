@@ -10,7 +10,7 @@ import { motion } from 'framer-motion';
 import { Store, ArrowRight, Sparkles } from 'lucide-react';
 import { useAppNavigate } from '../hooks/useAppNavigate';
 import MarketplaceCard from './MarketplaceCard';
-import { getMarketplaceServices } from '../services/marketplaceService';
+import { getAds } from '../services/adService';
 
 const MarketplaceSection = ({ maxItems = 6, showTitle = true, variant = 'default' }) => {
   const navigate = useAppNavigate();
@@ -24,10 +24,20 @@ const MarketplaceSection = ({ maxItems = 6, showTitle = true, variant = 'default
   useEffect(() => {
     const fetchServices = async () => {
       try {
-        const data = await getMarketplaceServices();
-        setServices(data.slice(0, maxItems));
+        // Fetching partner ads data for this section
+        const data = await getAds();
+        // Normalize data structure to match MarketplaceCard expectations
+        const normalized = (data || []).map(ad => ({
+          id: ad.id,
+          nom: ad.title,
+          description: ad.description,
+          logo_url: ad.image_url,
+          url: ad.app_link,
+          categorie: ad.category
+        }));
+        setServices(normalized.slice(0, maxItems));
       } catch (error) {
-        console.error('Erreur chargement marketplace:', error);
+        console.error('Erreur chargement partenaires:', error);
       } finally {
         setLoading(false);
       }
@@ -136,11 +146,11 @@ const MarketplaceSection = ({ maxItems = 6, showTitle = true, variant = 'default
             <div className="flex items-center gap-2">
               <div className="w-1 h-4 bg-[#f3cd08] rounded-full" />
               <h3 className="text-[10px] font-black text-[#141414] uppercase tracking-widest">
-                Notre Marketplace
+                Nos Partenaires
               </h3>
             </div>
             <button 
-              onClick={() => navigate('/marketplace')}
+              onClick={() => navigate('/services')}
               className="text-[9px] font-black text-gray-400 uppercase tracking-widest flex items-center gap-1 hover:text-[#f3cd08] transition-all"
             >
               Voir tout
