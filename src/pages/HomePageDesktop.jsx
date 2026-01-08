@@ -16,7 +16,7 @@ import PriceCard from '../components/PriceCard';
 import CarouselAds from '../components/CarouselAds';
 import ServiceAds from '../components/ServiceAds';
 import CityIndicator from '../components/CityIndicator';
-import MarketplaceSection from '../components/MarketplaceSection';
+import MarketplaceSectionDesktop from '../components/MarketplaceSectionDesktop';
 import Footer from '../components/Footer';
 import QuickPriceModal from '../components/QuickPriceModal';
 import EstimateSuccessModal from '../components/EstimateSuccessModal';
@@ -311,7 +311,7 @@ export default function HomePageDesktop() {
       {/* MARKETPLACE SECTION - Juste après ServiceAds */}
       <section className="py-20 px-12 bg-white border-b border-gray-100">
         <div className="max-w-7xl mx-auto">
-          <MarketplaceSection maxItems={4} showTitle={true} variant="default" />
+          <MarketplaceSectionDesktop maxItems={4} showTitle={true} />
         </div>
       </section>
 
