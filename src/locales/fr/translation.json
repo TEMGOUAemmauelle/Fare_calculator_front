@@ -365,7 +365,16 @@
     "navigation": "Navigation",
     "contact": "Contact",
     "follow_us": "Suivez-nous",
-    "join_community": "Rejoignez notre communauté et contribuez à améliorer les estimations."
+    "join_community": "Rejoignez notre communauté et contribuez à améliorer les estimations.",
+    "terms": "Conditions d'utilisation",
+    "cookies": "Cookies & Publicité"
+  },
+  "cookies_modal": {
+    "title": "Cookies & Expérience",
+    "description": "Nous utilisons des cookies pour vous garantir la meilleure expérience sur notre site. En continuant, vous acceptez notre utilisation des cookies.",
+    "accept": "Tout Accepter",
+    "decline": "Essentiels",
+    "learn_more": "Confidentialité"
   },
   "pricing": {
     "partnerships": "Partenariats",
