@@ -346,6 +346,8 @@
     "title": "Marketplace",
     "subtitle": "Partner Services",
     "description": "Discover services that transform daily life in Cameroon. Mobility, delivery and technology.",
+    "home_description": "An exclusive selection of partner services to enrich your daily life.",
+    "explore_catalog": "Explore catalog",
     "search_placeholder": "Search for a service...",
     "no_services": "No services found",
     "categories": {

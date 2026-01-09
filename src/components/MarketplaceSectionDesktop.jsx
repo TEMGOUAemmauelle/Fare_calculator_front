@@ -8,10 +8,12 @@
 import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { Store, ArrowRight, Sparkles, ExternalLink, Loader2 } from 'lucide-react';
+import { useTranslation } from 'react-i18next';
 import { useAppNavigate } from '../hooks/useAppNavigate';
 import { getMarketplaceServices } from '../services/marketplaceService';
 
 const MarketplaceSectionDesktop = ({ maxItems = 4, showTitle = true }) => {
+  const { t } = useTranslation();
   const navigate = useAppNavigate();
   const [services, setServices] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -52,10 +54,13 @@ const MarketplaceSectionDesktop = ({ maxItems = 4, showTitle = true }) => {
                className="h-2 bg-[#f3cd08]" 
              />
             <h2 className="text-6xl font-black italic uppercase tracking-tighter text-[#141414] leading-[0.85]">
-              La <br/> <span className="text-transparent" style={{ WebkitTextStroke: '2px #141414' }}>Marketplace</span>
+              {t('marketplace.title').split(' ')[0]} <br/> 
+              <span className="text-transparent" style={{ WebkitTextStroke: '2px #141414' }}>
+                {t('marketplace.title').split(' ').slice(1).join(' ') || t('marketplace.title')}
+              </span>
             </h2>
             <p className="text-xl text-gray-400 font-medium leading-relaxed">
-              Une sélection exclusive de services partenaires pour enrichir votre expérience.
+              {t('marketplace.home_description')}
             </p>
           </div>
           
@@ -65,7 +70,7 @@ const MarketplaceSectionDesktop = ({ maxItems = 4, showTitle = true }) => {
             onClick={() => navigate('/marketplace')}
             className="flex items-center gap-4 px-8 py-4 bg-[#141414] text-white rounded-full font-black uppercase tracking-widest text-xs hover:bg-[#f3cd08] hover:text-black transition-all shadow-xl"
           >
-            <span>Explorer le catalogue</span>
+            <span>{t('marketplace.explore_catalog')}</span>
             <div className="p-1 bg-white/20 rounded-full">
                 <ArrowRight className="w-4 h-4" />
             </div>
@@ -88,7 +93,7 @@ const MarketplaceSectionDesktop = ({ maxItems = 4, showTitle = true }) => {
             className="group flex flex-col bg-white border border-gray-100 hover:border-[#141414] transition-all duration-300"
           >
             {/* Image Block - Sharp & Clean */}
-            <div className="aspect-[4/3] w-full overflow-hidden bg-gray-50 relative">
+            <div className="aspect-4/3 w-full overflow-hidden bg-gray-50 relative">
                 <img 
                   src={service.logo_url || service.image_url} 
                   alt={service.nom}
@@ -113,7 +118,7 @@ const MarketplaceSectionDesktop = ({ maxItems = 4, showTitle = true }) => {
 
                 <div className="flex items-center justify-between pt-4 border-t border-gray-50 mt-auto">
                     <span className="text-[10px] font-black uppercase tracking-widest text-[#141414] group-hover:tracking-[0.2em] transition-all">
-                        En savoir plus
+                        {t('partners.see_more')}
                     </span>
                     <div className="w-8 h-8 flex items-center justify-center bg-[#141414] text-white group-hover:bg-[#f3cd08] group-hover:text-black transition-colors">
                         <ArrowRight className="w-4 h-4" />
