@@ -363,7 +363,7 @@
     "tagline": "Taxi fare estimator",
     "made_with_love": "Made with",
     "in_cameroon": "in Cameroon",
-    "copyright": "© {year} FareCAL All rights reserved.",
+    "copyright": "© {{year}} Yowyob Inc. Ltd. All rights reserved.",
     "description": "The reference for estimating your taxi fares in Cameroon. Community data, reliable estimates.",
     "location": "Yaoundé, Cameroon",
     "navigation": "Navigation",

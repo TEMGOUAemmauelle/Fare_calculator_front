@@ -304,7 +304,7 @@ export default function MapView({
         data: routeGeoJSON,
       });
 
-      // Outline (subtle dark border to increase contrast)
+      // Outline (bordure pour contraste)
       map.current.addLayer({
         id: `${layerId}-outline`,
         type: 'line',
@@ -314,14 +314,13 @@ export default function MapView({
           'line-cap': 'round',
         },
         paint: {
-          // use a low-opacity dark outline so colored line remains visible on light backgrounds
-          'line-color': 'rgba(17,24,39,0.12)',
-          'line-width': 8,
+          'line-color': '#1e40af', // Bleu foncé pour bordure
+          'line-width': 16, // Plus épais pour effet bordure
           'line-opacity': 1,
         },
       });
 
-      // Ligne principale - Couleur par data-driven styling (congestion)
+      // Ligne principale - Bleu bien visible
       map.current.addLayer({
         id: layerId,
         type: 'line',
@@ -331,17 +330,8 @@ export default function MapView({
           'line-cap': 'round',
         },
         paint: {
-          'line-color': [
-            'match',
-            ['get', 'congestion'],
-            'low', ROUTE_COLORS.congestion.low,        // Vert (fluide)
-            'moderate', ROUTE_COLORS.primary,           // Bleu (modéré)
-            'heavy', ROUTE_COLORS.congestion.moderate,  // Orange (dense)
-            'severe', ROUTE_COLORS.congestion.heavy,    // Rouge (saturé)
-            'unknown', ROUTE_COLORS.unknown,            // Jaune (pas de données)
-            ROUTE_COLORS.unknown // Défaut: jaune (si données manquantes)
-          ],
-          'line-width': 8,
+          'line-color': '#3b82f6', // Bleu vif et solide
+          'line-width': 12, // Bien épais
           'line-opacity': 1,
         },
       });
