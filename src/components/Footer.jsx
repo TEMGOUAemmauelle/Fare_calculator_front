@@ -107,6 +107,12 @@ const Footer = ({ variant = 'default' }) => {
           </div>
         )}
 
+        {/* Legal Links */}
+        <div className="flex justify-center gap-4 text-xs text-gray-500 mb-6">
+          <button onClick={() => navigate('/terms')} className="hover:text-white transition-colors">{t('footer.terms')}</button>
+          <button onClick={() => navigate('/cookies')} className="hover:text-white transition-colors">{t('footer.cookies')}</button>
+        </div>
+
         {/* Copyright */}
         <div className="text-center text-xs text-gray-500">
           <p className="flex items-center justify-center gap-1">
@@ -234,9 +240,15 @@ const Footer = ({ variant = 'default' }) => {
       {/* Bottom bar */}
       <div className="border-t border-white/10">
         <div className="max-w-7xl mx-auto px-12 py-6 flex flex-col md:flex-row items-center justify-between gap-4">
-          <p className="text-sm text-gray-500">
-            {t('footer.copyright', { year: currentYear })}
-          </p>
+          <div className="flex flex-col md:flex-row items-center gap-6">
+            <p className="text-sm text-gray-500">
+              {t('footer.copyright', { year: currentYear })}
+            </p>
+            <div className="flex items-center gap-4 text-sm text-gray-500">
+               <button onClick={() => navigate('/terms')} className="hover:text-white transition-colors">{t('footer.terms')}</button>
+               <button onClick={() => navigate('/cookies')} className="hover:text-white transition-colors">{t('footer.cookies')}</button>
+            </div>
+          </div>
           <p className="text-sm text-gray-500 flex items-center gap-1">
             {t('footer.made_with_love')} <Heart className="w-4 h-4 text-red-500" fill="currentColor" /> {t('footer.in_cameroon')}
           </p>

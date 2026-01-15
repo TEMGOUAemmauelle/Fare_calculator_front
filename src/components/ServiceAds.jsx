@@ -1,41 +1,41 @@
 import { useTranslation } from 'react-i18next';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useState, useEffect, useRef } from 'react';
-import { getAds } from '../services/adService';
+import { getMarketplaceServices } from '../services/marketplaceService';
 import { Loader2, ChevronRight, ChevronLeft, ExternalLink } from 'lucide-react';
 
 const MOCK_ADS = [
   {
     id: 1,
-    title: "Yango Pro",
-    title_en: "Yango Pro",
-    description: "Rejoignez la flotte Yango et gagnez plus.",
-    description_en: "Join Yango fleet and earn more.",
+    title: "Tech Service",
+    title_en: "Tech Service",
+    description: "Service technologique de mobilité.",
+    description_en: "Mobility tech service.",
     image_url: "https://images.unsplash.com/photo-1449965408869-eaa3f722e40d?q=80&w=2070&auto=format&fit=crop",
-    category: "Driver",
-    color: "#e63946",
-    app_link: "https://yango.com"
+    category: "Tech",
+    color: "#6366f1",
+    app_link: "#"
   },
   {
     id: 2,
-    title: "Eco Ride Cameroun",
-    title_en: "Eco Ride Cameroon",
-    description: "Le covoiturage écologique et économique.",
-    description_en: "Ecological and economical carpooling.",
+    title: "Livraison Express",
+    title_en: "Express Delivery",
+    description: "Livraison rapide dans toute la ville.",
+    description_en: "Fast delivery across the city.",
     image_url: "https://images.unsplash.com/photo-1494976388531-d1058494cdd8?q=80&w=2070&auto=format&fit=crop",
-    category: "Transport",
-    color: "#2a9d8f",
+    category: "Delivery",
+    color: "#22c55e",
     app_link: "#"
   },
   {
     id: 3,
-    title: "Assurance Zen",
-    title_en: "Zen Insurance",
-    description: "Assurez votre véhicule instantanément.",
-    description_en: "Insure your vehicle instantly.",
+    title: "Finance Mobile",
+    title_en: "Mobile Finance",
+    description: "Services financiers pour conducteurs.",
+    description_en: "Financial services for drivers.",
     image_url: "https://images.unsplash.com/photo-1454165804606-c3d57bc86b40?q=80&w=2070&auto=format&fit=crop",
-    category: "Service",
-    color: "#457b9d",
+    category: "Finance",
+    color: "#f59e0b",
     app_link: "#"
   }
 ];
@@ -62,11 +62,22 @@ export default function ServiceAds({ ads: propAds }) {
 
     const fetchAds = async () => {
       try {
-        const data = await getAds();
-        if (data && data.length > 0) {
-            setAds(data);
+        // Fetching marketplace services for this section
+        const data = await getMarketplaceServices();
+        // Normalize data to match the ad card structure
+        const normalized = (data || []).map(service => ({
+          id: service.id,
+          title: service.nom,
+          description: service.description,
+          image_url: service.logo_url || service.image_url,
+          category: service.categorie,
+          color: '#f3cd08',
+          app_link: service.url || service.lien_redirection
+        }));
+        if (normalized.length > 0) {
+            setAds(normalized);
         } else {
-            console.warn("Backend ads empty, using MOCK data for design review");
+            console.warn("Backend marketplace empty, using MOCK data for design review");
             setAds(MOCK_ADS);
         }
       } catch (err) {
@@ -91,11 +102,11 @@ export default function ServiceAds({ ads: propAds }) {
     <div className="space-y-4 lg:space-y-8 lg:py-8 w-full">
       <div className="flex items-center justify-between px-1 mb-4 lg:mb-8">
         <h3 className="text-[10px] lg:text-3xl font-black text-gray-400 lg:text-[#141414] uppercase tracking-widest lg:tracking-tighter lg:italic pl-1">
-          {isDesktop ? t('partners.discover_partners') : t('partners.partnership_services')}
+          {isDesktop ? t('partners.discover_partners') : t('partners.marketplace_services')}
         </h3>
         <a 
-            href="/services" 
-            onClick={(e) => { e.preventDefault(); window.location.href = '/services'; }}
+            href="/marketplace" 
+            onClick={(e) => { e.preventDefault(); window.location.href = '/marketplace'; }}
             className="text-[9px] lg:text-xs font-black text-[#f9d716] lg:text-gray-400 lg:hover:text-[#141414] uppercase tracking-widest hover:underline flex items-center gap-1 transition-colors"
         >
             {t('common.see_all')} <ChevronRight className="w-3 h-3" />
@@ -105,7 +116,7 @@ export default function ServiceAds({ ads: propAds }) {
       {isDesktop ? (
         <DesktopCarousel ads={displayAds} />
       ) : (
-        <div className="grid grid-cols-2 gap-4">
+        <div className="flex flex-col bg-gray-50/50 rounded-3xl overflow-hidden border border-gray-100 mx-0">
           {displayAds.map((ad, idx) => (
             <MobileAdCard key={ad.id || idx} ad={ad} idx={idx} />
           ))}
@@ -235,8 +246,9 @@ function DesktopCarousel({ ads }) {
   );
 }
 
+
+
 function MobileAdCard({ ad, idx }) {
-  const { t, i18n } = useTranslation();
   const [isLoaded, setIsLoaded] = useState(false);
 
   return (
@@ -245,37 +257,47 @@ function MobileAdCard({ ad, idx }) {
       target="_blank"
       rel="noopener noreferrer"
       whileTap={{ scale: 0.98 }}
-      className={`relative rounded-3xl overflow-hidden shadow-sm group cursor-pointer ${idx === 0 || idx === 3 ? 'col-span-2 h-32' : 'col-span-1 h-36'}`}
+      className="group relative flex items-start gap-3 p-4 bg-white border-b border-gray-100 last:border-b-0 active:bg-gray-50 transition-colors w-full"
     >
-      {!isLoaded && (
-        <div className="absolute inset-0 flex items-center justify-center bg-gray-50 z-10">
-           <Loader2 className="w-4 h-4 animate-spin text-gray-200" />
-        </div>
-      )}
-      <div className="absolute inset-0">
-         <img 
-           src={ad.image_url} 
-           alt={ad.title}
-           onLoad={() => setIsLoaded(true)}
-           className={`w-full h-full object-cover transition-all duration-1000 ${isLoaded ? 'opacity-100 scale-100' : 'opacity-0 scale-110'}`}
-         />
-         <div className="absolute inset-0 bg-linear-to-t from-black/95 via-black/40 to-transparent opacity-95" />
+      {/* Image/Icon */}
+      <div className="relative w-12 h-12 shrink-0 bg-gray-50 rounded-lg overflow-hidden border border-gray-100 mt-1">
+        {!isLoaded && (
+            <div className="absolute inset-0 flex items-center justify-center bg-gray-50">
+                <Loader2 className="w-3 h-3 animate-spin text-gray-300" />
+            </div>
+        )}
+        <img 
+            src={ad.image_url} 
+            alt={ad.title}
+            onLoad={() => setIsLoaded(true)}
+            className={`w-full h-full object-cover grayscale group-hover:grayscale-0 transition-all duration-500 ${isLoaded ? 'opacity-100' : 'opacity-0'}`}
+        />
       </div>
-      <div className="absolute bottom-0 left-0 p-4 w-full">
-         <span 
-            className="inline-block px-2 py-0.5 rounded-full text-[7px] font-black uppercase text-black mb-1.5 opacity-90 tracking-tighter"
-            style={{ backgroundColor: ad.color || '#f9d716' }}
-         >
-            {ad.category}
-         </span>
-         <h4 className="text-white text-lg font-black uppercase tracking-tight leading-none mb-1 shadow-sm">
-             {ad.title}
-         </h4>
-         <p className="text-gray-400 text-[9px] font-bold uppercase tracking-wider opacity-80 truncate">
-             {ad.description}
+
+      {/* Content */}
+      <div className="flex-1 min-w-0 pr-2">
+         {/* Top Line: Category & Title */}
+         <div className="flex flex-col mb-1">
+            <span className="text-[9px] font-bold uppercase tracking-widest text-gray-400 mb-0.5">
+                {ad.category}
+            </span>
+            <h4 className="text-sm font-black text-[#141414] uppercase tracking-tight leading-none group-hover:text-[#f3cd08] transition-colors">
+                {ad.title}
+            </h4>
+         </div>
+         
+         {/* Description Restored */}
+         <p className="text-[10px] text-gray-500 font-medium leading-normal line-clamp-2">
+            {ad.description}
          </p>
       </div>
-      <div className="absolute top-4 right-4 w-1.5 h-1.5 bg-white rounded-full opacity-30 group-hover:bg-[#f9d716] group-hover:opacity-100 transition-all scale-75 group-hover:scale-100" />
+
+      {/* Action Arrow */}
+      <div className="shrink-0 pt-2">
+         <div className="w-8 h-8 flex items-center justify-center rounded-full bg-gray-50 text-[#141414] group-hover:bg-[#141414] group-hover:text-[#f3cd08] transition-colors">
+            <ExternalLink className="w-3.5 h-3.5" />
+         </div>
+      </div>
     </motion.a>
   );
 }

@@ -25,10 +25,13 @@ import StatsPage from './pages/StatsPage';
 import ServicesPage from './pages/ServicesPage';
 import MarketplacePage from './pages/MarketplacePageRouter';
 import PricingPage from './pages/PricingPageRouter';
+import TermsPage from './pages/TermsPage';
+import CookiesPage from './pages/CookiesPage';
 
 // Components
 import PWAInstallPrompt from './components/PWAInstallPrompt';
 import LanguageWrapper from './components/LanguageWrapper';
+import CookieConsent from './components/CookieConsent';
 
 import './App.css';
 
@@ -112,6 +115,8 @@ function App() {
           <Route path="services" element={<ServicesPage />} />
           <Route path="marketplace" element={<MarketplacePage />} />
           <Route path="pricing" element={<PricingPage />} />
+          <Route path="terms" element={<TermsPage />} />
+          <Route path="cookies" element={<CookiesPage />} />
         </Route>
         
         {/* Explicit redirects for routes without language prefix */}
@@ -122,6 +127,8 @@ function App() {
         <Route path="/add-trajet" element={<RedirectToLang />} />
         <Route path="/trajets" element={<RedirectToLang />} />
         <Route path="/stats" element={<RedirectToLang />} />
+        <Route path="/terms" element={<RedirectToLang />} />
+        <Route path="/cookies" element={<RedirectToLang />} />
         
         {/* Catch-all redirect */}
         <Route path="*" element={<RedirectToLang />} />
@@ -129,6 +136,7 @@ function App() {
 
       {/* PWA Install Prompt */}
       <PWAInstallPrompt />
+      <CookieConsent />
     </BrowserRouter>
   );
 }

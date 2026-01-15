@@ -328,6 +328,7 @@
     "services": "Services",
     "special_offer": "Offre Spéciale",
     "discover_partners": "Découvrez nos Services Partenaires",
+    "discover_marketplace": "Découvrez notre Marketplace",
     "optimize_trips": "Optimisez vos déplacements",
     "trust_partners": "Partenaires de confiance pour voyager sereinement",
     "see_offers": "Consulter les offres",
@@ -338,12 +339,15 @@
     "loading_offers": "Chargement des offres...",
     "suggested_partners": "Partenaires suggérés",
     "see_more": "Voir plus",
-    "partnership_services": "Services Partenaires"
+    "partnership_services": "Services Partenaires",
+    "marketplace_services": "Marketplace"
   },
   "marketplace": {
     "title": "Marketplace",
     "subtitle": "Services Partenaires",
     "description": "Découvrez les services qui transforment le quotidien au Cameroun. Mobilité, livraison et technologie.",
+    "home_description": "Une sélection exclusive de services partenaires pour enrichir votre quotidien.",
+    "explore_catalog": "Explorer le catalogue",
     "search_placeholder": "Rechercher un service...",
     "no_services": "Aucun service trouvé",
     "categories": {
@@ -359,13 +363,22 @@
     "tagline": "Estimateur de tarifs taxi",
     "made_with_love": "Made with",
     "in_cameroon": "in Cameroon",
-    "copyright": "© {year} FareCAL Tous droits réservés.",
+    "copyright": "© {{year}} Yowyob Inc. Ltd. All rights reserved.",
     "description": "La référence pour estimer vos tarifs de taxi au Cameroun. Données communautaires, estimations fiables.",
     "location": "Yaoundé, Cameroun",
     "navigation": "Navigation",
     "contact": "Contact",
     "follow_us": "Suivez-nous",
-    "join_community": "Rejoignez notre communauté et contribuez à améliorer les estimations."
+    "join_community": "Rejoignez notre communauté et contribuez à améliorer les estimations.",
+    "terms": "Conditions d'utilisation",
+    "cookies": "Cookies & Publicité"
+  },
+  "cookies_modal": {
+    "title": "Cookies & Expérience",
+    "description": "Nous utilisons des cookies pour vous garantir la meilleure expérience sur notre site. En continuant, vous acceptez notre utilisation des cookies.",
+    "accept": "Tout Accepter",
+    "decline": "Essentiels",
+    "learn_more": "Confidentialité"
   },
   "pricing": {
     "partnerships": "Partenariats",

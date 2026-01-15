@@ -328,6 +328,7 @@
     "services": "Services",
     "special_offer": "Special Offer",
     "discover_partners": "Discover our Partner Services",
+    "discover_marketplace": "Discover our Marketplace",
     "optimize_trips": "Optimize your trips",
     "trust_partners": "Trusted partners for traveling with peace of mind",
     "see_offers": "Check offers",
@@ -338,12 +339,15 @@
     "loading_offers": "Loading offers...",
     "suggested_partners": "Suggested partners",
     "see_more": "See more",
-    "partnership_services": "Partner Services"
+    "partnership_services": "Partner Services",
+    "marketplace_services": "Marketplace"
   },
   "marketplace": {
     "title": "Marketplace",
     "subtitle": "Partner Services",
     "description": "Discover services that transform daily life in Cameroon. Mobility, delivery and technology.",
+    "home_description": "An exclusive selection of partner services to enrich your daily life.",
+    "explore_catalog": "Explore catalog",
     "search_placeholder": "Search for a service...",
     "no_services": "No services found",
     "categories": {
@@ -359,13 +363,22 @@
     "tagline": "Taxi fare estimator",
     "made_with_love": "Made with",
     "in_cameroon": "in Cameroon",
-    "copyright": "© {year} FareCAL All rights reserved.",
+    "copyright": "© {{year}} Yowyob Inc. Ltd. All rights reserved.",
     "description": "The reference for estimating your taxi fares in Cameroon. Community data, reliable estimates.",
     "location": "Yaoundé, Cameroon",
     "navigation": "Navigation",
     "contact": "Contact",
     "follow_us": "Follow us",
-    "join_community": "Join our community and help improve estimates."
+    "join_community": "Join our community and help improve estimates.",
+    "terms": "Terms of Service",
+    "cookies": "Cookies & Ads Notice"
+  },
+  "cookies_modal": {
+    "title": "Cookies & Experience",
+    "description": "We use cookies to ensure you get the best experience on our website. By continuing, you agree to our use of cookies.",
+    "accept": "Accept All",
+    "decline": "Essential Only",
+    "learn_more": "Privacy Policy"
   },
   "pricing": {
     "partnerships": "Partnerships",
@@ -450,11 +463,13 @@
     "distance": "Distance",
     "duration": "Duration",
     "got_it": "Got it!",
-    "services_for_you": "Services for you",    "discover_services": "Discover services to simplify your journey",    "services_disclaimer": "These services are offered by our partners",
+    "services_for_you": "Services for you",
+    "discover_services": "Discover services to simplify your journey",
+    "services_disclaimer": "These services are offered by our partners",
     "view_all": "View all",
     "no_services_available": "No services available"
-  } ,
-   "contribution_success_modal": {
+  },
+  "contribution_success_modal": {
     "thank_you": "Thank you!",
     "help_community": "You help the community",
     "contribution_saved": "Contribution saved",
