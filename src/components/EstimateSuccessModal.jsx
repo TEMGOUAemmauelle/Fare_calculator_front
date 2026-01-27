@@ -156,12 +156,12 @@ const EstimateSuccessModal = ({
                             <div className="flex gap-4">
                               <div className="flex-1 p-4 bg-white/5 rounded-xl border border-white/10">
                                 <p className="text-[10px] text-gray-500 uppercase tracking-wide mb-1">{t('estimate_success_modal.distance')}</p>
-                                <p className="text-lg font-bold text-white">{estimateData.distance} km</p>
+                                <p className="text-lg font-bold text-white">{(estimateData.distance / 1000).toFixed(1)} km</p>
                               </div>
                               {estimateData.duree && (
                                 <div className="flex-1 p-4 bg-white/5 rounded-xl border border-white/10">
                                   <p className="text-[10px] text-gray-500 uppercase tracking-wide mb-1">{t('estimate_success_modal.duration')}</p>
-                                  <p className="text-lg font-bold text-white">{estimateData.duree} min</p>
+                                  <p className="text-lg font-bold text-white">{Math.round(estimateData.duree / 60)} min</p>
                                 </div>
                               )}
                             </div>
@@ -328,7 +328,7 @@ const EstimateSuccessModal = ({
                           {estimateData.distance && (
                             <div className="text-right">
                               <p className="text-xs text-gray-400">{t('estimate_success_modal.distance')}</p>
-                              <p className="text-sm font-bold text-white">{estimateData.distance} km</p>
+                              <p className="text-sm font-bold text-white">{(estimateData.distance / 1000).toFixed(1)} km</p>
                             </div>
                           )}
                         </div>

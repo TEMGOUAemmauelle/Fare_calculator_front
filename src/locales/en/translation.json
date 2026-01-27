@@ -423,7 +423,8 @@
   "quick_price": {
     "error_min_price": "The price must be at least 50 FCFA",
     "success": "Thank you for your contribution!",
-    "error": "Error adding the price"
+    "error": "Error adding the price",
+    "cta_know_price": "Do you know the real price?"
   },
   "trajets": {
     "title": "Shared Trips",
