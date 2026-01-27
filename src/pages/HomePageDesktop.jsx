@@ -445,6 +445,31 @@ export default function HomePageDesktop() {
                                 </button>
                             </div>
 
+                            <AnimatePresence>
+                                {prediction && (
+                                    <motion.div
+                                        initial={{ opacity: 0, y: 30 }}
+                                        animate={{ opacity: 1, y: 0 }}
+                                        exit={{ opacity: 0, y: 30 }}
+                                        className="bg-[#141414] rounded-4xl p-8 text-white shadow-2xl border border-white/10"
+                                    >
+                                        <div className="flex items-center justify-between mb-6">
+                                            <div className="flex items-center gap-4">
+                                                <div className="w-12 h-12 bg-[#f3cd08] rounded-2xl flex items-center justify-center text-black">
+                                                    <Sparkles className="w-6 h-6" />
+                                                </div>
+                                                <div>
+                                                    <h4 className="text-xl font-black italic uppercase tracking-tighter">{t('estimate.optimal_result')}</h4>
+                                                    <p className="text-gray-400 text-[10px] font-bold uppercase tracking-widest">{t('estimate.ai_estimation')}</p>
+                                                </div>
+                                            </div>
+                                            <button onClick={() => setPrediction(null)} className="px-4 py-2 bg-white/5 hover:bg-white/10 rounded-xl text-[9px] font-black uppercase tracking-widest transition-all">{t('estimate.new_calculation')}</button>
+                                        </div>
+                                        <PriceCard prediction={prediction} onAddTrajet={() => navigate('/add-trajet')} variant="desktop" />
+                                    </motion.div>
+                                )}
+                            </AnimatePresence>
+
                     </div>
 
                     <div className="bg-[#141414] rounded-[3rem] p-10 text-white relative overflow-hidden group">
@@ -488,28 +513,7 @@ export default function HomePageDesktop() {
                     </div>
 
                     <AnimatePresence>
-                        {prediction && (
-                             <motion.div
-                                initial={{ opacity: 0, y: 30 }}
-                                animate={{ opacity: 1, y: 0 }}
-                                exit={{ opacity: 0, y: 30 }}
-                                className="bg-[#141414] rounded-4xl p-8 text-white shadow-2xl border border-white/10"
-                             >
-                                <div className="flex items-center justify-between mb-6">
-                                     <div className="flex items-center gap-4">
-                                         <div className="w-12 h-12 bg-[#f3cd08] rounded-2xl flex items-center justify-center text-black">
-                                             <Sparkles className="w-6 h-6" />
-                                         </div>
-                                         <div>
-                                             <h4 className="text-xl font-black italic uppercase tracking-tighter">{t('estimate.optimal_result')}</h4>
-                                             <p className="text-gray-400 text-[10px] font-bold uppercase tracking-widest">{t('estimate.ai_estimation')}</p>
-                                         </div>
-                                     </div>
-                                     <button onClick={() => setPrediction(null)} className="px-4 py-2 bg-white/5 hover:bg-white/10 rounded-xl text-[9px] font-black uppercase tracking-widest transition-all">{t('estimate.new_calculation')}</button>
-                                </div>
-                                <PriceCard prediction={prediction} onAddTrajet={() => navigate('/add-trajet')} variant="desktop" />
-                             </motion.div>
-                        )}
+                        {prediction && null}
                     </AnimatePresence>
                 </div>
             </div>
