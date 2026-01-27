@@ -5,7 +5,7 @@ import { useTranslation } from 'react-i18next';
 import { 
     Search, MapPin, BarChart2, Globe, PlusCircle, ArrowRight, 
     Navigation, Calculator, Sun, CloudRain, MapPinned, Loader2, 
-    Clock, Ruler, LocateFixed, ShieldCheck, Zap, Heart,Sparkles
+    Clock, Ruler, LocateFixed, ShieldCheck, Zap, Heart, Sparkles, X
 } from 'lucide-react';
 import { useAppNavigate } from '../hooks/useAppNavigate';
 
@@ -446,28 +446,7 @@ export default function HomePageDesktop() {
                             </div>
 
                             <AnimatePresence>
-                                {prediction && (
-                                    <motion.div
-                                        initial={{ opacity: 0, y: 30 }}
-                                        animate={{ opacity: 1, y: 0 }}
-                                        exit={{ opacity: 0, y: 30 }}
-                                        className="bg-[#141414] rounded-4xl p-8 text-white shadow-2xl border border-white/10"
-                                    >
-                                        <div className="flex items-center justify-between mb-6">
-                                            <div className="flex items-center gap-4">
-                                                <div className="w-12 h-12 bg-[#f3cd08] rounded-2xl flex items-center justify-center text-black">
-                                                    <Sparkles className="w-6 h-6" />
-                                                </div>
-                                                <div>
-                                                    <h4 className="text-xl font-black italic uppercase tracking-tighter">{t('estimate.optimal_result')}</h4>
-                                                    <p className="text-gray-400 text-[10px] font-bold uppercase tracking-widest">{t('estimate.ai_estimation')}</p>
-                                                </div>
-                                            </div>
-                                            <button onClick={() => setPrediction(null)} className="px-4 py-2 bg-white/5 hover:bg-white/10 rounded-xl text-[9px] font-black uppercase tracking-widest transition-all">{t('estimate.new_calculation')}</button>
-                                        </div>
-                                        <PriceCard prediction={prediction} onAddTrajet={() => navigate('/add-trajet')} variant="desktop" />
-                                    </motion.div>
-                                )}
+                                {/* Prediction removed from here */}
                             </AnimatePresence>
 
                     </div>
@@ -491,30 +470,92 @@ export default function HomePageDesktop() {
                         
                         <AnimatePresence>
                             {routeStats && (
-                                <motion.div initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }} className="absolute bottom-10 left-10 p-8 bg-white/90 backdrop-blur-xl rounded-[2.5rem] shadow-2xl border border-white flex flex-col gap-6 min-w-[240px]">
-                                    <div className="flex items-center gap-4">
-                                        <div className="p-3 bg-blue-50 rounded-2xl"><Ruler className="w-6 h-6 text-blue-500" /></div>
+                                <motion.div initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }} className="absolute bottom-6 left-6 p-4 bg-white/95 backdrop-blur-xl rounded-2xl shadow-xl border border-white/50 flex items-center gap-4">
+                                    <div className="flex items-center gap-2">
+                                        <div className="p-2 bg-blue-50 rounded-xl"><Ruler className="w-4 h-4 text-blue-500" /></div>
                                         <div>
-                                            <p className="text-[10px] font-black uppercase tracking-widest text-gray-400 leading-none mb-1">{t('estimate.total_distance')}</p>
-                                            <p className="text-2xl font-black italic">{routeStats.distance} km</p>
+                                            <p className="text-[8px] font-bold uppercase tracking-wider text-gray-400">{t('estimate.total_distance')}</p>
+                                            <p className="text-base font-black">{routeStats.distance} km</p>
                                         </div>
                                     </div>
-                                    <div className="w-full h-px bg-gray-100" />
-                                    <div className="flex items-center gap-4">
-                                        <div className="p-3 bg-indigo-50 rounded-2xl"><Clock className="w-6 h-6 text-indigo-500" /></div>
+                                    <div className="w-px h-8 bg-gray-200" />
+                                    <div className="flex items-center gap-2">
+                                        <div className="p-2 bg-indigo-50 rounded-xl"><Clock className="w-4 h-4 text-indigo-500" /></div>
                                         <div>
-                                            <p className="text-[10px] font-black uppercase tracking-widest text-gray-400 leading-none mb-1">{t('estimate.estimated_duration')}</p>
-                                            <p className="text-2xl font-black italic">{routeStats.duration} min</p>
+                                            <p className="text-[8px] font-bold uppercase tracking-wider text-gray-400">{t('estimate.estimated_duration')}</p>
+                                            <p className="text-base font-black">{routeStats.duration} min</p>
+                                        </div>
+                                    </div>
+                                </motion.div>
+                            )}
+                        </AnimatePresence>
+
+                        <AnimatePresence>
+                            {prediction && (
+                                <motion.div
+                                    initial={{ opacity: 0, y: -20 }}
+                                    animate={{ opacity: 1, y: 0 }}
+                                    exit={{ opacity: 0, y: -20 }}
+                                    className="absolute top-6 left-6 z-20 bg-[#141414]/90 backdrop-blur-xl rounded-2xl p-4 text-white shadow-2xl border border-white/10"
+                                >
+                                    {/* Header compact */}
+                                    <div className="flex items-center gap-3 mb-3 pb-3 border-b border-white/10">
+                                        <div className="w-8 h-8 bg-[#f3cd08] rounded-lg flex items-center justify-center text-black">
+                                            <Sparkles className="w-4 h-4" />
+                                        </div>
+                                        <div className="flex-1">
+                                            <h4 className="text-sm font-black uppercase tracking-tight">{t('estimate.optimal_result')}</h4>
+                                            <p className="text-gray-400 text-[8px] font-bold uppercase tracking-widest">{t('estimate.ai_estimation')}</p>
+                                        </div>
+                                        <button onClick={() => setPrediction(null)} className="p-1.5 bg-white/5 hover:bg-white/10 rounded-lg transition-all">
+                                            <X className="w-3.5 h-3.5 text-gray-400" />
+                                        </button>
+                                    </div>
+                                    
+                                    {/* Prix principal - Compact */}
+                                    <div className="text-center mb-3">
+                                        <p className="text-[8px] font-bold uppercase tracking-widest text-gray-400 mb-1">{t('price_card.estimated_price')}</p>
+                                        <div className="flex items-baseline justify-center gap-1">
+                                            <span className="text-4xl font-black">{prediction.prix_moyen?.toLocaleString('fr-FR')}</span>
+                                            <span className="text-sm font-bold text-gray-400">{t('price_card.currency')}</span>
+                                        </div>
+                                        {prediction.prix_min && prediction.prix_max && (
+                                            <div className="mt-1 inline-flex items-center gap-2 px-2 py-0.5 bg-white/5 rounded-full text-[10px] text-gray-400">
+                                                <span>{prediction.prix_min}</span>
+                                                <div className="w-4 h-0.5 bg-gray-600 rounded-full" />
+                                                <span>{prediction.prix_max}</span>
+                                            </div>
+                                        )}
+                                    </div>
+
+                                    {/* Trajet compact */}
+                                    <div className="flex items-center gap-2 p-2 bg-white/5 rounded-xl mb-3">
+                                        <div className="flex flex-col items-center gap-0.5">
+                                            <div className="w-2 h-2 rounded-full bg-[#f3cd08]" />
+                                            <div className="w-0.5 h-4 bg-gradient-to-b from-[#f3cd08] to-gray-600" />
+                                            <div className="w-2 h-2 rounded-full bg-gray-400" />
+                                        </div>
+                                        <div className="flex-1 min-w-0">
+                                            <p className="text-[9px] font-bold text-white truncate">{prediction.details_trajet?.depart?.label || t('price_card.default_depart')}</p>
+                                            <p className="text-[9px] font-bold text-gray-400 truncate">{prediction.details_trajet?.arrivee?.label || t('price_card.default_arrival')}</p>
+                                        </div>
+                                    </div>
+
+                                    {/* Infos compactes en grille */}
+                                    <div className="grid grid-cols-2 gap-2 text-center">
+                                        <div className="p-2 bg-white/5 rounded-xl">
+                                            <p className="text-[7px] font-bold uppercase tracking-wider text-gray-500">{t('price_card.reliability')}</p>
+                                            <p className="text-xs font-black text-green-400">{(prediction.fiabilite * 100).toFixed(0)}%</p>
+                                        </div>
+                                        <div className="p-2 bg-white/5 rounded-xl">
+                                            <p className="text-[7px] font-bold uppercase tracking-wider text-gray-500">{t('price_card.status')}</p>
+                                            <p className="text-xs font-black text-[#f3cd08] capitalize">{prediction.statut}</p>
                                         </div>
                                     </div>
                                 </motion.div>
                             )}
                         </AnimatePresence>
                     </div>
-
-                    <AnimatePresence>
-                        {prediction && null}
-                    </AnimatePresence>
                 </div>
             </div>
         </div>
