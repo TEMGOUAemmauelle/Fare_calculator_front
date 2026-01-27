@@ -423,7 +423,8 @@
   "quick_price": {
     "error_min_price": "Le prix doit être au moins 50 FCFA",
     "success": "Merci pour votre contribution !",
-    "error": "Erreur lors de l'ajout du prix"
+    "error": "Erreur lors de l'ajout du prix",
+    "cta_know_price": "Vous connaissez le vrai prix ?"
   },
   "trajets": {
     "title": "Trajets Partagés",

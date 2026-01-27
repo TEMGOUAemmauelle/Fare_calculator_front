@@ -7,6 +7,7 @@
 
 import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
+import { useTranslation } from 'react-i18next';
 import { 
   Store, Search, Filter, Sparkles, Grid, List, 
   ArrowRight, ExternalLink, PlusCircle, BarChart2, Globe 
@@ -25,6 +26,7 @@ const CATEGORIES = [
 ];
 
 export default function MarketplacePageDesktop() {
+  const { t } = useTranslation();
   const navigate = useAppNavigate();
   const [services, setServices] = useState([]);
   const [filteredServices, setFilteredServices] = useState([]);

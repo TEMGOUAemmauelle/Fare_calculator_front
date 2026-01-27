@@ -430,7 +430,7 @@ export default function HomePageDesktop() {
                                         <p className="text-[10px] font-black text-gray-400 uppercase tracking-widest pl-1">{t('estimate.moment')}</p>
                                         <div className="relative">
                                             <select value={heureTrajet} onChange={(e) => setHeureTrajet(e.target.value)} className="w-full bg-gray-50 border-2 border-transparent hover:border-gray-100 rounded-2xl text-[10px] font-black p-5 outline-none uppercase text-gray-700 appearance-none cursor-pointer">
-                                                {TIME_SLOTS.map(slot => <option key={slot.value} value={t(slot.label_key)}>{t(slot.label_key)}</option>)}
+                                                {TIME_SLOTS.map(slot => <option key={slot.value} value={slot.value}>{t(slot.label_key)}</option>)}
                                             </select>
                                             <Clock className="absolute right-5 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400 pointer-events-none" />
                                         </div>
@@ -444,6 +444,31 @@ export default function HomePageDesktop() {
                                     {isLoading ? <Loader2 className="w-6 h-6 animate-spin" /> : <> {t('estimate.launch')} <div className="p-2 bg-black rounded-xl group-hover:rotate-12 transition-transform"><Calculator className="w-4 h-4 text-[#f3cd08]" /></div></>}
                                 </button>
                             </div>
+
+                            <AnimatePresence>
+                                {prediction && (
+                                    <motion.div
+                                        initial={{ opacity: 0, y: 30 }}
+                                        animate={{ opacity: 1, y: 0 }}
+                                        exit={{ opacity: 0, y: 30 }}
+                                        className="bg-[#141414] rounded-4xl p-8 text-white shadow-2xl border border-white/10"
+                                    >
+                                        <div className="flex items-center justify-between mb-6">
+                                            <div className="flex items-center gap-4">
+                                                <div className="w-12 h-12 bg-[#f3cd08] rounded-2xl flex items-center justify-center text-black">
+                                                    <Sparkles className="w-6 h-6" />
+                                                </div>
+                                                <div>
+                                                    <h4 className="text-xl font-black italic uppercase tracking-tighter">{t('estimate.optimal_result')}</h4>
+                                                    <p className="text-gray-400 text-[10px] font-bold uppercase tracking-widest">{t('estimate.ai_estimation')}</p>
+                                                </div>
+                                            </div>
+                                            <button onClick={() => setPrediction(null)} className="px-4 py-2 bg-white/5 hover:bg-white/10 rounded-xl text-[9px] font-black uppercase tracking-widest transition-all">{t('estimate.new_calculation')}</button>
+                                        </div>
+                                        <PriceCard prediction={prediction} onAddTrajet={() => navigate('/add-trajet')} variant="desktop" />
+                                    </motion.div>
+                                )}
+                            </AnimatePresence>
 
                     </div>
 
@@ -488,28 +513,7 @@ export default function HomePageDesktop() {
                     </div>
 
                     <AnimatePresence>
-                        {prediction && (
-                             <motion.div
-                                initial={{ opacity: 0, y: 30 }}
-                                animate={{ opacity: 1, y: 0 }}
-                                exit={{ opacity: 0, y: 30 }}
-                                className="bg-[#141414] rounded-4xl p-8 text-white shadow-2xl border border-white/10"
-                             >
-                                <div className="flex items-center justify-between mb-6">
-                                     <div className="flex items-center gap-4">
-                                         <div className="w-12 h-12 bg-[#f3cd08] rounded-2xl flex items-center justify-center text-black">
-                                             <Sparkles className="w-6 h-6" />
-                                         </div>
-                                         <div>
-                                             <h4 className="text-xl font-black italic uppercase tracking-tighter">{t('estimate.optimal_result')}</h4>
-                                             <p className="text-gray-400 text-[10px] font-bold uppercase tracking-widest">{t('estimate.ai_estimation')}</p>
-                                         </div>
-                                     </div>
-                                     <button onClick={() => setPrediction(null)} className="px-4 py-2 bg-white/5 hover:bg-white/10 rounded-xl text-[9px] font-black uppercase tracking-widest transition-all">{t('estimate.new_calculation')}</button>
-                                </div>
-                                <PriceCard prediction={prediction} onAddTrajet={() => navigate('/add-trajet')} variant="desktop" />
-                             </motion.div>
-                        )}
+                        {prediction && null}
                     </AnimatePresence>
                 </div>
             </div>
