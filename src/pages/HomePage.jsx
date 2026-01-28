@@ -12,15 +12,17 @@ import { useEffect, useState } from 'react';
 import { motion } from 'framer-motion';
 import { useTranslation } from 'react-i18next';
 import { useAppNavigate } from '../hooks/useAppNavigate';
-import { Search, MapPin, BarChart2, Globe, PlusCircle, ArrowRight, Store } from 'lucide-react';
+import { Search, MapPin, BarChart2, Globe, PlusCircle, ArrowRight, Store, User } from 'lucide-react';
 import LanguageSwitcher from '../components/LanguageSwitcher';
 import SplashScreen from '../components/SplashScreen';
 import ServiceAds from '../components/ServiceAds';
 import CityIndicator from '../components/CityIndicator';
 import MarketplaceSection from '../components/MarketplaceSection';
 import Footer from '../components/Footer';
+import UserAuthButton from '../components/UserAuthButton';
 import geolocationService from '../services/geolocationService';
 import { reverseSearch } from '../services/nominatimService';
+import { useAuth } from '../contexts/AuthContext';
 
 const HERO_IMAGE = "https://media.istockphoto.com/id/519870714/fr/photo/en-taxi.jpg?s=612x612&w=0&k=20&c=r4tdiKcJZMDfpuOCJlVZQNFYegp2YNnVCTGn-tM4rOE=";
 
@@ -104,13 +106,13 @@ export default function HomePage() {
                 FARE<span className="text-[#f9d716]">CAL</span>
               </h1>
               <div className="h-1 w-8 bg-[#f9d716] mt-1 rounded-full" />
-              <CityIndicator address={userAddress} variant="minimal" className="mt-2" />
+              <CityIndicator address={userAddress} variant="minimal" className="mt-2" showSwitch={false} />
            </div>
            
-           <div className="flex items-center gap-3">
+           <div className="flex items-center gap-2">
+              <UserAuthButton variant="compact" />
               <button onClick={() => navigate('/marketplace')} className="p-2.5 bg-gray-50 rounded-2xl text-gray-400 hover:text-[#f3cd08] transition-colors"><Store className="w-5 h-5" /></button>
               <button onClick={() => navigate('/stats')} className="p-2.5 bg-gray-50 rounded-2xl text-gray-400 hover:text-[#f3cd08] transition-colors"><BarChart2 className="w-5 h-5" /></button>
-              <button onClick={() => navigate('/trajets')} className="p-2.5 bg-gray-50 rounded-2xl text-gray-400 hover:text-[#f3cd08] transition-colors"><Globe className="w-5 h-5" /></button>
               <div className="bg-gray-50 rounded-2xl">
                  <LanguageSwitcher variant="dark" /> 
               </div>

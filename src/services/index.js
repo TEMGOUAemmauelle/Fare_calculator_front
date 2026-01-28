@@ -14,6 +14,7 @@
 export * from './estimateService';
 export * from './trajetService';
 export * from './pointService';
+export * from './authService';
 
 // Services externes
 export * from './geolocationService';
@@ -27,6 +28,7 @@ export * from './localStorageService';
 import estimateService from './estimateService';
 import trajetService from './trajetService';
 import pointService from './pointService';
+import authService from './authService';
 import geolocationService from './geolocationService';
 import mapboxService from './mapboxService';
 import weatherService from './weatherService';
@@ -35,6 +37,7 @@ export default {
   estimate: estimateService,
   trajet: trajetService,
   point: pointService,
+  auth: authService,
   geolocation: geolocationService,
   mapbox: mapboxService,
   weather: weatherService,

@@ -12,6 +12,7 @@ import { PlusCircle } from 'lucide-react';
 import { useAppNavigate } from '../hooks/useAppNavigate';
 import LanguageSwitcher from './LanguageSwitcher';
 import CityIndicator from './CityIndicator';
+import UserAuthButton from './UserAuthButton';
 
 /**
  * @param {Object} props
@@ -85,7 +86,10 @@ export default function NavbarDesktop({ currentAddress, showCityIndicator = true
       </div>
 
       {/* Actions */}
-      <div className="flex items-center gap-6">
+      <div className="flex items-center gap-4">
+        {/* Bouton Auth */}
+        <UserAuthButton variant="navbar" />
+        
         <div className="bg-gray-50 rounded-2xl p-1">
           <LanguageSwitcher variant="dark" />
         </div>
