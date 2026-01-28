@@ -15,11 +15,11 @@ import showToast from './utils/customToast';
 import geolocationService from './services/geolocationService';
 import { MESSAGES } from './config/constants';
 import { useTranslation } from 'react-i18next';
-import { useEffect } from 'react';
+import { useEffect, useRef } from 'react';
 
 // Contexts
 import { SearchRestrictProvider } from './contexts/SearchRestrictContext';
-import { AuthProvider } from './contexts/AuthContext';
+import { AuthProvider, useAuth } from './contexts/AuthContext';
 
 // Pages
 import HomePage from './pages/HomePageRouter';
@@ -145,6 +145,7 @@ function App() {
       {/* PWA Install Prompt */}
       <PWAInstallPrompt />
       <CookieConsent />
+      <AuthPromptController />
       
       {/* Phone Auth Modal - Global */}
       <PhoneAuthModal />
@@ -152,6 +153,22 @@ function App() {
     </SearchRestrictProvider>
     </AuthProvider>
   );
+}
+
+function AuthPromptController() {
+  const { shouldPromptAuth, openAuthModal, isAuthenticated, isLoading } = useAuth();
+  const hasPromptedRef = useRef(false);
+
+  useEffect(() => {
+    if (hasPromptedRef.current) return;
+    if (isLoading) return;
+    if (!isAuthenticated && shouldPromptAuth()) {
+      hasPromptedRef.current = true;
+      openAuthModal();
+    }
+  }, [isAuthenticated, isLoading, shouldPromptAuth, openAuthModal]);
+
+  return null;
 }
 
 export default App;

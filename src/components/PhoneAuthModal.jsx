@@ -175,7 +175,7 @@ export default function PhoneAuthModal() {
           />
 
           {/* Modal */}
-          <div className="fixed inset-0 z-[9999] flex items-end md:items-center justify-center pointer-events-none">
+          <div className="fixed inset-0 z-[9999] flex items-end md:items-center justify-center pointer-events-none md:p-6">
             
             <motion.div
               variants={modalVariants}
@@ -183,7 +183,7 @@ export default function PhoneAuthModal() {
               animate="visible"
               exit="exit"
               transition={{ type: "spring", damping: 25, stiffness: 300 }}
-              className="pointer-events-auto w-full md:w-[420px] bg-white rounded-t-[24px] md:rounded-[24px] shadow-2xl overflow-hidden"
+              className="pointer-events-auto w-full md:w-[480px] md:max-h-[85vh] bg-white rounded-t-[24px] md:rounded-2xl shadow-2xl overflow-hidden"
             >
               <div className="relative px-6 py-8 md:p-8">
                 

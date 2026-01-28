@@ -39,14 +39,13 @@ const STORAGE_KEYS = {
   USER: 'fare_calculator_user',
   BACKEND_USER: 'fare_calculator_backend_user',
   PHONE: 'fare_calculator_phone',
-  AUTH_PROMPTED: 'fare_calculator_auth_prompted',
-  AUTH_METHOD: 'fare_calculator_auth_method', // 'phone_sms' | 'phone_password' | 'google'
+  AUTH_PROMPT_COUNT: 'fare_calculator_auth_prompt_count',
+  AUTH_METHOD: 'fare_calculator_auth_method', // 'phone_sms' | 'google'
 };
 
 // Modes d'authentification
 export const AUTH_MODES = {
   PHONE_SMS: 'phone_sms',         // Mode billing activé
-  PHONE_PASSWORD: 'phone_password', // Mode billing désactivé
   GOOGLE: 'google',               // OAuth Google
 };
 
@@ -67,7 +66,7 @@ export function AuthProvider({ children }) {
   /**
    * Détermine le mode d'auth principal (SMS ou Mot de passe)
    */
-  const primaryAuthMode = FIREBASE_BILLING_ENABLED ? AUTH_MODES.PHONE_SMS : AUTH_MODES.PHONE_PASSWORD;
+  const primaryAuthMode = FIREBASE_BILLING_ENABLED ? AUTH_MODES.PHONE_SMS : AUTH_MODES.GOOGLE;
 
   /**
    * Synchronise l'utilisateur Firebase avec le backend Django
@@ -189,7 +188,8 @@ export function AuthProvider({ children }) {
     setIsAuthModalOpen(false);
     setAuthError(null);
     setVerificationStep('phone');
-    localStorage.setItem(STORAGE_KEYS.AUTH_PROMPTED, 'true');
+    const currentCount = Number(localStorage.getItem(STORAGE_KEYS.AUTH_PROMPT_COUNT) || 0);
+    localStorage.setItem(STORAGE_KEYS.AUTH_PROMPT_COUNT, String(currentCount + 1));
   }, []);
 
   // ===========================================================================
@@ -377,9 +377,9 @@ export function AuthProvider({ children }) {
   const shouldPromptAuth = useCallback(() => {
     if (user) return false;
     if (!auth) return false;
-    const prompted = localStorage.getItem(STORAGE_KEYS.AUTH_PROMPTED);
-    if (prompted) return false;
-    return true;
+    const promptCount = Number(localStorage.getItem(STORAGE_KEYS.AUTH_PROMPT_COUNT) || 0);
+    if (promptCount === 0) return true;
+    return Math.random() < 0.1;
   }, [user]);
 
   // ===========================================================================

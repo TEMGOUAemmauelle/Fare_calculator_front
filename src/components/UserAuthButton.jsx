@@ -12,7 +12,8 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { useTranslation } from 'react-i18next';
 import { User, LogIn, LogOut, X } from 'lucide-react';
 import { useAuth } from '../contexts/AuthContext';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
+import { createPortal } from 'react-dom';
 
 /**
  * Formate le numéro de téléphone pour l'affichage
@@ -55,6 +56,13 @@ export default function UserAuthButton({
   } = useAuth();
 
   const [isProfileOpen, setIsProfileOpen] = useState(false);
+  const [isDesktop, setIsDesktop] = useState(window.innerWidth >= 768);
+
+  useEffect(() => {
+    const handleResize = () => setIsDesktop(window.innerWidth >= 768);
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
+  }, []);
 
   // Ne rien afficher si Firebase n'est pas configuré
   if (!isFirebaseConfigured) {
@@ -134,81 +142,143 @@ export default function UserAuthButton({
           )}
         </motion.button>
 
-        <AnimatePresence>
-          {isProfileOpen && (
-            <>
-              {/* Backdrop */}
-              <motion.div
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                exit={{ opacity: 0 }}
-                className="fixed inset-0 bg-black/40 backdrop-blur-sm z-[9998]"
-                onClick={() => setIsProfileOpen(false)}
-              />
-              
-              {/* Modal Profile */}
-              <div className="fixed inset-0 z-[9999] flex items-center justify-center p-4 pointer-events-none">
-                 <motion.div
-                    initial={{ opacity: 0, scale: 0.95, y: 10 }}
+        {createPortal(
+          <AnimatePresence>
+            {isProfileOpen && (
+              <>
+                {/* Backdrop */}
+                <motion.div
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  exit={{ opacity: 0 }}
+                  className="fixed inset-0 bg-black/40 backdrop-blur-sm z-[9998]"
+                  onClick={() => setIsProfileOpen(false)}
+                />
+                
+                {/* Modal Profile */}
+                {isDesktop ? (
+                  <motion.div
+                    initial={{ opacity: 0, scale: 0.96, y: 8 }}
                     animate={{ opacity: 1, scale: 1, y: 0 }}
-                    exit={{ opacity: 0, scale: 0.95, y: 10 }}
-                    transition={{ type: 'spring', damping: 25, stiffness: 300 }}
-                    className="pointer-events-auto bg-white w-full max-w-[320px] rounded-2xl shadow-xl overflow-hidden"
+                    exit={{ opacity: 0, scale: 0.96, y: 8 }}
+                    transition={{ type: 'spring', damping: 22, stiffness: 280 }}
+                    className="pointer-events-auto fixed left-1/2 top-1/2 z-[9999] w-[520px] max-w-[92vw] max-h-[85vh] -translate-x-1/2 -translate-y-1/2 rounded-2xl overflow-hidden bg-white shadow-2xl"
                   >
-                    <div className="relative p-6 text-center">
-                        <button
-                            onClick={() => setIsProfileOpen(false)}
-                            className="absolute top-4 right-4 p-2 text-gray-400 hover:text-black transition-colors rounded-full hover:bg-gray-50"
+                    <div className="relative px-8 py-7 overflow-y-auto">
+                      <button
+                        onClick={() => setIsProfileOpen(false)}
+                        className="absolute top-5 right-5 p-2 text-gray-400 hover:text-black transition-colors rounded-full hover:bg-gray-50"
+                      >
+                        <X className="w-4 h-4" />
+                      </button>
+
+                      <div className="flex items-center gap-5">
+                        <div className="w-20 h-20 rounded-full bg-gray-50 border border-gray-100 flex items-center justify-center shrink-0">
+                          {hasPhoto ? (
+                            <img
+                              src={photoURL}
+                              alt=""
+                              className="w-20 h-20 rounded-full object-cover"
+                              referrerPolicy="no-referrer"
+                            />
+                          ) : (
+                            <User className="w-9 h-9 text-gray-400" />
+                          )}
+                        </div>
+                        <div className="min-w-0">
+                          <p className="text-[11px] font-semibold uppercase tracking-wider text-gray-400">
+                            {t('auth.logged_in_as')}
+                          </p>
+                          <h3 className="text-2xl font-bold text-gray-900 truncate">
+                            {fullDisplay}
+                          </h3>
+                          {email && (
+                            <p className="text-sm text-gray-400 truncate mt-1">{email}</p>
+                          )}
+                        </div>
+                      </div>
+                    </div>
+
+                    <div className="px-8 pb-7">
+                      <div className="rounded-xl border border-gray-100 bg-gray-50 p-4">
+                        <motion.button
+                          whileHover={{ scale: 1.02 }}
+                          whileTap={{ scale: 0.98 }}
+                          onClick={async () => {
+                            await logout();
+                            setIsProfileOpen(false);
+                          }}
+                          className="w-full bg-white border border-gray-200 text-gray-900 font-medium py-3.5 rounded-xl flex items-center justify-center gap-2 hover:bg-gray-50 hover:border-gray-300 transition-all shadow-sm"
                         >
-                            <X className="w-4 h-4" />
-                        </button>
-                    
+                          <LogOut className="w-4 h-4 text-gray-500" />
+                          <span className="text-sm">{t('auth.logout_btn')}</span>
+                        </motion.button>
+                      </div>
+                    </div>
+                  </motion.div>
+                ) : (
+                  <div className="fixed inset-0 z-[9999] flex items-center justify-center p-4 pointer-events-none">
+                    <motion.div
+                      initial={{ opacity: 0, scale: 0.95, y: 10 }}
+                      animate={{ opacity: 1, scale: 1, y: 0 }}
+                      exit={{ opacity: 0, scale: 0.95, y: 10 }}
+                      transition={{ type: 'spring', damping: 25, stiffness: 300 }}
+                      className="pointer-events-auto bg-white w-full max-w-[360px] rounded-2xl shadow-xl overflow-hidden"
+                    >
+                    <div className="relative p-6 text-center">
+                      <button
+                        onClick={() => setIsProfileOpen(false)}
+                        className="absolute top-4 right-4 p-2 text-gray-400 hover:text-black transition-colors rounded-full hover:bg-gray-50"
+                      >
+                        <X className="w-4 h-4" />
+                      </button>
+
+                      <div className="mx-auto w-20 h-20 rounded-full bg-gray-50 flex items-center justify-center mb-4 border border-gray-100">
                         {hasPhoto ? (
-                          <img 
-                            src={photoURL} 
-                            alt="" 
-                            className="w-16 h-16 mx-auto rounded-full object-cover mb-4"
+                          <img
+                            src={photoURL}
+                            alt=""
+                            className="w-20 h-20 rounded-full object-cover"
                             referrerPolicy="no-referrer"
                           />
                         ) : (
-                          <div className="w-16 h-16 mx-auto bg-gray-50 rounded-full flex items-center justify-center mb-4">
-                            <User className="w-8 h-8 text-gray-400" />
-                          </div>
+                          <User className="w-9 h-9 text-gray-400" />
                         )}
-                        
-                        <h3 className="text-gray-500 text-xs font-semibold uppercase tracking-wide mb-1">
-                            {t('auth.logged_in_as')}
-                        </h3>
-                        <p className="text-lg font-bold text-gray-900 tracking-tight">
-                            {fullDisplay}
-                        </p>
-                        {/* Afficher l'email en secondaire si on a un nom */}
-                        {displayName && email && (
-                          <p className="text-xs text-gray-400 mt-1">
-                            {email}
-                          </p>
-                        )}
+                      </div>
+
+                      <h3 className="text-gray-500 text-[11px] font-semibold uppercase tracking-wide mb-2">
+                        {t('auth.logged_in_as')}
+                      </h3>
+                      <p className="text-xl font-bold text-gray-900 tracking-tight">
+                        {fullDisplay}
+                      </p>
+                      {email && (
+                        <p className="text-sm text-gray-400 mt-1">{email}</p>
+                      )}
                     </div>
 
-                    <div className="p-4 bg-gray-50 border-t border-gray-100">
-                        <motion.button
-                            whileHover={{ scale: 1.02 }}
-                            whileTap={{ scale: 0.98 }}
-                            onClick={async () => {
-                                await logout();
-                                setIsProfileOpen(false);
-                            }}
-                            className="w-full bg-white border border-gray-200 text-gray-900 font-medium py-3 rounded-xl flex items-center justify-center gap-2 hover:bg-gray-50 hover:border-gray-300 transition-all shadow-sm"
-                        >
-                            <LogOut className="w-4 h-4 text-gray-500" />
-                            <span className="text-sm">{t('auth.logout_btn')}</span>
-                        </motion.button>
+                    <div className="p-5 bg-gray-50 border-t border-gray-100">
+                      <motion.button
+                        whileHover={{ scale: 1.02 }}
+                        whileTap={{ scale: 0.98 }}
+                        onClick={async () => {
+                          await logout();
+                          setIsProfileOpen(false);
+                        }}
+                        className="w-full bg-white border border-gray-200 text-gray-900 font-medium py-3.5 rounded-xl flex items-center justify-center gap-2 hover:bg-gray-50 hover:border-gray-300 transition-all shadow-sm"
+                      >
+                        <LogOut className="w-4 h-4 text-gray-500" />
+                        <span className="text-sm">{t('auth.logout_btn')}</span>
+                      </motion.button>
                     </div>
-                  </motion.div>
-              </div>
-            </>
-          )}
-        </AnimatePresence>
+                    </motion.div>
+                  </div>
+                )}
+              </>
+            )}
+          </AnimatePresence>,
+          document.body
+        )}
       </>
     );
   }
