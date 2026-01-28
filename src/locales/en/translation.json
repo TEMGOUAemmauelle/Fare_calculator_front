@@ -217,6 +217,12 @@
     "unsupported": "Geolocation not supported by your device",
     "localized": "Position localized"
   },
+  "search_restrict": {
+    "city_only": "Search limited to city",
+    "all_cameroon": "Search all Cameroon",
+    "restricted": "Restricted area",
+    "expanded": "Expanded area"
+  },
   "search": {
     "placeholder": "Search for a place...",
     "no_results": "No results found",

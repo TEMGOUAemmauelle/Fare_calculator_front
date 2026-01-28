@@ -1,15 +1,18 @@
 /**
- * @fileoverview CityIndicator - Affiche la ville actuelle de l'utilisateur
+ * @fileoverview CityIndicator - Affiche la ville actuelle + Switch restriction zone
  * 
  * Design discret et élégant pour indiquer la localisation.
+ * Inclut un switch pour restreindre la recherche à la ville ou tout le Cameroun.
  * Affiche "Yaoundé" par défaut si la géolocalisation échoue.
  */
 
 import { useState, useEffect } from 'react';
-import { MapPin } from 'lucide-react';
+import { MapPin, Globe, Target } from 'lucide-react';
 import { motion } from 'framer-motion';
+import { useTranslation } from 'react-i18next';
 import geolocationService from '../services/geolocationService';
 import { reverseSearch } from '../services/nominatimService';
+import { useSearchRestrict } from '../contexts/SearchRestrictContext';
 
 /**
  * Extrait le nom de la ville à partir d'une adresse complète Nominatim
@@ -43,10 +46,14 @@ const extractCityFromAddress = (fullAddress) => {
   return 'Yaoundé';
 };
 
-export default function CityIndicator({ variant = 'default', className = '' }) {
+export default function CityIndicator({ variant = 'default', className = '', showSwitch = true }) {
+  const { t } = useTranslation();
   const [city, setCity] = useState('Yaoundé');
   const [isLoading, setIsLoading] = useState(true);
   const [hasError, setHasError] = useState(false);
+  
+  // Contexte de restriction de recherche
+  const { isRestricted, toggleRestriction, setCurrentCity } = useSearchRestrict();
 
   useEffect(() => {
     const detectCity = async () => {
@@ -63,6 +70,7 @@ export default function CityIndicator({ variant = 'default', className = '' }) {
           if (address) {
             const detectedCity = extractCityFromAddress(address);
             setCity(detectedCity);
+            setCurrentCity(detectedCity); // Mettre à jour le contexte
           }
         }
       } catch (error) {
@@ -75,27 +83,27 @@ export default function CityIndicator({ variant = 'default', className = '' }) {
     };
 
     detectCity();
-  }, []);
+  }, [setCurrentCity]);
 
   // Variantes de style
   const variants = {
     default: {
-      container: 'flex items-center gap-1.5 px-3 py-1.5 bg-gray-50 rounded-full',
+      container: 'flex items-center gap-3 px-3 py-1.5 bg-gray-50 rounded-full',
       icon: 'w-3.5 h-3.5 text-[#f9d716]',
       text: 'text-xs font-semibold text-gray-600'
     },
     minimal: {
-      container: 'flex items-center gap-1',
+      container: 'flex items-center gap-2',
       icon: 'w-3 h-3 text-[#f9d716]',
       text: 'text-[10px] font-bold text-gray-400 uppercase tracking-wider'
     },
     hero: {
-      container: 'flex items-center gap-2 px-4 py-2 bg-white/10 backdrop-blur-sm rounded-full border border-white/20',
+      container: 'flex items-center gap-3 px-4 py-2 bg-white/10 backdrop-blur-sm rounded-full border border-white/20',
       icon: 'w-4 h-4 text-[#f9d716]',
       text: 'text-sm font-semibold text-white'
     },
     dark: {
-      container: 'flex items-center gap-1.5 px-3 py-1.5 bg-gray-800/50 rounded-full',
+      container: 'flex items-center gap-3 px-3 py-1.5 bg-gray-800/50 rounded-full',
       icon: 'w-3.5 h-3.5 text-[#f9d716]',
       text: 'text-xs font-semibold text-gray-300'
     }
@@ -114,6 +122,41 @@ export default function CityIndicator({ variant = 'default', className = '' }) {
         <span className={`${style.text} animate-pulse`}>...</span>
       ) : (
         <span className={style.text}>{city}</span>
+      )}
+      
+      {/* Switch de restriction de zone */}
+      {showSwitch && (
+        <>
+          <div className="w-px h-4 bg-gray-200" />
+          <button
+            onClick={toggleRestriction}
+            className="flex items-center gap-1.5 group relative"
+            title={isRestricted ? t('search_restrict.city_only') : t('search_restrict.all_cameroon')}
+          >
+            {/* Icon qui change selon l'état */}
+            {isRestricted ? (
+              <Target className="w-3.5 h-3.5 text-[#f9d716]" />
+            ) : (
+              <Globe className="w-3.5 h-3.5 text-blue-500" />
+            )}
+            
+            {/* Mini switch visuel */}
+            <div className={`relative w-8 h-4 rounded-full transition-colors ${
+              isRestricted ? 'bg-[#f9d716]' : 'bg-blue-500'
+            }`}>
+              <motion.div
+                initial={false}
+                animate={{ x: isRestricted ? 2 : 16 }}
+                className="absolute top-0.5 w-3 h-3 bg-white rounded-full shadow-sm"
+              />
+            </div>
+            
+            {/* Tooltip au hover */}
+            <span className="absolute -bottom-8 left-1/2 -translate-x-1/2 whitespace-nowrap text-[9px] font-bold bg-gray-900 text-white px-2 py-1 rounded-lg opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none z-50">
+              {isRestricted ? t('search_restrict.city_only') : t('search_restrict.all_cameroon')}
+            </span>
+          </button>
+        </>
       )}
     </motion.div>
   );

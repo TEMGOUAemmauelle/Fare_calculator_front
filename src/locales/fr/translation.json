@@ -217,6 +217,12 @@
     "unsupported": "Géolocalisation non supportée par votre appareil",
     "localized": "Position localisée"
   },
+  "search_restrict": {
+    "city_only": "Recherche limitée à la ville",
+    "all_cameroon": "Recherche dans tout le Cameroun",
+    "restricted": "Zone restreinte",
+    "expanded": "Zone élargie"
+  },
   "search": {
     "placeholder": "Rechercher un lieu...",
     "no_results": "Aucun lieu trouvé",

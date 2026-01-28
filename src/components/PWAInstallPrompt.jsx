@@ -35,12 +35,17 @@ export default function PWAInstallPrompt() {
 
     if (isInStandaloneMode) return;
 
-    // Vérifier si l'utilisateur a déjà ignoré le prompt récemment (24h)
-    const lastDismissed = localStorage.getItem('pwa-prompt-dismissed');
-    const now = Date.now();
-    if (lastDismissed && now - parseInt(lastDismissed) < 24 * 60 * 60 * 1000) {
-      console.log('🔇 PWA: Prompt ignoré récemment, masqué pour le moment');
-      return;
+    // Vérifier si l'utilisateur a déjà refusé l'installation
+    const hasDeclined = localStorage.getItem('pwa-prompt-declined');
+    
+    if (hasDeclined) {
+      // L'utilisateur a déjà refusé : afficher le prompt avec 1 chance sur 10
+      const randomChance = Math.floor(Math.random() * 10) + 1; // 1 à 10
+      if (randomChance !== 5) {
+        console.log('🎲 PWA: Utilisateur a déjà refusé, tirage aléatoire:', randomChance, '(pas affiché)');
+        return;
+      }
+      console.log('🎲 PWA: Utilisateur a déjà refusé, mais tirage gagnant! Affichage du prompt.');
     }
 
     // Gestion de l'événement d'installation
@@ -104,9 +109,9 @@ export default function PWAInstallPrompt() {
   };
 
   const handleDismiss = () => {
-    console.log('❌ Installation PWA fermée');
-    // Mémoriser le refus pour 24h
-    localStorage.setItem('pwa-prompt-dismissed', Date.now().toString());
+    console.log('❌ Installation PWA refusée par l\'utilisateur');
+    // Mémoriser le refus de façon permanente (1 chance sur 10 de réapparaître)
+    localStorage.setItem('pwa-prompt-declined', 'true');
     setShowPrompt(false);
   };
 

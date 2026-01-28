@@ -1,6 +1,7 @@
 
 import { useState, useEffect, useRef } from 'react';
 import { searchPlaces } from '../services/nominatimService';
+import { useSearchRestrict } from '../contexts/SearchRestrictContext';
 
 /**
  * Composant de recherche "Headless" ou presque.
@@ -21,6 +22,9 @@ export default function SearchBarEnhanced({
 }) {
   const [internalValue, setInternalValue] = useState(value);
   const debounceTimer = useRef(null);
+  
+  // Récupérer les options de recherche du contexte
+  const { getSearchOptions } = useSearchRestrict();
   
   // Sync prop value -> internal state
   useEffect(() => {
@@ -46,10 +50,11 @@ export default function SearchBarEnhanced({
     onLoading(true);
     debounceTimer.current = setTimeout(async () => {
         try {
+            // Utiliser les options du contexte (bounded + viewbox)
+            const searchOptions = getSearchOptions();
             const results = await searchPlaces(text, { 
                 limit: 8,
-                bounded: true, 
-                viewbox: '11.3,3.7,11.7,4.0' // Largeur Yaoundé
+                ...searchOptions
             });
             onSuggestions(results);
         } catch (error) {

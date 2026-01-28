@@ -16,6 +16,7 @@ import { useTranslation } from 'react-i18next';
 import { searchPlaces } from '../services/nominatimService';
 import { getCurrentPositionWithAddress } from '../services/geolocationService';
 import geolocationService from '../services/geolocationService';
+import { useSearchRestrict } from '../contexts/SearchRestrictContext';
 
 export default function SearchBar({
   onSelect,
@@ -39,6 +40,9 @@ export default function SearchBar({
   
   const debounceTimer = useRef(null);
   const wrapperRef = useRef(null);
+  
+  // Récupérer les options de recherche du contexte
+  const { getSearchOptions } = useSearchRestrict();
 
   // Combiner loading interne et externe
   const showLoading = loadingLocation || externalLoading;
@@ -71,11 +75,11 @@ export default function SearchBar({
     setIsLoading(true);
     debounceTimer.current = setTimeout(async () => {
       try {
-        // Utiliser Nominatim au lieu de Mapbox
+        // Utiliser les options du contexte (bounded + viewbox)
+        const searchOptions = getSearchOptions();
         const results = await searchPlaces(query, { 
           limit: 10,
-          bounded: true, // Limiter à Yaoundé
-          viewbox: '11.4,3.78,11.6,3.95',
+          ...searchOptions
         });
         setSuggestions(results);
         setIsOpen(results.length > 0);
