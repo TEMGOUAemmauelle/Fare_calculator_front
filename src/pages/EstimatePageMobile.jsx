@@ -15,7 +15,7 @@ import { Drawer } from 'vaul';
 import { motion, AnimatePresence } from 'framer-motion';
 import { 
     Navigation, MapPin, Calculator, ArrowLeft, 
-    Sun, CloudRain, MapPinned, Loader2, Globe, BarChart2, PlusCircle, Clock, Ruler, ChevronUp, LocateFixed, Store
+    Sun, CloudRain, MapPinned, Loader2, Globe, BarChart2, PlusCircle, Clock, Ruler, ChevronUp, LocateFixed, Store, History, MoreHorizontal
 } from 'lucide-react';
 import showToast from '../utils/customToast';
 
@@ -26,12 +26,14 @@ import PriceCard from '../components/PriceCard';
 import EstimateSuccessModal from '../components/EstimateSuccessModal';
 import OutOfBoundsModal from '../components/OutOfBoundsModal';
 import QuickPriceModal from '../components/QuickPriceModal';
+import RecentEstimatesModal from '../components/RecentEstimatesModal';
 
 // Services
 import { estimatePrice } from '../services/estimateService';
 import { getDirections } from '../services/mapboxService';
 import geolocationService from '../services/geolocationService';
 import { reverseSearch } from '../services/nominatimService';
+import { addEstimateToHistory } from '../services/localStorageService';
 
 // Utils
 import { validateTrajetInCameroon, detectCountry } from '../utils/cameroonGeoUtils';
@@ -90,6 +92,8 @@ export default function EstimatePageMobile() {
   const [showOutOfBoundsModal, setShowOutOfBoundsModal] = useState(false);
   const [outOfBoundsInfo, setOutOfBoundsInfo] = useState({ invalidPoint: 'depart', detectedCountry: '' });
   const [showQuickPriceModal, setShowQuickPriceModal] = useState(false);
+  const [showHistoryModal, setShowHistoryModal] = useState(false);
+    const [showQuickActions, setShowQuickActions] = useState(false);
 
   const arriveeInputRef = useRef(null);
   const departInputRef = useRef(null);
@@ -208,6 +212,14 @@ export default function EstimatePageMobile() {
               meteo, heure: heureTrajet
           });
           setPrediction(res);
+          
+          // Sauvegarder dans l'historique local
+          addEstimateToHistory({
+            depart: departPlace,
+            arrivee: arriveePlace,
+            prediction: res,
+          });
+          
           // Afficher le modal marketplace après 2.5s si c'est une première prédiction
           setTimeout(() => setShowMarketplaceModal(true), 2500);
       } catch (e) { showToast.error(t('estimate.server_error')); }
@@ -229,8 +241,10 @@ export default function EstimatePageMobile() {
       </div>
 
       {/* TOP BAR */}
-      <div className="absolute top-4 left-0 right-0 z-20 px-4 flex items-center justify-between">
-          <button onClick={() => navigate('/')} className="p-2.5 bg-white rounded-xl shadow-md active:scale-95 transition-transform text-gray-700"><ArrowLeft className="w-5 h-5" /></button>
+            <div className="absolute top-4 left-0 right-0 z-20 px-4 flex items-center justify-between">
+                    <div className="flex gap-2">
+                        <button onClick={() => navigate('/')} className="p-2.5 bg-white rounded-xl shadow-md active:scale-95 transition-transform text-gray-700"><ArrowLeft className="w-5 h-5" /></button>
+                    </div>
           
           <div className="flex items-center p-0.5 bg-white/90 backdrop-blur-sm rounded-full shadow-md">
               <button className="px-4 py-1.5 bg-[#f3cd08] text-black rounded-full font-bold text-[9px] uppercase tracking-wide flex items-center gap-1">
@@ -241,12 +255,65 @@ export default function EstimatePageMobile() {
               </button>
           </div>
 
-          <div className="flex gap-2">
-             <button onClick={() => navigate('/marketplace')} className="p-2.5 bg-white rounded-xl text-gray-400 hover:text-[#f3cd08] shadow-md transition-colors"><Store className="w-4 h-4" /></button>
-             <button onClick={() => navigate('/stats')} className="p-2.5 bg-white rounded-xl text-gray-400 hover:text-[#3b82f6] shadow-md transition-colors"><BarChart2 className="w-4 h-4" /></button>
-             <button onClick={() => navigate('/trajets')} className="p-2.5 bg-white rounded-xl text-gray-400 hover:text-[#3b82f6] shadow-md transition-colors"><Globe className="w-4 h-4" /></button>
-          </div>
+                    <div className="flex gap-2">
+                         <button
+                             onClick={() => setShowQuickActions(true)}
+                             className="p-2.5 bg-white rounded-xl text-gray-400 hover:text-[#141414] shadow-md transition-colors active:scale-95"
+                         >
+                             <MoreHorizontal className="w-5 h-5" />
+                         </button>
+                    </div>
       </div>
+
+            {/* QUICK ACTIONS MENU */}
+            <AnimatePresence>
+                {showQuickActions && (
+                    <>
+                        <motion.div
+                            initial={{ opacity: 0 }}
+                            animate={{ opacity: 1 }}
+                            exit={{ opacity: 0 }}
+                            className="fixed inset-0 z-30 bg-black/20"
+                            onClick={() => setShowQuickActions(false)}
+                        />
+                        <motion.div
+                            initial={{ opacity: 0, y: -10, scale: 0.98 }}
+                            animate={{ opacity: 1, y: 0, scale: 1 }}
+                            exit={{ opacity: 0, y: -10, scale: 0.98 }}
+                            className="fixed top-16 right-4 z-40 w-56 bg-white rounded-2xl shadow-2xl border border-gray-100 overflow-hidden"
+                        >
+                            <button
+                                onClick={() => { setShowQuickActions(false); setShowHistoryModal(true); }}
+                                className="w-full px-4 py-3 flex items-center gap-3 text-left text-gray-700 hover:bg-gray-50"
+                            >
+                                <History className="w-4 h-4 text-gray-400" />
+                                <span className="text-sm font-bold">{t('nav.history')}</span>
+                            </button>
+                            <button
+                                onClick={() => { setShowQuickActions(false); navigate('/marketplace'); }}
+                                className="w-full px-4 py-3 flex items-center gap-3 text-left text-gray-700 hover:bg-gray-50"
+                            >
+                                <Store className="w-4 h-4 text-gray-400" />
+                                <span className="text-sm font-bold">{t('marketplace.title')}</span>
+                            </button>
+                            <button
+                                onClick={() => { setShowQuickActions(false); navigate('/stats'); }}
+                                className="w-full px-4 py-3 flex items-center gap-3 text-left text-gray-700 hover:bg-gray-50"
+                            >
+                                <BarChart2 className="w-4 h-4 text-gray-400" />
+                                <span className="text-sm font-bold">{t('nav.stats')}</span>
+                            </button>
+                            <button
+                                onClick={() => { setShowQuickActions(false); navigate('/trajets'); }}
+                                className="w-full px-4 py-3 flex items-center gap-3 text-left text-gray-700 hover:bg-gray-50"
+                            >
+                                <Globe className="w-4 h-4 text-gray-400" />
+                                <span className="text-sm font-bold">{t('estimate.community_trips')}</span>
+                            </button>
+                        </motion.div>
+                    </>
+                )}
+            </AnimatePresence>
 
       {/* ROUTE STATS */}
       <AnimatePresence>
@@ -450,6 +517,31 @@ export default function EstimatePageMobile() {
         onSuccess={() => {
           // Optionnel : refaire une estimation pour voir le nouveau prix
           setPrediction(null);
+        }}
+      />
+
+      {/* Modal Historique des estimations récentes */}
+      <RecentEstimatesModal
+        isOpen={showHistoryModal}
+        onClose={() => setShowHistoryModal(false)}
+        onSelectEstimate={(estimate) => {
+          // Pré-remplir les champs avec l'estimation sélectionnée
+          if (estimate.depart) {
+            setDepartPlace({
+              label: estimate.depart.label || estimate.depart.place_name,
+              latitude: estimate.depart.coordinates?.[1] || estimate.depart.lat,
+              longitude: estimate.depart.coordinates?.[0] || estimate.depart.lon,
+            });
+            setDepartQuery(estimate.depart.label || estimate.depart.place_name || '');
+          }
+          if (estimate.arrivee) {
+            setArriveePlace({
+              label: estimate.arrivee.label || estimate.arrivee.place_name,
+              latitude: estimate.arrivee.coordinates?.[1] || estimate.arrivee.lat,
+              longitude: estimate.arrivee.coordinates?.[0] || estimate.arrivee.lon,
+            });
+            setArriveeQuery(estimate.arrivee.label || estimate.arrivee.place_name || '');
+          }
         }}
       />
     </div>

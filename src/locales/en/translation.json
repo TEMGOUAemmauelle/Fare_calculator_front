@@ -489,6 +489,25 @@
     "total_contributions": "Total Contributions:",
     "active_nodes": "Active Nodes:"
   },
+  "history": {
+    "title": "History",
+    "estimates_count": "estimate(s)",
+    "empty_title": "No recent estimates",
+    "empty_description": "Your trip estimates will appear here for quick access.",
+    "start_estimate": "Estimate a trip",
+    "clear_all": "Clear all",
+    "clear_confirm_title": "Clear history?",
+    "clear_confirm_description": "This will permanently delete all your recent estimates.",
+    "storage_hint": "Stored locally on this device",
+    "just_now": "Just now",
+    "minutes_ago": "{{count}} min ago",
+    "hours_ago": "{{count}}h ago",
+    "yesterday": "Yesterday",
+    "days_ago": "{{count}} days ago",
+    "status_connu": "Exact",
+    "status_similaire": "Similar",
+    "status_inconnu": "AI Estimate"
+  },
   "estimate_success_modal": {
     "title": "Your trip is ready!",
     "subtitle": "Estimation completed",

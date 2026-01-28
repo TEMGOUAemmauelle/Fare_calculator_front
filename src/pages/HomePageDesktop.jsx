@@ -5,7 +5,7 @@ import { useTranslation } from 'react-i18next';
 import { 
     Search, MapPin, BarChart2, Globe, PlusCircle, ArrowRight, 
     Navigation, Calculator, Sun, CloudRain, MapPinned, Loader2, 
-    Clock, Ruler, LocateFixed, ShieldCheck, Zap, Heart, Sparkles, X
+    Clock, Ruler, LocateFixed, ShieldCheck, Zap, Heart, Sparkles, X, History
 } from 'lucide-react';
 import { useAppNavigate } from '../hooks/useAppNavigate';
 
@@ -20,6 +20,7 @@ import MarketplaceSectionDesktop from '../components/MarketplaceSectionDesktop';
 import Footer from '../components/Footer';
 import QuickPriceModal from '../components/QuickPriceModal';
 import EstimateSuccessModal from '../components/EstimateSuccessModal';
+import RecentEstimatesModal from '../components/RecentEstimatesModal';
 import NavbarDesktop from '../components/NavbarDesktop';
 import showToast from '../utils/customToast';
 
@@ -29,6 +30,7 @@ import { getDirections } from '../services/mapboxService';
 import geolocationService from '../services/geolocationService';
 import { reverseSearch } from '../services/nominatimService';
 import { getAds } from '../services/adService';
+import { addEstimateToHistory } from '../services/localStorageService';
 
 const HERO_IMAGE = "https://image.arrivalguides.com/x/09/589f0996b9fbebbbc00a573694086f3a.jpg";
 
@@ -114,6 +116,7 @@ export default function HomePageDesktop() {
   const [backendAds, setBackendAds] = useState([]);
   const [showQuickPriceModal, setShowQuickPriceModal] = useState(false);
   const [showMarketplaceModal, setShowMarketplaceModal] = useState(false);
+    const [showHistoryModal, setShowHistoryModal] = useState(false);
 
   const arriveeInputRef = useRef(null);
   const departInputRef = useRef(null);
@@ -200,6 +203,21 @@ export default function HomePageDesktop() {
               meteo, heure: heureTrajet
           });
           setPrediction(res);
+                    addEstimateToHistory({
+                        depart: { 
+                            label: departPlace.label, 
+                            latitude: departPlace.latitude, 
+                            longitude: departPlace.longitude,
+                            coordinates: [departPlace.longitude, departPlace.latitude],
+                        },
+                        arrivee: { 
+                            label: arriveePlace.label, 
+                            latitude: arriveePlace.latitude, 
+                            longitude: arriveePlace.longitude,
+                            coordinates: [arriveePlace.longitude, arriveePlace.latitude],
+                        },
+                        prediction: res,
+                    });
           // Afficher le modal marketplace après une estimation réussie
           setTimeout(() => setShowMarketplaceModal(true), 500);
       } catch (e) { showToast.error(t('estimate.server_error')); }
@@ -326,8 +344,16 @@ export default function HomePageDesktop() {
                     </h2>
                     <p className="text-gray-400 text-sm font-bold uppercase tracking-[0.2em]">{t('estimate.drawer_description')}</p>
                 </div>
-                <div className="flex items-center gap-4 lg:justify-end">
-                     <div className="px-6 py-4 bg-gray-50 rounded-3xl border border-gray-100 flex items-center gap-4">
+                     <div className="flex items-center gap-4 lg:justify-end">
+                            <button
+                                onClick={() => setShowHistoryModal(true)}
+                                className="px-5 py-4 bg-gray-50 rounded-3xl border border-gray-100 flex items-center gap-3 text-gray-400 hover:text-[#f3cd08] hover:border-[#f3cd08]/30 hover:bg-white transition-all"
+                                title={t('nav.history')}
+                            >
+                                <div className="p-2 bg-white rounded-xl shadow-sm"><History className="w-5 h-5 text-[#f3cd08]" /></div>
+                                <span className="text-[9px] font-black uppercase tracking-widest">{t('nav.history')}</span>
+                            </button>
+                            <div className="px-6 py-4 bg-gray-50 rounded-3xl border border-gray-100 flex items-center gap-4">
                         <div className="p-2 bg-white rounded-xl shadow-sm"><Calculator className="w-5 h-5 text-[#f3cd08]" /></div>
                         <div>
                             <p className="text-[10px] font-black uppercase tracking-widest text-gray-400 leading-none mb-1">{t('home.last_update')}</p>
@@ -586,6 +612,31 @@ export default function HomePageDesktop() {
         onClose={() => setShowMarketplaceModal(false)}
         estimateData={prediction}
       />
+
+            {/* Modal Historique des estimations récentes */}
+            <RecentEstimatesModal
+                isOpen={showHistoryModal}
+                onClose={() => setShowHistoryModal(false)}
+                onSelectEstimate={(estimate) => {
+                    if (estimate.depart) {
+                        setDepartPlace({
+                            label: estimate.depart.label || estimate.depart.place_name,
+                            longitude: estimate.depart.coordinates?.[0] || estimate.depart.lon,
+                            latitude: estimate.depart.coordinates?.[1] || estimate.depart.lat,
+                        });
+                        setDepartQuery(estimate.depart.label || estimate.depart.place_name || '');
+                    }
+                    if (estimate.arrivee) {
+                        setArriveePlace({
+                            label: estimate.arrivee.label || estimate.arrivee.place_name,
+                            longitude: estimate.arrivee.coordinates?.[0] || estimate.arrivee.lon,
+                            latitude: estimate.arrivee.coordinates?.[1] || estimate.arrivee.lat,
+                        });
+                        setArriveeQuery(estimate.arrivee.label || estimate.arrivee.place_name || '');
+                    }
+                    scrollToEstimation();
+                }}
+            />
     </div>
   );
 }
