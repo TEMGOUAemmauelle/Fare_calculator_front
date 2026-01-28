@@ -115,9 +115,7 @@ const Footer = ({ variant = 'default' }) => {
 
         {/* Copyright */}
         <div className="text-center text-xs text-gray-500">
-          <p className="flex items-center justify-center gap-1">
-            {t('footer.made_with_love')} <Heart className="w-3 h-3 text-red-500" fill="currentColor" /> {t('footer.in_cameroon')}
-          </p>
+       
           <p className="mt-1">{t('footer.copyright', { year: currentYear })}</p>
         </div>
       </footer>
@@ -249,9 +247,7 @@ const Footer = ({ variant = 'default' }) => {
                <button onClick={() => navigate('/cookies')} className="hover:text-white transition-colors">{t('footer.cookies')}</button>
             </div>
           </div>
-          <p className="text-sm text-gray-500 flex items-center gap-1">
-            {t('footer.made_with_love')} <Heart className="w-4 h-4 text-red-500" fill="currentColor" /> {t('footer.in_cameroon')}
-          </p>
+         
         </div>
       </div>
     </footer>

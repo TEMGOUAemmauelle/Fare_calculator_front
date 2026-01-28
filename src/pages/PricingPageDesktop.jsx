@@ -7,6 +7,7 @@
 
 import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
+import { useTranslation } from 'react-i18next';
 import { 
   CreditCard, Check, Sparkles, Shield, Zap, Users, 
   Code, Globe, Headphones, ArrowRight, PlusCircle,
@@ -38,6 +39,7 @@ const FAQ_ITEMS = [
 
 export default function PricingPageDesktop() {
   const navigate = useAppNavigate();
+  const { t } = useTranslation();
   const [offres, setOffres] = useState([]);
   const [loading, setLoading] = useState(true);
   const [selectedOffre, setSelectedOffre] = useState(null);

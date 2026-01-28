@@ -267,10 +267,10 @@ function MobileAdCard({ ad, idx }) {
             </div>
         )}
         <img 
-            src={ad.image_url} 
-            alt={ad.title}
-            onLoad={() => setIsLoaded(true)}
-            className={`w-full h-full object-cover grayscale group-hover:grayscale-0 transition-all duration-500 ${isLoaded ? 'opacity-100' : 'opacity-0'}`}
+          src={ad.image_url} 
+          alt={ad.title}
+          onLoad={() => setIsLoaded(true)}
+          className={`w-full h-full object-cover transition-all duration-500 ${isLoaded ? 'opacity-100' : 'opacity-0'}`}
         />
       </div>
 
