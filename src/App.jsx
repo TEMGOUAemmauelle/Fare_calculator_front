@@ -6,6 +6,7 @@
  * - Toaster pour notifications
  * - Structure responsive
  * - Gestion erreurs globale
+ * - Authentification Firebase par téléphone
  */
 
 import { BrowserRouter, Routes, Route, Navigate, useLocation } from 'react-router-dom';
@@ -18,6 +19,7 @@ import { useEffect } from 'react';
 
 // Contexts
 import { SearchRestrictProvider } from './contexts/SearchRestrictContext';
+import { AuthProvider } from './contexts/AuthContext';
 
 // Pages
 import HomePage from './pages/HomePageRouter';
@@ -35,6 +37,7 @@ import CookiesPage from './pages/CookiesPage';
 import PWAInstallPrompt from './components/PWAInstallPrompt';
 import LanguageWrapper from './components/LanguageWrapper';
 import CookieConsent from './components/CookieConsent';
+import PhoneAuthModal from './components/PhoneAuthModal';
 
 import './App.css';
 
@@ -78,6 +81,7 @@ function App() {
     askPermissionOnLoad();
   }, []);
   return (
+    <AuthProvider>
     <SearchRestrictProvider>
     <BrowserRouter>
       {/* Toaster pour notifications globales */}
@@ -141,8 +145,12 @@ function App() {
       {/* PWA Install Prompt */}
       <PWAInstallPrompt />
       <CookieConsent />
+      
+      {/* Phone Auth Modal - Global */}
+      <PhoneAuthModal />
     </BrowserRouter>
     </SearchRestrictProvider>
+    </AuthProvider>
   );
 }
 

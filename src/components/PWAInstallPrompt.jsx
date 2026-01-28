@@ -22,6 +22,7 @@ export default function PWAInstallPrompt() {
   const [showPrompt, setShowPrompt] = useState(false);
   const [isIOS, setIsIOS] = useState(false);
   const [isStandalone, setIsStandalone] = useState(false);
+  const [isMobile, setIsMobile] = useState(false);
 
   useEffect(() => {
     // Vérifier si déjà installé
@@ -33,10 +34,15 @@ export default function PWAInstallPrompt() {
     const iOS = /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream;
     setIsIOS(iOS);
 
+    // Détecter mobile (viewport)
+    const mobile = window.matchMedia('(max-width: 768px)').matches;
+    setIsMobile(mobile);
+
     if (isInStandaloneMode) return;
 
     // Vérifier si l'utilisateur a déjà refusé l'installation
-    const hasDeclined = localStorage.getItem('pwa-prompt-declined');
+    const declineKey = mobile ? 'pwa-prompt-declined-mobile' : 'pwa-prompt-declined';
+    const hasDeclined = localStorage.getItem(declineKey);
     
     if (hasDeclined) {
       // L'utilisateur a déjà refusé : afficher le prompt avec 1 chance sur 10
@@ -111,7 +117,8 @@ export default function PWAInstallPrompt() {
   const handleDismiss = () => {
     console.log('❌ Installation PWA refusée par l\'utilisateur');
     // Mémoriser le refus de façon permanente (1 chance sur 10 de réapparaître)
-    localStorage.setItem('pwa-prompt-declined', 'true');
+    const declineKey = isMobile ? 'pwa-prompt-declined-mobile' : 'pwa-prompt-declined';
+    localStorage.setItem(declineKey, 'true');
     setShowPrompt(false);
   };
 
