@@ -16,6 +16,9 @@ import { MESSAGES } from './config/constants';
 import { useTranslation } from 'react-i18next';
 import { useEffect } from 'react';
 
+// Contexts
+import { SearchRestrictProvider } from './contexts/SearchRestrictContext';
+
 // Pages
 import HomePage from './pages/HomePageRouter';
 import EstimatePage from './pages/EstimatePageRouter';
@@ -75,6 +78,7 @@ function App() {
     askPermissionOnLoad();
   }, []);
   return (
+    <SearchRestrictProvider>
     <BrowserRouter>
       {/* Toaster pour notifications globales */}
       <Toaster
@@ -138,6 +142,7 @@ function App() {
       <PWAInstallPrompt />
       <CookieConsent />
     </BrowserRouter>
+    </SearchRestrictProvider>
   );
 }
 
