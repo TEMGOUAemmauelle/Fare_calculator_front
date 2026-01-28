@@ -489,6 +489,25 @@
     "total_contributions": "Total Contributions:",
     "active_nodes": "Active Nodes:"
   },
+  "history": {
+    "title": "Historique",
+    "estimates_count": "estimation(s)",
+    "empty_title": "Aucune estimation récente",
+    "empty_description": "Vos estimations de trajets apparaîtront ici pour un accès rapide.",
+    "start_estimate": "Estimer un trajet",
+    "clear_all": "Tout effacer",
+    "clear_confirm_title": "Effacer l'historique ?",
+    "clear_confirm_description": "Cette action supprimera définitivement toutes vos estimations récentes.",
+    "storage_hint": "Stocké localement sur cet appareil",
+    "just_now": "À l'instant",
+    "minutes_ago": "Il y a {{count}} min",
+    "hours_ago": "Il y a {{count}}h",
+    "yesterday": "Hier",
+    "days_ago": "Il y a {{count}} jours",
+    "status_connu": "Exact",
+    "status_similaire": "Similaire",
+    "status_inconnu": "Estimé IA"
+  },
   "estimate_success_modal": {
     "title": "Votre trajet est prêt !",
     "subtitle": "Estimation terminée",
