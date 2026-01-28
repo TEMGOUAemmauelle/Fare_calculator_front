@@ -6,14 +6,34 @@
  * - Plus de POIs (écoles, marchés, carrefours)
  * - Données OSM Cameroun
  * - Gratuit et sans limites
+ * 
+ * NOTE: Nominatim requiert une identification (email) pour éviter les blocages
+ * Le header User-Agent ne peut pas être défini depuis le navigateur (restriction sécurité)
  */
 
 const NOMINATIM_BASE_URL = 'https://nominatim.openstreetmap.org';
-const USER_AGENT = 'FareCalculatorApp/1.0';
+// Email requis par Nominatim pour identifier l'application (leur politique d'usage)
+const APP_EMAIL = 'contact@taxiestimator.cm';
 
 // Cache
 const searchCache = new Map();
 const CACHE_TTL = 3600000; // 1h
+
+// Throttle pour respecter la limite de 1 req/sec de Nominatim
+let lastRequestTime = 0;
+const MIN_REQUEST_INTERVAL = 1100; // 1.1 secondes entre chaque requête
+
+const throttledFetch = async (url) => {
+  const now = Date.now();
+  const timeSinceLastRequest = now - lastRequestTime;
+  
+  if (timeSinceLastRequest < MIN_REQUEST_INTERVAL) {
+    await new Promise(resolve => setTimeout(resolve, MIN_REQUEST_INTERVAL - timeSinceLastRequest));
+  }
+  
+  lastRequestTime = Date.now();
+  return fetch(url);
+};
 
 /**
  * Recherche de lieux avec Nominatim
@@ -50,15 +70,13 @@ export const searchPlaces = async (query, options = {}) => {
       bounded: bounded ? '1' : '0',
       'accept-language': 'fr',
       dedupe: '1', // Éviter doublons
+      email: APP_EMAIL, // Identification requise par Nominatim
     });
 
     const url = `${NOMINATIM_BASE_URL}/search?${params}`;
 
-    const response = await fetch(url, {
-      headers: {
-        'User-Agent': USER_AGENT,
-      },
-    });
+    // Utiliser throttledFetch pour respecter la limite de 1 req/sec
+    const response = await throttledFetch(url);
 
     if (!response.ok) {
       throw new Error(`Nominatim error: ${response.status}`);
@@ -149,6 +167,7 @@ export const searchStructured = async (components = {}) => {
       addressdetails: '1',
       limit: limit.toString(),
       'accept-language': 'fr',
+      email: APP_EMAIL,
     });
 
     if (street) params.append('street', street);
@@ -157,11 +176,7 @@ export const searchStructured = async (components = {}) => {
 
     const url = `${NOMINATIM_BASE_URL}/search?${params}`;
 
-    const response = await fetch(url, {
-      headers: {
-        'User-Agent': USER_AGENT,
-      },
-    });
+    const response = await throttledFetch(url);
 
     if (!response.ok) {
       throw new Error(`Nominatim error: ${response.status}`);
@@ -195,13 +210,12 @@ export const reverseGeocode = async (lat, lon) => {
       addressdetails: '1',
       zoom: '18',
       'accept-language': 'fr',
+      email: APP_EMAIL,
     });
 
     const url = `${NOMINATIM_BASE_URL}/reverse?${params}`;
 
-    const response = await fetch(url, {
-      headers: { 'User-Agent': USER_AGENT },
-    });
+    const response = await throttledFetch(url);
 
     if (!response.ok) throw new Error(`Nominatim error: ${response.status}`);
 

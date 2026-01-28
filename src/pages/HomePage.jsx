@@ -106,7 +106,7 @@ export default function HomePage() {
                 FARE<span className="text-[#f9d716]">CAL</span>
               </h1>
               <div className="h-1 w-8 bg-[#f9d716] mt-1 rounded-full" />
-              <CityIndicator address={userAddress} variant="minimal" className="mt-2" showSwitch={false} />
+              <CityIndicator address={userAddress} variant="minimal" className="mt-2" showSwitch={true} />
            </div>
            
            <div className="flex items-center gap-2">
