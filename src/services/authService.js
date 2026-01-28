@@ -78,20 +78,24 @@ authClient.interceptors.response.use(
  * Vérifie le token Firebase avec le backend et crée/récupère l'utilisateur en base.
  * 
  * @param {string} idToken - Token JWT Firebase ID
+ * @param {string} [authMethod] - Méthode d'auth utilisée ('phone_sms', 'phone_password', 'google')
  * @returns {Promise<VerifyTokenResponse>} Réponse avec données utilisateur backend
  * 
  * @example
  * // Après authentification Firebase réussie
  * const firebaseUser = auth.currentUser;
  * const idToken = await firebaseUser.getIdToken();
- * const response = await verifyToken(idToken);
+ * const response = await verifyToken(idToken, 'phone_sms');
  * console.log(`Utilisateur ${response.is_new_user ? 'créé' : 'retrouvé'}: ${response.user.phone_number}`);
  */
-export const verifyToken = async (idToken) => {
+export const verifyToken = async (idToken, authMethod = null) => {
   try {
-    const response = await authClient.post('/auth/verify-token/', {
-      id_token: idToken,
-    });
+    const payload = { id_token: idToken };
+    if (authMethod) {
+      payload.auth_method = authMethod;
+    }
+    
+    const response = await authClient.post('/auth/verify-token/', payload);
     
     return response.data;
   } catch (error) {

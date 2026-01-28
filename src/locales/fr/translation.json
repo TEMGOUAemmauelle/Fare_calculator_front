@@ -226,6 +226,7 @@
   "auth": {
     "phone_title": "Connexion",
     "phone_subtitle": "Entrez votre numéro de téléphone",
+    "google_only_subtitle": "Connectez-vous avec votre compte Google",
     "phone_label": "Numéro de téléphone",
     "phone_info": "Un code de vérification sera envoyé par SMS à ce numéro.",
     "send_code": "Envoyer le code",
@@ -243,9 +244,11 @@
     "login_prompt_title": "Identifiez-vous",
     "login_prompt_description": "Connectez-vous pour une expérience personnalisée",
     "login_btn": "Se connecter",
-      "logged_in_as": "Connecté",
-      "logout_btn": "Se déconnecter",
-      "close": "Fermer"
+    "logged_in_as": "Connecté",
+    "logout_btn": "Se déconnecter",
+    "close": "Fermer",
+    "or": "ou",
+    "continue_with_google": "Continuer avec Google"
   },
   "search": {
     "placeholder": "Rechercher un lieu...",

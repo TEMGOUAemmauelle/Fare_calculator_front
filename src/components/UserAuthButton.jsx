@@ -3,7 +3,7 @@
  * 
  * Affiche soit :
  * - Un bouton "Se connecter" si non authentifié
- * - Le numéro de téléphone tronqué si connecté
+ * - Le nom, email ou téléphone si connecté (par ordre de priorité)
  * 
  * Design compact et élégant pour intégration dans navbar/header.
  */
@@ -20,12 +20,23 @@ import { useState } from 'react';
  */
 const formatPhoneForDisplay = (phone) => {
   if (!phone) return '';
-  // Garder le préfixe et masquer le milieu
   const cleaned = phone.replace(/\s/g, '');
   if (cleaned.length >= 12) {
     return `${cleaned.slice(0, 4)} ${cleaned.slice(4, 5)}** *** **${cleaned.slice(-1)}`;
   }
   return phone;
+};
+
+/**
+ * Formate l'email pour l'affichage
+ * arthur.donfack@gmail.com -> arth****@gmail.com
+ */
+const formatEmailForDisplay = (email) => {
+  if (!email) return '';
+  const [local, domain] = email.split('@');
+  if (!domain) return email;
+  const visiblePart = local.slice(0, Math.min(4, local.length));
+  return `${visiblePart}****@${domain}`;
 };
 
 export default function UserAuthButton({ 
@@ -36,6 +47,8 @@ export default function UserAuthButton({
   const { 
     isAuthenticated, 
     phoneNumber, 
+    user,
+    backendUser,
     openAuthModal,
     logout,
     isFirebaseConfigured 
@@ -47,6 +60,17 @@ export default function UserAuthButton({
   if (!isFirebaseConfigured) {
     return null;
   }
+
+  // Déterminer l'identifiant à afficher (ordre de priorité)
+  const displayName = backendUser?.display_name || user?.displayName;
+  const email = backendUser?.email || user?.email;
+  const photoURL = backendUser?.photo_url || user?.photoURL;
+  
+  // Ce qu'on affiche dans le bouton compact
+  const shortDisplay = displayName?.split(' ')[0] || (phoneNumber ? formatPhoneForDisplay(phoneNumber) : formatEmailForDisplay(email));
+  
+  // Ce qu'on affiche dans le modal
+  const fullDisplay = displayName || phoneNumber || email || 'Utilisateur';
 
   const variants = {
     default: {
@@ -70,9 +94,11 @@ export default function UserAuthButton({
   const isCompact = variant === 'compact';
 
   if (isAuthenticated) {
-    // Utilisateur connecté - afficher le numéro
+    // Utilisateur connecté - afficher le nom/email/téléphone
     const showLabel = variant !== 'compact';
     const avatarSize = variant === 'compact' ? 'w-5 h-5' : 'w-6 h-6';
+    const hasPhoto = !!photoURL;
+    
     return (
       <>
         <motion.button
@@ -83,10 +109,19 @@ export default function UserAuthButton({
           className={`${style.container} bg-gray-50 border border-gray-200 hover:bg-gray-100 ${className}`}
           aria-label={t('auth.logged_in_as')}
         >
-          <div className={`${avatarSize} bg-black/5 rounded-full flex items-center justify-center`}>
-            <User className={`${style.icon} text-black`} />
-          </div>
-          {!isCompact && (
+          {hasPhoto ? (
+            <img 
+              src={photoURL} 
+              alt="" 
+              className={`${avatarSize} rounded-full object-cover`}
+              referrerPolicy="no-referrer"
+            />
+          ) : (
+            <div className={`${avatarSize} bg-black/5 rounded-full flex items-center justify-center`}>
+              <User className={`${style.icon} text-black`} />
+            </div>
+          )}
+          {!isCompact && shortDisplay && (
             <span className={`${style.text} text-gray-700 whitespace-nowrap`}>
               {showLabel && (
                 <>
@@ -94,7 +129,7 @@ export default function UserAuthButton({
                   <span className="mx-1 text-gray-300">•</span>
                 </>
               )}
-              {formatPhoneForDisplay(phoneNumber)}
+              {shortDisplay}
             </span>
           )}
         </motion.button>
@@ -128,16 +163,31 @@ export default function UserAuthButton({
                             <X className="w-4 h-4" />
                         </button>
                     
-                        <div className="w-16 h-16 mx-auto bg-gray-50 rounded-full flex items-center justify-center mb-4">
+                        {hasPhoto ? (
+                          <img 
+                            src={photoURL} 
+                            alt="" 
+                            className="w-16 h-16 mx-auto rounded-full object-cover mb-4"
+                            referrerPolicy="no-referrer"
+                          />
+                        ) : (
+                          <div className="w-16 h-16 mx-auto bg-gray-50 rounded-full flex items-center justify-center mb-4">
                             <User className="w-8 h-8 text-gray-400" />
-                        </div>
+                          </div>
+                        )}
                         
                         <h3 className="text-gray-500 text-xs font-semibold uppercase tracking-wide mb-1">
                             {t('auth.logged_in_as')}
                         </h3>
                         <p className="text-lg font-bold text-gray-900 tracking-tight">
-                            {phoneNumber}
+                            {fullDisplay}
                         </p>
+                        {/* Afficher l'email en secondaire si on a un nom */}
+                        {displayName && email && (
+                          <p className="text-xs text-gray-400 mt-1">
+                            {email}
+                          </p>
+                        )}
                     </div>
 
                     <div className="p-4 bg-gray-50 border-t border-gray-100">

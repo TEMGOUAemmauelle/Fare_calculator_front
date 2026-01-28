@@ -226,6 +226,7 @@
   "auth": {
     "phone_title": "Sign In",
     "phone_subtitle": "Enter your phone number",
+    "google_only_subtitle": "Sign in with your Google account",
     "phone_label": "Phone number",
     "phone_info": "A verification code will be sent via SMS to this number.",
     "send_code": "Send code",
@@ -245,7 +246,9 @@
     "login_btn": "Sign in",
     "logged_in_as": "Signed in",
     "logout_btn": "Sign out",
-    "close": "Close"
+    "close": "Close",
+    "or": "or",
+    "continue_with_google": "Continue with Google"
   },
   "search": {
     "placeholder": "Search for a place...",
