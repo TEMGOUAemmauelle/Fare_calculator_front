@@ -72,10 +72,14 @@ self.addEventListener('fetch', (event) => {
     return;
   }
 
-  // Stratégie pour les API externes (Mapbox, Nominatim, etc.)
-  if (url.hostname.includes('mapbox.com') || 
-      url.hostname.includes('openstreetmap.org') ||
-      url.hostname.includes('nominatim.org')) {
+  // ⚠️ NE PAS intercepter Nominatim - cause des problèmes CORS
+  // Nominatim doit passer directement sans interception du SW
+  if (url.hostname.includes('nominatim')) {
+    return; // Laisser passer sans interception
+  }
+
+  // Stratégie pour les API externes (Mapbox seulement)
+  if (url.hostname.includes('mapbox.com')) {
     event.respondWith(networkFirstWithCache(request, API_CACHE));
     return;
   }
