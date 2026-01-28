@@ -1,8 +1,20 @@
-# Fare Calculator - Frontend PWA
+<div align="center">
 
-# -> Fare Calculator Frontend
+<img src="src/assets/images/taxi-logo-v2.png" alt="Fare Calculator" width="140" />
 
-Application web PWA moderne pour l'estimation de prix de taxi au Cameroun (focus Yaoundé).
+# Fare Calculator — Frontend PWA
+
+### Interface ultra‑moderne pour estimer les tarifs de taxi au Cameroun (focus Yaoundé)
+
+[![React](https://img.shields.io/badge/React-19-61DAFB?style=for-the-badge&logo=react&logoColor=white)](https://react.dev/)
+[![Vite](https://img.shields.io/badge/Vite-7-646CFF?style=for-the-badge&logo=vite&logoColor=white)](https://vitejs.dev/)
+[![Tailwind](https://img.shields.io/badge/TailwindCSS-4-38B2AC?style=for-the-badge&logo=tailwindcss&logoColor=white)](https://tailwindcss.com/)
+[![Mapbox](https://img.shields.io/badge/Mapbox-GL%20JS-000000?style=for-the-badge&logo=mapbox&logoColor=white)](https://www.mapbox.com/)
+[![PWA](https://img.shields.io/badge/PWA-Ready-5A0FC8?style=for-the-badge&logo=pwa&logoColor=white)](https://developer.mozilla.org/fr/docs/Web/Progressive_web_apps)
+
+[**Fonctionnalités**](#-fonctionnalités) • [**Technologies**](#-technologies) • [**Installation**](#-installation-et-configuration) • [**Captures**](#-captures-décran-desktop)
+
+</div>
 
 ## -> Fonctionnalités
 
@@ -35,6 +47,25 @@ Cette application React/Vite permet aux utilisateurs de :
 - **Ajouter des trajets réels** après un ride pour enrichir la base de données communautaire
 - **Visualiser l'itinéraire** sur une carte interactive (Mapbox GL JS)
 - **Consulter l'historique** et les statistiques des trajets
+
+## -> Captures d'écran (Desktop)
+
+![Accueil](./Fare-Calculator-capture-version-pc/Accueil.png)
+![Connexion - Modal](./Fare-Calculator-capture-version-pc/modal-connexion-pc.jpeg)
+![Connexion - Google](./Fare-Calculator-capture-version-pc/modal-google-auth-pc.jpeg)
+![Connexion - Saisie numéro](./Fare-Calculator-capture-version-pc/modal-conexion-saisie-numero-pc.jpeg)
+![Connexion - Saisie code](./Fare-Calculator-capture-version-pc/modal-conexion-saisie-codepc.jpeg)
+![Utilisateur connecté + déconnexion](./Fare-Calculator-capture-version-pc/modal-signed-in-and-sign-out-pc.jpeg)
+![Indicateur Signed-in](./Fare-Calculator-capture-version-pc/indicateur-signed-in-pc.jpeg)
+![Language Switch](./Fare-Calculator-capture-version-pc/language-switch.png)
+![Estimation trajet](./Fare-Calculator-capture-version-pc/page-estimation-trajets.png)
+![Résultat estimation + pub](./Fare-Calculator-capture-version-pc/resultat-estimation-et-pub-pc.png)
+![Carte trajet](./Fare-Calculator-capture-version-pc/trajet-carte-pc.png)
+![Ajout contribution trajets](./Fare-Calculator-capture-version-pc/page-ajout-contribution-trajets.png)
+![Consultation trajets communauté](./Fare-Calculator-capture-version-pc/page-consultation-trajets-commu.png)
+![Statistiques trajets](./Fare-Calculator-capture-version-pc/page-statistiques-trajets.png)
+![Marketplace](./Fare-Calculator-capture-version-pc/page-marketplace.png)
+![Partenaires](./Fare-Calculator-capture-version-pc/partenaires.png)
 
 ### Technologies utilisées
 
