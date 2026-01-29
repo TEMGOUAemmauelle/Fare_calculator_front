@@ -65,7 +65,7 @@ const Footer = ({ variant = 'default' }) => {
         {/* Logo */}
         <div className="text-center mb-6">
           <h2 className="text-xl font-black tracking-tighter uppercase italic">
-            FARE<span className="text-[#f3cd08]">CAL</span>
+            FARE<span className="text-[#f39908]">CAL</span>
           </h2>
           <p className="text-xs text-gray-500 mt-1">
             {t('footer.tagline')}
@@ -78,7 +78,7 @@ const Footer = ({ variant = 'default' }) => {
             {contact.email && (
               <a 
                 href={`mailto:${contact.email}`}
-                className="p-3 bg-white/10 rounded-xl hover:bg-[#f3cd08] hover:text-black transition-all"
+                className="p-3 bg-white/10 rounded-xl hover:bg-[#f39908] hover:text-black transition-all"
                 aria-label="Email"
               >
                 <Mail className="w-5 h-5" />
@@ -98,7 +98,7 @@ const Footer = ({ variant = 'default' }) => {
             {contact.telephone && (
               <a 
                 href={`tel:${contact.telephone}`}
-                className="p-3 bg-white/10 rounded-xl hover:bg-[#f3cd08] hover:text-black transition-all"
+                className="p-3 bg-white/10 rounded-xl hover:bg-[#f39908] hover:text-black transition-all"
                 aria-label="Téléphone"
               >
                 <Phone className="w-5 h-5" />
@@ -132,15 +132,15 @@ const Footer = ({ variant = 'default' }) => {
           <div className="lg:col-span-1">
             <div className="mb-6">
               <h2 className="text-2xl font-black tracking-tighter uppercase italic">
-                FARE<span className="text-[#f3cd08]">CAL</span>
+                FARE<span className="text-[#f39908]">CAL</span>
               </h2>
-              <div className="h-1 w-8 bg-[#f3cd08] mt-2 rounded-full" />
+              <div className="h-1 w-8 bg-[#f39908] mt-2 rounded-full" />
             </div>
             <p className="text-gray-400 text-sm leading-relaxed mb-6">
               {t('footer.description')}
             </p>
             <div className="flex items-center gap-2 text-sm text-gray-500">
-              <MapPin className="w-4 h-4 text-[#f3cd08]" />
+              <MapPin className="w-4 h-4 text-[#f39908]" />
               <span>{t('footer.location')}</span>
             </div>
           </div>
@@ -157,7 +157,7 @@ const Footer = ({ variant = 'default' }) => {
                     onClick={() => navigate(link.path)}
                     className="text-gray-400 hover:text-white transition-colors flex items-center gap-2 group"
                   >
-                    <ChevronRight className="w-4 h-4 text-[#f3cd08] opacity-0 group-hover:opacity-100 transition-opacity" />
+                    <ChevronRight className="w-4 h-4 text-[#f39908] opacity-0 group-hover:opacity-100 transition-opacity" />
                     <span>{t(link.label_key)}</span>
                   </button>
                 </li>
@@ -177,7 +177,7 @@ const Footer = ({ variant = 'default' }) => {
                   className="flex items-center gap-3 text-gray-400 hover:text-white transition-colors"
                 >
                   <div className="w-10 h-10 bg-white/10 rounded-xl flex items-center justify-center">
-                    <Mail className="w-5 h-5 text-[#f3cd08]" />
+                    <Mail className="w-5 h-5 text-[#f39908]" />
                   </div>
                   <span className="text-sm">{contact.email}</span>
                 </a>
@@ -201,7 +201,7 @@ const Footer = ({ variant = 'default' }) => {
                   className="flex items-center gap-3 text-gray-400 hover:text-white transition-colors"
                 >
                   <div className="w-10 h-10 bg-white/10 rounded-xl flex items-center justify-center">
-                    <Phone className="w-5 h-5 text-[#f3cd08]" />
+                    <Phone className="w-5 h-5 text-[#f39908]" />
                   </div>
                   <span className="text-sm">{contact.telephone}</span>
                 </a>
@@ -221,7 +221,7 @@ const Footer = ({ variant = 'default' }) => {
                   href={social.url}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="w-10 h-10 bg-white/10 rounded-xl flex items-center justify-center hover:bg-[#f3cd08] hover:text-black transition-all"
+                  className="w-10 h-10 bg-white/10 rounded-xl flex items-center justify-center hover:bg-[#f39908] hover:text-black transition-all"
                   aria-label={social.label}
                 >
                   <social.icon className="w-5 h-5" />

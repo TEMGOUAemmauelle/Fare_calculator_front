@@ -22,7 +22,7 @@ const CATEGORIES = [
 ];
 
 const COLORS = [
-  { value: '#f3cd08', label: 'Or' },
+  { value: '#f39908', label: 'Or' },
   { value: '#22c55e', label: 'Vert' },
   { value: '#3b82f6', label: 'Bleu' },
   { value: '#ef4444', label: 'Rouge' },
@@ -49,7 +49,7 @@ const SubscriptionForm = ({
     image_url: '',
     app_link: '',
     category: 'Transport',
-    color: '#f3cd08',
+    color: '#f39908',
     // Contact info
     contact_email: '',
     contact_telephone: '',
@@ -144,7 +144,7 @@ const SubscriptionForm = ({
           image_url: '',
           app_link: '',
           category: 'Transport',
-          color: '#f3cd08',
+          color: '#f39908',
           contact_email: '',
           contact_telephone: '',
         });
@@ -186,14 +186,14 @@ const SubscriptionForm = ({
               {/* Header */}
               <div className="sticky top-0 bg-white border-b border-gray-100 px-6 py-4 flex items-center justify-between rounded-t-3xl z-10">
                 <div className="flex items-center gap-3">
-                  <div className="p-2 bg-[#f3cd08]/10 rounded-xl">
-                    <Sparkles className="w-5 h-5 text-[#f3cd08]" />
+                  <div className="p-2 bg-[#f39908]/10 rounded-xl">
+                    <Sparkles className="w-5 h-5 text-[#f39908]" />
                   </div>
                   <div>
                     <h2 className="text-lg font-black">Devenir partenaire</h2>
                     {selectedOffre && (
                       <p className="text-xs text-gray-500">
-                        Offre <span className="font-bold text-[#f3cd08]">{selectedOffre.nom}</span> • {selectedOffre.duree_jours || selectedOffre.duree_mois * 30} jours
+                        Offre <span className="font-bold text-[#f39908]">{selectedOffre.nom}</span> • {selectedOffre.duree_jours || selectedOffre.duree_mois * 30} jours
                       </p>
                     )}
                   </div>
@@ -209,11 +209,11 @@ const SubscriptionForm = ({
               {/* Progress indicator */}
               <div className="px-6 py-3 bg-gray-50 border-b border-gray-100">
                 <div className="flex items-center gap-2">
-                  <div className={`flex items-center justify-center w-6 h-6 rounded-full text-xs font-bold ${step >= 1 ? 'bg-[#f3cd08] text-black' : 'bg-gray-200 text-gray-500'}`}>
+                  <div className={`flex items-center justify-center w-6 h-6 rounded-full text-xs font-bold ${step >= 1 ? 'bg-[#f39908] text-black' : 'bg-gray-200 text-gray-500'}`}>
                     1
                   </div>
-                  <div className={`flex-1 h-1 rounded ${step >= 2 ? 'bg-[#f3cd08]' : 'bg-gray-200'}`} />
-                  <div className={`flex items-center justify-center w-6 h-6 rounded-full text-xs font-bold ${step >= 2 ? 'bg-[#f3cd08] text-black' : 'bg-gray-200 text-gray-500'}`}>
+                  <div className={`flex-1 h-1 rounded ${step >= 2 ? 'bg-[#f39908]' : 'bg-gray-200'}`} />
+                  <div className={`flex items-center justify-center w-6 h-6 rounded-full text-xs font-bold ${step >= 2 ? 'bg-[#f39908] text-black' : 'bg-gray-200 text-gray-500'}`}>
                     2
                   </div>
                 </div>
@@ -276,7 +276,7 @@ const SubscriptionForm = ({
                               className={`w-full pl-12 pr-4 py-3.5 bg-gray-50 rounded-xl outline-none transition-all ${
                                 errors.nom_entreprise 
                                   ? 'ring-2 ring-red-500' 
-                                  : 'focus:ring-2 focus:ring-[#f3cd08]'
+                                  : 'focus:ring-2 focus:ring-[#f39908]'
                               }`}
                             />
                           </div>
@@ -300,7 +300,7 @@ const SubscriptionForm = ({
                               className={`w-full pl-12 pr-4 py-3.5 bg-gray-50 rounded-xl outline-none transition-all ${
                                 errors.title 
                                   ? 'ring-2 ring-red-500' 
-                                  : 'focus:ring-2 focus:ring-[#f3cd08]'
+                                  : 'focus:ring-2 focus:ring-[#f39908]'
                               }`}
                             />
                           </div>
@@ -324,7 +324,7 @@ const SubscriptionForm = ({
                               className={`w-full pl-12 pr-4 py-3.5 bg-gray-50 rounded-xl outline-none transition-all resize-none ${
                                 errors.description 
                                   ? 'ring-2 ring-red-500' 
-                                  : 'focus:ring-2 focus:ring-[#f3cd08]'
+                                  : 'focus:ring-2 focus:ring-[#f39908]'
                               }`}
                             />
                           </div>
@@ -345,7 +345,7 @@ const SubscriptionForm = ({
                               onChange={handleChange('description_en')}
                               placeholder="Describe your service in a few sentences..."
                               rows={2}
-                              className="w-full pl-12 pr-4 py-3.5 bg-gray-50 rounded-xl outline-none focus:ring-2 focus:ring-[#f3cd08] transition-all resize-none"
+                              className="w-full pl-12 pr-4 py-3.5 bg-gray-50 rounded-xl outline-none focus:ring-2 focus:ring-[#f39908] transition-all resize-none"
                             />
                           </div>
                         </div>
@@ -365,7 +365,7 @@ const SubscriptionForm = ({
                               className={`w-full pl-12 pr-4 py-3.5 bg-gray-50 rounded-xl outline-none transition-all ${
                                 errors.image_url 
                                   ? 'ring-2 ring-red-500' 
-                                  : 'focus:ring-2 focus:ring-[#f3cd08]'
+                                  : 'focus:ring-2 focus:ring-[#f39908]'
                               }`}
                             />
                           </div>
@@ -387,7 +387,7 @@ const SubscriptionForm = ({
                               value={formData.app_link}
                               onChange={handleChange('app_link')}
                               placeholder="https://play.google.com/store/apps/..."
-                              className="w-full pl-12 pr-4 py-3.5 bg-gray-50 rounded-xl outline-none focus:ring-2 focus:ring-[#f3cd08] transition-all"
+                              className="w-full pl-12 pr-4 py-3.5 bg-gray-50 rounded-xl outline-none focus:ring-2 focus:ring-[#f39908] transition-all"
                             />
                           </div>
                         </div>
@@ -403,7 +403,7 @@ const SubscriptionForm = ({
                               <select
                                 value={formData.category}
                                 onChange={handleChange('category')}
-                                className="w-full pl-12 pr-4 py-3.5 bg-gray-50 rounded-xl outline-none focus:ring-2 focus:ring-[#f3cd08] transition-all appearance-none"
+                                className="w-full pl-12 pr-4 py-3.5 bg-gray-50 rounded-xl outline-none focus:ring-2 focus:ring-[#f39908] transition-all appearance-none"
                               >
                                 {CATEGORIES.map(cat => (
                                   <option key={cat.value} value={cat.value}>{cat.label}</option>
@@ -420,7 +420,7 @@ const SubscriptionForm = ({
                               <select
                                 value={formData.color}
                                 onChange={handleChange('color')}
-                                className="w-full pl-12 pr-4 py-3.5 bg-gray-50 rounded-xl outline-none focus:ring-2 focus:ring-[#f3cd08] transition-all appearance-none"
+                                className="w-full pl-12 pr-4 py-3.5 bg-gray-50 rounded-xl outline-none focus:ring-2 focus:ring-[#f39908] transition-all appearance-none"
                                 style={{ borderLeft: `4px solid ${formData.color}` }}
                               >
                                 {COLORS.map(col => (
@@ -471,7 +471,7 @@ const SubscriptionForm = ({
                               className={`w-full pl-12 pr-4 py-3.5 bg-gray-50 rounded-xl outline-none transition-all ${
                                 errors.contact_email 
                                   ? 'ring-2 ring-red-500' 
-                                  : 'focus:ring-2 focus:ring-[#f3cd08]'
+                                  : 'focus:ring-2 focus:ring-[#f39908]'
                               }`}
                             />
                           </div>
@@ -495,7 +495,7 @@ const SubscriptionForm = ({
                               className={`w-full pl-12 pr-4 py-3.5 bg-gray-50 rounded-xl outline-none transition-all ${
                                 errors.contact_telephone 
                                   ? 'ring-2 ring-red-500' 
-                                  : 'focus:ring-2 focus:ring-[#f3cd08]'
+                                  : 'focus:ring-2 focus:ring-[#f39908]'
                               }`}
                             />
                           </div>
@@ -518,7 +518,7 @@ const SubscriptionForm = ({
                             </div>
                             <div className="flex justify-between">
                               <span className="text-gray-500">Offre:</span>
-                              <span className="font-bold text-[#f3cd08]">{selectedOffre?.nom || '-'}</span>
+                              <span className="font-bold text-[#f39908]">{selectedOffre?.nom || '-'}</span>
                             </div>
                             <div className="flex justify-between">
                               <span className="text-gray-500">Prix:</span>
@@ -540,7 +540,7 @@ const SubscriptionForm = ({
                             disabled={isSubmitting}
                             whileHover={{ scale: 1.02 }}
                             whileTap={{ scale: 0.98 }}
-                            className="flex-1 py-4 bg-[#f3cd08] text-black rounded-2xl font-bold flex items-center justify-center gap-2 disabled:opacity-50 transition-opacity"
+                            className="flex-1 py-4 bg-[#f39908] text-black rounded-2xl font-bold flex items-center justify-center gap-2 disabled:opacity-50 transition-opacity"
                           >
                             {isSubmitting ? (
                               <>

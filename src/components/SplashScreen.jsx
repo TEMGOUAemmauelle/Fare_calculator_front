@@ -22,7 +22,7 @@ export default function SplashScreen({ isVisible, status, message, onRetry, onSk
                     className="flex flex-col items-center"
                   >
                      <h1 className="text-3xl font-black tracking-tighter uppercase italic text-[#141414]">
-                        FARE<span className="text-[#f3cd08]">CAL</span>
+                        FARE<span className="text-[#f39908]">CAL</span>
                      </h1>
                      <div className="w-12 h-1 bg-[#141414] mt-2 rounded-full" />
                   </motion.div>
@@ -35,7 +35,7 @@ export default function SplashScreen({ isVisible, status, message, onRetry, onSk
                                <motion.div 
                                  animate={{ scale: [1, 1.2, 1], opacity: [0.5, 1, 0.5] }} 
                                  transition={{ repeat: Infinity, duration: 1 }}
-                                 className="w-2 h-2 bg-[#f3cd08] rounded-full" 
+                                 className="w-2 h-2 bg-[#f39908] rounded-full" 
                                />
                                <motion.div 
                                  animate={{ scale: [1, 1.2, 1], opacity: [0.5, 1, 0.5] }} 
@@ -45,7 +45,7 @@ export default function SplashScreen({ isVisible, status, message, onRetry, onSk
                                <motion.div 
                                  animate={{ scale: [1, 1.2, 1], opacity: [0.5, 1, 0.5] }} 
                                  transition={{ repeat: Infinity, duration: 1, delay: 0.4 }}
-                                 className="w-2 h-2 bg-[#f3cd08] rounded-full" 
+                                 className="w-2 h-2 bg-[#f39908] rounded-full" 
                                />
                             </div>
                             <p className="text-[10px] font-black text-gray-400 uppercase tracking-[0.2em] animate-pulse">
@@ -59,7 +59,7 @@ export default function SplashScreen({ isVisible, status, message, onRetry, onSk
                                         <motion.div
                                            animate={{ y: [0, -3, 0] }}
                                            transition={{ repeat: Infinity, duration: 1.8, ease: 'easeInOut' }}
-                                           className="w-5 h-5 rounded-full bg-[#f3cd08]/20 flex items-center justify-center"
+                                           className="w-5 h-5 rounded-full bg-[#f39908]/20 flex items-center justify-center"
                                         >
                                            <MapPin className="w-4 h-4 text-[#141414]" />
                                         </motion.div>

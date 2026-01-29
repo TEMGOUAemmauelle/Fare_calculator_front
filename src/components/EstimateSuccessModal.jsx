@@ -127,7 +127,7 @@ const EstimateSuccessModal = ({
                   <div className="w-2/5 bg-gradient-to-br from-[#141414] to-[#2a2a2a] p-8 flex flex-col justify-between">
                     <div>
                       <div className="flex items-center gap-3 mb-6">
-                        <div className="p-3 bg-[#f3cd08] rounded-2xl">
+                        <div className="p-3 bg-[#f39908] rounded-2xl">
                           <Sparkles className="w-6 h-6 text-black" />
                         </div>
                         <div>
@@ -148,7 +148,7 @@ const EstimateSuccessModal = ({
                             </p>
                             <p className="text-4xl font-black text-white">
                               {estimateData.prix_estime || estimateData.prix_moyen || '---'}
-                              <span className="text-lg font-bold text-[#f3cd08] ml-2">{t('estimate_success_modal.currency')}</span>
+                              <span className="text-lg font-bold text-[#f39908] ml-2">{t('estimate_success_modal.currency')}</span>
                             </p>
                           </div>
 
@@ -172,7 +172,7 @@ const EstimateSuccessModal = ({
 
                     <button
                       onClick={onClose}
-                      className="w-full py-4 bg-[#f3cd08] text-black rounded-2xl font-black text-sm uppercase tracking-wider flex items-center justify-center gap-2 hover:bg-[#e5c007] transition-colors"
+                      className="w-full py-4 bg-[#f39908] text-black rounded-2xl font-black text-sm uppercase tracking-wider flex items-center justify-center gap-2 hover:bg-[#e5c007] transition-colors"
                     >
                       {t('estimate_success_modal.got_it')}
                       <ArrowRight className="w-4 h-4" />
@@ -190,14 +190,14 @@ const EstimateSuccessModal = ({
                       </button>
                       
                       <div className="flex items-center gap-3">
-                        <Store className="w-5 h-5 text-[#f3cd08]" />
+                        <Store className="w-5 h-5 text-[#f39908]" />
                         <h3 className="text-lg font-black text-gray-900 uppercase tracking-wide">
                           {t('estimate_success_modal.services_for_you')}
                         </h3>
                       </div>
                       <button
                         onClick={handleViewAll}
-                        className="text-sm font-bold text-[#f3cd08] flex items-center gap-1 hover:underline"
+                        className="text-sm font-bold text-[#f39908] flex items-center gap-1 hover:underline"
                       >
                         {t('estimate_success_modal.view_all')}
                         <ChevronRight className="w-4 h-4" />
@@ -224,7 +224,7 @@ const EstimateSuccessModal = ({
                             <div 
                               className="absolute inset-0 opacity-10 group-hover:opacity-20 transition-opacity"
                               style={{ 
-                                background: `linear-gradient(135deg, ${service.couleur || '#f3cd08'} 0%, transparent 100%)` 
+                                background: `linear-gradient(135deg, ${service.couleur || '#f39908'} 0%, transparent 100%)` 
                               }}
                             />
                             
@@ -240,7 +240,7 @@ const EstimateSuccessModal = ({
                               ) : (
                                 <div 
                                   className="w-14 h-14 rounded-xl mb-4 flex items-center justify-center"
-                                  style={{ backgroundColor: service.couleur || '#f3cd08' }}
+                                  style={{ backgroundColor: service.couleur || '#f39908' }}
                                 >
                                   <Sparkles className="w-6 h-6 text-white" />
                                 </div>
@@ -283,7 +283,7 @@ const EstimateSuccessModal = ({
                   <div className="px-6 pb-4 border-b border-gray-100">
                     <div className="flex items-start justify-between">
                       <div className="flex items-center gap-3">
-                        <div className="p-2.5 bg-[#f3cd08] rounded-2xl">
+                        <div className="p-2.5 bg-[#f39908] rounded-2xl">
                           <Sparkles className="w-5 h-5 text-black" />
                         </div>
                         <div>
@@ -314,14 +314,14 @@ const EstimateSuccessModal = ({
                         <div className="flex items-center justify-between">
                           <div className="flex items-center gap-3">
                             <div className="p-2 bg-white/10 rounded-xl">
-                              <Car className="w-4 h-4 text-[#f3cd08]" />
+                              <Car className="w-4 h-4 text-[#f39908]" />
                             </div>
                             <div>
                               <p className="text-[10px] text-gray-400 uppercase tracking-wide font-bold">
                                 {t('estimate_success_modal.estimated_fare')}
                               </p>
                               <p className="text-xl font-black text-white">
-                                {estimateData.prix_estime || estimateData.prix_moyen || '---'} <span className="text-sm font-bold text-[#f3cd08]">FCFA</span>
+                                {estimateData.prix_estime || estimateData.prix_moyen || '---'} <span className="text-sm font-bold text-[#f39908]">FCFA</span>
                               </p>
                             </div>
                           </div>
@@ -340,14 +340,14 @@ const EstimateSuccessModal = ({
                   <div className="px-6 py-5 overflow-y-auto max-h-[50vh]">
                     <div className="flex items-center justify-between mb-4">
                       <div className="flex items-center gap-2">
-                        <Store className="w-4 h-4 text-[#f3cd08]" />
+                        <Store className="w-4 h-4 text-[#f39908]" />
                         <h3 className="text-sm font-black text-gray-900 uppercase tracking-wide">
                           {t('estimate_success_modal.services_for_you')}
                         </h3>
                       </div>
                       <button
                         onClick={handleViewAll}
-                        className="text-xs font-bold text-[#f3cd08] flex items-center gap-1 hover:underline"
+                        className="text-xs font-bold text-[#f39908] flex items-center gap-1 hover:underline"
                       >
                         {t('estimate_success_modal.view_all')}
                         <ChevronRight className="w-3 h-3" />
@@ -374,7 +374,7 @@ const EstimateSuccessModal = ({
                             <div 
                               className="absolute inset-0 opacity-10 group-hover:opacity-20 transition-opacity"
                               style={{ 
-                                background: `linear-gradient(135deg, ${service.couleur || '#f3cd08'} 0%, transparent 100%)` 
+                                background: `linear-gradient(135deg, ${service.couleur || '#f39908'} 0%, transparent 100%)` 
                               }}
                             />
                             
@@ -390,7 +390,7 @@ const EstimateSuccessModal = ({
                               ) : (
                                 <div 
                                   className="w-12 h-12 rounded-xl mb-3 flex items-center justify-center"
-                                  style={{ backgroundColor: service.couleur || '#f3cd08' }}
+                                  style={{ backgroundColor: service.couleur || '#f39908' }}
                                 >
                                   <Sparkles className="w-5 h-5 text-white" />
                                 </div>

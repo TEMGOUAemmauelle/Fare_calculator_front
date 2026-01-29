@@ -13,7 +13,7 @@ const TermsPage = () => {
       <div className="max-w-4xl mx-auto px-6 py-12 md:py-20">
         <button 
           onClick={() => navigate('/')} 
-          className="flex items-center gap-2 text-sm font-medium text-gray-500 hover:text-[#f3cd08] transition-colors mb-10 group"
+          className="flex items-center gap-2 text-sm font-medium text-gray-500 hover:text-[#f39908] transition-colors mb-10 group"
         >
           <ChevronLeft className="w-4 h-4 transition-transform group-hover:-translate-x-1" />
           {t('common.back')}
@@ -43,8 +43,8 @@ const TermsEn = () => (
         These General Terms of Service (the “Terms”) govern your access to and use of FarCal, including any associated websites, APIs, features, and content (collectively, the “Service”). By accessing or using the Service, you agree to these Terms.
       </p>
       
-      <div className="p-6 bg-[#f3cd08]/10 border border-[#f3cd08]/20 rounded-2xl">
-        <p className="font-semibold text-[#B49200] dark:text-[#f3cd08]">
+      <div className="p-6 bg-[#f39908]/10 border border-[#f39908]/20 rounded-2xl">
+        <p className="font-semibold text-[#B49200] dark:text-[#f39908]">
           If you do not agree to these Terms, do not use the Service.
         </p>
       </div>
@@ -211,7 +211,7 @@ const TermsEn = () => (
 
       <h2 className="text-2xl font-bold text-gray-900 dark:text-white mt-12 mb-4">17. Contact information</h2>
       <p>
-        Support and inquiries: please use the contact page at <a href="https://yowyob.com/contact" className="text-[#f3cd08] hover:underline" target="_blank" rel="noopener noreferrer">yowyob.com/contact</a>.
+        Support and inquiries: please use the contact page at <a href="https://yowyob.com/contact" className="text-[#f39908] hover:underline" target="_blank" rel="noopener noreferrer">yowyob.com/contact</a>.
       </p>
 
       <h2 className="text-2xl font-bold text-gray-900 dark:text-white mt-12 mb-4">18. Miscellaneous</h2>
@@ -241,8 +241,8 @@ const TermsFr = () => (
         Les présentes Conditions Générales d’Utilisation (les « Conditions ») régissent votre accès et votre utilisation de FarCal, y compris les sites web associés, APIs, fonctionnalités et contenus (collectivement, le « Service »). En accédant au Service ou en l’utilisant, vous acceptez les présentes Conditions.
       </p>
       
-      <div className="p-6 bg-[#f3cd08]/10 border border-[#f3cd08]/20 rounded-2xl">
-        <p className="font-semibold text-[#B49200] dark:text-[#f3cd08]">
+      <div className="p-6 bg-[#f39908]/10 border border-[#f39908]/20 rounded-2xl">
+        <p className="font-semibold text-[#B49200] dark:text-[#f39908]">
           Si vous n’acceptez pas ces Conditions, n’utilisez pas le Service.
         </p>
       </div>
@@ -409,7 +409,7 @@ const TermsFr = () => (
 
       <h2 className="text-2xl font-bold text-gray-900 dark:text-white mt-12 mb-4">17. Coordonnées de contact</h2>
       <p>
-        Assistance et demandes : veuillez utiliser la page de contact <a href="https://yowyob.com/contact" className="text-[#f3cd08] hover:underline" target="_blank" rel="noopener noreferrer">yowyob.com/contact</a>.
+        Assistance et demandes : veuillez utiliser la page de contact <a href="https://yowyob.com/contact" className="text-[#f39908] hover:underline" target="_blank" rel="noopener noreferrer">yowyob.com/contact</a>.
       </p>
 
       <h2 className="text-2xl font-bold text-gray-900 dark:text-white mt-12 mb-4">18. Dispositions diverses</h2>

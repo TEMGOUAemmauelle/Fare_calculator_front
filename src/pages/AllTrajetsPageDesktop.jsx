@@ -61,7 +61,7 @@ export default function AllTrajetsPageDesktop() {
   };
 
   return (
-    <div className="min-h-screen bg-white text-[#141414] font-sans selection:bg-[#f3cd08]/30 overflow-x-hidden">
+    <div className="min-h-screen bg-white text-[#141414] font-sans selection:bg-[#f39908]/30 overflow-x-hidden">
       {/* NAVBAR */}
       <NavbarDesktop activeRoute="/trajets" />
 
@@ -69,11 +69,11 @@ export default function AllTrajetsPageDesktop() {
         <header className="flex flex-col md:flex-row justify-between items-end mb-16 gap-8">
             <div className="space-y-4">
                 <motion.div initial={{ opacity: 0, x: -20 }} animate={{ opacity: 1, x: 0 }} className="inline-flex items-center gap-2 px-4 py-2 bg-yellow-50 rounded-full border border-yellow-100">
-                    <Activity className="w-4 h-4 text-[#f3cd08]" />
-                    <span className="text-[10px] font-black uppercase tracking-widest text-[#d4af37]">{t('trajets.real_time_feed')}</span>
+                    <Activity className="w-4 h-4 text-[#f39908]" />
+                    <span className="text-[10px] font-black uppercase tracking-widest text-[#d4a537]">{t('trajets.real_time_feed')}</span>
                 </motion.div>
                 <motion.h2 initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.1 }} className="text-6xl font-black italic uppercase tracking-tighter leading-none">
-                    Trajets<span className="text-[#f3cd08]">{t('trajets.title').split(' ')[1]}</span>
+                    Trajets<span className="text-[#f39908]">{t('trajets.title').split(' ')[1]}</span>
                 </motion.h2>
                 <p className="text-gray-400 text-lg font-medium leading-relaxed max-w-xl">
                     {t('trajets.subtitle')}
@@ -82,11 +82,11 @@ export default function AllTrajetsPageDesktop() {
 
             <div className="flex flex-col gap-4 w-full md:w-auto">
                 <div className="relative group min-w-[400px]">
-                    <Search className="absolute left-6 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-300 group-focus-within:text-[#f3cd08] transition-colors" />
+                    <Search className="absolute left-6 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-300 group-focus-within:text-[#f39908] transition-colors" />
                     <input 
                         type="text" placeholder={t('trajets.search_placeholder')} 
                         value={searchTerm} onChange={(e) => setSearchTerm(e.target.value)}
-                        className="w-full pl-14 pr-6 py-5 bg-gray-50 border-2 border-transparent rounded-3xl text-sm font-black text-gray-700 placeholder:text-gray-300 focus:bg-white focus:border-[#f3cd08]/30 outline-none transition-all shadow-sm"
+                        className="w-full pl-14 pr-6 py-5 bg-gray-50 border-2 border-transparent rounded-3xl text-sm font-black text-gray-700 placeholder:text-gray-300 focus:bg-white focus:border-[#f39908]/30 outline-none transition-all shadow-sm"
                     />
                 </div>
                 <div className="flex gap-4">
@@ -121,18 +121,18 @@ export default function AllTrajetsPageDesktop() {
                     <motion.div
                         key={trajet.id || idx}
                         variants={itemVariants}
-                        className="group relative bg-white p-8 rounded-[2.5rem] border border-gray-100 shadow-xl shadow-gray-200/50 hover:shadow-2xl hover:border-[#f3cd08]/30 transition-all overflow-hidden flex flex-col h-[320px]"
+                        className="group relative bg-white p-8 rounded-[2.5rem] border border-gray-100 shadow-xl shadow-gray-200/50 hover:shadow-2xl hover:border-[#f39908]/30 transition-all overflow-hidden flex flex-col h-[320px]"
                     >
                         <div className="flex justify-between items-start mb-8 shrink-0">
                             <div className="flex flex-col gap-1">
                                 <span className="text-[9px] font-black text-gray-300 uppercase tracking-widest">{t('trajets.price_paid')}</span>
                                 <div className="flex items-baseline gap-2">
                                     <span className="text-3xl font-black text-[#141414] italic tracking-tighter tabular-nums">{trajet.prix?.toLocaleString()}</span>
-                                    <span className="text-[10px] font-black text-[#f3cd08] uppercase">{t('trajets.currency')}</span>
+                                    <span className="text-[10px] font-black text-[#f39908] uppercase">{t('trajets.currency')}</span>
                                 </div>
                             </div>
                             <div className="px-4 py-2 bg-gray-50 rounded-2xl group-hover:bg-[#141414] transition-colors">
-                                <span className="text-[10px] font-black text-gray-400 group-hover:text-[#f3cd08] tabular-nums">
+                                <span className="text-[10px] font-black text-gray-400 group-hover:text-[#f39908] tabular-nums">
                                     {trajet.date_ajout ? new Date(trajet.date_ajout).toLocaleDateString('fr-FR', { day: 'numeric', month: 'short' }) : '---'}
                                 </span>
                             </div>
@@ -147,7 +147,7 @@ export default function AllTrajetsPageDesktop() {
                                 </div>
                              </div>
                              <div className="flex items-start gap-4">
-                                <Navigation className="w-4 h-4 text-[#f3cd08] mt-1 shrink-0 transform rotate-45" />
+                                <Navigation className="w-4 h-4 text-[#f39908] mt-1 shrink-0 transform rotate-45" />
                                 <div className="flex flex-col min-w-0">
                                     <span className="text-[8px] font-black text-gray-300 uppercase tracking-widest mb-1">{t('trajets.arrival')}</span>
                                     <span className="text-sm font-black text-gray-900 truncate uppercase italic tracking-tight">{trajet.point_arrivee?.label || t('trajets.unknown_location')}</span>
@@ -167,12 +167,12 @@ export default function AllTrajetsPageDesktop() {
                                 </div>
                             </div>
                              <div className="flex items-center gap-2">
-                                <span className="text-[10px] font-black italic text-[#f3cd08]">{trajet.qualite_trajet || 5}/10</span>
+                                <span className="text-[10px] font-black italic text-[#f39908]">{trajet.qualite_trajet || 5}/10</span>
                                 <span className="text-[7px] font-black text-gray-200 uppercase tracking-widest">{t('add.quality_label')}</span>
                             </div>
                         </div>
                         
-                        <div className="absolute -bottom-10 -right-10 w-24 h-24 bg-[#f3cd08] rounded-full blur-3xl opacity-0 group-hover:opacity-10 transition-opacity" />
+                        <div className="absolute -bottom-10 -right-10 w-24 h-24 bg-[#f39908] rounded-full blur-3xl opacity-0 group-hover:opacity-10 transition-opacity" />
                     </motion.div>
                 ))}
             </motion.div>
@@ -184,7 +184,7 @@ export default function AllTrajetsPageDesktop() {
                     <MapPinned className="w-16 h-16 text-gray-200" />
                 </div>
                 <h3 className="text-xl font-black italic uppercase tracking-tighter text-gray-300">{t('trajets.no_matching_trajets')}</h3>
-                <button onClick={() => { setSearchTerm(''); setFilterHeure('all'); setFilterMeteo('all'); }} className="px-8 py-4 bg-[#141414] text-white rounded-2xl font-black text-[10px] uppercase tracking-widest hover:bg-[#f3cd08] hover:text-black transition-all shadow-xl">
+                <button onClick={() => { setSearchTerm(''); setFilterHeure('all'); setFilterMeteo('all'); }} className="px-8 py-4 bg-[#141414] text-white rounded-2xl font-black text-[10px] uppercase tracking-widest hover:bg-[#f39908] hover:text-black transition-all shadow-xl">
                     {t('trajets.reset_filters')}
                 </button>
             </div>

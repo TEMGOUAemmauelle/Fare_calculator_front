@@ -71,7 +71,7 @@ export default function ServiceAds({ ads: propAds }) {
           description: service.description,
           image_url: service.logo_url || service.image_url,
           category: service.categorie,
-          color: '#f3cd08',
+          color: '#f39908',
           app_link: service.url || service.lien_redirection
         }));
         if (normalized.length > 0) {
@@ -92,7 +92,7 @@ export default function ServiceAds({ ads: propAds }) {
 
   if (loading) return (
     <div className="flex items-center justify-center py-10">
-      <Loader2 className="w-5 h-5 animate-spin text-[#f9d716]" />
+      <Loader2 className="w-5 h-5 animate-spin text-[#fabd16]" />
     </div>
   );
 
@@ -107,7 +107,7 @@ export default function ServiceAds({ ads: propAds }) {
         <a 
             href="/marketplace" 
             onClick={(e) => { e.preventDefault(); window.location.href = '/marketplace'; }}
-            className="text-[9px] lg:text-xs font-black text-[#f9d716] lg:text-gray-400 lg:hover:text-[#141414] uppercase tracking-widest hover:underline flex items-center gap-1 transition-colors"
+            className="text-[9px] lg:text-xs font-black text-[#fabd16] lg:text-gray-400 lg:hover:text-[#141414] uppercase tracking-widest hover:underline flex items-center gap-1 transition-colors"
         >
             {t('common.see_all')} <ChevronRight className="w-3 h-3" />
         </a>
@@ -192,7 +192,7 @@ function DesktopCarousel({ ads }) {
                     initial={{ width: 0 }}
                     animate={{ width: 'auto' }}
                     className="inline-block px-5 py-2 rounded-full text-sm font-black uppercase text-black tracking-widest shadow-lg transform -rotate-1 origin-bottom-left"
-                    style={{ backgroundColor: currentAd.color || '#f9d716' }}
+                    style={{ backgroundColor: currentAd.color || '#fabd16' }}
                  >
                     {currentAd.category}
                  </motion.span>
@@ -201,7 +201,7 @@ function DesktopCarousel({ ads }) {
                     {currentAd.title}
                  </h2>
                  
-                 <p className="text-gray-200 text-2xl font-medium leading-relaxed max-w-xl border-l-4 border-[#f9d716] pl-6 py-2">
+                 <p className="text-gray-200 text-2xl font-medium leading-relaxed max-w-xl border-l-4 border-[#fabd16] pl-6 py-2">
                     {currentAd.description}
                  </p>
 
@@ -212,7 +212,7 @@ function DesktopCarousel({ ads }) {
                         rel="noopener noreferrer"
                         whileHover={{ scale: 1.05, boxShadow: "0px 10px 20px rgba(249, 215, 22, 0.3)" }}
                         whileTap={{ scale: 0.95 }}
-                        className="inline-flex items-center gap-4 px-10 py-5 bg-white text-black rounded-full font-black uppercase tracking-widest text-sm hover:bg-[#f9d716] transition-all duration-300 shadow-xl"
+                        className="inline-flex items-center gap-4 px-10 py-5 bg-white text-black rounded-full font-black uppercase tracking-widest text-sm hover:bg-[#fabd16] transition-all duration-300 shadow-xl"
                     >
                         {t('partners.discover_service')} <ExternalLink className="w-5 h-5" />
                     </motion.a>
@@ -225,20 +225,20 @@ function DesktopCarousel({ ads }) {
                 <button
                     key={idx}
                     onClick={() => setCurrentIndex(idx)}
-                    className={`h-2.5 rounded-full transition-all duration-500 ${idx === currentIndex ? 'w-20 bg-[#f9d716]' : 'w-4 bg-white/30 hover:bg-white/60 hover:w-8'}`}
+                    className={`h-2.5 rounded-full transition-all duration-500 ${idx === currentIndex ? 'w-20 bg-[#fabd16]' : 'w-4 bg-white/30 hover:bg-white/60 hover:w-8'}`}
                 />
             ))}
         </div>
 
         <button 
             onClick={prevSlide}
-            className="absolute left-8 top-1/2 -translate-y-1/2 p-5 rounded-full bg-black/20 hover:bg-black/50 text-white/50 hover:text-[#f9d716] backdrop-blur-md opacity-0 group-hover:opacity-100 transition-all z-20 hover:scale-110"
+            className="absolute left-8 top-1/2 -translate-y-1/2 p-5 rounded-full bg-black/20 hover:bg-black/50 text-white/50 hover:text-[#fabd16] backdrop-blur-md opacity-0 group-hover:opacity-100 transition-all z-20 hover:scale-110"
         >
             <ChevronLeft className="w-10 h-10" />
         </button>
         <button 
             onClick={nextSlide}
-            className="absolute right-8 top-1/2 -translate-y-1/2 p-5 rounded-full bg-black/20 hover:bg-black/50 text-white/50 hover:text-[#f9d716] backdrop-blur-md opacity-0 group-hover:opacity-100 transition-all z-20 hover:scale-110"
+            className="absolute right-8 top-1/2 -translate-y-1/2 p-5 rounded-full bg-black/20 hover:bg-black/50 text-white/50 hover:text-[#fabd16] backdrop-blur-md opacity-0 group-hover:opacity-100 transition-all z-20 hover:scale-110"
         >
             <ChevronRight className="w-10 h-10" />
         </button>
@@ -281,7 +281,7 @@ function MobileAdCard({ ad, idx }) {
             <span className="text-[9px] font-bold uppercase tracking-widest text-gray-400 mb-0.5">
                 {ad.category}
             </span>
-            <h4 className="text-sm font-black text-[#141414] uppercase tracking-tight leading-none group-hover:text-[#f3cd08] transition-colors">
+            <h4 className="text-sm font-black text-[#141414] uppercase tracking-tight leading-none group-hover:text-[#f39908] transition-colors">
                 {ad.title}
             </h4>
          </div>
@@ -294,7 +294,7 @@ function MobileAdCard({ ad, idx }) {
 
       {/* Action Arrow */}
       <div className="shrink-0 pt-2">
-         <div className="w-8 h-8 flex items-center justify-center rounded-full bg-gray-50 text-[#141414] group-hover:bg-[#141414] group-hover:text-[#f3cd08] transition-colors">
+         <div className="w-8 h-8 flex items-center justify-center rounded-full bg-gray-50 text-[#141414] group-hover:bg-[#141414] group-hover:text-[#f39908] transition-colors">
             <ExternalLink className="w-3.5 h-3.5" />
          </div>
       </div>

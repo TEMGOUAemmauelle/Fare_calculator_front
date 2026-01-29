@@ -109,10 +109,10 @@ export default function ConfirmationModal({
                 >
                    <div className="flex items-center justify-between mb-2">
                       <div className="flex items-center gap-1.5">
-                         <Sparkles className="w-3 h-3 text-[#f3cd08]" />
+                         <Sparkles className="w-3 h-3 text-[#f39908]" />
                          <span className="text-[9px] font-black text-gray-400 uppercase tracking-widest">{t('partners.special_offer')}</span>
                       </div>
-                      <a href="/services" className="text-[8px] font-black text-[#f3cd08] uppercase tracking-widest hover:underline">
+                      <a href="/services" className="text-[8px] font-black text-[#f39908] uppercase tracking-widest hover:underline">
                          {t('common.see_all')}
                       </a>
                    </div>
@@ -169,7 +169,7 @@ export default function ConfirmationModal({
                     whileHover={{ scale: 1.02 }}
                     whileTap={{ scale: 0.98 }}
                     onClick={handleButtonClick}
-                    className="w-full py-4 bg-[#f3cd08] hover:bg-[#e2bd07] text-black font-black text-[10px] uppercase tracking-widest rounded-2xl shadow-lg shadow-yellow-500/20 transition-all"
+                    className="w-full py-4 bg-[#f39908] hover:bg-[#e2bd07] text-black font-black text-[10px] uppercase tracking-widest rounded-2xl shadow-lg shadow-yellow-500/20 transition-all"
                   >
                     {modalButtonText}
                   </motion.button>

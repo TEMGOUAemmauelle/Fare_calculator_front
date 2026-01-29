@@ -91,7 +91,7 @@ export default function MarketplacePageDesktop() {
       {/* HERO SECTION */}
       <section className="pt-40 pb-20 px-12 bg-white relative overflow-hidden">
         {/* Background decoration */}
-        <div className="absolute top-0 right-0 w-[600px] h-[600px] bg-[#f3cd08]/5 rounded-full blur-[120px] -translate-y-1/2 translate-x-1/2" />
+        <div className="absolute top-0 right-0 w-[600px] h-[600px] bg-[#f39908]/5 rounded-full blur-[120px] -translate-y-1/2 translate-x-1/2" />
         <div className="absolute bottom-0 left-0 w-[400px] h-[400px] bg-gray-50 rounded-full blur-[100px] -translate-x-1/2 translate-y-1/2" />
         
         <div className="max-w-7xl mx-auto relative z-10">
@@ -101,15 +101,15 @@ export default function MarketplacePageDesktop() {
               animate={{ opacity: 1, x: 0 }}
               className="text-left"
             >
-              <div className="inline-flex items-center gap-2 px-4 py-2 bg-[#f3cd08]/10 rounded-full mb-6">
-                <Sparkles className="w-4 h-4 text-[#f3cd08]" />
-                <span className="text-[10px] font-black text-[#f3cd08] uppercase tracking-widest">
+              <div className="inline-flex items-center gap-2 px-4 py-2 bg-[#f39908]/10 rounded-full mb-6">
+                <Sparkles className="w-4 h-4 text-[#f39908]" />
+                <span className="text-[10px] font-black text-[#f39908] uppercase tracking-widest">
                   Ecosystème Partenaire
                 </span>
               </div>
               <h1 className="text-6xl lg:text-7xl font-black italic uppercase tracking-tighter leading-[0.9] mb-6">
                 Notre <br/>
-                <span className="text-[#f3cd08]">Marketplace</span>
+                <span className="text-[#f39908]">Marketplace</span>
               </h1>
               <p className="text-xl text-gray-400 max-w-md font-medium leading-relaxed">
                 {t('marketplace.description')}
@@ -130,7 +130,7 @@ export default function MarketplacePageDesktop() {
                     value={searchQuery}
                     onChange={(e) => setSearchQuery(e.target.value)}
                     placeholder="Rechercher un service..."
-                    className="w-full pl-16 pr-6 py-5 bg-white border-none rounded-2xl text-base font-bold outline-none ring-2 ring-transparent focus:ring-[#f3cd08]/30 transition-all shadow-sm"
+                    className="w-full pl-16 pr-6 py-5 bg-white border-none rounded-2xl text-base font-bold outline-none ring-2 ring-transparent focus:ring-[#f39908]/30 transition-all shadow-sm"
                   />
                 </div>
 
@@ -141,14 +141,14 @@ export default function MarketplacePageDesktop() {
                       onClick={() => setSelectedCategory(cat.id)}
                       className={`px-5 py-3 rounded-xl text-[10px] font-black uppercase tracking-widest transition-all flex items-center gap-2 ${
                         selectedCategory === cat.id
-                          ? 'bg-[#141414] text-[#f3cd08] shadow-xl'
+                          ? 'bg-[#141414] text-[#f39908] shadow-xl'
                           : 'bg-white text-gray-400 hover:text-black border border-gray-100'
                       }`}
                     >
                       {cat.label}
                       <span className={`px-2 py-0.5 rounded-md text-[9px] ${
                         selectedCategory === cat.id
-                          ? 'bg-[#f3cd08] text-black'
+                          ? 'bg-[#f39908] text-black'
                           : 'bg-gray-100 text-gray-400'
                       }`}>
                         {categoryCounts[cat.id] || 0}
@@ -207,7 +207,7 @@ export default function MarketplacePageDesktop() {
                     <div className="flex items-center gap-4 mb-10">
                       <div className="h-px flex-1 bg-gray-100" />
                       <h2 className="text-[10px] font-black uppercase tracking-[0.3em] text-gray-300 flex items-center gap-3">
-                        <Sparkles className="w-4 h-4 text-[#f3cd08]" />
+                        <Sparkles className="w-4 h-4 text-[#f39908]" />
                         Sélection Premium
                       </h2>
                       <div className="h-px flex-1 bg-gray-100" />
@@ -262,13 +262,13 @@ export default function MarketplacePageDesktop() {
         <div className="max-w-5xl mx-auto">
           <div className="bg-[#141414] rounded-[4rem] p-16 relative overflow-hidden">
             {/* Decoration */}
-            <div className="absolute top-0 right-0 w-96 h-96 bg-[#f3cd08]/10 rounded-full blur-[100px] translate-x-1/2 -translate-y-1/2" />
+            <div className="absolute top-0 right-0 w-96 h-96 bg-[#f39908]/10 rounded-full blur-[100px] translate-x-1/2 -translate-y-1/2" />
             
             <div className="relative z-10 flex flex-col md:flex-row items-center justify-between gap-12">
               <div className="text-left space-y-4">
                 <h2 className="text-4xl lg:text-5xl font-black italic uppercase tracking-tighter text-white leading-none">
                   Devenez <br/>
-                  <span className="text-[#f3cd08]">Partenaire</span>
+                  <span className="text-[#f39908]">Partenaire</span>
                 </h2>
                 <p className="text-gray-400 max-w-sm font-medium">
                   Propulsez votre service auprès de notre communauté grandissante au Cameroun.
@@ -277,7 +277,7 @@ export default function MarketplacePageDesktop() {
               
               <button
                 onClick={() => navigate('/pricing')}
-                className="px-10 py-5 bg-[#f3cd08] text-black rounded-2xl font-black text-[10px] uppercase tracking-widest flex items-center gap-4 hover:scale-105 transition-all shadow-2xl shadow-[#f3cd08]/20"
+                className="px-10 py-5 bg-[#f39908] text-black rounded-2xl font-black text-[10px] uppercase tracking-widest flex items-center gap-4 hover:scale-105 transition-all shadow-2xl shadow-[#f39908]/20"
               >
                 <span>Voir les offres</span>
                 <ArrowRight className="w-4 h-4" />

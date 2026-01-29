@@ -18,15 +18,15 @@ export default function PartnerPrompt({ isVisible, onClose }) {
           className="fixed bottom-24 left-6 right-6 z-60 bg-[#141414] rounded-3xl p-5 shadow-2xl border border-white/5 overflow-hidden group"
         >
           {/* Background Decoration */}
-          <div className="absolute -top-10 -right-10 w-24 h-24 bg-[#f3cd08] rounded-full blur-2xl opacity-20 group-hover:opacity-30 transition-opacity" />
+          <div className="absolute -top-10 -right-10 w-24 h-24 bg-[#f39908] rounded-full blur-2xl opacity-20 group-hover:opacity-30 transition-opacity" />
           
           <div className="relative z-10">
             <div className="flex justify-between items-start mb-3">
               <div className="flex items-center gap-2">
-                 <div className="p-1.5 bg-[#f3cd08] rounded-lg">
+                 <div className="p-1.5 bg-[#f39908] rounded-lg">
                     <Sparkles className="w-3.5 h-3.5 text-black" />
                  </div>
-                 <span className="text-[10px] font-black text-[#f3cd08] uppercase tracking-[0.2em]">{t('partners.special_offer')}</span>
+                 <span className="text-[10px] font-black text-[#f39908] uppercase tracking-[0.2em]">{t('partners.special_offer')}</span>
               </div>
               <button onClick={onClose} className="p-1 text-gray-500 hover:text-white transition-colors">
                 <X className="w-4 h-4" />
@@ -34,7 +34,7 @@ export default function PartnerPrompt({ isVisible, onClose }) {
             </div>
 
             <h3 className="text-white text-base font-black italic uppercase tracking-tighter leading-tight mb-1">
-                {t('partners.optimize_trips').split(' ')[0]} {t('partners.optimize_trips').split(' ')[1]} <span className="text-[#f3cd08]">{t('partners.optimize_trips').split(' ').slice(2).join(' ')}</span>
+                {t('partners.optimize_trips').split(' ')[0]} {t('partners.optimize_trips').split(' ')[1]} <span className="text-[#f39908]">{t('partners.optimize_trips').split(' ').slice(2).join(' ')}</span>
             </h3>
             <p className="text-gray-400 text-[10px] font-bold uppercase tracking-wide opacity-80 mb-4 max-w-[90%]">
                 {t('partners.trust_partners')}

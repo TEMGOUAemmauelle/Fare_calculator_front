@@ -17,7 +17,7 @@ const STATIC_FALLBACK_ADS = [
     "image_url": "https://upload.wikimedia.org/wikipedia/commons/thumb/0/03/TAXI.jpg/1280px-TAXI.jpg",
     "app_link": "https://play.google.com/store/apps/details?id=com.wikitaxi",
     "category": "Transport",
-    "color": "#f3cd08"
+    "color": "#f39908"
   },
   {
     "id": "2",

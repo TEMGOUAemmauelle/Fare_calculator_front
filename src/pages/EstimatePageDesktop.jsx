@@ -4,7 +4,7 @@
  * Corrections appliquées :
  * - Suppression emojis console
  * - Toggles modernes (comme mobile)
- * - Focus rings jaune (#f3cd08)
+ * - Focus rings jaune (#f39908)
  * - Carte Mapbox visible
  * - Sidebar fixe responsive
  * - Vérification géographique Cameroun
@@ -417,7 +417,7 @@ export default function EstimatePageDesktop() {
                 {/* Header */}
                 <div className="mb-10">
                   <div className="flex items-center gap-3 mb-2">
-                    <div className="w-1 h-6 bg-[#f3cd08] rounded-full" />
+                    <div className="w-1 h-6 bg-[#f39908] rounded-full" />
                     <h2 className="text-3xl font-black italic uppercase tracking-tighter leading-none">
                       {t('predict.estimate_a_trip')}
                     </h2>
@@ -529,7 +529,7 @@ export default function EstimatePageDesktop() {
                             : 'text-[#8a8a60] hover:text-[#231f0f]'
                         }`}
                       >
-                        <Icon className={`w-5 h-5 ${isActive ? 'text-[#f3cd08]' : ''}`} />
+                        <Icon className={`w-5 h-5 ${isActive ? 'text-[#f39908]' : ''}`} />
                         <span>{t(option.labelKey)}</span>
                       </button>
                     );
@@ -569,7 +569,7 @@ export default function EstimatePageDesktop() {
                 whileTap={{ scale: 0.98 }}
                 onClick={handleEstimate}
                 disabled={!depart || !arrivee || isLoading}
-                className="w-full py-4 bg-[#f3cd08] hover:bg-[#e0bc07] disabled:bg-gray-300 text-[#231f0f] disabled:text-gray-500 font-black text-lg rounded-2xl shadow-lg disabled:cursor-not-allowed transition-all flex items-center justify-center gap-3"
+                className="w-full py-4 bg-[#f39908] hover:bg-[#e0bc07] disabled:bg-gray-300 text-[#231f0f] disabled:text-gray-500 font-black text-lg rounded-2xl shadow-lg disabled:cursor-not-allowed transition-all flex items-center justify-center gap-3"
               >
                 {isLoading ? (
                   <>

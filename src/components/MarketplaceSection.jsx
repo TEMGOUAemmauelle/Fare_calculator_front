@@ -146,14 +146,14 @@ const MarketplaceSection = ({ maxItems = 6, showTitle = true, variant = 'default
         {showTitle && (
           <div className="flex items-center justify-between px-1">
             <div className="flex items-center gap-2">
-              <div className="w-1 h-4 bg-[#f3cd08] rounded-full" />
+              <div className="w-1 h-4 bg-[#f39908] rounded-full" />
               <h3 className="text-[10px] font-black text-[#141414] uppercase tracking-widest">
                 {t('partners.title')}
               </h3>
             </div>
             <button 
               onClick={() => navigate('/services')}
-              className="text-[9px] font-black text-gray-400 uppercase tracking-widest flex items-center gap-1 hover:text-[#f3cd08] transition-all"
+              className="text-[9px] font-black text-gray-400 uppercase tracking-widest flex items-center gap-1 hover:text-[#f39908] transition-all"
             >
               {t('common.see_all')}
               <ArrowRight className="w-3 h-3" />
@@ -188,11 +188,11 @@ const MarketplaceSection = ({ maxItems = 6, showTitle = true, variant = 'default
         <div className="flex items-center justify-between">
           <div className="space-y-2">
             <div className="flex items-center gap-3">
-              <div className="p-2 bg-[#f3cd08]/10 rounded-xl">
-                <Sparkles className="w-5 h-5 text-[#f3cd08]" />
+              <div className="p-2 bg-[#f39908]/10 rounded-xl">
+                <Sparkles className="w-5 h-5 text-[#f39908]" />
               </div>
               <h2 className="text-3xl font-black italic uppercase tracking-tighter">
-                {t('marketplace.title').split(' ')[0]} <span className="text-[#f3cd08]">{t('marketplace.title').split(' ').slice(1).join(' ') || t('marketplace.title')}</span>
+                {t('marketplace.title').split(' ')[0]} <span className="text-[#f39908]">{t('marketplace.title').split(' ').slice(1).join(' ') || t('marketplace.title')}</span>
               </h2>
             </div>
             <p className="text-gray-400 text-sm font-medium">
@@ -205,7 +205,7 @@ const MarketplaceSection = ({ maxItems = 6, showTitle = true, variant = 'default
             className="flex items-center gap-2 px-6 py-3 bg-gray-100 hover:bg-[#141414] hover:text-white rounded-xl font-bold text-sm transition-all group"
           >
             <span>{t('marketplace.explore_catalog')}</span>
-            <ArrowRight className="w-4 h-4 group-hover:text-[#f3cd08]" />
+            <ArrowRight className="w-4 h-4 group-hover:text-[#f39908]" />
           </motion.button>
         </div>
       )}

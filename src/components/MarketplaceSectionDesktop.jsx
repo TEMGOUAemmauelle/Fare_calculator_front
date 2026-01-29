@@ -35,7 +35,7 @@ const MarketplaceSectionDesktop = ({ maxItems = 4, showTitle = true }) => {
   if (loading) {
     return (
       <div className="flex items-center justify-center py-20">
-        <Loader2 className="w-8 h-8 animate-spin text-[#f3cd08]" />
+        <Loader2 className="w-8 h-8 animate-spin text-[#f39908]" />
       </div>
     );
   }
@@ -51,7 +51,7 @@ const MarketplaceSectionDesktop = ({ maxItems = 4, showTitle = true }) => {
              <motion.div 
                initial={{ width: 0 }} 
                whileInView={{ width: '100px' }} 
-               className="h-2 bg-[#f3cd08]" 
+               className="h-2 bg-[#f39908]" 
              />
             <h2 className="text-6xl font-black italic uppercase tracking-tighter text-[#141414] leading-[0.85]">
               {t('marketplace.title').split(' ')[0]} <br/> 
@@ -68,7 +68,7 @@ const MarketplaceSectionDesktop = ({ maxItems = 4, showTitle = true }) => {
             whileHover={{ scale: 1.05 }}
             whileTap={{ scale: 0.95 }}
             onClick={() => navigate('/marketplace')}
-            className="flex items-center gap-4 px-8 py-4 bg-[#141414] text-white rounded-full font-black uppercase tracking-widest text-xs hover:bg-[#f3cd08] hover:text-black transition-all shadow-xl"
+            className="flex items-center gap-4 px-8 py-4 bg-[#141414] text-white rounded-full font-black uppercase tracking-widest text-xs hover:bg-[#f39908] hover:text-black transition-all shadow-xl"
           >
             <span>{t('marketplace.explore_catalog')}</span>
             <div className="p-1 bg-white/20 rounded-full">
@@ -108,7 +108,7 @@ const MarketplaceSectionDesktop = ({ maxItems = 4, showTitle = true }) => {
 
             {/* Content Block */}
             <div className="flex flex-col flex-1 p-6 relative">
-                <h3 className="text-xl font-black text-[#141414] uppercase leading-tight mb-3 group-hover:text-[#f3cd08] transition-colors">
+                <h3 className="text-xl font-black text-[#141414] uppercase leading-tight mb-3 group-hover:text-[#f39908] transition-colors">
                     {service.nom}
                 </h3>
                 
@@ -120,7 +120,7 @@ const MarketplaceSectionDesktop = ({ maxItems = 4, showTitle = true }) => {
                     <span className="text-[10px] font-black uppercase tracking-widest text-[#141414] group-hover:tracking-[0.2em] transition-all">
                         {t('partners.see_more')}
                     </span>
-                    <div className="w-8 h-8 flex items-center justify-center bg-[#141414] text-white group-hover:bg-[#f3cd08] group-hover:text-black transition-colors">
+                    <div className="w-8 h-8 flex items-center justify-center bg-[#141414] text-white group-hover:bg-[#f39908] group-hover:text-black transition-colors">
                         <ArrowRight className="w-4 h-4" />
                     </div>
                 </div>

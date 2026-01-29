@@ -65,12 +65,12 @@ const EstimateCard = ({ estimate, onDelete, onSelect, t, index }) => {
     >
       <button
         onClick={() => onSelect(estimate)}
-        className="w-full text-left p-4 bg-white rounded-2xl border border-gray-100 hover:border-[#f3cd08] hover:shadow-lg transition-all"
+        className="w-full text-left p-4 bg-white rounded-2xl border border-gray-100 hover:border-[#f39908] hover:shadow-lg transition-all"
       >
         <div className="flex items-start gap-4">
           {/* Icône / Badge prix */}
           <div className="shrink-0">
-            <div className="w-14 h-14 bg-gradient-to-br from-[#f3cd08] to-[#e5c007] rounded-2xl flex flex-col items-center justify-center shadow-lg shadow-[#f3cd08]/20">
+            <div className="w-14 h-14 bg-gradient-to-br from-[#f39908] to-[#e5c007] rounded-2xl flex flex-col items-center justify-center shadow-lg shadow-[#f39908]/20">
               <span className="text-lg font-black text-black leading-none">
                 {estimate.prix_moyen || '---'}
               </span>
@@ -131,7 +131,7 @@ const EstimateCard = ({ estimate, onDelete, onSelect, t, index }) => {
           </div>
 
           {/* Chevron */}
-          <ChevronRight className="w-5 h-5 text-gray-300 group-hover:text-[#f3cd08] transition-colors shrink-0 self-center" />
+          <ChevronRight className="w-5 h-5 text-gray-300 group-hover:text-[#f39908] transition-colors shrink-0 self-center" />
         </div>
       </button>
 
@@ -268,8 +268,8 @@ const RecentEstimatesModal = ({
               {/* Header */}
               <div className="px-6 py-4 border-b border-gray-100 flex items-center justify-between shrink-0">
                 <div className="flex items-center gap-3">
-                  <div className="p-2.5 bg-[#f3cd08]/10 rounded-xl">
-                    <History className="w-5 h-5 text-[#f3cd08]" />
+                  <div className="p-2.5 bg-[#f39908]/10 rounded-xl">
+                    <History className="w-5 h-5 text-[#f39908]" />
                   </div>
                   <div>
                     <h2 className="text-lg font-black text-gray-900 uppercase tracking-tight">
@@ -319,7 +319,7 @@ const RecentEstimatesModal = ({
                     </p>
                     <button
                       onClick={() => { onClose(); navigate('/estimate'); }}
-                      className="px-6 py-3 bg-[#f3cd08] text-black rounded-xl font-bold text-sm flex items-center gap-2 hover:bg-[#e5c007] transition-colors"
+                      className="px-6 py-3 bg-[#f39908] text-black rounded-xl font-bold text-sm flex items-center gap-2 hover:bg-[#e5c007] transition-colors"
                     >
                       <MapPin className="w-4 h-4" />
                       {t('history.start_estimate')}

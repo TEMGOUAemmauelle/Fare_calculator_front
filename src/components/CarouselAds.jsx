@@ -55,7 +55,7 @@ export default function CarouselAds() {
 
   if (loading || ads.length === 0) return (
      <div className="w-full h-40 rounded-4xl bg-gray-50 flex items-center justify-center">
-        <div className="w-4 h-4 rounded-full border-2 border-[#f3cd08] border-t-transparent animate-spin" />
+        <div className="w-4 h-4 rounded-full border-2 border-[#f39908] border-t-transparent animate-spin" />
      </div>
   );
 
@@ -65,7 +65,7 @@ export default function CarouselAds() {
       {!imagesLoaded && (
         <div className="absolute inset-0 flex items-center justify-center bg-[#1a1a1a]">
           <div className="flex gap-1">
-            <div className="w-1.5 h-1.5 bg-[#f3cd08] rounded-full animate-pulse" />
+            <div className="w-1.5 h-1.5 bg-[#f39908] rounded-full animate-pulse" />
             <div className="w-1.5 h-1.5 bg-gray-600 rounded-full animate-pulse delay-100" />
             <div className="w-1.5 h-1.5 bg-gray-600 rounded-full animate-pulse delay-200" />
           </div>
@@ -96,7 +96,7 @@ export default function CarouselAds() {
           <div className="relative z-10 space-y-1">
             <span 
               className="px-2 py-0.5 rounded-full text-black text-[7px] font-black uppercase tracking-widest inline-block mb-1"
-              style={{ backgroundColor: ad.color || '#f3cd08' }}
+              style={{ backgroundColor: ad.color || '#f39908' }}
             >
               {ad.category}
             </span>
@@ -109,7 +109,7 @@ export default function CarouselAds() {
           </div>
 
           {/* ACTION ICON */}
-          <div className="absolute bottom-5 right-6 p-2 bg-white/10 backdrop-blur-md rounded-xl border border-white/5 group-hover:bg-[#f3cd08]/20 transition-all">
+          <div className="absolute bottom-5 right-6 p-2 bg-white/10 backdrop-blur-md rounded-xl border border-white/5 group-hover:bg-[#f39908]/20 transition-all">
              <ExternalLink className="w-3 h-3 text-white/50" />
           </div>
         </a>
@@ -121,7 +121,7 @@ export default function CarouselAds() {
           {ads.map((_, i) => (
             <div 
               key={i} 
-              className={`h-[3px] rounded-full transition-all duration-500 ${i === currentIndex ? 'w-5 bg-[#f3cd08]' : 'w-1.5 bg-white/20'}`} 
+              className={`h-[3px] rounded-full transition-all duration-500 ${i === currentIndex ? 'w-5 bg-[#f39908]' : 'w-1.5 bg-white/20'}`} 
             />
           ))}
         </div>

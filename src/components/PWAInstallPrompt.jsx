@@ -156,7 +156,7 @@ export default function PWAInstallPrompt() {
                   initial={{ rotate: -10, scale: 0.8 }}
                   animate={{ rotate: 0, scale: 1 }}
                   transition={{ delay: 0.2, type: 'spring', damping: 12 }}
-                  className="w-16 h-16 bg-[#f3cd08] rounded-3xl shadow-xl shadow-yellow-500/20 flex items-center justify-center mb-6"
+                  className="w-16 h-16 bg-[#f39908] rounded-3xl shadow-xl shadow-yellow-500/20 flex items-center justify-center mb-6"
                 >
                   <Smartphone className="w-8 h-8 text-black" />
                 </motion.div>
@@ -196,7 +196,7 @@ export default function PWAInstallPrompt() {
                       onClick={handleInstallClick}
                       className="w-full bg-[#141414] text-white font-black py-5 px-8 rounded-3xl shadow-xl shadow-black/10 transition-all flex items-center justify-center gap-3 group"
                     >
-                      <Download className="w-4 h-4 text-[#f3cd08] group-hover:animate-bounce" />
+                      <Download className="w-4 h-4 text-[#f39908] group-hover:animate-bounce" />
                       <span className="text-[10px] uppercase tracking-[0.2em]">{t('pwa.install_btn')}</span>
                     </motion.button>
                   )}

@@ -238,11 +238,11 @@ export default function SearchBar({
       <div className="flex gap-3">
         <div className="relative flex-1">
           <div className={`relative transition-all duration-200 ${
-            isFocused ? 'ring-2 ring-[#f3cd08] ring-opacity-50' : ''
+            isFocused ? 'ring-2 ring-[#f39908] ring-opacity-50' : ''
           } rounded-xl`}>
             <div className="absolute left-4 top-1/2 -translate-y-1/2 z-10">
               <Search className={`w-5 h-5 transition-colors duration-200 ${
-                isFocused ? 'text-[#f3cd08]' : 'text-gray-400'
+                isFocused ? 'text-[#f39908]' : 'text-gray-400'
               }`} />
             </div>
             
@@ -257,12 +257,12 @@ export default function SearchBar({
               onBlur={() => setIsFocused(false)}
               onKeyDown={handleKeyDown}
               placeholder={defaultPlaceholder}
-              className="w-full pl-12 pr-12 py-4 bg-white border border-gray-200 rounded-xl text-gray-900 placeholder-gray-400 transition-all duration-200 focus:outline-none focus:border-[#f3cd08] focus:ring-2 focus:ring-[#f3cd08]/20"
+              className="w-full pl-12 pr-12 py-4 bg-white border border-gray-200 rounded-xl text-gray-900 placeholder-gray-400 transition-all duration-200 focus:outline-none focus:border-[#f39908] focus:ring-2 focus:ring-[#f39908]/20"
             />
             
             <div className="absolute right-4 top-1/2 -translate-y-1/2">
               {isLoading ? (
-                <Loader2 className="w-5 h-5 text-[#f3cd08] animate-spin" />
+                <Loader2 className="w-5 h-5 text-[#f39908] animate-spin" />
               ) : query && (
                 <MapPin className="w-5 h-5 text-gray-400" />
               )}
@@ -276,7 +276,7 @@ export default function SearchBar({
             whileTap={{ scale: 0.98 }}
             onClick={handleCurrentLocation}
             disabled={showLoading}
-            className="px-4 py-4 bg-[#f3cd08] text-[#231f0f] rounded-xl hover:bg-[#e0bc07] disabled:bg-gray-300 disabled:cursor-not-allowed flex items-center justify-center shadow-lg transition-all duration-200"
+            className="px-4 py-4 bg-[#f39908] text-[#231f0f] rounded-xl hover:bg-[#e0bc07] disabled:bg-gray-300 disabled:cursor-not-allowed flex items-center justify-center shadow-lg transition-all duration-200"
             title={t('search.use_current')}
           >
             {showLoading ? (
@@ -304,12 +304,12 @@ export default function SearchBar({
                   onClick={() => handleSelect(suggestion)}
                   className={`w-full px-5 py-4 text-left transition-all duration-150 flex items-start gap-3 ${
                     index === selectedIndex 
-                      ? 'bg-[#fef9e6] border-l-4 border-[#f3cd08]' 
+                      ? 'bg-[#fef9e6] border-l-4 border-[#f39908]' 
                       : 'hover:bg-gray-50 border-l-4 border-transparent'
                   } ${index !== suggestions.length - 1 ? 'border-b border-gray-100' : ''}`}
                 >
                   <MapPinned className={`w-5 h-5 mt-0.5 shrink-0 ${
-                    index === selectedIndex ? 'text-[#f3cd08]' : 'text-gray-400'
+                    index === selectedIndex ? 'text-[#f39908]' : 'text-gray-400'
                   }`} />
                   <div className="flex-1 min-w-0">
                     <div className="font-semibold text-gray-900 truncate">

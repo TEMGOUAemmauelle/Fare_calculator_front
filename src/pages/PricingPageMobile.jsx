@@ -64,11 +64,11 @@ export default function PricingPageMobile() {
         <div className="px-6 pt-14 pb-6 flex items-center justify-between">
           <div className="flex flex-col">
             <div className="flex items-center gap-2 mb-1">
-              <div className="w-1 h-4 bg-[#f3cd08] rounded-full" />
+              <div className="w-1 h-4 bg-[#f39908] rounded-full" />
               <span className="text-[10px] font-black text-gray-400 uppercase tracking-[0.2em]">{t('pricing.partnerships')}</span>
             </div>
             <h1 className="text-3xl font-black uppercase tracking-tighter italic leading-none">
-              Pri<span className="text-[#f3cd08]">cing</span>
+              Pri<span className="text-[#f39908]">cing</span>
             </h1>
           </div>
           
@@ -144,7 +144,7 @@ export default function PricingPageMobile() {
               className="flex flex-col items-center text-center space-y-4"
             >
               <div className="w-16 h-16 bg-white rounded-2xl flex items-center justify-center shadow-sm">
-                <feature.icon className="w-6 h-6 text-[#f3cd08]" />
+                <feature.icon className="w-6 h-6 text-[#f39908]" />
               </div>
               <span className="text-sm font-black italic uppercase tracking-tighter">{t(feature.text_key)}</span>
             </motion.div>
@@ -159,7 +159,7 @@ export default function PricingPageMobile() {
         </p>
         <button 
           onClick={() => setShowForm(true)}
-          className="px-8 py-4 bg-[#141414] text-[#f3cd08] rounded-2xl font-black text-[10px] uppercase tracking-widest shadow-xl shadow-black/10"
+          className="px-8 py-4 bg-[#141414] text-[#f39908] rounded-2xl font-black text-[10px] uppercase tracking-widest shadow-xl shadow-black/10"
         >
           Nous contacter
         </button>

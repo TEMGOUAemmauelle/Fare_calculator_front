@@ -149,7 +149,7 @@ export default function EstimatePageMobile() {
   useEffect(() => {
     const newMarkers = [];
     if (departPlace) newMarkers.push({ coordinates: [departPlace.longitude, departPlace.latitude], type: 'depart', color: '#141414', label: departPlace.label });
-    if (arriveePlace) newMarkers.push({ coordinates: [arriveePlace.longitude, arriveePlace.latitude], type: 'arrivee', color: '#f3cd08', label: arriveePlace.label });
+    if (arriveePlace) newMarkers.push({ coordinates: [arriveePlace.longitude, arriveePlace.latitude], type: 'arrivee', color: '#f39908', label: arriveePlace.label });
     setMarkers(newMarkers);
 
     if (departPlace && arriveePlace) {
@@ -247,7 +247,7 @@ export default function EstimatePageMobile() {
                     </div>
           
           <div className="flex items-center p-0.5 bg-white/90 backdrop-blur-sm rounded-full shadow-md">
-              <button className="px-4 py-1.5 bg-[#f3cd08] text-black rounded-full font-bold text-[9px] uppercase tracking-wide flex items-center gap-1">
+              <button className="px-4 py-1.5 bg-[#f39908] text-black rounded-full font-bold text-[9px] uppercase tracking-wide flex items-center gap-1">
                   <Calculator className="w-3 h-3" /> {t('nav.estimate')}
               </button>
               <button onClick={() => navigate('/add-trajet')} className="px-4 py-1.5 text-gray-500 font-bold text-[9px] uppercase tracking-wide flex items-center gap-1 hover:text-gray-700">
@@ -349,7 +349,7 @@ export default function EstimatePageMobile() {
             onClick={() => setIsDrawerOpen(true)}
             className="fixed bottom-6 left-1/2 z-40 px-5 py-2.5 bg-[#141414] text-white rounded-full shadow-2xl flex items-center gap-2 font-bold text-xs active:scale-95 transition-all group"
           >
-            <ChevronUp className="w-4 h-4 text-[#f3cd08] group-hover:animate-bounce" />
+            <ChevronUp className="w-4 h-4 text-[#f39908] group-hover:animate-bounce" />
             {t('estimate.reopen_modal')}
           </motion.button>
         )}
@@ -372,12 +372,12 @@ export default function EstimatePageMobile() {
             <div className="flex-1 overflow-y-auto px-6 pb-6">
                 {!prediction ? (
                     <div className="space-y-4">
-                        <h2 className="text-lg font-bold tracking-tight text-[#141414] italic">{t('estimate.title_section').split(' ')[0]} {t('estimate.title_section').split(' ')[1]} <span className="text-[#f3cd08]">{t('estimate.title_section').split(' ')[2]}</span></h2>
+                        <h2 className="text-lg font-bold tracking-tight text-[#141414] italic">{t('estimate.title_section').split(' ')[0]} {t('estimate.title_section').split(' ')[1]} <span className="text-[#f39908]">{t('estimate.title_section').split(' ')[2]}</span></h2>
 
                         {/* ITINÉRAIRE */}
                         <div className="space-y-2">
-                            <div className={`flex items-center gap-3 p-3 rounded-2xl border transition-all ${activeSearchField === 'depart' ? 'border-[#f3cd08] bg-white shadow-lg' : 'border-transparent bg-gray-50'}`}>
-                                <Navigation className={`w-4 h-4 shrink-0 ${activeSearchField === 'depart' ? 'text-[#f3cd08]' : 'text-gray-500'}`} />
+                            <div className={`flex items-center gap-3 p-3 rounded-2xl border transition-all ${activeSearchField === 'depart' ? 'border-[#f39908] bg-white shadow-lg' : 'border-transparent bg-gray-50'}`}>
+                                <Navigation className={`w-4 h-4 shrink-0 ${activeSearchField === 'depart' ? 'text-[#f39908]' : 'text-gray-500'}`} />
                                 <div className="flex-1 min-w-0">
                                     <span className="text-[9px] font-bold text-gray-500 uppercase tracking-widest block">{t('add.placeholder_from').split(' ')[0]}</span>
                                     <SearchBarEnhanced
@@ -395,8 +395,8 @@ export default function EstimatePageMobile() {
                                 </button>
                             </div>
 
-                            <div className={`flex items-center gap-3 p-3 rounded-2xl border transition-all ${activeSearchField === 'arrivee' ? 'border-[#f3cd08] bg-white shadow-lg' : 'border-gray-100 bg-white'}`}>
-                                <MapPin className={`w-4 h-4 shrink-0 ${activeSearchField === 'arrivee' ? 'text-[#f3cd08]' : 'text-gray-500'}`} />
+                            <div className={`flex items-center gap-3 p-3 rounded-2xl border transition-all ${activeSearchField === 'arrivee' ? 'border-[#f39908] bg-white shadow-lg' : 'border-gray-100 bg-white'}`}>
+                                <MapPin className={`w-4 h-4 shrink-0 ${activeSearchField === 'arrivee' ? 'text-[#f39908]' : 'text-gray-500'}`} />
                                 <div className="flex-1 min-w-0">
                                     <span className="text-[9px] font-bold text-gray-500 uppercase tracking-widest block">{t('add.placeholder_to').split(' ')[0]}</span>
                                     <SearchBarEnhanced
@@ -406,7 +406,7 @@ export default function EstimatePageMobile() {
                                         className="w-full text-base font-bold text-[#141414] border-none p-0 focus:ring-0 bg-transparent placeholder:text-gray-300 truncate"
                                     />
                                 </div>
-                                {isSearching && <Loader2 className="w-4 h-4 text-[#f3cd08] animate-spin shrink-0" />}
+                                {isSearching && <Loader2 className="w-4 h-4 text-[#f39908] animate-spin shrink-0" />}
                             </div>
                         </div>
 
@@ -420,7 +420,7 @@ export default function EstimatePageMobile() {
                                         <div className="space-y-1">
                                             {suggestions.map((s, i) => (
                                                 <button key={i} onMouseDown={() => handleSelectSuggestion(s)} className="w-full p-3 rounded-xl flex items-center gap-4 text-left group hover:bg-gray-50 transition-all">
-                                                    <div className="w-9 h-9 bg-gray-100 rounded-xl flex items-center justify-center text-gray-400 group-hover:bg-[#f3cd08] group-hover:text-black shrink-0"><MapPinned className="w-4 h-4"/></div>
+                                                    <div className="w-9 h-9 bg-gray-100 rounded-xl flex items-center justify-center text-gray-400 group-hover:bg-[#f39908] group-hover:text-black shrink-0"><MapPinned className="w-4 h-4"/></div>
                                                     <div className="flex flex-col min-w-0">
                                                         <span className="text-sm font-bold text-gray-900 truncate tracking-tight">{s.name}</span>
                                                         <span className="text-[9px] text-gray-500 font-bold uppercase truncate">{s.place_formatted}</span>
@@ -457,7 +457,7 @@ export default function EstimatePageMobile() {
 
                                 {departPlace && arriveePlace && (
                                     <button onClick={handleEstimate} disabled={isLoading} className="w-full py-5 bg-[#141414] text-white rounded-4xl font-bold text-[11px] uppercase tracking-[0.2em] shadow-xl flex items-center justify-center gap-3 active:scale-[0.98] transition-all">
-                                        {isLoading ? <Loader2 className="w-5 h-5 animate-spin text-[#f3cd08]" /> : <>{t('estimate.launch')} <Calculator className="w-4 h-4 text-[#f3cd08]" /></>}
+                                        {isLoading ? <Loader2 className="w-5 h-5 animate-spin text-[#f39908]" /> : <>{t('estimate.launch')} <Calculator className="w-4 h-4 text-[#f39908]" /></>}
                                     </button>
                                 )}
                             </div>
@@ -467,7 +467,7 @@ export default function EstimatePageMobile() {
                     <div className="py-4">
                          <div className="flex justify-between items-center mb-6">
                             <h2 className="text-lg font-bold uppercase tracking-tight italic">{t('estimate.result_title')}</h2>
-                            <button onClick={() => setPrediction(null)} className="px-4 py-2 bg-gray-100 rounded-xl text-[9px] font-bold text-gray-600 uppercase hover:bg-[#f3cd08] hover:text-black transition-all">{t('estimate.recalculate')}</button>
+                            <button onClick={() => setPrediction(null)} className="px-4 py-2 bg-gray-100 rounded-xl text-[9px] font-bold text-gray-600 uppercase hover:bg-[#f39908] hover:text-black transition-all">{t('estimate.recalculate')}</button>
                          </div>
                          <PriceCard prediction={prediction} onAddTrajet={() => navigate('/add-trajet')} />
                          
@@ -478,7 +478,7 @@ export default function EstimatePageMobile() {
                              animate={{ opacity: 1, y: 0 }}
                              transition={{ delay: 0.5 }}
                              onClick={() => setShowQuickPriceModal(true)}
-                             className="w-full mt-4 py-4 bg-gradient-to-r from-[#f3cd08] to-[#fbbf24] text-black rounded-2xl font-black text-[11px] uppercase tracking-wider flex items-center justify-center gap-3 shadow-lg shadow-yellow-500/20 active:scale-[0.98] transition-transform"
+                             className="w-full mt-4 py-4 bg-gradient-to-r from-[#f39908] to-[#fbbf24] text-black rounded-2xl font-black text-[11px] uppercase tracking-wider flex items-center justify-center gap-3 shadow-lg shadow-yellow-500/20 active:scale-[0.98] transition-transform"
                            >
                              <PlusCircle className="w-4 h-4" />
                              {t('quick_price.cta_know_price') || 'Vous connaissez le vrai prix ?'}

@@ -107,7 +107,7 @@ export default function AddTrajetPageDesktop() {
   useEffect(() => {
     const newMarkers = [];
     if (formData.depart) newMarkers.push({ coordinates: [formData.depart.longitude, formData.depart.latitude], type: 'depart', color: '#141414', label: formData.depart.label });
-    if (formData.arrivee) newMarkers.push({ coordinates: [formData.arrivee.longitude, formData.arrivee.latitude], type: 'arrivee', color: '#f3cd08', label: formData.arrivee.label });
+    if (formData.arrivee) newMarkers.push({ coordinates: [formData.arrivee.longitude, formData.arrivee.latitude], type: 'arrivee', color: '#f39908', label: formData.arrivee.label });
     setMarkers(newMarkers);
 
     if (formData.depart && formData.arrivee) {
@@ -176,7 +176,7 @@ export default function AddTrajetPageDesktop() {
   };
 
   return (
-    <div className="min-h-screen bg-white text-[#141414] font-sans selection:bg-[#f3cd08]/30 overflow-x-hidden">
+    <div className="min-h-screen bg-white text-[#141414] font-sans selection:bg-[#f39908]/30 overflow-x-hidden">
       {/* NAVBAR */}
       <NavbarDesktop activeRoute="/add-trajet" />
 
@@ -186,12 +186,12 @@ export default function AddTrajetPageDesktop() {
             <div className="lg:col-span-5 space-y-8">
                 <div className="space-y-4">
                     <div className="inline-flex items-center gap-3 px-4 py-2 bg-yellow-50 rounded-full border border-yellow-100">
-                        <Heart className="w-4 h-4 text-[#f3cd08]" />
-                        <span className="text-[10px] font-black uppercase tracking-widest text-[#d4af37]">Community Power</span>
+                        <Heart className="w-4 h-4 text-[#f39908]" />
+                        <span className="text-[10px] font-black uppercase tracking-widest text-[#d4a537]">Community Power</span>
                     </div>
                     <h2 className="text-5xl font-black italic uppercase tracking-tighter leading-none">
                         {t('add.share_fare')} <br/>
-                        <span className="text-[#f3cd08]">{t('add.fare')}</span>
+                        <span className="text-[#f39908]">{t('add.fare')}</span>
                     </h2>
                     <p className="text-gray-400 text-sm font-medium leading-relaxed max-w-sm">
                         {t('add.drawer_description') || "Partagez votre dernier trajet pour aider la communauté à obtenir des estimations plus précises."}
@@ -201,9 +201,9 @@ export default function AddTrajetPageDesktop() {
                 <form onSubmit={handleSubmit} className="bg-white p-10 rounded-[3rem] border border-gray-100 shadow-2xl shadow-gray-200/50 space-y-8">
                     <div className="space-y-6">
                         {/* DEPART */}
-                        <div className={`group relative p-6 rounded-3xl border-2 transition-all ${activeSearchField === 'depart' ? 'border-[#f3cd08] bg-white ring-8 ring-yellow-50' : 'border-gray-50 bg-gray-50/50 hover:bg-white hover:border-gray-100'}`}>
+                        <div className={`group relative p-6 rounded-3xl border-2 transition-all ${activeSearchField === 'depart' ? 'border-[#f39908] bg-white ring-8 ring-yellow-50' : 'border-gray-50 bg-gray-50/50 hover:bg-white hover:border-gray-100'}`}>
                             <div className="flex items-center gap-4 mb-2">
-                                <div className={`p-2 rounded-xl transition-colors ${activeSearchField === 'depart' ? 'bg-[#f3cd08] text-black' : 'bg-white text-gray-400'}`}>
+                                <div className={`p-2 rounded-xl transition-colors ${activeSearchField === 'depart' ? 'bg-[#f39908] text-black' : 'bg-white text-gray-400'}`}>
                                     <Navigation className="w-5 h-5" />
                                 </div>
                                 <span className="text-[10px] font-black text-gray-400 uppercase tracking-widest">{t('add.placeholder_from').split(' ')[0]}</span>
@@ -225,9 +225,9 @@ export default function AddTrajetPageDesktop() {
                         </div>
 
                         {/* ARRIVEE */}
-                        <div className={`group relative p-6 rounded-3xl border-2 transition-all ${activeSearchField === 'arrivee' ? 'border-[#f3cd08] bg-white ring-8 ring-yellow-50' : 'border-gray-50 bg-gray-50/50 hover:bg-white hover:border-gray-100'}`}>
+                        <div className={`group relative p-6 rounded-3xl border-2 transition-all ${activeSearchField === 'arrivee' ? 'border-[#f39908] bg-white ring-8 ring-yellow-50' : 'border-gray-50 bg-gray-50/50 hover:bg-white hover:border-gray-100'}`}>
                             <div className="flex items-center gap-4 mb-2">
-                                <div className={`p-2 rounded-xl transition-colors ${activeSearchField === 'arrivee' ? 'bg-[#f3cd08] text-black' : 'bg-white text-gray-400'}`}>
+                                <div className={`p-2 rounded-xl transition-colors ${activeSearchField === 'arrivee' ? 'bg-[#f39908] text-black' : 'bg-white text-gray-400'}`}>
                                     <MapPin className="w-5 h-5" />
                                 </div>
                                 <span className="text-[10px] font-black text-gray-400 uppercase tracking-widest">{t('add.placeholder_to').split(' ')[0]}</span>
@@ -239,7 +239,7 @@ export default function AddTrajetPageDesktop() {
                                     onLoading={setIsSearching} placeholder={t('add.placeholder_to')}
                                     className="w-full text-xl font-black text-[#141414] border-none p-0 focus:ring-0 bg-transparent placeholder:text-gray-200 italic"
                                 />
-                                {activeSearchField === 'arrivee' && isSearching && <Loader2 className="w-5 h-5 text-[#f3cd08] animate-spin" />}
+                                {activeSearchField === 'arrivee' && isSearching && <Loader2 className="w-5 h-5 text-[#f39908] animate-spin" />}
                             </div>
                         </div>
                     </div>
@@ -285,13 +285,13 @@ export default function AddTrajetPageDesktop() {
                         <div className="space-y-6">
                             <div className="flex justify-between items-center px-1">
                                 <p className="text-[10px] font-black text-gray-400 uppercase tracking-widest">{t('add.quality_label')}</p>
-                                <div className="px-4 py-1.5 bg-[#f3cd08] text-black rounded-full font-black text-xs italic tabular-nums shadow-lg shadow-yellow-500/20">{formData.qualite}/10</div>
+                                <div className="px-4 py-1.5 bg-[#f39908] text-black rounded-full font-black text-xs italic tabular-nums shadow-lg shadow-yellow-500/20">{formData.qualite}/10</div>
                             </div>
                             <div className="relative pt-2">
                                 <input 
                                     type="range" min="1" max="10" value={formData.qualite} 
                                     onChange={(e) => setFormData({...formData, qualite: parseInt(e.target.value)})}
-                                    className="w-full h-3 bg-gray-100 rounded-full appearance-none cursor-pointer accent-[#f3cd08]"
+                                    className="w-full h-3 bg-gray-100 rounded-full appearance-none cursor-pointer accent-[#f39908]"
                                 />
                                 <div className="flex justify-between px-1 mt-4">
                                     <div className="flex items-center gap-2 text-gray-300">
@@ -311,7 +311,7 @@ export default function AddTrajetPageDesktop() {
                         type="submit" disabled={isLoading}
                         className="w-full py-6 bg-[#141414] text-white rounded-4xl font-black text-[12px] uppercase tracking-[0.3em] shadow-xl shadow-black/10 flex items-center justify-center gap-4 hover:bg-black hover:scale-[1.02] active:scale-[0.98] transition-all group"
                     >
-                        {isLoading ? <Loader2 className="w-6 h-6 animate-spin text-[#f3cd08]" /> : <> {t('common.confirm')} <PlusCircle className="w-5 h-5 text-[#f3cd08] group-hover:rotate-90 transition-transform" /> </>}
+                        {isLoading ? <Loader2 className="w-6 h-6 animate-spin text-[#f39908]" /> : <> {t('common.confirm')} <PlusCircle className="w-5 h-5 text-[#f39908] group-hover:rotate-90 transition-transform" /> </>}
                     </button>
                 </form>
 
@@ -322,7 +322,7 @@ export default function AddTrajetPageDesktop() {
                             <div className="p-3 space-y-1">
                                 {suggestions.map((s, i) => (
                                     <button key={i} onMouseDown={() => handleSelectSuggestion(s)} className="w-full p-4 rounded-2xl flex items-center gap-4 text-left group hover:bg-gray-50 transition-all">
-                                        <div className="w-10 h-10 bg-gray-50 rounded-xl flex items-center justify-center text-gray-400 group-hover:bg-[#f3cd08] group-hover:text-black shrink-0 transition-all"><MapPinned className="w-5 h-5"/></div>
+                                        <div className="w-10 h-10 bg-gray-50 rounded-xl flex items-center justify-center text-gray-400 group-hover:bg-[#f39908] group-hover:text-black shrink-0 transition-all"><MapPinned className="w-5 h-5"/></div>
                                         <div className="flex flex-col min-w-0">
                                             <span className="text-sm font-black text-gray-900 truncate tracking-tight uppercase italic">{s.name}</span>
                                             <span className="text-[9px] text-gray-500 font-bold uppercase truncate tracking-widest">{s.place_formatted}</span>
@@ -364,18 +364,18 @@ export default function AddTrajetPageDesktop() {
                 </div>
 
                 <div className="bg-[#141414] rounded-4xl p-10 text-white relative overflow-hidden group">
-                    <div className="absolute top-0 right-0 w-64 h-64 bg-[#f3cd08] rounded-full blur-[100px] opacity-10 group-hover:opacity-20 transition-opacity" />
+                    <div className="absolute top-0 right-0 w-64 h-64 bg-[#f39908] rounded-full blur-[100px] opacity-10 group-hover:opacity-20 transition-opacity" />
                     <div className="relative z-10 flex items-center justify-between">
                         <div className="space-y-4">
                             <div className="w-12 h-12 bg-white/10 rounded-2xl flex items-center justify-center">
-                                <Sparkles className="w-6 h-6 text-[#f3cd08]" />
+                                <Sparkles className="w-6 h-6 text-[#f39908]" />
                             </div>
                             <h4 className="text-2xl font-black uppercase italic tracking-tighter leading-none">{t('add.contribution_title')}</h4>
                             <p className="text-gray-400 text-[10px] font-bold uppercase tracking-widest max-w-xs">{t('add.contribution_description')}</p>
                         </div>
                         <div className="hidden xl:block">
                              <div className="text-center">
-                                <span className="text-5xl font-black italic text-[#f3cd08] tabular-nums">850+</span>
+                                <span className="text-5xl font-black italic text-[#f39908] tabular-nums">850+</span>
                                 <p className="text-[10px] font-black uppercase tracking-widest text-gray-500 mt-2">{t('add.active_contributors')}</p>
                              </div>
                         </div>

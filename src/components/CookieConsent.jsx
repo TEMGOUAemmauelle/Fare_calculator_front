@@ -41,8 +41,8 @@ const CookieConsent = () => {
         >
           <div className="bg-white/90 dark:bg-[#1E1E1E]/90 backdrop-blur-md border border-gray-200 dark:border-white/10 p-6 rounded-2xl shadow-2xl">
             <div className="flex items-start justify-between gap-4 mb-4">
-              <div className="p-3 bg-[#f3cd08]/10 rounded-xl">
-                <Cookie className="w-6 h-6 text-[#f3cd08]" />
+              <div className="p-3 bg-[#f39908]/10 rounded-xl">
+                <Cookie className="w-6 h-6 text-[#f39908]" />
               </div>
               <button 
                 onClick={handleDecline}
@@ -63,7 +63,7 @@ const CookieConsent = () => {
             <div className="flex flex-col gap-3">
               <button
                 onClick={handleAccept}
-                className="w-full py-2.5 px-4 bg-[#f3cd08] hover:bg-[#dNb907] text-black font-bold rounded-xl transition-all transform active:scale-95 text-sm"
+                className="w-full py-2.5 px-4 bg-[#f39908] hover:bg-[#dNb907] text-black font-bold rounded-xl transition-all transform active:scale-95 text-sm"
               >
                 {t('cookies_modal.accept', 'Accept All')}
               </button>
@@ -77,7 +77,7 @@ const CookieConsent = () => {
                 </button>
                 <button
                   onClick={() => navigate('/cookies')}
-                  className="py-2.5 px-4 bg-transparent text-gray-500 hover:text-[#f3cd08] font-medium transition-colors text-sm"
+                  className="py-2.5 px-4 bg-transparent text-gray-500 hover:text-[#f39908] font-medium transition-colors text-sm"
                 >
                   {t('cookies_modal.learn_more', 'Privacy')}
                 </button>

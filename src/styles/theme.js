@@ -1,14 +1,14 @@
 /**
  * @fileoverview Thème global de l'application
- * Palette de couleurs inspirée de la maquette - Dominance jaune #f3cd08
+ * Palette de couleurs inspirée de la maquette - Dominance jaune #f39908
  */
 
 export const THEME = {
   // Couleurs principales
   colors: {
-    primary: '#f3cd08',      // Jaune dominant
+    primary: '#f39908',      // Jaune dominant
     primaryDark: '#d4b307',  // Jaune foncé hover
-    primaryLight: '#f3cd08', // Jaune clair
+    primaryLight: '#f39908', // Jaune clair
     
     text: {
       primary: '#231f0f',    // Texte principal (noir doré)
@@ -26,7 +26,7 @@ export const THEME = {
     
     border: {
       default: '#e2e8f0',    // Bordure par défaut
-      active: '#f3cd08',     // Bordure active (jaune)
+      active: '#f39908',     // Bordure active (jaune)
       light: '#f1f5f9',      // Bordure légère
     },
     
@@ -43,7 +43,7 @@ export const THEME = {
       100: 'rgba(243, 205, 8, 0.1)',
       200: 'rgba(243, 205, 8, 0.2)',
       300: 'rgba(243, 205, 8, 0.3)',
-      500: '#f3cd08',
+      500: '#f39908',
       600: '#d4b307',
       700: '#b59906',
     },
@@ -67,21 +67,21 @@ export const THEME = {
   classes: {
     // Boutons
     button: {
-      primary: 'bg-[#f3cd08] text-[#231f0f] hover:bg-[#d4b307] rounded-full font-semibold transition-all duration-200 shadow-lg hover:scale-105 active:scale-95',
-      secondary: 'bg-white text-[#231f0f] border-2 border-[#f3cd08] hover:bg-[#f3cd08]/10 rounded-full font-semibold transition-all duration-200',
-      ghost: 'bg-transparent text-[#231f0f] hover:bg-[#f3cd08]/10 rounded-full transition-all duration-200',
+      primary: 'bg-[#f39908] text-[#231f0f] hover:bg-[#d4b307] rounded-full font-semibold transition-all duration-200 shadow-lg hover:scale-105 active:scale-95',
+      secondary: 'bg-white text-[#231f0f] border-2 border-[#f39908] hover:bg-[#f39908]/10 rounded-full font-semibold transition-all duration-200',
+      ghost: 'bg-transparent text-[#231f0f] hover:bg-[#f39908]/10 rounded-full transition-all duration-200',
     },
     
     // Inputs
     input: {
-      base: 'w-full px-4 py-3 rounded-xl border-2 border-slate-200 focus:border-[#f3cd08] focus:ring-4 focus:ring-[#f3cd08]/20 bg-white text-[#231f0f] placeholder-slate-400 transition-all duration-200',
+      base: 'w-full px-4 py-3 rounded-xl border-2 border-slate-200 focus:border-[#f39908] focus:ring-4 focus:ring-[#f39908]/20 bg-white text-[#231f0f] placeholder-slate-400 transition-all duration-200',
       error: 'border-red-300 focus:border-red-500 focus:ring-red-100',
     },
     
     // Cartes
     card: {
       base: 'bg-white rounded-2xl shadow-lg border border-slate-200',
-      yellow: 'bg-gradient-to-br from-[#f3cd08]/10 to-[#f3cd08]/5 border-[#f3cd08]/30',
+      yellow: 'bg-gradient-to-br from-[#f39908]/10 to-[#f39908]/5 border-[#f39908]/30',
     },
     
     // Textes
@@ -94,7 +94,7 @@ export const THEME = {
     
     // Icônes
     icon: {
-      primary: 'text-[#f3cd08]',
+      primary: 'text-[#f39908]',
       secondary: 'text-[#231f0f]',
       muted: 'text-slate-500',
     },
