@@ -47,14 +47,14 @@ export default function StatsPageDesktop() {
   if (loading) return (
     <div className="min-h-screen bg-white flex items-center justify-center">
       <div className="flex flex-col items-center gap-6">
-        <Loader2 className="w-12 h-12 animate-spin text-[#f3cd08]" />
+        <Loader2 className="w-12 h-12 animate-spin text-[#f39908]" />
         <p className="text-xs font-black text-gray-400 uppercase tracking-[0.3em] animate-pulse">Analysing Data Streams...</p>
       </div>
     </div>
   );
 
   return (
-    <div className="min-h-screen bg-white text-[#141414] font-sans selection:bg-[#f3cd08]/30 overflow-x-hidden">
+    <div className="min-h-screen bg-white text-[#141414] font-sans selection:bg-[#f39908]/30 overflow-x-hidden">
       {/* NAVBAR */}
       <NavbarDesktop activeRoute="/stats" />
 
@@ -67,7 +67,7 @@ export default function StatsPageDesktop() {
                     <span className="text-[10px] font-black uppercase tracking-widest text-indigo-600">Live Insights</span>
                 </motion.div>
                 <motion.h2 initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.1 }} className="text-6xl font-black italic uppercase tracking-tighter leading-none">
-                    Data<span className="text-[#f3cd08]">Dashboard</span>
+                    Data<span className="text-[#f39908]">Dashboard</span>
                 </motion.h2>
                 <p className="text-gray-400 text-lg font-medium leading-relaxed max-w-xl">
                     Visualisez les tendances du transport en temps réel grâce aux contributions de notre communauté.
@@ -83,7 +83,7 @@ export default function StatsPageDesktop() {
                     <button
                         key={opt.id}
                         onClick={() => setPeriod(opt.id)}
-                        className={`px-8 py-3.5 rounded-3xl text-[10px] font-black uppercase tracking-widest transition-all ${period === opt.id ? 'bg-[#141414] text-[#f3cd08] shadow-xl' : 'text-gray-400 hover:text-black'}`}
+                        className={`px-8 py-3.5 rounded-3xl text-[10px] font-black uppercase tracking-widest transition-all ${period === opt.id ? 'bg-[#141414] text-[#f39908] shadow-xl' : 'text-gray-400 hover:text-black'}`}
                     >
                         {opt.label}
                     </button>
@@ -95,7 +95,7 @@ export default function StatsPageDesktop() {
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 mb-16">
             <motion.div variants={itemVariants} initial="hidden" animate="visible" className="bg-white p-8 rounded-[2.5rem] border border-gray-100 shadow-xl shadow-gray-200/50 space-y-4">
                 <div className="w-12 h-12 bg-yellow-50 rounded-2xl flex items-center justify-center">
-                    <TrendingUp className="w-6 h-6 text-[#f3cd08]" />
+                    <TrendingUp className="w-6 h-6 text-[#f39908]" />
                 </div>
                 <div>
                    <p className="text-[10px] font-black text-gray-400 uppercase tracking-widest mb-1">Trajets Analysés</p>
@@ -182,14 +182,14 @@ export default function StatsPageDesktop() {
                 {/* CRITICAL ZONES */}
                 <section className="space-y-8">
                     <div className="flex items-center gap-4 px-1">
-                        <AlertTriangle className="w-6 h-6 text-[#f3cd08]" />
+                        <AlertTriangle className="w-6 h-6 text-[#f39908]" />
                         <h3 className="text-2xl font-black italic uppercase tracking-tighter">Zones de Tension</h3>
                     </div>
                     <div className="flex overflow-x-auto pb-8 gap-8 hide-scrollbar snap-x">
                         {stats.trajets_difficiles.map((item, idx) => (
                             <motion.div 
                                 key={idx}
-                                className="snap-center shrink-0 w-[350px] bg-white border border-gray-100 rounded-[2.5rem] p-8 shadow-xl shadow-gray-200/30 hover:shadow-2xl hover:border-[#f3cd08]/30 transition-all"
+                                className="snap-center shrink-0 w-[350px] bg-white border border-gray-100 rounded-[2.5rem] p-8 shadow-xl shadow-gray-200/30 hover:shadow-2xl hover:border-[#f39908]/30 transition-all"
                             >
                                 <div className="flex justify-between items-start mb-6">
                                     <div className="flex flex-col gap-1">
@@ -207,7 +207,7 @@ export default function StatsPageDesktop() {
                                         <span className="text-sm font-bold text-gray-600 truncate">{item.point_depart.label}</span>
                                      </div>
                                      <div className="flex items-center gap-4">
-                                        <div className="w-2 h-2 rounded-full bg-[#f3cd08]" />
+                                        <div className="w-2 h-2 rounded-full bg-[#f39908]" />
                                         <span className="text-sm font-black text-gray-900 truncate uppercase italic tracking-tight">{item.point_arrivee.label}</span>
                                      </div>
                                 </div>
@@ -221,10 +221,10 @@ export default function StatsPageDesktop() {
             <div className="lg:col-span-4 space-y-12">
                 {stats.lieu_du_mois && (
                     <motion.div initial={{ opacity: 0, scale: 0.95 }} animate={{ opacity: 1, scale: 1 }} className="bg-[#141414] rounded-[3.5rem] p-12 text-white relative overflow-hidden group h-[500px] flex flex-col justify-between">
-                         <div className="absolute top-0 right-0 w-80 h-80 bg-[#f3cd08] rounded-full blur-[120px] opacity-10 group-hover:opacity-20 transition-opacity" />
+                         <div className="absolute top-0 right-0 w-80 h-80 bg-[#f39908] rounded-full blur-[120px] opacity-10 group-hover:opacity-20 transition-opacity" />
                          
                          <div className="relative z-10 space-y-6">
-                            <div className="inline-flex items-center gap-3 px-4 py-2 bg-[#f3cd08] rounded-full">
+                            <div className="inline-flex items-center gap-3 px-4 py-2 bg-[#f39908] rounded-full">
                                 <Award className="w-4 h-4 text-black" />
                                 <span className="text-[10px] font-black uppercase tracking-widest text-black">Destination Elue</span>
                             </div>
@@ -234,11 +234,11 @@ export default function StatsPageDesktop() {
 
                          <div className="relative z-10">
                             <div className="flex items-baseline gap-4 mb-2">
-                                <span className="text-7xl font-black italic text-[#f3cd08] tabular-nums tracking-tighter">{stats.lieu_du_mois.count}</span>
+                                <span className="text-7xl font-black italic text-[#f39908] tabular-nums tracking-tighter">{stats.lieu_du_mois.count}</span>
                                 <span className="text-lg font-black uppercase tracking-widest text-white/40">Visites</span>
                             </div>
                             <div className="h-1.5 w-full bg-white/5 rounded-full overflow-hidden">
-                                <motion.div initial={{ width: 0 }} animate={{ width: '85%' }} transition={{ duration: 1.5 }} className="h-full bg-[#f3cd08]" />
+                                <motion.div initial={{ width: 0 }} animate={{ width: '85%' }} transition={{ duration: 1.5 }} className="h-full bg-[#f39908]" />
                             </div>
                          </div>
                     </motion.div>
@@ -262,7 +262,7 @@ export default function StatsPageDesktop() {
                         </div>
                     </div>
                     <button onClick={() => navigate('/trajets')} className="w-full py-5 bg-[#141414] text-white rounded-2xl font-black text-[10px] uppercase tracking-widest hover:bg-black transition-colors flex items-center justify-center gap-3">
-                        Tout les Trajets <ChevronRight className="w-4 h-4 text-[#f3cd08]" />
+                        Tout les Trajets <ChevronRight className="w-4 h-4 text-[#f39908]" />
                     </button>
                 </div>
             </div>

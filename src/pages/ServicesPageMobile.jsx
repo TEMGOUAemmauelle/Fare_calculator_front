@@ -44,9 +44,9 @@ export default function ServicesPageMobile() {
             <button onClick={() => navigate(-1)} className="p-2.5 bg-white/10 rounded-xl text-white hover:bg-white/20 transition-colors active:scale-95 backdrop-blur-md">
                 <ArrowLeft className="w-5 h-5"/>
             </button>
-            <div className="px-3 py-1.5 bg-[#f3cd08]/10 border border-[#f3cd08]/20 rounded-full flex items-center gap-2">
-                <ShieldCheck className="w-3 h-3 text-[#f3cd08]" />
-                <span className="text-[9px] font-bold uppercase tracking-widest text-[#f3cd08]">{t('services.verified')}</span>
+            <div className="px-3 py-1.5 bg-[#f39908]/10 border border-[#f39908]/20 rounded-full flex items-center gap-2">
+                <ShieldCheck className="w-3 h-3 text-[#f39908]" />
+                <span className="text-[9px] font-bold uppercase tracking-widest text-[#f39908]">{t('services.verified')}</span>
             </div>
          </div>
          
@@ -93,7 +93,7 @@ export default function ServicesPageMobile() {
                             <div className="absolute top-4 left-4">
                                 <span 
                                     className="px-2 py-1 rounded-sm text-[8px] font-black uppercase tracking-widest text-[#141414]"
-                                    style={{ backgroundColor: service.color || '#f3cd08' }}
+                                    style={{ backgroundColor: service.color || '#f39908' }}
                                 >
                                     {service.category}
                                 </span>
@@ -113,7 +113,7 @@ export default function ServicesPageMobile() {
                             </p>
                             
                             <div className="flex items-center gap-2 text-[#141414]">
-                                <span className="text-[9px] font-bold uppercase tracking-widest border-b border-[#f3cd08] pb-0.5">
+                                <span className="text-[9px] font-bold uppercase tracking-widest border-b border-[#f39908] pb-0.5">
                                     {t('partners.discover_service')}
                                 </span>
                             </div>
@@ -125,15 +125,15 @@ export default function ServicesPageMobile() {
 
         {/* BECOME A PARTNER CTA */}
         <div className="mt-12 bg-[#141414] rounded-sm p-6 relative overflow-hidden">
-            <div className="absolute top-0 right-0 w-32 h-32 bg-[#f3cd08] rounded-full blur-[60px] opacity-10" />
+            <div className="absolute top-0 right-0 w-32 h-32 bg-[#f39908] rounded-full blur-[60px] opacity-10" />
             
             <div className="relative z-10">
                 <div className="w-10 h-10 bg-white/10 rounded-sm flex items-center justify-center mb-4">
-                    <Users className="w-5 h-5 text-[#f3cd08]" />
+                    <Users className="w-5 h-5 text-[#f39908]" />
                 </div>
                 
                 <h3 className="text-2xl font-black text-white uppercase tracking-tighter leading-none mb-2">
-                    {t('services.join_the')} <span className="text-[#f3cd08]">{t('services.join_the_network')}</span>
+                    {t('services.join_the')} <span className="text-[#f39908]">{t('services.join_the_network')}</span>
                 </h3>
                 <p className="text-gray-400 text-[10px] font-medium leading-relaxed mb-6">
                     {t('services.position_brand')}

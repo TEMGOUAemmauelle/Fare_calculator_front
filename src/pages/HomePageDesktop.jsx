@@ -66,7 +66,7 @@ const HeroImageWithSkeleton = ({ src, alt }) => {
       
       {/* Fallback en cas d'erreur */}
       {hasError && (
-        <div className="absolute inset-0 bg-gradient-to-br from-[#f3cd08]/20 to-[#141414]/20 flex items-center justify-center">
+        <div className="absolute inset-0 bg-gradient-to-br from-[#f39908]/20 to-[#141414]/20 flex items-center justify-center">
           <div className="text-center text-gray-400">
             <MapPin className="w-12 h-12 mx-auto mb-2" />
             <p className="text-sm font-bold uppercase">{t('home.city_name')}</p>
@@ -163,7 +163,7 @@ export default function HomePageDesktop() {
   useEffect(() => {
     const newMarkers = [];
     if (departPlace) newMarkers.push({ coordinates: [departPlace.longitude, departPlace.latitude], type: 'depart', color: '#141414', label: departPlace.label });
-    if (arriveePlace) newMarkers.push({ coordinates: [arriveePlace.longitude, arriveePlace.latitude], type: 'arrivee', color: '#f3cd08', label: arriveePlace.label });
+    if (arriveePlace) newMarkers.push({ coordinates: [arriveePlace.longitude, arriveePlace.latitude], type: 'arrivee', color: '#f39908', label: arriveePlace.label });
     setMarkers(newMarkers);
 
     if (departPlace && arriveePlace) {
@@ -225,7 +225,7 @@ export default function HomePageDesktop() {
   };
 
   return (
-    <div className="min-h-screen bg-white text-[#141414] font-sans selection:bg-[#f3cd08]/30 overflow-x-hidden">
+    <div className="min-h-screen bg-white text-[#141414] font-sans selection:bg-[#f39908]/30 overflow-x-hidden">
       
       {/* NAVBAR DESKTOP */}
       <NavbarDesktop 
@@ -251,7 +251,7 @@ export default function HomePageDesktop() {
                 >
                     {t('home.hero_title_1')} <br/>
                     <span className="text-transparent border-t-2 border-b-2 py-2 px-0 mb-2 inline-block " style={{ WebkitTextStroke: '2px #141414' }}>{t('home.hero_title_2')}</span><br/>
-                    <span className="text-[#f3cd08]">{t('home.hero_title_3')}</span>
+                    <span className="text-[#f39908]">{t('home.hero_title_3')}</span>
                 </motion.h2>
 
                 <motion.p 
@@ -270,15 +270,15 @@ export default function HomePageDesktop() {
                     onClick={scrollToEstimation}
                     className="relative max-w-xl group cursor-pointer"
                 >
-                    <div className="absolute inset-0 bg-[#f3cd08] rounded-3xl blur-2xl opacity-0 group-hover:opacity-20 transition-opacity" />
+                    <div className="absolute inset-0 bg-[#f39908] rounded-3xl blur-2xl opacity-0 group-hover:opacity-20 transition-opacity" />
                     <div className="relative flex items-center gap-6 p-6 bg-white border-2 border-[#141414] rounded-3xl shadow-2xl shadow-gray-200/50 group-hover:-translate-y-1 transition-transform">
-                        <div className="w-14 h-14 bg-[#141414] rounded-2xl flex items-center justify-center text-[#f3cd08] shrink-0">
+                        <div className="w-14 h-14 bg-[#141414] rounded-2xl flex items-center justify-center text-[#f39908] shrink-0">
                             <Search className="w-7 h-7" />
                         </div>
                         <div className="flex-1">
                             <span className="text-2xl font-black text-gray-300 italic group-hover:text-[#141414] transition-colors">{t('estimate.start_search')}</span>
                         </div>
-                        <div className="p-4 bg-gray-50 rounded-2xl text-gray-400 group-hover:bg-[#f3cd08] group-hover:text-black transition-all">
+                        <div className="p-4 bg-gray-50 rounded-2xl text-gray-400 group-hover:bg-[#f39908] group-hover:text-black transition-all">
                             <ArrowRight className="w-6 h-6" />
                         </div>
                     </div>
@@ -299,7 +299,7 @@ export default function HomePageDesktop() {
                     
                     <div className="absolute bottom-12 left-12 right-12 p-8 bg-white/10 backdrop-blur-xl rounded-4xl border border-white/20">
                         <div className="flex items-center gap-4 mb-4">
-                            <div className="w-12 h-12 bg-[#f3cd08] rounded-2xl flex items-center justify-center">
+                            <div className="w-12 h-12 bg-[#f39908] rounded-2xl flex items-center justify-center">
                                 <ShieldCheck className="w-6 h-6 text-black" />
                             </div>
                             <div>
@@ -340,21 +340,21 @@ export default function HomePageDesktop() {
                 <div>
                     <h2 className="text-6xl font-black italic uppercase tracking-tighter leading-none mb-6">
                         {t('estimate.title_section').split(' ').slice(0, 2).join(' ')} <br/>
-                        <span className="text-[#f3cd08]">{t('estimate.title_section').split(' ').slice(2).join(' ')}</span>
+                        <span className="text-[#f39908]">{t('estimate.title_section').split(' ').slice(2).join(' ')}</span>
                     </h2>
                     <p className="text-gray-400 text-sm font-bold uppercase tracking-[0.2em]">{t('estimate.drawer_description')}</p>
                 </div>
                      <div className="flex items-center gap-4 lg:justify-end">
                             <button
                                 onClick={() => setShowHistoryModal(true)}
-                                className="px-5 py-4 bg-gray-50 rounded-3xl border border-gray-100 flex items-center gap-3 text-gray-400 hover:text-[#f3cd08] hover:border-[#f3cd08]/30 hover:bg-white transition-all"
+                                className="px-5 py-4 bg-gray-50 rounded-3xl border border-gray-100 flex items-center gap-3 text-gray-400 hover:text-[#f39908] hover:border-[#f39908]/30 hover:bg-white transition-all"
                                 title={t('nav.history')}
                             >
-                                <div className="p-2 bg-white rounded-xl shadow-sm"><History className="w-5 h-5 text-[#f3cd08]" /></div>
+                                <div className="p-2 bg-white rounded-xl shadow-sm"><History className="w-5 h-5 text-[#f39908]" /></div>
                                 <span className="text-[9px] font-black uppercase tracking-widest">{t('nav.history')}</span>
                             </button>
                             <div className="px-6 py-4 bg-gray-50 rounded-3xl border border-gray-100 flex items-center gap-4">
-                        <div className="p-2 bg-white rounded-xl shadow-sm"><Calculator className="w-5 h-5 text-[#f3cd08]" /></div>
+                        <div className="p-2 bg-white rounded-xl shadow-sm"><Calculator className="w-5 h-5 text-[#f39908]" /></div>
                         <div>
                             <p className="text-[10px] font-black uppercase tracking-widest text-gray-400 leading-none mb-1">{t('home.last_update')}</p>
                             <p className="text-xs font-black uppercase italic">{t('home.last_update_time')}</p>
@@ -368,9 +368,9 @@ export default function HomePageDesktop() {
                     <div className="bg-white p-10 rounded-[3rem] border border-gray-100 shadow-2xl shadow-gray-200/50">
                         <div className="space-y-8 relative">
                             <div className="space-y-6 relative">
-                                    <div className={`group relative p-6 rounded-3xl border-2 transition-all ${activeSearchField === 'depart' ? 'border-[#f3cd08] bg-white ring-8 ring-yellow-50' : 'border-gray-50 bg-gray-50/50 hover:bg-white hover:border-gray-100'}`}>
+                                    <div className={`group relative p-6 rounded-3xl border-2 transition-all ${activeSearchField === 'depart' ? 'border-[#f39908] bg-white ring-8 ring-yellow-50' : 'border-gray-50 bg-gray-50/50 hover:bg-white hover:border-gray-100'}`}>
                                         <div className="flex items-center gap-4 mb-2">
-                                            <div className={`p-2 rounded-xl transition-colors ${activeSearchField === 'depart' ? 'bg-[#f3cd08] text-black' : 'bg-white text-gray-400'}`}>
+                                            <div className={`p-2 rounded-xl transition-colors ${activeSearchField === 'depart' ? 'bg-[#f39908] text-black' : 'bg-white text-gray-400'}`}>
                                                 <Navigation className="w-5 h-5" />
                                             </div>
                                             <span className="text-[10px] font-black text-gray-400 uppercase tracking-widest">{t('add.placeholder_from').split(' ')[0]}</span>
@@ -397,9 +397,9 @@ export default function HomePageDesktop() {
                                         </div>
                                     </div>
 
-                                    <div className={`group relative p-6 rounded-3xl border-2 transition-all ${activeSearchField === 'arrivee' ? 'border-[#f3cd08] bg-white ring-8 ring-yellow-50' : 'border-gray-50 bg-gray-50/50 hover:bg-white hover:border-gray-100'}`}>
+                                    <div className={`group relative p-6 rounded-3xl border-2 transition-all ${activeSearchField === 'arrivee' ? 'border-[#f39908] bg-white ring-8 ring-yellow-50' : 'border-gray-50 bg-gray-50/50 hover:bg-white hover:border-gray-100'}`}>
                                         <div className="flex items-center gap-4 mb-2">
-                                            <div className={`p-2 rounded-xl transition-colors ${activeSearchField === 'arrivee' ? 'bg-[#f3cd08] text-black' : 'bg-white text-gray-400'}`}>
+                                            <div className={`p-2 rounded-xl transition-colors ${activeSearchField === 'arrivee' ? 'bg-[#f39908] text-black' : 'bg-white text-gray-400'}`}>
                                                 <MapPin className="w-5 h-5" />
                                             </div>
                                             <span className="text-[10px] font-black text-gray-400 uppercase tracking-widest">{t('add.placeholder_to').split(' ')[0]}</span>
@@ -411,7 +411,7 @@ export default function HomePageDesktop() {
                                                 onLoading={setIsSearching} placeholder={t('estimate.placeholder_to')}
                                                 className="w-full text-2xl font-black text-[#141414] border-none p-0 focus:ring-0 bg-transparent placeholder:text-gray-200 truncate italic"
                                             />
-                                            {isSearching && <Loader2 className="w-5 h-5 text-[#f3cd08] animate-spin shrink-0" />}
+                                            {isSearching && <Loader2 className="w-5 h-5 text-[#f39908] animate-spin shrink-0" />}
                                         </div>
                                     </div>
                                     
@@ -427,7 +427,7 @@ export default function HomePageDesktop() {
                                                 <div className="p-2 space-y-1">
                                                     {suggestions.map((s, i) => (
                                                         <button key={i} onMouseDown={() => handleSelectSuggestion(s)} className="w-full p-4 rounded-2xl flex items-center gap-4 text-left group hover:bg-gray-50 transition-all">
-                                                            <div className="w-10 h-10 bg-gray-50 rounded-xl flex items-center justify-center text-gray-400 group-hover:bg-[#f3cd08] group-hover:text-black shrink-0 transition-all"><MapPinned className="w-5 h-5"/></div>
+                                                            <div className="w-10 h-10 bg-gray-50 rounded-xl flex items-center justify-center text-gray-400 group-hover:bg-[#f39908] group-hover:text-black shrink-0 transition-all"><MapPinned className="w-5 h-5"/></div>
                                                             <div className="flex flex-col min-w-0">
                                                                 <span className="text-sm font-black text-gray-900 truncate tracking-tight uppercase italic">{s.name}</span>
                                                                 <span className="text-[9px] text-gray-400 font-bold uppercase truncate tracking-widest">{s.place_formatted}</span>
@@ -465,9 +465,9 @@ export default function HomePageDesktop() {
 
                                 <button 
                                     onClick={handleEstimate} 
-                                    className="w-full py-6 bg-[#f3cd08] text-black rounded-4xl font-black text-[12px] uppercase tracking-[0.3em] shadow-xl shadow-yellow-500/20 flex items-center justify-center gap-4 hover:scale-[1.02] active:scale-[0.98] transition-all group mt-4"
+                                    className="w-full py-6 bg-[#f39908] text-black rounded-4xl font-black text-[12px] uppercase tracking-[0.3em] shadow-xl shadow-yellow-500/20 flex items-center justify-center gap-4 hover:scale-[1.02] active:scale-[0.98] transition-all group mt-4"
                                 >
-                                    {isLoading ? <Loader2 className="w-6 h-6 animate-spin" /> : <> {t('estimate.launch')} <div className="p-2 bg-black rounded-xl group-hover:rotate-12 transition-transform"><Calculator className="w-4 h-4 text-[#f3cd08]" /></div></>}
+                                    {isLoading ? <Loader2 className="w-6 h-6 animate-spin" /> : <> {t('estimate.launch')} <div className="p-2 bg-black rounded-xl group-hover:rotate-12 transition-transform"><Calculator className="w-4 h-4 text-[#f39908]" /></div></>}
                                 </button>
                             </div>
 
@@ -478,14 +478,14 @@ export default function HomePageDesktop() {
                     </div>
 
                     <div className="bg-[#141414] rounded-[3rem] p-10 text-white relative overflow-hidden group">
-                        <div className="absolute -bottom-10 -right-10 w-40 h-40 bg-[#f3cd08] rounded-full blur-[80px] opacity-10 group-hover:opacity-20 transition-opacity" />
+                        <div className="absolute -bottom-10 -right-10 w-40 h-40 bg-[#f39908] rounded-full blur-[80px] opacity-10 group-hover:opacity-20 transition-opacity" />
                         <div className="relative z-10 flex flex-col gap-6">
                             <div className="w-16 h-16 bg-white/10 rounded-2xl flex items-center justify-center backdrop-blur-md">
-                                <Heart className="w-8 h-8 text-[#f3cd08]" />
+                                <Heart className="w-8 h-8 text-[#f39908]" />
                             </div>
-                            <h4 className="text-3xl font-black uppercase italic tracking-tighter leading-none">{t('add.share_fare')} <br/> <span className="text-[#f3cd08]">{t('add.fare')}</span></h4>
+                            <h4 className="text-3xl font-black uppercase italic tracking-tighter leading-none">{t('add.share_fare')} <br/> <span className="text-[#f39908]">{t('add.fare')}</span></h4>
                             <p className="text-gray-400 text-sm font-bold uppercase tracking-wider leading-relaxed">{t('home.contribute_description')}</p>
-                            <button onClick={() => navigate('/add-trajet')} className="w-fit px-8 py-4 bg-white text-black rounded-2xl font-black text-[10px] uppercase tracking-widest hover:bg-[#f3cd08] transition-colors">{t('home.cta_contribute')}</button>
+                            <button onClick={() => navigate('/add-trajet')} className="w-fit px-8 py-4 bg-white text-black rounded-2xl font-black text-[10px] uppercase tracking-widest hover:bg-[#f39908] transition-colors">{t('home.cta_contribute')}</button>
                         </div>
                     </div>
                 </div>
@@ -526,7 +526,7 @@ export default function HomePageDesktop() {
                                 >
                                     {/* Header compact */}
                                     <div className="flex items-center gap-3 mb-3 pb-3 border-b border-white/10">
-                                        <div className="w-8 h-8 bg-[#f3cd08] rounded-lg flex items-center justify-center text-black">
+                                        <div className="w-8 h-8 bg-[#f39908] rounded-lg flex items-center justify-center text-black">
                                             <Sparkles className="w-4 h-4" />
                                         </div>
                                         <div className="flex-1">
@@ -557,8 +557,8 @@ export default function HomePageDesktop() {
                                     {/* Trajet compact */}
                                     <div className="flex items-center gap-2 p-2 bg-white/5 rounded-xl mb-3">
                                         <div className="flex flex-col items-center gap-0.5">
-                                            <div className="w-2 h-2 rounded-full bg-[#f3cd08]" />
-                                            <div className="w-0.5 h-4 bg-gradient-to-b from-[#f3cd08] to-gray-600" />
+                                            <div className="w-2 h-2 rounded-full bg-[#f39908]" />
+                                            <div className="w-0.5 h-4 bg-gradient-to-b from-[#f39908] to-gray-600" />
                                             <div className="w-2 h-2 rounded-full bg-gray-400" />
                                         </div>
                                         <div className="flex-1 min-w-0">
@@ -575,7 +575,7 @@ export default function HomePageDesktop() {
                                         </div>
                                         <div className="p-2 bg-white/5 rounded-xl">
                                             <p className="text-[7px] font-bold uppercase tracking-wider text-gray-500">{t('price_card.status')}</p>
-                                            <p className="text-xs font-black text-[#f3cd08] capitalize">{prediction.statut}</p>
+                                            <p className="text-xs font-black text-[#f39908] capitalize">{prediction.statut}</p>
                                         </div>
                                     </div>
                                 </motion.div>

@@ -128,7 +128,7 @@ export default function QuickPriceModal({ isOpen, onClose, trajetData, onSuccess
                 </button>
                 
                 <div className="flex items-center gap-3 mb-3">
-                  <div className="p-2 bg-[#f3cd08] rounded-xl">
+                  <div className="p-2 bg-[#f39908] rounded-xl">
                     <Heart className="w-5 h-5 text-black" />
                   </div>
                   <div>
@@ -145,7 +145,7 @@ export default function QuickPriceModal({ isOpen, onClose, trajetData, onSuccess
                 <div className="flex items-center gap-3 p-3 bg-white/10 rounded-2xl mt-3">
                   <div className="flex flex-col gap-1 flex-1 min-w-0">
                     <div className="flex items-center gap-2">
-                      <Navigation className="w-3 h-3 text-[#f3cd08] shrink-0" />
+                      <Navigation className="w-3 h-3 text-[#f39908] shrink-0" />
                       <span className="text-xs font-semibold truncate">
                         {trajetData?.depart?.label || 'Départ'}
                       </span>
@@ -177,7 +177,7 @@ export default function QuickPriceModal({ isOpen, onClose, trajetData, onSuccess
                     {t('quick_price.contribution_saved') || 'Votre contribution aide des milliers de Camerounais'}
                   </p>
                   <div className="mt-4 flex justify-center">
-                    <Sparkles className="w-5 h-5 text-[#f3cd08] animate-pulse" />
+                    <Sparkles className="w-5 h-5 text-[#f39908] animate-pulse" />
                   </div>
                 </motion.div>
               ) : (
@@ -188,7 +188,7 @@ export default function QuickPriceModal({ isOpen, onClose, trajetData, onSuccess
                       {t('quick_price.price_label') || 'Prix payé pour ce trajet'}
                     </label>
                     <div className="relative">
-                      <div className="absolute left-4 top-1/2 -translate-y-1/2 p-2 bg-[#f3cd08] rounded-xl">
+                      <div className="absolute left-4 top-1/2 -translate-y-1/2 p-2 bg-[#f39908] rounded-xl">
                         <Coins className="w-5 h-5 text-black" />
                       </div>
                       <input
@@ -198,7 +198,7 @@ export default function QuickPriceModal({ isOpen, onClose, trajetData, onSuccess
                         placeholder="200"
                         min="50"
                         step="25"
-                        className="w-full pl-16 pr-20 py-4 text-2xl font-black text-gray-900 bg-gray-50 border-2 border-transparent focus:border-[#f3cd08] rounded-2xl outline-none transition-all placeholder:text-gray-300"
+                        className="w-full pl-16 pr-20 py-4 text-2xl font-black text-gray-900 bg-gray-50 border-2 border-transparent focus:border-[#f39908] rounded-2xl outline-none transition-all placeholder:text-gray-300"
                         autoFocus
                       />
                       <span className="absolute right-4 top-1/2 -translate-y-1/2 text-sm font-bold text-gray-400">
@@ -237,10 +237,10 @@ export default function QuickPriceModal({ isOpen, onClose, trajetData, onSuccess
                     className="w-full py-4 bg-[#141414] text-white rounded-2xl font-black text-[11px] uppercase tracking-[0.2em] flex items-center justify-center gap-3 hover:bg-black transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
                   >
                     {isSubmitting ? (
-                      <Loader2 className="w-5 h-5 animate-spin text-[#f3cd08]" />
+                      <Loader2 className="w-5 h-5 animate-spin text-[#f39908]" />
                     ) : (
                       <>
-                        <Heart className="w-4 h-4 text-[#f3cd08]" />
+                        <Heart className="w-4 h-4 text-[#f39908]" />
                         {t('quick_price.submit') || 'Contribuer'}
                       </>
                     )}

@@ -49,7 +49,7 @@ const MarketplaceCard = ({ service, variant = 'default' }) => {
         rel="noopener noreferrer"
         whileHover={{ y: -2 }}
         whileTap={{ scale: 0.98 }}
-        className="block bg-white rounded-sm border border-gray-100 hover:border-[#f3cd08] hover:shadow-md transition-all group overflow-hidden h-full"
+        className="block bg-white rounded-sm border border-gray-100 hover:border-[#f39908] hover:shadow-md transition-all group overflow-hidden h-full"
       >
         {/* Image - Hauteur réduite pour un look plus fin */}
         <div className="w-full h-16 bg-gray-100 relative">
@@ -68,7 +68,7 @@ const MarketplaceCard = ({ service, variant = 'default' }) => {
         </div>
         
         <div className="p-2">
-          <h4 className="font-black text-gray-900 truncate group-hover:text-[#f3cd08] transition-colors text-[10px] uppercase tracking-tighter leading-tight">
+          <h4 className="font-black text-gray-900 truncate group-hover:text-[#f39908] transition-colors text-[10px] uppercase tracking-tighter leading-tight">
             {service.nom}
           </h4>
           <p className="text-[8px] text-gray-400 truncate mt-0.5 font-medium">
@@ -107,7 +107,7 @@ const MarketplaceCard = ({ service, variant = 'default' }) => {
         
         {/* Badge Featured */}
         <div className="absolute top-4 right-4 z-10">
-          <div className="flex items-center gap-1 px-3 py-1 bg-[#f3cd08] rounded-full">
+          <div className="flex items-center gap-1 px-3 py-1 bg-[#f39908] rounded-full">
             <Sparkles className="w-3 h-3 text-black" />
             <span className="text-[9px] font-black uppercase tracking-wide text-black">Featured</span>
           </div>
@@ -131,7 +131,7 @@ const MarketplaceCard = ({ service, variant = 'default' }) => {
               </div>
             )}
             <div className="flex-1">
-              <h3 className="text-xl font-black text-white mb-1 group-hover:text-[#f3cd08] transition-colors">
+              <h3 className="text-xl font-black text-white mb-1 group-hover:text-[#f39908] transition-colors">
                 {service.nom}
               </h3>
               <span className={`inline-block px-2 py-0.5 rounded-lg text-[10px] font-bold uppercase ${categoryStyle.bg} ${categoryStyle.text}`}>
@@ -151,7 +151,7 @@ const MarketplaceCard = ({ service, variant = 'default' }) => {
               <Users className="w-4 h-4" />
               <span>Service partenaire</span>
             </div>
-            <div className="flex items-center gap-2 text-[#f3cd08] font-bold text-sm group-hover:gap-3 transition-all">
+            <div className="flex items-center gap-2 text-[#f39908] font-bold text-sm group-hover:gap-3 transition-all">
               <span>Découvrir</span>
               <ExternalLink className="w-4 h-4" />
             </div>
@@ -171,7 +171,7 @@ const MarketplaceCard = ({ service, variant = 'default' }) => {
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true }}
       whileHover={{ y: -4, boxShadow: '0 20px 40px -20px rgba(0,0,0,0.15)' }}
-      className="block bg-white rounded-2xl border border-gray-100 hover:border-[#f3cd08] transition-all group overflow-hidden h-full min-h-[280px] flex flex-col"
+      className="block bg-white rounded-2xl border border-gray-100 hover:border-[#f39908] transition-all group overflow-hidden h-full min-h-[280px] flex flex-col"
     >
       {/* Image */}
       <div className="w-full h-36 bg-gray-100 relative">
@@ -200,10 +200,10 @@ const MarketplaceCard = ({ service, variant = 'default' }) => {
       {/* Contenu */}
       <div className="p-5 flex-1 flex flex-col">
         <div className="flex items-start justify-between gap-2 mb-3">
-          <h3 className="font-bold text-gray-900 text-lg group-hover:text-[#f3cd08] transition-colors">
+          <h3 className="font-bold text-gray-900 text-lg group-hover:text-[#f39908] transition-colors">
             {service.nom}
           </h3>
-          <ExternalLink className="w-5 h-5 text-gray-300 group-hover:text-[#f3cd08] transition-colors shrink-0 mt-1" />
+          <ExternalLink className="w-5 h-5 text-gray-300 group-hover:text-[#f39908] transition-colors shrink-0 mt-1" />
         </div>
 
         <p className="text-gray-500 text-sm leading-relaxed line-clamp-2 flex-1">
@@ -216,7 +216,7 @@ const MarketplaceCard = ({ service, variant = 'default' }) => {
             <Users className="w-3.5 h-3.5" />
             <span>Partenaire</span>
           </div>
-          <span className="text-[#f3cd08] text-xs font-bold">Visiter →</span>
+          <span className="text-[#f39908] text-xs font-bold">Visiter →</span>
         </div>
       </div>
     </motion.a>

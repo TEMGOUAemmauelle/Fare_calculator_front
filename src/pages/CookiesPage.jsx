@@ -13,7 +13,7 @@ const CookiesPage = () => {
       <div className="max-w-4xl mx-auto px-6 py-12 md:py-20">
         <button 
           onClick={() => navigate('/')} 
-          className="flex items-center gap-2 text-sm font-medium text-gray-500 hover:text-[#f3cd08] transition-colors mb-10 group"
+          className="flex items-center gap-2 text-sm font-medium text-gray-500 hover:text-[#f39908] transition-colors mb-10 group"
         >
           <ChevronLeft className="w-4 h-4 transition-transform group-hover:-translate-x-1" />
           {t('common.back')}
@@ -52,7 +52,7 @@ const CookiesEn = () => (
 
       <h2 className="text-2xl font-bold text-gray-900 dark:text-white mt-12 mb-4">2. Who we are</h2>
       <p>
-        FarCal is provided by Yowyob Inc. Ltd ("Yowyob", "we", "us"). For questions, please contact us via <a href="https://yowyob.com/contact" className="text-[#f3cd08] hover:underline" target="_blank" rel="noopener noreferrer">yowyob.com/contact</a>.
+        FarCal is provided by Yowyob Inc. Ltd ("Yowyob", "we", "us"). For questions, please contact us via <a href="https://yowyob.com/contact" className="text-[#f39908] hover:underline" target="_blank" rel="noopener noreferrer">yowyob.com/contact</a>.
       </p>
 
       <h2 className="text-2xl font-bold text-gray-900 dark:text-white mt-12 mb-4">3. What are cookies and similar technologies?</h2>
@@ -180,7 +180,7 @@ const CookiesEn = () => (
 
       <h2 className="text-2xl font-bold text-gray-900 dark:text-white mt-12 mb-4">13. Contact</h2>
       <p>
-        For questions about cookies, advertising, or your privacy choices, contact Yowyob Inc. Ltd via <a href="https://yowyob.com/contact" className="text-[#f3cd08] hover:underline" target="_blank" rel="noopener noreferrer">yowyob.com/contact</a>.
+        For questions about cookies, advertising, or your privacy choices, contact Yowyob Inc. Ltd via <a href="https://yowyob.com/contact" className="text-[#f39908] hover:underline" target="_blank" rel="noopener noreferrer">yowyob.com/contact</a>.
       </p>
     </section>
   </div>
@@ -211,7 +211,7 @@ const CookiesFr = () => (
 
       <h2 className="text-2xl font-bold text-gray-900 dark:text-white mt-12 mb-4">2. Qui sommes-nous</h2>
       <p>
-        FarCal est fourni par Yowyob Inc. Ltd ("Yowyob", "nous"). Pour toute question, contactez-nous via <a href="https://yowyob.com/contact" className="text-[#f3cd08] hover:underline" target="_blank" rel="noopener noreferrer">yowyob.com/contact</a>.
+        FarCal est fourni par Yowyob Inc. Ltd ("Yowyob", "nous"). Pour toute question, contactez-nous via <a href="https://yowyob.com/contact" className="text-[#f39908] hover:underline" target="_blank" rel="noopener noreferrer">yowyob.com/contact</a>.
       </p>
 
       <h2 className="text-2xl font-bold text-gray-900 dark:text-white mt-12 mb-4">3. Que sont les cookies et technologies similaires ?</h2>
@@ -339,7 +339,7 @@ const CookiesFr = () => (
 
       <h2 className="text-2xl font-bold text-gray-900 dark:text-white mt-12 mb-4">13. Contact</h2>
       <p>
-        Pour toute question sur les cookies, la publicité ou vos choix de confidentialité, contactez Yowyob Inc. Ltd via <a href="https://yowyob.com/contact" className="text-[#f3cd08] hover:underline" target="_blank" rel="noopener noreferrer">yowyob.com/contact</a>.
+        Pour toute question sur les cookies, la publicité ou vos choix de confidentialité, contactez Yowyob Inc. Ltd via <a href="https://yowyob.com/contact" className="text-[#f39908] hover:underline" target="_blank" rel="noopener noreferrer">yowyob.com/contact</a>.
       </p>
     </section>
   </div>

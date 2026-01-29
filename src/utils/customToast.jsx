@@ -36,8 +36,8 @@ const Toast = ({ t, type, message, icon, visible, id }) => {
   // Override icon if provided directly
   if (icon === '📍') {
     Icon = MapPin;
-    iconColor = 'text-[#f3cd08]'; // Taxi yellow
-    iconBg = 'bg-[#f3cd08]/10';
+    iconColor = 'text-[#f39908]'; // Taxi yellow
+    iconBg = 'bg-[#f39908]/10';
   } else if (icon === '🔒') {
     iconColor = 'text-red-500';
     iconBg = 'bg-red-50';

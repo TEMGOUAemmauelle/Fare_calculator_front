@@ -461,8 +461,8 @@ export default function MapView({
         el.className = 'user-location-marker';
         el.innerHTML = `
           <div class="relative w-10 h-10 flex items-center justify-center">
-            <div class="absolute inset-0 bg-[#f3cd08] rounded-full opacity-30 animate-ping"></div>
-            <div class="relative w-5 h-5 bg-[#f3cd08] border-4 border-white rounded-full shadow-lg"></div>
+            <div class="absolute inset-0 bg-[#f39908] rounded-full opacity-30 animate-ping"></div>
+            <div class="relative w-5 h-5 bg-[#f39908] border-4 border-white rounded-full shadow-lg"></div>
           </div>
         `;
 

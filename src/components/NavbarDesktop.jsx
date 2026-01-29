@@ -54,9 +54,9 @@ export default function NavbarDesktop({ currentAddress, showCityIndicator = true
           onClick={() => navigate('/')}
         >
           <h1 className="text-2xl font-black tracking-tighter uppercase leading-none italic">
-            FARE<span className="text-[#f3cd08]">CAL</span>
+            FARE<span className="text-[#f39908]">CAL</span>
           </h1>
-          <div className="h-1 w-8 bg-[#f3cd08] mt-1 rounded-full" />
+          <div className="h-1 w-8 bg-[#f39908] mt-1 rounded-full" />
         </div>
         
         {/* City Indicator (optionnel) */}
@@ -75,7 +75,7 @@ export default function NavbarDesktop({ currentAddress, showCityIndicator = true
               onClick={() => navigate(item.path)} 
               className={`text-[10px] font-black uppercase tracking-widest transition-colors ${
                 getActiveClass(item.path) 
-                  ? 'text-black border-b-2 border-[#f3cd08] pb-1' 
+                  ? 'text-black border-b-2 border-[#f39908] pb-1' 
                   : 'text-gray-400 hover:text-black'
               }`}
             >
@@ -97,7 +97,7 @@ export default function NavbarDesktop({ currentAddress, showCityIndicator = true
           onClick={() => navigate('/add-trajet')}
           className="px-6 py-3 bg-[#141414] text-white rounded-2xl font-black text-[10px] uppercase tracking-widest shadow-xl shadow-black/10 hover:scale-105 active:scale-95 transition-all flex items-center gap-3"
         >
-          <PlusCircle className="w-4 h-4 text-[#f3cd08]" />
+          <PlusCircle className="w-4 h-4 text-[#f39908]" />
           {t('home.cta_contribute') || 'Contribuer'}
         </button>
       </div>

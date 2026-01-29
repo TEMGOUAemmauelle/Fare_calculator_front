@@ -40,7 +40,7 @@ export default function ServicesPageDesktop() {
   const layoutMode = getLayoutMode(services.length);
 
   return (
-    <div className="min-h-screen bg-[#f8f8f8] text-[#141414] font-sans selection:bg-[#f3cd08]/30 overflow-x-hidden">
+    <div className="min-h-screen bg-[#f8f8f8] text-[#141414] font-sans selection:bg-[#f39908]/30 overflow-x-hidden">
       <NavbarDesktop activeRoute="/services" />
 
       <main className="pt-32 pb-20 px-8 max-w-[1600px] mx-auto">
@@ -52,7 +52,7 @@ export default function ServicesPageDesktop() {
                     animate={{ opacity: 1, y: 0 }}
                     className="inline-flex items-center gap-2 px-3 py-1 bg-[#141414] text-white rounded-sm mb-6"
                 >
-                    <ShieldCheck className="w-3 h-3 text-[#f3cd08]" />
+                    <ShieldCheck className="w-3 h-3 text-[#f39908]" />
                     <span className="text-[10px] font-bold uppercase tracking-widest">Official Partners</span>
                 </motion.div>
                 <motion.h1 
@@ -139,12 +139,12 @@ export default function ServicesPageDesktop() {
         {/* BECOME A PARTNER SECTION */}
         <section className="mt-32 border-t border-gray-200 pt-20">
             <div className="bg-[#141414] text-white rounded-sm p-16 relative overflow-hidden">
-                <div className="absolute top-0 right-0 w-[500px] h-[500px] bg-[#f3cd08] rounded-full blur-[150px] opacity-10" />
+                <div className="absolute top-0 right-0 w-[500px] h-[500px] bg-[#f39908] rounded-full blur-[150px] opacity-10" />
                 
                 <div className="relative z-10 flex flex-col lg:flex-row items-start justify-between gap-20">
                     <div className="space-y-8 max-w-2xl">
                         <h3 className="text-5xl font-black uppercase tracking-tighter leading-none">
-                            {t('services.join_the')} <span className="text-[#f3cd08]">{t('services.join_the_network')}</span>
+                            {t('services.join_the')} <span className="text-[#f39908]">{t('services.join_the_network')}</span>
                         </h3>
                         <p className="text-gray-400 text-lg font-medium leading-relaxed max-w-xl">
                             {t('services.position_brand_desc')}
@@ -152,7 +152,7 @@ export default function ServicesPageDesktop() {
                         <div className="flex gap-4 pt-4">
                             <button 
                                 onClick={() => navigate('/pricing')}
-                                className="px-8 py-4 bg-white text-black rounded-sm font-bold text-xs uppercase tracking-widest hover:bg-[#f3cd08] transition-colors inline-block"
+                                className="px-8 py-4 bg-white text-black rounded-sm font-bold text-xs uppercase tracking-widest hover:bg-[#f39908] transition-colors inline-block"
                             >
                                 {t('services.apply_now')}
                             </button>
@@ -171,12 +171,12 @@ export default function ServicesPageDesktop() {
 
                     <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 w-full lg:w-auto">
                         <div className="p-6 bg-white/5 border border-white/10 rounded-sm backdrop-blur-sm">
-                            <Users className="w-6 h-6 text-[#f3cd08] mb-4" />
+                            <Users className="w-6 h-6 text-[#f39908] mb-4" />
                             <h4 className="text-lg font-bold uppercase tracking-tight mb-2">{t('services.targeted_reach')}</h4>
                             <p className="text-gray-500 text-xs leading-relaxed">{t('services.targeted_reach_desc')}</p>
                         </div>
                         <div className="p-6 bg-white/5 border border-white/10 rounded-sm backdrop-blur-sm">
-                            <Sparkles className="w-6 h-6 text-[#f3cd08] mb-4" />
+                            <Sparkles className="w-6 h-6 text-[#f39908] mb-4" />
                             <h4 className="text-lg font-bold uppercase tracking-tight mb-2">{t('services.premium_brand')}</h4>
                             <p className="text-gray-500 text-xs leading-relaxed">{t('services.premium_brand_desc')}</p>
                         </div>
@@ -211,7 +211,7 @@ function PartnerCard({ service, t, variant = 'standard' }) {
             initial={{ opacity: 0, scale: 0.95 }}
             whileInView={{ opacity: 1, scale: 1 }}
             viewport={{ once: true }}
-            className={`group relative block w-full h-full overflow-hidden bg-white border border-gray-200 rounded-sm hover:border-[#f3cd08] transition-colors duration-500 ${isHero ? 'shadow-2xl' : 'shadow-sm'}`}
+            className={`group relative block w-full h-full overflow-hidden bg-white border border-gray-200 rounded-sm hover:border-[#f39908] transition-colors duration-500 ${isHero ? 'shadow-2xl' : 'shadow-sm'}`}
         >
             {/* Image Background */}
             <div className="absolute inset-0">
@@ -230,7 +230,7 @@ function PartnerCard({ service, t, variant = 'standard' }) {
                     <div className="flex items-center gap-3 mb-4">
                         <span 
                             className="px-3 py-1 rounded-sm text-[9px] font-black uppercase tracking-widest text-[#141414]"
-                            style={{ backgroundColor: service.color || '#f3cd08' }}
+                            style={{ backgroundColor: service.color || '#f39908' }}
                         >
                             {service.category}
                         </span>
@@ -251,10 +251,10 @@ function PartnerCard({ service, t, variant = 'standard' }) {
                         </p>
                         
                         <div className="flex items-center gap-2 text-white group/btn">
-                            <span className="text-xs font-bold uppercase tracking-widest group-hover/btn:text-[#f3cd08] transition-colors">
+                            <span className="text-xs font-bold uppercase tracking-widest group-hover/btn:text-[#f39908] transition-colors">
                                 {t('services.visit_website')}
                             </span>
-                            <ArrowUpRight className="w-4 h-4 group-hover/btn:text-[#f3cd08] group-hover/btn:translate-x-1 group-hover/btn:-translate-y-1 transition-all" />
+                            <ArrowUpRight className="w-4 h-4 group-hover/btn:text-[#f39908] group-hover/btn:translate-x-1 group-hover/btn:-translate-y-1 transition-all" />
                         </div>
                     </div>
                 </div>

@@ -17,8 +17,8 @@ const TIER_CONFIG = {
   },
   business: {
     icon: Sparkles,
-    color: 'text-[#f3cd08]',
-    bg: 'bg-[#f3cd08]/10',
+    color: 'text-[#f39908]',
+    bg: 'bg-[#f39908]/10',
     badge: 'Populaire'
   },
   premium: {
@@ -73,13 +73,13 @@ const PricingCard = ({
         viewport={{ once: true }}
         className={`relative p-6 rounded-[2.5rem] border ${
           isFeatured 
-            ? 'border-[#f3cd08] bg-white shadow-xl shadow-[#f3cd08]/5' 
+            ? 'border-[#f39908] bg-white shadow-xl shadow-[#f39908]/5' 
             : 'border-gray-100 bg-white'
         }`}
       >
         {config.badge && (
           <div className="absolute -top-3 left-8">
-            <span className={`px-3 py-1 ${isFeatured ? 'bg-[#f3cd08] text-black' : 'bg-gray-900 text-white'} text-[8px] font-black uppercase tracking-[0.2em] rounded-full`}>
+            <span className={`px-3 py-1 ${isFeatured ? 'bg-[#f39908] text-black' : 'bg-gray-900 text-white'} text-[8px] font-black uppercase tracking-[0.2em] rounded-full`}>
               {config.badge}
             </span>
           </div>
@@ -111,7 +111,7 @@ const PricingCard = ({
           disabled={isLoading}
           className={`w-full py-4 rounded-2xl font-black text-[10px] uppercase tracking-[0.2em] transition-all border ${
             isFeatured
-              ? 'bg-[#f3cd08] text-black border-[#f3cd08] shadow-lg shadow-[#f3cd08]/20'
+              ? 'bg-[#f39908] text-black border-[#f39908] shadow-lg shadow-[#f39908]/20'
               : 'bg-white text-gray-900 border-gray-200 hover:bg-gray-50'
           }`}
         >
@@ -129,13 +129,13 @@ const PricingCard = ({
       viewport={{ once: true }}
       className={`relative p-10 rounded-[3rem] transition-all border ${
         isFeatured 
-          ? 'border-[#f3cd08] bg-white shadow-2xl shadow-[#f3cd08]/10' 
+          ? 'border-[#f39908] bg-white shadow-2xl shadow-[#f39908]/10' 
           : 'border-gray-100 bg-white hover:border-gray-200'
       }`}
     >
       {config.badge && (
         <div className="absolute -top-4 left-1/2 -translate-x-1/2">
-          <span className={`px-4 py-1.5 ${isFeatured ? 'bg-[#f3cd08] text-black' : 'bg-gray-900 text-white'} text-[9px] font-black uppercase tracking-[0.3em] rounded-full shadow-lg`}>
+          <span className={`px-4 py-1.5 ${isFeatured ? 'bg-[#f39908] text-black' : 'bg-gray-900 text-white'} text-[9px] font-black uppercase tracking-[0.3em] rounded-full shadow-lg`}>
             {config.badge}
           </span>
         </div>
@@ -159,8 +159,8 @@ const PricingCard = ({
       <div className="space-y-4 mb-10">
         {features.map((feature, idx) => (
           <div key={idx} className="flex items-center gap-3">
-            <div className={`w-5 h-5 rounded-full ${isFeatured ? 'bg-[#f3cd08]/20' : 'bg-gray-50'} flex items-center justify-center flex-shrink-0`}>
-              <Check className={`w-3 h-3 ${isFeatured ? 'text-[#f3cd08]' : 'text-gray-400'}`} />
+            <div className={`w-5 h-5 rounded-full ${isFeatured ? 'bg-[#f39908]/20' : 'bg-gray-50'} flex items-center justify-center flex-shrink-0`}>
+              <Check className={`w-3 h-3 ${isFeatured ? 'text-[#f39908]' : 'text-gray-400'}`} />
             </div>
             <span className="text-sm font-medium text-gray-600">{feature}</span>
           </div>
@@ -174,7 +174,7 @@ const PricingCard = ({
         disabled={isLoading}
         className={`w-full py-5 rounded-[1.5rem] font-black text-[11px] uppercase tracking-[0.2em] transition-all ${
           isFeatured
-            ? 'bg-[#f3cd08] text-black shadow-xl shadow-[#f3cd08]/20'
+            ? 'bg-[#f39908] text-black shadow-xl shadow-[#f39908]/20'
             : 'bg-gray-900 text-white hover:bg-black'
         }`}
       >

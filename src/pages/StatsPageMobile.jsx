@@ -54,21 +54,21 @@ export default function StatsPageMobile() {
           <Icon className="w-3.5 h-3.5" />
           {title}
         </h2>
-        <span className="text-[9px] text-[#f3cd08] font-black uppercase tracking-tighter">Glisser →</span>
+        <span className="text-[9px] text-[#f39908] font-black uppercase tracking-tighter">Glisser →</span>
       </div>
       
       <div className="flex overflow-x-auto pb-4 gap-4 snap-x hide-scrollbar">
         {data.map((item, idx) => (
           <motion.div 
             key={idx}
-            className="snap-center shrink-0 w-[240px] bg-white border border-gray-100 rounded-3xl p-4 shadow-sm group hover:border-[#f3cd08]/30 transition-all"
+            className="snap-center shrink-0 w-[240px] bg-white border border-gray-100 rounded-3xl p-4 shadow-sm group hover:border-[#f39908]/30 transition-all"
           >
             <div className="flex justify-between items-start mb-3">
               <div className="flex flex-col min-w-0 flex-1">
                 <span className="text-[8px] font-black text-gray-300 uppercase tracking-widest mb-1">Départ</span>
                 <span className="text-[11px] font-bold text-gray-800 truncate">{item.point_depart.label}</span>
               </div>
-              <div className="ml-2 px-2 py-1 rounded-lg bg-gray-50 border border-transparent group-hover:bg-[#141414] group-hover:text-[#f3cd08] transition-all shrink-0">
+              <div className="ml-2 px-2 py-1 rounded-lg bg-gray-50 border border-transparent group-hover:bg-[#141414] group-hover:text-[#f39908] transition-all shrink-0">
                 <span className="text-[9px] font-black">
                   {type === 'price' && `${Math.round(item.prix).toLocaleString()} CFA`}
                   {type === 'quality' && `${item.qualite_trajet}/10 Q`}
@@ -89,7 +89,7 @@ export default function StatsPageMobile() {
               <span className="text-[8px] font-bold text-gray-300 uppercase">
                 {new Date(item.date_ajout).toLocaleDateString('fr-FR', { day: 'numeric', month: 'short' })}
               </span>
-              <ChevronRight className="w-3 h-3 text-gray-200 group-hover:text-[#f3cd08] transition-colors" />
+              <ChevronRight className="w-3 h-3 text-gray-200 group-hover:text-[#f39908] transition-colors" />
             </div>
           </motion.div>
         ))}
@@ -100,7 +100,7 @@ export default function StatsPageMobile() {
   if (loading) return (
     <div className="min-h-screen bg-white flex items-center justify-center p-10">
       <div className="flex flex-col items-center gap-4">
-        <Loader2 className="w-8 h-8 animate-spin text-[#f3cd08]" />
+        <Loader2 className="w-8 h-8 animate-spin text-[#f39908]" />
         <p className="text-[10px] font-black text-gray-400 uppercase tracking-widest animate-pulse">{t('stats.loading_data')}</p>
       </div>
     </div>
@@ -115,18 +115,18 @@ export default function StatsPageMobile() {
             <button onClick={() => navigate(-1)} className="p-2.5 bg-gray-50 rounded-2xl text-gray-400 hover:text-black transition-colors active:scale-95"><ArrowLeft className="w-5 h-5"/></button>
             <div className="flex flex-col">
               <h1 className="text-xl font-black uppercase tracking-tighter italic leading-none">
-                STATS<span className="text-[#f3cd08]">INSIGHT</span>
+                STATS<span className="text-[#f39908]">INSIGHT</span>
               </h1>
-              <div className="h-1 w-8 bg-[#f3cd08] mt-1 rounded-full" />
+              <div className="h-1 w-8 bg-[#f39908] mt-1 rounded-full" />
             </div>
          </div>
          <div className="flex items-center gap-2">
             <button 
                 onClick={() => setShowFilterModal(true)}
-                className={`p-2.5 rounded-2xl transition-all relative ${period !== 'all' ? 'bg-[#141414] text-[#f3cd08]' : 'bg-gray-50 text-gray-400'}`}
+                className={`p-2.5 rounded-2xl transition-all relative ${period !== 'all' ? 'bg-[#141414] text-[#f39908]' : 'bg-gray-50 text-gray-400'}`}
             >
                 <Filter className="w-5 h-5" />
-                {period !== 'all' && <span className="absolute -top-1 -right-1 w-2.5 h-2.5 bg-[#f3cd08] rounded-full border-2 border-white" />}
+                {period !== 'all' && <span className="absolute -top-1 -right-1 w-2.5 h-2.5 bg-[#f39908] rounded-full border-2 border-white" />}
             </button>
             <div className="bg-gray-50 rounded-2xl scale-90 origin-right">
                 <LanguageSwitcher variant="dark" /> 
@@ -144,10 +144,10 @@ export default function StatsPageMobile() {
 
         {stats.lieu_du_mois && (
           <motion.div variants={itemVariants} className="relative overflow-hidden rounded-4xl bg-[#141414] p-8 shadow-2xl shadow-gray-200 group">
-             <div className="absolute top-0 right-0 w-48 h-48 bg-[#f3cd08] rounded-full blur-[80px] opacity-10 group-hover:opacity-20 transition-opacity" />
+             <div className="absolute top-0 right-0 w-48 h-48 bg-[#f39908] rounded-full blur-[80px] opacity-10 group-hover:opacity-20 transition-opacity" />
              <div className="relative z-10">
                 <div className="flex items-center gap-2 mb-4">
-                   <div className="px-2.5 py-1 bg-[#f3cd08] text-black text-[8px] font-black uppercase tracking-widest rounded-full">
+                   <div className="px-2.5 py-1 bg-[#f39908] text-black text-[8px] font-black uppercase tracking-widest rounded-full">
                       {t('stats.trending')}
                    </div>
                    <span className="text-[10px] font-bold text-gray-400 uppercase tracking-widest">{t('stats.destination_of_month')}</span>
@@ -159,7 +159,7 @@ export default function StatsPageMobile() {
                    {t('stats.destination_description')}
                 </p>
                 <div className="flex items-baseline gap-2">
-                   <span className="text-3xl font-black text-[#f3cd08] italic tracking-tighter">{stats.lieu_du_mois.count}</span>
+                   <span className="text-3xl font-black text-[#f39908] italic tracking-tighter">{stats.lieu_du_mois.count}</span>
                    <span className="text-[10px] font-black text-white uppercase tracking-widest opacity-60">{t('stats.visits_recorded')}</span>
                 </div>
              </div>
@@ -219,7 +219,7 @@ export default function StatsPageMobile() {
               <div key={index} className="p-4 border-b border-gray-50 last:border-0 flex items-center gap-4 group hover:bg-gray-50 transition-all">
                 <span className={`
                   w-7 h-7 flex items-center justify-center rounded-xl text-[10px] font-black italic
-                  ${index === 0 ? 'bg-[#f3cd08] text-black ring-4 ring-yellow-50' : 
+                  ${index === 0 ? 'bg-[#f39908] text-black ring-4 ring-yellow-50' : 
                     index === 1 ? 'bg-gray-200 text-gray-600' : 
                     index === 2 ? 'bg-orange-100 text-orange-600' : 'bg-gray-50 text-gray-300'}
                 `}>
@@ -235,7 +235,7 @@ export default function StatsPageMobile() {
                       initial={{ width: 0 }}
                       animate={{ width: `${(lieu.count / stats.lieux_populaires.arrivee[0].count) * 100}%` }}
                       transition={{ duration: 1, ease: "easeOut" }}
-                      className="h-full bg-[#3b82f6] rounded-full group-hover:bg-[#f3cd08] transition-colors"
+                      className="h-full bg-[#3b82f6] rounded-full group-hover:bg-[#f39908] transition-colors"
                     />
                   </div>
                 </div>
@@ -274,9 +274,9 @@ export default function StatsPageMobile() {
                     onClick={() => { setPeriod(option.id); setShowFilterModal(false); }}
                     className={`w-full p-4 rounded-2xl flex items-center gap-4 transition-all ${period === option.id ? 'bg-[#141414] text-white shadow-xl' : 'bg-gray-50 text-gray-400 hover:bg-gray-100'}`}
                   >
-                    <div className={`p-2 rounded-xl ${period === option.id ? 'bg-[#f3cd08] text-black' : 'bg-white'}`}><option.icon className="w-5 h-5" /></div>
+                    <div className={`p-2 rounded-xl ${period === option.id ? 'bg-[#f39908] text-black' : 'bg-white'}`}><option.icon className="w-5 h-5" /></div>
                     <span className="text-sm font-black uppercase tracking-widest">{option.label}</span>
-                    {period === option.id && <ChevronRight className="ml-auto w-5 h-5 text-[#f3cd08]" />}
+                    {period === option.id && <ChevronRight className="ml-auto w-5 h-5 text-[#f39908]" />}
                   </button>
                 ))}
               </div>

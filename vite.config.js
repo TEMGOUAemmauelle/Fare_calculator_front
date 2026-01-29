@@ -61,7 +61,7 @@ export default defineConfig({
         name: 'Fare Calculator - Taxi Cameroun',
         short_name: 'FareCalc',
         description: "Estimation de prix de taxi au Cameroun avec données de trafic en temps réel",
-        theme_color: '#f3cd08',
+        theme_color: '#f39908',
         background_color: '#f8f8f5',
         display: 'standalone',
         start_url: '/',

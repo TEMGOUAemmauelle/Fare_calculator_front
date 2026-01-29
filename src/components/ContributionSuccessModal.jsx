@@ -131,7 +131,7 @@ const ContributionSuccessModal = ({
                   <div className="w-2/5 bg-gradient-to-br from-[#141414] to-[#2a2a2a] p-8 flex flex-col justify-between">
                     <div>
                       <div className="flex items-center gap-3 mb-6">
-                        <div className="p-3 bg-[#f3cd08] rounded-2xl">
+                        <div className="p-3 bg-[#f39908] rounded-2xl">
                           <CheckCircle2 className="w-6 h-6 text-black" />
                         </div>
                         <div>
@@ -153,12 +153,12 @@ const ContributionSuccessModal = ({
                             </p>
                             <p className="text-lg font-bold text-white mb-4 leading-tight">
                               {contributionData.depart?.label?.split(',')[0]} 
-                              <span className="text-[#f3cd08] mx-2">→</span> 
+                              <span className="text-[#f39908] mx-2">→</span> 
                               {contributionData.arrivee?.label?.split(',')[0]}
                             </p>
                             <p className="text-4xl font-black text-white">
                               {contributionData.prix}
-                              <span className="text-lg font-bold text-[#f3cd08] ml-2">{t('contribution_success_modal.currency')}</span>
+                              <span className="text-lg font-bold text-[#f39908] ml-2">{t('contribution_success_modal.currency')}</span>
                             </p>
                           </div>
 
@@ -168,7 +168,7 @@ const ContributionSuccessModal = ({
                               onClick={() => handleNavigate('/add-trajet')}
                               className="p-4 bg-white/5 hover:bg-white/10 border border-white/10 rounded-xl flex items-center gap-2 transition-colors"
                             >
-                              <PlusCircle className="w-4 h-4 text-[#f3cd08]" />
+                              <PlusCircle className="w-4 h-4 text-[#f39908]" />
                               <span className="text-xs font-bold text-white">
                                 {t('contribution_success_modal.add_another')}
                               </span>
@@ -178,7 +178,7 @@ const ContributionSuccessModal = ({
                               onClick={() => handleNavigate('/estimate')}
                               className="p-4 bg-white/5 hover:bg-white/10 border border-white/10 rounded-xl flex items-center gap-2 transition-colors"
                             >
-                              <Calculator className="w-4 h-4 text-[#f3cd08]" />
+                              <Calculator className="w-4 h-4 text-[#f39908]" />
                               <span className="text-xs font-bold text-white">
                                 {t('contribution_success_modal.estimate')}
                               </span>
@@ -190,7 +190,7 @@ const ContributionSuccessModal = ({
 
                     <button
                       onClick={onClose}
-                      className="w-full py-4 bg-[#f3cd08] text-black rounded-2xl font-black text-sm uppercase tracking-wider flex items-center justify-center gap-2 hover:bg-[#e5c007] transition-colors"
+                      className="w-full py-4 bg-[#f39908] text-black rounded-2xl font-black text-sm uppercase tracking-wider flex items-center justify-center gap-2 hover:bg-[#e5c007] transition-colors"
                     >
                       {t('contribution_success_modal.continue')}
                       <ArrowRight className="w-4 h-4" />
@@ -208,14 +208,14 @@ const ContributionSuccessModal = ({
                     
                     <div className="flex items-center justify-between mb-6">
                       <div className="flex items-center gap-3">
-                        <Store className="w-5 h-5 text-[#f3cd08]" />
+                        <Store className="w-5 h-5 text-[#f39908]" />
                         <h3 className="text-lg font-black text-gray-900 uppercase tracking-wide">
                           {t('contribution_success_modal.discover_also')}
                         </h3>
                       </div>
                       <button
                         onClick={handleViewAll}
-                        className="text-sm font-bold text-[#f3cd08] flex items-center gap-1 hover:underline"
+                        className="text-sm font-bold text-[#f39908] flex items-center gap-1 hover:underline"
                       >
                         {t('contribution_success_modal.view_all')}
                         <ChevronRight className="w-4 h-4" />
@@ -242,7 +242,7 @@ const ContributionSuccessModal = ({
                             <div 
                               className="absolute inset-0 opacity-10 group-hover:opacity-20 transition-opacity"
                               style={{ 
-                                background: `linear-gradient(135deg, ${service.couleur || '#f3cd08'} 0%, transparent 100%)` 
+                                background: `linear-gradient(135deg, ${service.couleur || '#f39908'} 0%, transparent 100%)` 
                               }}
                             />
                             
@@ -258,7 +258,7 @@ const ContributionSuccessModal = ({
                               ) : (
                                 <div 
                                   className="w-14 h-14 rounded-xl mb-4 flex items-center justify-center"
-                                  style={{ backgroundColor: service.couleur || '#f3cd08' }}
+                                  style={{ backgroundColor: service.couleur || '#f39908' }}
                                 >
                                   <Sparkles className="w-6 h-6 text-white" />
                                 </div>
@@ -301,7 +301,7 @@ const ContributionSuccessModal = ({
                   <div className="px-6 pb-4 border-b border-gray-100">
                     <div className="flex items-start justify-between">
                       <div className="flex items-center gap-3">
-                        <div className="p-2.5 bg-[#f3cd08] rounded-2xl">
+                        <div className="p-2.5 bg-[#f39908] rounded-2xl">
                           <CheckCircle2 className="w-5 h-5 text-black" />
                         </div>
                         <div>
@@ -332,8 +332,8 @@ const ContributionSuccessModal = ({
                       >
                         <div className="flex items-center justify-between">
                           <div className="flex items-center gap-3">
-                            <div className="p-2 bg-[#f3cd08]/20 rounded-xl">
-                              <Car className="w-4 h-4 text-[#f3cd08]" />
+                            <div className="p-2 bg-[#f39908]/20 rounded-xl">
+                              <Car className="w-4 h-4 text-[#f39908]" />
                             </div>
                             <div>
                               <p className="text-[10px] text-gray-400 uppercase tracking-wide font-bold">
@@ -346,7 +346,7 @@ const ContributionSuccessModal = ({
                           </div>
                           <div className="text-right">
                             <p className="text-xl font-black text-white">
-                              {contributionData.prix} <span className="text-sm font-bold text-[#f3cd08]">FCFA</span>
+                              {contributionData.prix} <span className="text-sm font-bold text-[#f39908]">FCFA</span>
                             </p>
                           </div>
                         </div>
@@ -360,9 +360,9 @@ const ContributionSuccessModal = ({
                         animate={{ opacity: 1, x: 0 }}
                         transition={{ delay: 0.2 }}
                         onClick={() => handleNavigate('/add-trajet')}
-                        className="p-3 bg-[#f3cd08]/10 hover:bg-[#f3cd08]/20 rounded-xl flex items-center gap-2 transition-colors active:scale-95"
+                        className="p-3 bg-[#f39908]/10 hover:bg-[#f39908]/20 rounded-xl flex items-center gap-2 transition-colors active:scale-95"
                       >
-                        <PlusCircle className="w-4 h-4 text-[#f3cd08]" />
+                        <PlusCircle className="w-4 h-4 text-[#f39908]" />
                         <span className="text-xs font-bold text-gray-700">
                           {t('contribution_success_modal.add_another')}
                         </span>
@@ -387,14 +387,14 @@ const ContributionSuccessModal = ({
                   <div className="px-6 py-5 overflow-y-auto max-h-[45vh]">
                     <div className="flex items-center justify-between mb-4">
                       <div className="flex items-center gap-2">
-                        <Store className="w-4 h-4 text-[#f3cd08]" />
+                        <Store className="w-4 h-4 text-[#f39908]" />
                         <h3 className="text-sm font-black text-gray-900 uppercase tracking-wide">
                           {t('contribution_success_modal.discover_also')}
                         </h3>
                       </div>
                       <button
                         onClick={handleViewAll}
-                        className="text-xs font-bold text-[#f3cd08] flex items-center gap-1 hover:underline"
+                        className="text-xs font-bold text-[#f39908] flex items-center gap-1 hover:underline"
                       >
                         {t('contribution_success_modal.view_all')}
                         <ChevronRight className="w-3 h-3" />
@@ -421,7 +421,7 @@ const ContributionSuccessModal = ({
                             <div 
                               className="absolute inset-0 opacity-10 group-hover:opacity-20 transition-opacity"
                               style={{ 
-                                background: `linear-gradient(135deg, ${service.couleur || '#f3cd08'} 0%, transparent 100%)` 
+                                background: `linear-gradient(135deg, ${service.couleur || '#f39908'} 0%, transparent 100%)` 
                               }}
                             />
                             
@@ -437,7 +437,7 @@ const ContributionSuccessModal = ({
                               ) : (
                                 <div 
                                   className="w-12 h-12 rounded-xl mb-3 flex items-center justify-center"
-                                  style={{ backgroundColor: service.couleur || '#f3cd08' }}
+                                  style={{ backgroundColor: service.couleur || '#f39908' }}
                                 >
                                   <Sparkles className="w-5 h-5 text-white" />
                                 </div>
@@ -476,7 +476,7 @@ const ContributionSuccessModal = ({
                       className="w-full py-4 bg-[#141414] text-white rounded-2xl font-black text-xs uppercase tracking-widest flex items-center justify-center gap-2 active:scale-95 transition-all"
                     >
                       {t('contribution_success_modal.continue')}
-                      <ArrowRight className="w-4 h-4 text-[#f3cd08]" />
+                      <ArrowRight className="w-4 h-4 text-[#f39908]" />
                     </button>
                     
                     <p className="text-center text-[10px] text-gray-400 mt-3">

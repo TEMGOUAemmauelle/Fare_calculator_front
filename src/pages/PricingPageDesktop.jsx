@@ -76,7 +76,7 @@ export default function PricingPageDesktop() {
   };
 
   return (
-    <div className="min-h-screen bg-white text-[#141414] font-sans selection:bg-[#f3cd08]/30">
+    <div className="min-h-screen bg-white text-[#141414] font-sans selection:bg-[#f39908]/30">
       {/* NAVBAR */}
       <NavbarDesktop activeRoute="/pricing" />
 
@@ -92,7 +92,7 @@ export default function PricingPageDesktop() {
             className="text-center mb-20"
           >
             <div className="inline-flex items-center gap-2 px-4 py-2 bg-gray-50 rounded-full mb-8 border border-gray-100">
-              <Sparkles className="w-4 h-4 text-[#f3cd08]" />
+              <Sparkles className="w-4 h-4 text-[#f39908]" />
               <span className="text-[10px] font-black text-gray-400 uppercase tracking-[0.2em]">
                 Partenariats & API
               </span>
@@ -100,7 +100,7 @@ export default function PricingPageDesktop() {
             
             <h1 className="text-6xl lg:text-8xl font-black italic uppercase tracking-tighter leading-none mb-8">
               Boostez votre <br/>
-              <span className="text-[#f3cd08]">Croissance</span>
+              <span className="text-[#f39908]">Croissance</span>
             </h1>
             
             <p className="text-xl text-gray-400 max-w-2xl mx-auto font-medium leading-relaxed">
@@ -154,7 +154,7 @@ export default function PricingPageDesktop() {
                 className="flex flex-col items-center text-center space-y-6"
               >
                 <div className="w-20 h-20 bg-white rounded-[2rem] flex items-center justify-center shadow-xl shadow-gray-200/50 group hover:scale-110 transition-transform">
-                  <feature.icon className="w-8 h-8 text-[#f3cd08]" />
+                  <feature.icon className="w-8 h-8 text-[#f39908]" />
                 </div>
                 <div className="space-y-3">
                   <h3 className="text-xl font-black italic uppercase tracking-tighter">{t(feature.title)}</h3>
@@ -170,26 +170,26 @@ export default function PricingPageDesktop() {
       <section className="py-32 px-12 bg-white">
         <div className="max-w-6xl mx-auto">
           <div className="bg-[#141414] rounded-[4rem] p-16 relative overflow-hidden">
-            <div className="absolute top-0 right-0 w-full h-full bg-gradient-to-br from-[#f3cd08]/5 to-transparent pointer-events-none" />
+            <div className="absolute top-0 right-0 w-full h-full bg-gradient-to-br from-[#f39908]/5 to-transparent pointer-events-none" />
             
             <div className="relative z-10 grid grid-cols-1 lg:grid-cols-2 gap-20 items-center">
               <div className="space-y-8">
                 <div className="inline-flex items-center gap-2 px-4 py-2 bg-white/5 rounded-full">
-                  <Building2 className="w-4 h-4 text-[#f3cd08]" />
+                  <Building2 className="w-4 h-4 text-[#f39908]" />
                   <span className="text-[10px] font-black text-white uppercase tracking-widest">
                     Solutions Enterprise
                   </span>
                 </div>
                 <h2 className="text-5xl lg:text-6xl font-black italic uppercase tracking-tighter text-white leading-none">
                   Besoin de <br/>
-                  <span className="text-[#f3cd08]">Sur-mesure ?</span>
+                  <span className="text-[#f39908]">Sur-mesure ?</span>
                 </h2>
                 <p className="text-gray-400 text-lg font-medium leading-relaxed">
                   Volume illimité, intégration dédiée et support prioritaire. Parlons de votre projet.
                 </p>
                 <button
                   onClick={() => setShowForm(true)}
-                  className="px-10 py-5 bg-[#f3cd08] text-black rounded-2xl font-black text-[10px] uppercase tracking-widest flex items-center gap-4 hover:scale-105 transition-all shadow-2xl shadow-[#f3cd08]/20"
+                  className="px-10 py-5 bg-[#f39908] text-black rounded-2xl font-black text-[10px] uppercase tracking-widest flex items-center gap-4 hover:scale-105 transition-all shadow-2xl shadow-[#f39908]/20"
                 >
                   <span>Contacter l'équipe</span>
                   <ArrowRight className="w-4 h-4" />
@@ -205,8 +205,8 @@ export default function PricingPageDesktop() {
                   "Facturation personnalisée"
                 ].map((item, i) => (
                   <div key={i} className="flex items-center gap-4 group">
-                    <div className="w-6 h-6 bg-[#f3cd08]/20 rounded-lg flex items-center justify-center group-hover:bg-[#f3cd08] transition-colors">
-                      <Check className="w-3 h-3 text-[#f3cd08] group-hover:text-black transition-colors" strokeWidth={4} />
+                    <div className="w-6 h-6 bg-[#f39908]/20 rounded-lg flex items-center justify-center group-hover:bg-[#f39908] transition-colors">
+                      <Check className="w-3 h-3 text-[#f39908] group-hover:text-black transition-colors" strokeWidth={4} />
                     </div>
                     <span className="text-gray-300 font-bold text-sm tracking-wide">{item}</span>
                   </div>
@@ -227,7 +227,7 @@ export default function PricingPageDesktop() {
             className="text-center mb-12"
           >
             <h2 className="text-4xl font-black italic uppercase tracking-tighter mb-4">
-              Questions <span className="text-[#f3cd08]">fréquentes</span>
+              Questions <span className="text-[#f39908]">fréquentes</span>
             </h2>
           </motion.div>
 

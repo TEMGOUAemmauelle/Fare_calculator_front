@@ -22,9 +22,9 @@ export default function Button({
   const baseClasses = 'inline-flex items-center justify-center gap-2 font-semibold transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed';
   
   const variantClasses = {
-    primary: 'bg-[#f3cd08] text-[#231f0f] hover:bg-[#231f0f] hover:text-white shadow-lg',
-    secondary: 'bg-white text-[#231f0f] border-2 border-[#f3cd08] hover:bg-[#f3cd08]/10',
-    ghost: 'bg-transparent text-[#231f0f] hover:bg-[#f3cd08]/10',
+    primary: 'bg-[#f39908] text-[#231f0f] hover:bg-[#231f0f] hover:text-white shadow-lg',
+    secondary: 'bg-white text-[#231f0f] border-2 border-[#f39908] hover:bg-[#f39908]/10',
+    ghost: 'bg-transparent text-[#231f0f] hover:bg-[#f39908]/10',
     danger: 'bg-red-500 text-white hover:bg-red-600 shadow-lg',
   };
   

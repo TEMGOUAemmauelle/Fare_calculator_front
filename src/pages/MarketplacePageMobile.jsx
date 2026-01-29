@@ -65,7 +65,7 @@ export default function MarketplacePageMobile() {
       {/* Header Premium - Plus "Cool" */}
       <div className="relative bg-[#141414] pt-14 pb-10 px-6 overflow-hidden">
         {/* Décorations de fond */}
-        <div className="absolute top-0 right-0 w-64 h-64 bg-[#f3cd08]/10 rounded-full blur-[80px] -translate-y-1/2 translate-x-1/2" />
+        <div className="absolute top-0 right-0 w-64 h-64 bg-[#f39908]/10 rounded-full blur-[80px] -translate-y-1/2 translate-x-1/2" />
         <div className="absolute bottom-0 left-0 w-40 h-40 bg-white/5 rounded-full blur-[60px] translate-y-1/2 -translate-x-1/2" />
         
         <div className="relative z-10">
@@ -76,14 +76,14 @@ export default function MarketplacePageMobile() {
             >
               <ArrowLeft className="w-5 h-5 text-white" />
             </button>
-            <div className="flex items-center gap-2 px-4 py-2 bg-[#f3cd08] rounded-full">
+            <div className="flex items-center gap-2 px-4 py-2 bg-[#f39908] rounded-full">
               <Sparkles className="w-3 h-3 text-black" />
               <span className="text-[9px] font-black uppercase tracking-widest text-black">{t('marketplace.premium_ecosystem')}</span>
             </div>
           </div>
 
           <h1 className="text-4xl font-black uppercase tracking-tighter italic leading-none text-white mb-2">
-            Market<span className="text-[#f3cd08]">place</span>
+            Market<span className="text-[#f39908]">place</span>
           </h1>
           <p className="text-gray-400 text-xs font-medium max-w-[240px] leading-relaxed">
             {t('marketplace.description')}
@@ -116,7 +116,7 @@ export default function MarketplacePageMobile() {
               onClick={() => setSelectedCategory(cat.id)}
               className={`px-6 py-3 rounded-xl text-[10px] font-black uppercase tracking-widest whitespace-nowrap transition-all ${
                 selectedCategory === cat.id
-                  ? 'bg-[#f3cd08] text-black shadow-lg shadow-[#f3cd08]/20'
+                  ? 'bg-[#f39908] text-black shadow-lg shadow-[#f39908]/20'
                   : 'bg-white text-gray-400 border border-gray-100'
               }`}
             >

@@ -6,7 +6,7 @@
   "scope": "/",
   "display": "standalone",
   "background_color": "#f8f8f5",
-  "theme_color": "#f3cd08",
+  "theme_color": "#f39908",
   "orientation": "portrait-primary",
   "categories": ["travel", "navigation", "utilities"],
   "lang": "fr-CM",

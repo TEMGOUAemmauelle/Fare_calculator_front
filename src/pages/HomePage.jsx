@@ -103,16 +103,16 @@ export default function HomePage() {
         <header className="px-6 pt-12 pb-6 flex items-center justify-between">
            <div className="flex flex-col">
               <h1 className="text-xl font-black tracking-tighter uppercase leading-none italic">
-                FARE<span className="text-[#f9d716]">CAL</span>
+                FARE<span className="text-[#fabd16]">CAL</span>
               </h1>
-              <div className="h-1 w-8 bg-[#f9d716] mt-1 rounded-full" />
+              <div className="h-1 w-8 bg-[#fabd16] mt-1 rounded-full" />
               <CityIndicator address={userAddress} variant="minimal" className="mt-2" showSwitch={true} />
            </div>
            
            <div className="flex items-center gap-2">
               <UserAuthButton variant="compact" />
-              <button onClick={() => navigate('/marketplace')} className="p-2.5 bg-gray-50 rounded-2xl text-gray-400 hover:text-[#f3cd08] transition-colors"><Store className="w-5 h-5" /></button>
-              <button onClick={() => navigate('/stats')} className="p-2.5 bg-gray-50 rounded-2xl text-gray-400 hover:text-[#f3cd08] transition-colors"><BarChart2 className="w-5 h-5" /></button>
+              <button onClick={() => navigate('/marketplace')} className="p-2.5 bg-gray-50 rounded-2xl text-gray-400 hover:text-[#f39908] transition-colors"><Store className="w-5 h-5" /></button>
+              <button onClick={() => navigate('/stats')} className="p-2.5 bg-gray-50 rounded-2xl text-gray-400 hover:text-[#f39908] transition-colors"><BarChart2 className="w-5 h-5" /></button>
               <div className="bg-gray-50 rounded-2xl">
                  <LanguageSwitcher variant="dark" /> 
               </div>
@@ -129,7 +129,7 @@ export default function HomePage() {
                         animate={{ opacity: 1, y: 0 }}
                         className="text-2xl font-black text-white leading-tight italic uppercase tracking-tighter"
                     >
-                        {t('home.hero_title_1')} <span className="text-[#f3cd08]">{t('home.hero_title_2')}</span><br/>{t('home.hero_title_3')}
+                        {t('home.hero_title_1')} <span className="text-[#f39908]">{t('home.hero_title_2')}</span><br/>{t('home.hero_title_3')}
                     </motion.h2>
                 </div>
             </div>
@@ -142,7 +142,7 @@ export default function HomePage() {
                     <div className="absolute left-0 bottom-6 text-[#141414]">
                         <div className="w-3 h-3 bg-black rounded-sm mb-1" />
                         <div className="w-0.5 h-10 bg-gray-100 ml-[5px]" />
-                        <div className="w-3 h-3 bg-[#f3cd08] rounded-sm mt-1 ring-4 ring-yellow-50" />
+                        <div className="w-3 h-3 bg-[#f39908] rounded-sm mt-1 ring-4 ring-yellow-50" />
                     </div>
 
                     <div className="pl-10 space-y-8">
@@ -155,10 +155,10 @@ export default function HomePage() {
                         
                         <div className="flex items-center justify-between border-b-2 border-[#141414] pb-3 transition-colors">
                             <div className="flex items-center gap-1">
-                                <div className="w-0.5 h-6 bg-[#f3cd08] cursor-blink" />
+                                <div className="w-0.5 h-6 bg-[#f39908] cursor-blink" />
                                 <span className="text-xl font-bold text-[#141414] opacity-40">{t('estimate.start_search')}</span>
                             </div>
-                            <ArrowRight className="w-5 h-5 text-[#f3cd08]" />
+                            <ArrowRight className="w-5 h-5 text-[#f39908]" />
                         </div>
                     </div>
                  </div>
@@ -173,7 +173,7 @@ export default function HomePage() {
                       onClick={() => handleStartSearch(dest)}
                       className="flex items-center gap-4 py-2 border-b border-gray-50 hover:bg-gray-50 transition-all text-left group"
                     >
-                      <div className="w-10 h-10 rounded-2xl bg-gray-100 flex items-center justify-center text-gray-600 group-hover:bg-[#f3cd08] group-hover:text-black transition-all">
+                      <div className="w-10 h-10 rounded-2xl bg-gray-100 flex items-center justify-center text-gray-600 group-hover:bg-[#f39908] group-hover:text-black transition-all">
                         <MapPin className="w-5 h-5" />
                       </div>
                       <div className="flex flex-col flex-1 min-w-0">
@@ -203,7 +203,7 @@ export default function HomePage() {
             onClick={() => navigate('/add-trajet')}
             className="flex items-center gap-3 px-6 py-4 bg-[#141414] text-white rounded-4xl font-bold text-[10px] uppercase tracking-widest shadow-2xl active:scale-95 transition-all outline outline-white"
           >
-            <PlusCircle className="w-4 h-4 text-[#f3cd08]" />
+            <PlusCircle className="w-4 h-4 text-[#f39908]" />
             <span>{t('home.cta_contribute')}</span>
           </button>
         </div>
