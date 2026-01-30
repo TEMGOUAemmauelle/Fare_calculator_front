@@ -169,11 +169,11 @@ export default function HomePageDesktop() {
     // Charger les tarifs standards
     const fetchTarifs = async () => {
       try {
-        const tarifsData = await tarifService.getTarifsStandards();
+        const tarifsData = await getTarifsStandards();
         setTarifs(tarifsData);
       } catch (error) {
         console.error('Erreur chargement tarifs:', error);
-        setTarifs(tarifService.getDefaultTarifs());
+        setTarifs(getDefaultTarifs());
       }
     };
     fetchTarifs();
@@ -571,6 +571,32 @@ export default function HomePageDesktop() {
                                                 <span>{prediction.prix_max}</span>
                                             </div>
                                         )}
+                                        
+                                        {/* Tarifs Standards - Directement sous le prix */}
+                                        {tarifs && (
+                                            <div className="mt-3 pt-3 border-t border-white/10">
+                                                <div className="flex items-center justify-center gap-1.5 mb-2">
+                                                    <Shield className="w-3.5 h-3.5 text-[#f39908]" />
+                                                    <span className="text-[10px] font-bold uppercase tracking-wider text-gray-400">{t('tarifs.title')}</span>
+                                                    {isNuit && <Moon className="w-3 h-3 text-purple-400" />}
+                                                </div>
+                                                <div className="flex justify-center gap-4">
+                                                    <div className="text-center">
+                                                        <p className="text-[9px] text-gray-500 font-medium mb-0.5">{t('tarifs.taxi_label')}</p>
+                                                        <p className="text-base font-black text-white">
+                                                            {isNuit ? tarifs.tarif_taxi_nuit : tarifs.tarif_taxi_jour} <span className="text-[10px] text-gray-400">FCFA</span>
+                                                        </p>
+                                                    </div>
+                                                    <div className="w-px bg-white/10" />
+                                                    <div className="text-center">
+                                                        <p className="text-[9px] text-gray-500 font-medium mb-0.5">{t('tarifs.course_label')}</p>
+                                                        <p className="text-base font-black text-white">
+                                                            {isNuit ? tarifs.tarif_course_nuit?.toLocaleString('fr-FR') : tarifs.tarif_course_jour?.toLocaleString('fr-FR')} <span className="text-[10px] text-gray-400">FCFA</span>
+                                                        </p>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        )}
                                     </div>
 
                                     {/* Trajet compact */}
@@ -597,42 +623,6 @@ export default function HomePageDesktop() {
                                             <p className="text-xs font-black text-[#f39908] capitalize">{prediction.statut}</p>
                                         </div>
                                     </div>
-                                    
-                                    {/* Tarifs Standards Officiels - Compact */}
-                                    {tarifs && (
-                                        <div className="mt-3 pt-3 border-t border-white/10">
-                                            <div className="flex items-center gap-1.5 mb-2">
-                                                <Shield className="w-3 h-3 text-[#f39908]" />
-                                                <span className="text-[8px] font-bold uppercase tracking-widest text-gray-400">{t('tarifs.title')}</span>
-                                            </div>
-                                            <div className="grid grid-cols-2 gap-1.5">
-                                                <div className="flex items-center gap-1.5 p-1.5 bg-white/5 rounded-lg">
-                                                    <Users className="w-3 h-3 text-[#f39908]" />
-                                                    <div>
-                                                        <p className="text-[7px] text-gray-500 font-medium">{t('tarifs.taxi_label')}</p>
-                                                        <p className="text-[10px] font-black text-white">
-                                                            {isNuit ? tarifs.tarif_taxi_nuit : tarifs.tarif_taxi_jour} <span className="text-[7px] text-gray-500">FCFA</span>
-                                                        </p>
-                                                    </div>
-                                                </div>
-                                                <div className="flex items-center gap-1.5 p-1.5 bg-white/5 rounded-lg">
-                                                    <Car className="w-3 h-3 text-[#f39908]" />
-                                                    <div>
-                                                        <p className="text-[7px] text-gray-500 font-medium">{t('tarifs.course_label')}</p>
-                                                        <p className="text-[10px] font-black text-white">
-                                                            {isNuit ? tarifs.tarif_course_nuit : tarifs.tarif_course_jour} <span className="text-[7px] text-gray-500">FCFA</span>
-                                                        </p>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            {isNuit && (
-                                                <div className="flex items-center justify-center gap-1 mt-1.5 text-[7px] text-purple-400">
-                                                    <Moon className="w-2.5 h-2.5" />
-                                                    <span>{t('tarifs.night_rate')}</span>
-                                                </div>
-                                            )}
-                                        </div>
-                                    )}
                                 </motion.div>
                             )}
                         </AnimatePresence>
