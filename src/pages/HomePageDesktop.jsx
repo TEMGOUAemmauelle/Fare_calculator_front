@@ -5,7 +5,8 @@ import { useTranslation } from 'react-i18next';
 import { 
     Search, MapPin, BarChart2, Globe, PlusCircle, ArrowRight, 
     Navigation, Calculator, Sun, CloudRain, MapPinned, Loader2, 
-    Clock, Ruler, LocateFixed, ShieldCheck, Zap, Heart, Sparkles, X, History
+    Clock, Ruler, LocateFixed, ShieldCheck, Zap, Heart, Sparkles, X, History,
+    Moon, Users, Car, Shield
 } from 'lucide-react';
 import { useAppNavigate } from '../hooks/useAppNavigate';
 
@@ -31,6 +32,7 @@ import geolocationService from '../services/geolocationService';
 import { reverseSearch } from '../services/nominatimService';
 import { getAds } from '../services/adService';
 import { addEstimateToHistory } from '../services/localStorageService';
+import { getTarifsStandards, getDefaultTarifs, getPeriodeFromHeure } from '../services/tarifService';
 
 const HERO_IMAGE = "https://image.arrivalguides.com/x/09/589f0996b9fbebbbc00a573694086f3a.jpg";
 
@@ -116,7 +118,12 @@ export default function HomePageDesktop() {
   const [backendAds, setBackendAds] = useState([]);
   const [showQuickPriceModal, setShowQuickPriceModal] = useState(false);
   const [showMarketplaceModal, setShowMarketplaceModal] = useState(false);
-    const [showHistoryModal, setShowHistoryModal] = useState(false);
+  const [showHistoryModal, setShowHistoryModal] = useState(false);
+  const [tarifs, setTarifs] = useState(null);
+
+  // Déterminer la période (jour/nuit) à partir de l'heure
+  const periode = getPeriodeFromHeure(heureTrajet);
+  const isNuit = periode === 'nuit';
 
   const arriveeInputRef = useRef(null);
   const departInputRef = useRef(null);
@@ -158,6 +165,18 @@ export default function HomePageDesktop() {
         setBackendAds(ads.slice(0, 3));
     };
     fetchAds();
+    
+    // Charger les tarifs standards
+    const fetchTarifs = async () => {
+      try {
+        const tarifsData = await getTarifsStandards();
+        setTarifs(tarifsData);
+      } catch (error) {
+        console.error('Erreur chargement tarifs:', error);
+        setTarifs(getDefaultTarifs());
+      }
+    };
+    fetchTarifs();
   }, []);
 
   useEffect(() => {
@@ -552,6 +571,32 @@ export default function HomePageDesktop() {
                                                 <span>{prediction.prix_max}</span>
                                             </div>
                                         )}
+                                        
+                                        {/* Tarifs Standards - Directement sous le prix */}
+                                        {tarifs && (
+                                            <div className="mt-3 pt-3 border-t border-white/10">
+                                                <div className="flex items-center justify-center gap-1.5 mb-2">
+                                                    <Shield className="w-3.5 h-3.5 text-[#f39908]" />
+                                                    <span className="text-[10px] font-bold uppercase tracking-wider text-gray-400">{t('tarifs.title')}</span>
+                                                    {isNuit && <Moon className="w-3 h-3 text-purple-400" />}
+                                                </div>
+                                                <div className="flex justify-center gap-4">
+                                                    <div className="text-center">
+                                                        <p className="text-[9px] text-gray-500 font-medium mb-0.5">{t('tarifs.taxi_label')}</p>
+                                                        <p className="text-base font-black text-white">
+                                                            {isNuit ? tarifs.tarif_taxi_nuit : tarifs.tarif_taxi_jour} <span className="text-[10px] text-gray-400">FCFA</span>
+                                                        </p>
+                                                    </div>
+                                                    <div className="w-px bg-white/10" />
+                                                    <div className="text-center">
+                                                        <p className="text-[9px] text-gray-500 font-medium mb-0.5">{t('tarifs.course_label')}</p>
+                                                        <p className="text-base font-black text-white">
+                                                            {isNuit ? tarifs.tarif_course_nuit?.toLocaleString('fr-FR') : tarifs.tarif_course_jour?.toLocaleString('fr-FR')} <span className="text-[10px] text-gray-400">FCFA</span>
+                                                        </p>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        )}
                                     </div>
 
                                     {/* Trajet compact */}
@@ -611,6 +656,7 @@ export default function HomePageDesktop() {
         isOpen={showMarketplaceModal && !!prediction}
         onClose={() => setShowMarketplaceModal(false)}
         estimateData={prediction}
+        heureTrajet={heureTrajet}
       />
 
             {/* Modal Historique des estimations récentes */}

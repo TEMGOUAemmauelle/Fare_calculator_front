@@ -537,5 +537,32 @@
     "services_disclaimer": "These services are offered by our partners",
     "no_services_available": "No services available",
     "estimate_trip": "Estimate trip"
+  },
+  "tarifs": {
+    "title": "Official Fares",
+    "standard": "Standard",
+    "tarifs_officiels": "Official Fares",
+    "tarif_officiel": "Official fare",
+    "tarif_jour": "Daytime period (6am-6pm)",
+    "tarif_nuit": "Nighttime period (6pm-6am)",
+    "jour": "day",
+    "nuit": "night",
+    "taxi_label": "Shared taxi",
+    "course_label": "Private ride",
+    "taxi_partage": "Shared taxi",
+    "course_depot": "Private ride",
+    "taxi_jour": "Taxi day",
+    "taxi_nuit": "Taxi night",
+    "course_jour": "Private day",
+    "course_nuit": "Private night",
+    "night_rate": "Night fare",
+    "day_rate": "Day fare",
+    "tous_tarifs": "All fares",
+    "source": "Source",
+    "voir_details": "View details",
+    "erreur_chargement": "Default rates (network error)",
+    "ministere_transports": "Ministry of Transport of Cameroon",
+    "compare_estimation": "Compare with our estimate",
+    "info_tarif": "These fares are set by the Ministry of Transport and may vary based on local negotiations."
   }
 }

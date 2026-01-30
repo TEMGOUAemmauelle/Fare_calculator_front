@@ -3,28 +3,43 @@
  * 
  * Modal élégant proposant les services marketplace après une estimation.
  * Design adaptatif : slide-up sur mobile, centré sur desktop.
+ * 
+ * Inclut maintenant l'affichage des tarifs standards officiels
+ * pour comparaison avec l'estimation IA.
  */
 
 import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { 
   X, Sparkles, ArrowRight, ExternalLink, 
-  MapPin, Clock, Car, ChevronRight, Store
+  MapPin, Clock, Car, ChevronRight, Store, Sun, Moon, Users, Shield
 } from 'lucide-react';
 import { useAppNavigate } from '../hooks/useAppNavigate';
 import { useTranslation } from 'react-i18next';
 import { getMarketplaceServices } from '../services/marketplaceService';
+import { 
+  getTarifsStandards, 
+  getDefaultTarifs, 
+  getPeriodeFromHeure 
+} from '../services/tarifService';
 
 const EstimateSuccessModal = ({ 
   isOpen, 
   onClose,
-  estimateData = null // Données de l'estimation (prix, trajet, etc.)
+  estimateData = null, // Données de l'estimation (prix, trajet, etc.)
+  heureTrajet = 'matin' // Tranche horaire pour les tarifs standards
 }) => {
   const navigate = useAppNavigate();
   const { t, i18n } = useTranslation();
   const [services, setServices] = useState([]);
   const [loading, setLoading] = useState(true);
   const [isMobile, setIsMobile] = useState(false);
+  const [tarifs, setTarifs] = useState(null);
+  const [tarifsLoading, setTarifsLoading] = useState(true);
+
+  // Déterminer la période (jour/nuit) à partir de l'heure
+  const periode = getPeriodeFromHeure(heureTrajet);
+  const isNuit = periode === 'nuit';
 
   // Détecter si on est sur mobile
   useEffect(() => {
@@ -33,6 +48,17 @@ const EstimateSuccessModal = ({
     window.addEventListener('resize', checkMobile);
     return () => window.removeEventListener('resize', checkMobile);
   }, []);
+
+  // Charger les tarifs standards
+  useEffect(() => {
+    if (isOpen) {
+      setTarifsLoading(true);
+      getTarifsStandards()
+        .then(data => setTarifs(data))
+        .catch(() => setTarifs(getDefaultTarifs()))
+        .finally(() => setTarifsLoading(false));
+    }
+  }, [isOpen]);
 
   useEffect(() => {
     if (isOpen) {
@@ -141,7 +167,7 @@ const EstimateSuccessModal = ({
                       </div>
 
                       {estimateData && (
-                        <div className="space-y-6">
+                        <div className="space-y-2">
                           <div className="p-6 bg-white/5 rounded-2xl border border-white/10">
                             <p className="text-xs text-gray-400 uppercase tracking-widest font-bold mb-2">
                               {t('estimate_success_modal.estimated_fare')}
@@ -152,8 +178,42 @@ const EstimateSuccessModal = ({
                             </p>
                           </div>
 
+                          {/* Section Tarifs Standards */}
+                          {!tarifsLoading && tarifs && (
+                            <div className="p-4 bg-white/5 rounded-2xl border border-white/10">
+                              <div className="flex items-center gap-2 mb-3">
+                                <Shield className="w-4 h-4 text-[#f39908]" />
+                                <p className="text-[10px] text-gray-400 uppercase tracking-widest font-bold">
+                                  {t('tarifs.tarifs_officiels')} ({isNuit ? t('tarifs.nuit') : t('tarifs.jour')})
+                                </p>
+                              </div>
+                              <div className="grid grid-cols-2 gap-3">
+                                <div className="p-3 bg-white/5 rounded-xl">
+                                  <div className="flex items-center gap-1.5 mb-1">
+                                    <Users className="w-3 h-3 text-gray-500" />
+                                    <span className="text-[9px] text-gray-500 uppercase">{t('tarifs.taxi_partage')}</span>
+                                  </div>
+                                  <p className="text-lg font-black text-white">
+                                    {isNuit ? tarifs.tarif_taxi_nuit : tarifs.tarif_taxi_jour}
+                                    <span className="text-xs text-gray-500 ml-1">FCFA</span>
+                                  </p>
+                                </div>
+                                <div className="p-3 bg-white/5 rounded-xl">
+                                  <div className="flex items-center gap-1.5 mb-1">
+                                    <Car className="w-3 h-3 text-gray-500" />
+                                    <span className="text-[9px] text-gray-500 uppercase">{t('tarifs.course_depot')}</span>
+                                  </div>
+                                  <p className="text-lg font-black text-white">
+                                    {isNuit ? tarifs.tarif_course_nuit : tarifs.tarif_course_jour}
+                                    <span className="text-xs text-gray-500 ml-1">FCFA</span>
+                                  </p>
+                                </div>
+                              </div>
+                            </div>
+                          )}
+
                           {estimateData.distance && (
-                            <div className="flex gap-4">
+                            <div className="flex gap-4 mb-2">
                               <div className="flex-1 p-4 bg-white/5 rounded-xl border border-white/10">
                                 <p className="text-[10px] text-gray-500 uppercase tracking-wide mb-1">{t('estimate_success_modal.distance')}</p>
                                 <p className="text-lg font-bold text-white">{(estimateData.distance / 1000).toFixed(1)} km</p>
@@ -309,29 +369,71 @@ const EstimateSuccessModal = ({
                         initial={{ opacity: 0, y: 10 }}
                         animate={{ opacity: 1, y: 0 }}
                         transition={{ delay: 0.1 }}
-                        className="mt-4 p-4 bg-gradient-to-r from-[#141414] to-[#2a2a2a] rounded-2xl"
+                        className="mt-4 space-y-3"
                       >
-                        <div className="flex items-center justify-between">
-                          <div className="flex items-center gap-3">
-                            <div className="p-2 bg-white/10 rounded-xl">
-                              <Car className="w-4 h-4 text-[#f39908]" />
+                        {/* Prix estimé */}
+                        <div className="p-4 bg-gradient-to-r from-[#141414] to-[#2a2a2a] rounded-2xl">
+                          <div className="flex items-center justify-between">
+                            <div className="flex items-center gap-3">
+                              <div className="p-2 bg-white/10 rounded-xl">
+                                <Car className="w-4 h-4 text-[#f39908]" />
+                              </div>
+                              <div>
+                                <p className="text-[10px] text-gray-400 uppercase tracking-wide font-bold">
+                                  {t('estimate_success_modal.estimated_fare')}
+                                </p>
+                                <p className="text-xl font-black text-white">
+                                  {estimateData.prix_estime || estimateData.prix_moyen || '---'} <span className="text-sm font-bold text-[#f39908]">FCFA</span>
+                                </p>
+                              </div>
                             </div>
-                            <div>
-                              <p className="text-[10px] text-gray-400 uppercase tracking-wide font-bold">
-                                {t('estimate_success_modal.estimated_fare')}
+                            {estimateData.distance && (
+                              <div className="text-right">
+                                <p className="text-xs text-gray-400">{t('estimate_success_modal.distance')}</p>
+                                <p className="text-sm font-bold text-white">{(estimateData.distance / 1000).toFixed(1)} km</p>
+                              </div>
+                            )}
+                          </div>
+                        </div>
+
+                        {/* Tarifs Standards - Mobile */}
+                        {!tarifsLoading && tarifs && (
+                          <div className="p-4 bg-gray-50 rounded-2xl border border-gray-100">
+                            <div className="flex items-center gap-2 mb-3">
+                              <Shield className="w-4 h-4 text-[#f39908]" />
+                              <p className="text-[10px] text-gray-500 uppercase tracking-widest font-bold">
+                                {t('tarifs.tarifs_officiels')} ({isNuit ? t('tarifs.nuit') : t('tarifs.jour')})
                               </p>
-                              <p className="text-xl font-black text-white">
-                                {estimateData.prix_estime || estimateData.prix_moyen || '---'} <span className="text-sm font-bold text-[#f39908]">FCFA</span>
-                              </p>
+                              {isNuit ? (
+                                <Moon className="w-3 h-3 text-indigo-500" />
+                              ) : (
+                                <Sun className="w-3 h-3 text-amber-500" />
+                              )}
+                            </div>
+                            <div className="grid grid-cols-2 gap-2">
+                              <div className="p-3 bg-white rounded-xl">
+                                <div className="flex items-center gap-1.5 mb-1">
+                                  <Users className="w-3 h-3 text-gray-400" />
+                                  <span className="text-[9px] text-gray-400 uppercase font-bold">{t('tarifs.taxi_partage')}</span>
+                                </div>
+                                <p className="text-lg font-black text-gray-900">
+                                  {isNuit ? tarifs.tarif_taxi_nuit : tarifs.tarif_taxi_jour}
+                                  <span className="text-xs text-gray-400 ml-1">FCFA</span>
+                                </p>
+                              </div>
+                              <div className="p-3 bg-white rounded-xl">
+                                <div className="flex items-center gap-1.5 mb-1">
+                                  <Car className="w-3 h-3 text-gray-400" />
+                                  <span className="text-[9px] text-gray-400 uppercase font-bold">{t('tarifs.course_depot')}</span>
+                                </div>
+                                <p className="text-lg font-black text-gray-900">
+                                  {isNuit ? tarifs.tarif_course_nuit : tarifs.tarif_course_jour}
+                                  <span className="text-xs text-gray-400 ml-1">FCFA</span>
+                                </p>
+                              </div>
                             </div>
                           </div>
-                          {estimateData.distance && (
-                            <div className="text-right">
-                              <p className="text-xs text-gray-400">{t('estimate_success_modal.distance')}</p>
-                              <p className="text-sm font-bold text-white">{(estimateData.distance / 1000).toFixed(1)} km</p>
-                            </div>
-                          )}
-                        </div>
+                        )}
                       </motion.div>
                     )}
                   </div>
