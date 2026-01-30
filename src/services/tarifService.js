@@ -127,8 +127,8 @@ export const getTarifsForHeure = async (heure) => {
  * @returns {TarifsStandards}
  */
 export const getDefaultTarifs = () => ({
-  tarif_taxi_jour: 300,
-  tarif_taxi_nuit: 350,
+  tarif_taxi_jour: 350,
+  tarif_taxi_nuit: 400,
   tarif_course_jour: 3500,
   tarif_course_nuit: 4000,
   source: 'Ministère des Transports du Cameroun (valeurs par défaut)',

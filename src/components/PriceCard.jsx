@@ -6,8 +6,10 @@
  * - Typography Clean & Modern (Inter/Sans)
  * - Mobile-first UX
  * - Visualisation trajet type "Timeline"
+ * - Affichage des tarifs standards officiels
  */
 
+import { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { useTranslation } from 'react-i18next';
 import { METEO_CODES, TYPE_ZONE_CODES } from '../config/constants';
@@ -26,12 +28,26 @@ import {
   Car,
   ShieldCheck,
   AlertTriangle,
-  Sparkles
+  Sparkles,
+  Users,
+  Shield
 } from 'lucide-react';
 import CarouselAds from './CarouselAds'; // Re-use the existing dynamic carousel
+import { getTarifsStandards, getDefaultTarifs, getPeriodeFromHeure } from '../services/tarifService';
 
-export default function PriceCard({ prediction, onAddTrajet }) {
-  const { t, i18n } = useTranslation();
+export default function PriceCard({ prediction, onAddTrajet, heureTrajet = 'matin' }) {
+  const { t, i18n } = useTranslation();  const [tarifs, setTarifs] = useState(null);
+
+  // Charger les tarifs standards
+  useEffect(() => {
+    getTarifsStandards()
+      .then(data => setTarifs(data))
+      .catch(() => setTarifs(getDefaultTarifs()));
+  }, []);
+
+  // Déterminer la période (jour/nuit) à partir de l'heure
+  const periode = getPeriodeFromHeure(heureTrajet);
+  const isNuit = periode === 'nuit';
   if (!prediction) return null;
 
   // Variables de style
@@ -160,8 +176,45 @@ export default function PriceCard({ prediction, onAddTrajet }) {
         </div>
       </div>
 
-      {/* 4. DETAILS GRID (Les nouvelles données API) */}
-      <div className="p-4 mx-4 mt-6 mb-6 bg-gray-50 rounded-2xl border border-gray-100">
+      {/* 4. TARIFS STANDARDS OFFICIELS */}
+      {tarifs && (
+        <div className="px-6 pt-4">
+          <div className="p-4 bg-gradient-to-r from-amber-50 to-orange-50 rounded-2xl border border-amber-100">
+            <div className="flex items-center gap-2 mb-3">
+              <Shield className="w-4 h-4 text-[#f39908]" />
+              <span className="text-[10px] font-black text-gray-500 uppercase tracking-widest">
+                {t('tarifs.tarifs_officiels')} ({isNuit ? t('tarifs.nuit') : t('tarifs.jour')})
+              </span>
+              {isNuit ? <Moon className="w-3 h-3 text-indigo-500" /> : <Sun className="w-3 h-3 text-amber-500" />}
+            </div>
+            <div className="grid grid-cols-2 gap-3">
+              <div className="p-3 bg-white rounded-xl">
+                <div className="flex items-center gap-1.5 mb-1">
+                  <Users className="w-3 h-3 text-gray-400" />
+                  <span className="text-[9px] text-gray-400 uppercase font-bold">{t('tarifs.taxi_partage')}</span>
+                </div>
+                <p className="text-lg font-black text-gray-900">
+                  {isNuit ? tarifs.tarif_taxi_nuit : tarifs.tarif_taxi_jour}
+                  <span className="text-xs text-gray-400 ml-1">FCFA</span>
+                </p>
+              </div>
+              <div className="p-3 bg-white rounded-xl">
+                <div className="flex items-center gap-1.5 mb-1">
+                  <Car className="w-3 h-3 text-gray-400" />
+                  <span className="text-[9px] text-gray-400 uppercase font-bold">{t('tarifs.course_depot')}</span>
+                </div>
+                <p className="text-lg font-black text-gray-900">
+                  {isNuit ? tarifs.tarif_course_nuit : tarifs.tarif_course_jour}
+                  <span className="text-xs text-gray-400 ml-1">FCFA</span>
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* 5. DETAILS GRID (Les nouvelles données API) */}
+      <div className="p-4 mx-4 mt-4 mb-6 bg-gray-50 rounded-2xl border border-gray-100">
          <div className="grid grid-cols-2 gap-4">
             {/* Distance */}
             <div className="flex flex-col gap-1">
@@ -205,7 +258,7 @@ export default function PriceCard({ prediction, onAddTrajet }) {
          </div>
       </div>
 
-      {/* 5. ESTIMATIONS ALTERNATIVES COMPACTES (Si inconnu) */}
+      {/* 6. ESTIMATIONS ALTERNATIVES COMPACTES (Si inconnu) */}
         {isInconnu && prediction.estimations_supplementaires && (
         <div className="px-6 pb-6">
           <div className="text-[10px] font-bold text-gray-400 uppercase tracking-wide mb-3">
@@ -234,7 +287,7 @@ export default function PriceCard({ prediction, onAddTrajet }) {
 
  
 
-      {/* 7. PARTENAIRES SUGGESTION (Nouveau) */}
+      {/* 8. PARTENAIRES SUGGESTION (Nouveau) */}
       <div className="px-6 pb-6 pt-2">
          <div className="flex items-center justify-between mb-3 px-1">
             <div className="flex items-center gap-1.5">

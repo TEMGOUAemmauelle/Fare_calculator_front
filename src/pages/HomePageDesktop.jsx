@@ -5,7 +5,8 @@ import { useTranslation } from 'react-i18next';
 import { 
     Search, MapPin, BarChart2, Globe, PlusCircle, ArrowRight, 
     Navigation, Calculator, Sun, CloudRain, MapPinned, Loader2, 
-    Clock, Ruler, LocateFixed, ShieldCheck, Zap, Heart, Sparkles, X, History
+    Clock, Ruler, LocateFixed, ShieldCheck, Zap, Heart, Sparkles, X, History,
+    Moon, Users, Car, Shield
 } from 'lucide-react';
 import { useAppNavigate } from '../hooks/useAppNavigate';
 
@@ -31,6 +32,7 @@ import geolocationService from '../services/geolocationService';
 import { reverseSearch } from '../services/nominatimService';
 import { getAds } from '../services/adService';
 import { addEstimateToHistory } from '../services/localStorageService';
+import { getTarifsStandards, getDefaultTarifs, getPeriodeFromHeure } from '../services/tarifService';
 
 const HERO_IMAGE = "https://image.arrivalguides.com/x/09/589f0996b9fbebbbc00a573694086f3a.jpg";
 
@@ -116,7 +118,12 @@ export default function HomePageDesktop() {
   const [backendAds, setBackendAds] = useState([]);
   const [showQuickPriceModal, setShowQuickPriceModal] = useState(false);
   const [showMarketplaceModal, setShowMarketplaceModal] = useState(false);
-    const [showHistoryModal, setShowHistoryModal] = useState(false);
+  const [showHistoryModal, setShowHistoryModal] = useState(false);
+  const [tarifs, setTarifs] = useState(null);
+
+  // Déterminer la période (jour/nuit) à partir de l'heure
+  const periode = getPeriodeFromHeure(heureTrajet);
+  const isNuit = periode === 'nuit';
 
   const arriveeInputRef = useRef(null);
   const departInputRef = useRef(null);
@@ -158,6 +165,18 @@ export default function HomePageDesktop() {
         setBackendAds(ads.slice(0, 3));
     };
     fetchAds();
+    
+    // Charger les tarifs standards
+    const fetchTarifs = async () => {
+      try {
+        const tarifsData = await tarifService.getTarifsStandards();
+        setTarifs(tarifsData);
+      } catch (error) {
+        console.error('Erreur chargement tarifs:', error);
+        setTarifs(tarifService.getDefaultTarifs());
+      }
+    };
+    fetchTarifs();
   }, []);
 
   useEffect(() => {
@@ -578,6 +597,42 @@ export default function HomePageDesktop() {
                                             <p className="text-xs font-black text-[#f39908] capitalize">{prediction.statut}</p>
                                         </div>
                                     </div>
+                                    
+                                    {/* Tarifs Standards Officiels - Compact */}
+                                    {tarifs && (
+                                        <div className="mt-3 pt-3 border-t border-white/10">
+                                            <div className="flex items-center gap-1.5 mb-2">
+                                                <Shield className="w-3 h-3 text-[#f39908]" />
+                                                <span className="text-[8px] font-bold uppercase tracking-widest text-gray-400">{t('tarifs.title')}</span>
+                                            </div>
+                                            <div className="grid grid-cols-2 gap-1.5">
+                                                <div className="flex items-center gap-1.5 p-1.5 bg-white/5 rounded-lg">
+                                                    <Users className="w-3 h-3 text-[#f39908]" />
+                                                    <div>
+                                                        <p className="text-[7px] text-gray-500 font-medium">{t('tarifs.taxi_label')}</p>
+                                                        <p className="text-[10px] font-black text-white">
+                                                            {isNuit ? tarifs.tarif_taxi_nuit : tarifs.tarif_taxi_jour} <span className="text-[7px] text-gray-500">FCFA</span>
+                                                        </p>
+                                                    </div>
+                                                </div>
+                                                <div className="flex items-center gap-1.5 p-1.5 bg-white/5 rounded-lg">
+                                                    <Car className="w-3 h-3 text-[#f39908]" />
+                                                    <div>
+                                                        <p className="text-[7px] text-gray-500 font-medium">{t('tarifs.course_label')}</p>
+                                                        <p className="text-[10px] font-black text-white">
+                                                            {isNuit ? tarifs.tarif_course_nuit : tarifs.tarif_course_jour} <span className="text-[7px] text-gray-500">FCFA</span>
+                                                        </p>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            {isNuit && (
+                                                <div className="flex items-center justify-center gap-1 mt-1.5 text-[7px] text-purple-400">
+                                                    <Moon className="w-2.5 h-2.5" />
+                                                    <span>{t('tarifs.night_rate')}</span>
+                                                </div>
+                                            )}
+                                        </div>
+                                    )}
                                 </motion.div>
                             )}
                         </AnimatePresence>

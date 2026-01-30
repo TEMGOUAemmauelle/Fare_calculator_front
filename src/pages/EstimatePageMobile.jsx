@@ -469,7 +469,7 @@ export default function EstimatePageMobile() {
                             <h2 className="text-lg font-bold uppercase tracking-tight italic">{t('estimate.result_title')}</h2>
                             <button onClick={() => setPrediction(null)} className="px-4 py-2 bg-gray-100 rounded-xl text-[9px] font-bold text-gray-600 uppercase hover:bg-[#f39908] hover:text-black transition-all">{t('estimate.recalculate')}</button>
                          </div>
-                         <PriceCard prediction={prediction} onAddTrajet={() => navigate('/add-trajet')} />
+                         <PriceCard prediction={prediction} onAddTrajet={() => navigate('/add-trajet')} heureTrajet={heureTrajet} />
                          
                          {/* Bouton contribution rapide si trajet inconnu */}
                          {prediction?.statut === 'inconnu' && (
