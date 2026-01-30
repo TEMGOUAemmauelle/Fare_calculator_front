@@ -495,6 +495,7 @@ export default function EstimatePageMobile() {
         isOpen={showMarketplaceModal && !!prediction} 
         onClose={() => setShowMarketplaceModal(false)}
         estimateData={prediction}
+        heureTrajet={heureTrajet}
       />
       
       <OutOfBoundsModal 

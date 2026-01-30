@@ -27,3 +27,4 @@ export { default as ContributionSuccessModal } from './ContributionSuccessModal'
 export { default as EstimateSuccessModal } from './EstimateSuccessModal';
 export { default as QuickPriceModal } from './QuickPriceModal';
 export { default as NavbarDesktop } from './NavbarDesktop';
+export { default as TarifsStandardsDisplay } from './TarifsStandardsDisplay';

@@ -611,6 +611,7 @@ export default function HomePageDesktop() {
         isOpen={showMarketplaceModal && !!prediction}
         onClose={() => setShowMarketplaceModal(false)}
         estimateData={prediction}
+        heureTrajet={heureTrajet}
       />
 
             {/* Modal Historique des estimations récentes */}
