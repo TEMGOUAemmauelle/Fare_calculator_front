@@ -339,12 +339,18 @@
     "error_geolocation_unavailable": "Géolocalisation non disponible sur cet appareil.",
     "error_api_key": "Clé API invalide. Contactez l'administrateur.",
     "error_same_points": "Les points de départ et d'arrivée doivent être différents.",
+    "error_missing_points": "Veuillez sélectionner un point de départ et d'arrivée.",
     "success_trajet_added": "Trajet ajouté avec succès ! Merci de contribuer à la communauté 🎉",
     "success_copied": "Copié dans le presse-papiers !",
     "info_loading_estimate": "Calcul de l'estimation en cours...",
     "info_detecting_location": "Détection de votre position...",
     "info_no_results": "Aucun résultat trouvé. Essayez avec un autre lieu.",
     "invite_add_trajet": "Ce trajet est inconnu. Aidez la communauté en ajoutant votre prix après le trajet !"
+  },
+  "same_points_modal": {
+    "title": "Points identiques",
+    "message": "Le point de départ et le point d'arrivée sont identiques. Veuillez choisir une destination différente.",
+    "understood": "Compris"
   },
   "pwa": {
     "install_title": "Installer l'App",
@@ -520,7 +526,10 @@
     "discover_services": "Découvrez des services pour faciliter votre trajet",
     "services_disclaimer": "Ces services sont proposés par nos partenaires",
     "view_all": "Voir tout",
-    "no_services_available": "Aucun service disponible"
+    "no_services_available": "Aucun service disponible",
+    "route_summary": "Itinéraire",
+    "from": "De",
+    "to": "À"
   },
     "contribution_success_modal": {
     "thank_you": "Merci !",

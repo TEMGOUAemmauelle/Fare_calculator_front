@@ -27,6 +27,7 @@ import EstimateSuccessModal from '../components/EstimateSuccessModal';
 import OutOfBoundsModal from '../components/OutOfBoundsModal';
 import QuickPriceModal from '../components/QuickPriceModal';
 import RecentEstimatesModal from '../components/RecentEstimatesModal';
+import SamePointsModal from '../components/SamePointsModal';
 
 // Services
 import { estimatePrice } from '../services/estimateService';
@@ -93,6 +94,7 @@ export default function EstimatePageMobile() {
   const [outOfBoundsInfo, setOutOfBoundsInfo] = useState({ invalidPoint: 'depart', detectedCountry: '' });
   const [showQuickPriceModal, setShowQuickPriceModal] = useState(false);
   const [showHistoryModal, setShowHistoryModal] = useState(false);
+  const [showSamePointsModal, setShowSamePointsModal] = useState(false);
     const [showQuickActions, setShowQuickActions] = useState(false);
 
   const arriveeInputRef = useRef(null);
@@ -179,8 +181,46 @@ export default function EstimatePageMobile() {
       setSuggestions([]); setActiveSearchField(null);
   };
 
+  // Fonction pour vérifier si deux points sont identiques ou très proches
+  const arePointsIdentical = (point1, point2, thresholdMeters = 50) => {
+      if (!point1 || !point2) return false;
+      
+      // Vérifier par le label (nom du lieu)
+      if (point1.label && point2.label && point1.label.trim().toLowerCase() === point2.label.trim().toLowerCase()) {
+          return true;
+      }
+      
+      // Vérifier par les coordonnées (distance < seuil)
+      const lat1 = point1.latitude || point1.lat;
+      const lon1 = point1.longitude || point1.lon;
+      const lat2 = point2.latitude || point2.lat;
+      const lon2 = point2.longitude || point2.lon;
+      
+      if (lat1 && lon1 && lat2 && lon2) {
+          // Calcul approximatif de distance en mètres (formule haversine simplifiée)
+          const R = 6371000; // Rayon de la Terre en mètres
+          const dLat = (lat2 - lat1) * Math.PI / 180;
+          const dLon = (lon2 - lon1) * Math.PI / 180;
+          const a = Math.sin(dLat/2) * Math.sin(dLat/2) +
+                    Math.cos(lat1 * Math.PI / 180) * Math.cos(lat2 * Math.PI / 180) *
+                    Math.sin(dLon/2) * Math.sin(dLon/2);
+          const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
+          const distance = R * c;
+          
+          return distance < thresholdMeters;
+      }
+      
+      return false;
+  };
+
   const handleEstimate = async () => {
       if (!departPlace || !arriveePlace) return;
+      
+      // Vérification des points identiques
+      if (arePointsIdentical(departPlace, arriveePlace)) {
+          setShowSamePointsModal(true);
+          return;
+      }
       
       // Vérification géographique Cameroun
       const departPoint = { lat: departPlace.latitude, lon: departPlace.longitude };
@@ -496,6 +536,8 @@ export default function EstimatePageMobile() {
         onClose={() => setShowMarketplaceModal(false)}
         estimateData={prediction}
         heureTrajet={heureTrajet}
+        departLabel={departPlace?.label}
+        arriveeLabel={arriveePlace?.label}
       />
       
       <OutOfBoundsModal 
@@ -544,6 +586,12 @@ export default function EstimatePageMobile() {
             setArriveeQuery(estimate.arrivee.label || estimate.arrivee.place_name || '');
           }
         }}
+      />
+
+      {/* Modal points identiques */}
+      <SamePointsModal
+        isOpen={showSamePointsModal}
+        onClose={() => setShowSamePointsModal(false)}
       />
     </div>
   );

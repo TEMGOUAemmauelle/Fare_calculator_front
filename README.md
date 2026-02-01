@@ -190,7 +190,7 @@ src/
 │
 ├───pages
 │       AddTrajetPage.jsx
-│       EstimatePageDesktop.jsx
+│       HomePageDesktop.jsx
 │       EstimatePageMobile.jsx
 │       EstimatePageRouter.jsx
 │       HomePage.jsx

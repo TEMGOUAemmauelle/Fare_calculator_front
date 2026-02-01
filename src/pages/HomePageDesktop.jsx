@@ -22,6 +22,7 @@ import Footer from '../components/Footer';
 import QuickPriceModal from '../components/QuickPriceModal';
 import EstimateSuccessModal from '../components/EstimateSuccessModal';
 import RecentEstimatesModal from '../components/RecentEstimatesModal';
+import SamePointsModal from '../components/SamePointsModal';
 import NavbarDesktop from '../components/NavbarDesktop';
 import showToast from '../utils/customToast';
 
@@ -119,6 +120,7 @@ export default function HomePageDesktop() {
   const [showQuickPriceModal, setShowQuickPriceModal] = useState(false);
   const [showMarketplaceModal, setShowMarketplaceModal] = useState(false);
   const [showHistoryModal, setShowHistoryModal] = useState(false);
+  const [showSamePointsModal, setShowSamePointsModal] = useState(false);
   const [tarifs, setTarifs] = useState(null);
 
   // Déterminer la période (jour/nuit) à partir de l'heure
@@ -212,8 +214,47 @@ export default function HomePageDesktop() {
       setSuggestions([]); setActiveSearchField(null);
   };
 
+  // Fonction pour vérifier si deux points sont identiques ou très proches
+  const arePointsIdentical = (point1, point2, thresholdMeters = 50) => {
+      if (!point1 || !point2) return false;
+      
+      // Vérifier par le label (nom du lieu)
+      if (point1.label && point2.label && point1.label.trim().toLowerCase() === point2.label.trim().toLowerCase()) {
+          return true;
+      }
+      
+      // Vérifier par les coordonnées (distance < seuil)
+      const lat1 = point1.latitude || point1.lat;
+      const lon1 = point1.longitude || point1.lon;
+      const lat2 = point2.latitude || point2.lat;
+      const lon2 = point2.longitude || point2.lon;
+      
+      if (lat1 && lon1 && lat2 && lon2) {
+          // Calcul approximatif de distance en mètres (formule haversine simplifiée)
+          const R = 6371000; // Rayon de la Terre en mètres
+          const dLat = (lat2 - lat1) * Math.PI / 180;
+          const dLon = (lon2 - lon1) * Math.PI / 180;
+          const a = Math.sin(dLat/2) * Math.sin(dLat/2) +
+                    Math.cos(lat1 * Math.PI / 180) * Math.cos(lat2 * Math.PI / 180) *
+                    Math.sin(dLon/2) * Math.sin(dLon/2);
+          const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
+          const distance = R * c;
+          
+          return distance < thresholdMeters;
+      }
+      
+      return false;
+  };
+
   const handleEstimate = async () => {
       if (!departPlace || !arriveePlace) return;
+      
+      // Vérification des points identiques
+      if (arePointsIdentical(departPlace, arriveePlace)) {
+          setShowSamePointsModal(true);
+          return;
+      }
+      
       setIsLoading(true);
       try {
           const res = await estimatePrice({
@@ -657,6 +698,8 @@ export default function HomePageDesktop() {
         onClose={() => setShowMarketplaceModal(false)}
         estimateData={prediction}
         heureTrajet={heureTrajet}
+        departLabel={departPlace?.label}
+        arriveeLabel={arriveePlace?.label}
       />
 
             {/* Modal Historique des estimations récentes */}
@@ -682,6 +725,12 @@ export default function HomePageDesktop() {
                     }
                     scrollToEstimation();
                 }}
+            />
+
+            {/* Modal points identiques */}
+            <SamePointsModal
+                isOpen={showSamePointsModal}
+                onClose={() => setShowSamePointsModal(false)}
             />
     </div>
   );

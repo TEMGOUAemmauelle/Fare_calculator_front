@@ -27,7 +27,9 @@ const EstimateSuccessModal = ({
   isOpen, 
   onClose,
   estimateData = null, // Données de l'estimation (prix, trajet, etc.)
-  heureTrajet = 'matin' // Tranche horaire pour les tarifs standards
+  heureTrajet = 'matin', // Tranche horaire pour les tarifs standards
+  departLabel = null, // Label du point de départ
+  arriveeLabel = null // Label du point d'arrivée
 }) => {
   const navigate = useAppNavigate();
   const { t, i18n } = useTranslation();
@@ -168,6 +170,30 @@ const EstimateSuccessModal = ({
 
                       {estimateData && (
                         <div className="space-y-2">
+                          {/* Résumé du trajet - D'où à où */}
+                          {(departLabel || arriveeLabel) && (
+                            <div className="p-4 bg-white/5 rounded-2xl border border-white/10 mb-2">
+                              <p className="text-[10px] text-gray-400 uppercase tracking-widest font-bold mb-2">
+                                {t('estimate_success_modal.route_summary')}
+                              </p>
+                              <div className="flex items-center gap-2">
+                                <div className="flex flex-col items-center">
+                                  <div className="w-2 h-2 rounded-full bg-blue-500" />
+                                  <div className="w-0.5 h-4 bg-gray-600" />
+                                  <div className="w-2 h-2 rounded-full bg-[#f39908]" />
+                                </div>
+                                <div className="flex-1 min-w-0">
+                                  <p className="text-xs text-white font-semibold truncate" title={departLabel}>
+                                    {departLabel || '---'}
+                                  </p>
+                                  <p className="text-xs text-[#f39908] font-semibold truncate mt-1" title={arriveeLabel}>
+                                    {arriveeLabel || '---'}
+                                  </p>
+                                </div>
+                              </div>
+                            </div>
+                          )}
+
                           <div className="p-6 bg-white/5 rounded-2xl border border-white/10">
                             <p className="text-xs text-gray-400 uppercase tracking-widest font-bold mb-2">
                               {t('estimate_success_modal.estimated_fare')}
@@ -371,6 +397,27 @@ const EstimateSuccessModal = ({
                         transition={{ delay: 0.1 }}
                         className="mt-4 space-y-3"
                       >
+                        {/* Résumé du trajet - Mobile */}
+                        {(departLabel || arriveeLabel) && (
+                          <div className="p-3 bg-gray-50 rounded-2xl border border-gray-100">
+                            <div className="flex items-center gap-2">
+                              <div className="flex flex-col items-center">
+                                <div className="w-1.5 h-1.5 rounded-full bg-blue-500" />
+                                <div className="w-0.5 h-3 bg-gray-300" />
+                                <div className="w-1.5 h-1.5 rounded-full bg-[#f39908]" />
+                              </div>
+                              <div className="flex-1 min-w-0">
+                                <p className="text-[10px] text-gray-600 font-semibold truncate" title={departLabel}>
+                                  {departLabel || '---'}
+                                </p>
+                                <p className="text-[10px] text-[#f39908] font-semibold truncate" title={arriveeLabel}>
+                                  {arriveeLabel || '---'}
+                                </p>
+                              </div>
+                            </div>
+                          </div>
+                        )}
+
                         {/* Prix estimé */}
                         <div className="p-4 bg-gradient-to-r from-[#141414] to-[#2a2a2a] rounded-2xl">
                           <div className="flex items-center justify-between">
