@@ -339,12 +339,18 @@
     "error_geolocation_unavailable": "Geolocation not available on this device.",
     "error_api_key": "Invalid API key. Please contact the administrator.",
     "error_same_points": "Pickup and drop-off points must be different.",
+    "error_missing_points": "Please select a pickup and drop-off point.",
     "success_trajet_added": "Trip successfully added! Thank you for contributing to the community 🎉",
     "success_copied": "Copied to clipboard!",
     "info_loading_estimate": "Calculating estimate...",
     "info_detecting_location": "Detecting your position...",
     "info_no_results": "No results found. Try another place.",
     "invite_add_trajet": "This trip is unknown. Help the community by adding your fare after the trip!"
+  },
+  "same_points_modal": {
+    "title": "Same location",
+    "message": "The departure and arrival points are the same. Please choose a different destination.",
+    "understood": "Got it"
   },
   "pwa": {
     "install_title": "Install App",
@@ -520,7 +526,10 @@
     "discover_services": "Discover services to simplify your journey",
     "services_disclaimer": "These services are offered by our partners",
     "view_all": "View all",
-    "no_services_available": "No services available"
+    "no_services_available": "No services available",
+    "route_summary": "Route",
+    "from": "From",
+    "to": "To"
   },
   "contribution_success_modal": {
     "thank_you": "Thank you!",
